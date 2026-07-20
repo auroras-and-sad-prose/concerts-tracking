@@ -1,0 +1,41 @@
+name: validate-seen
+
+on:
+  push:
+    branches: [main]
+    paths: ["seen.json", "tools/**", "go.mod"]
+  pull_request:
+    paths: ["seen.json", "tools/**", "go.mod"]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # need history to diff against the base version
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      - name: Unit tests
+        run: go test ./tools/...
+
+      - name: Structural validation
+        run: go run ./tools/validate -file seen.json
+
+      - name: Append-only check vs base
+        run: |
+          set -e
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            git fetch origin "${{ github.base_ref }}" --depth=1
+            git show "origin/${{ github.base_ref }}:seen.json" > /tmp/base-seen.json 2>/dev/null || :
+          else
+            git show "HEAD^:seen.json" > /tmp/base-seen.json 2>/dev/null || :
+          fi
+          if [ -s /tmp/base-seen.json ]; then
+            go run ./tools/validate -file seen.json -base /tmp/base-seen.json
+          else
+            echo "no base seen.json available; skipping append-only check"
+          fi
