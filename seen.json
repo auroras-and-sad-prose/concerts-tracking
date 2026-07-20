@@ -1,0 +1,28 @@
+{
+  "concerts": [
+    {
+      "id": "burkev|2026-07-27|samedan",
+      "artist": "İlyun Bürkev",
+      "date": "2026-07-27",
+      "city": "Samedan",
+      "country": "Switzerland",
+      "venue": "Evangelische Dorfkirche Samedan",
+      "program": null,
+      "location_tag": "europe",
+      "source_url": "https://ilyunburkev.com/en/portfolio/concerts/",
+      "first_seen": "2026-07-20"
+    },
+    {
+      "id": "burkev|2026-09-10|toulouse",
+      "artist": "İlyun Bürkev",
+      "date": "2026-09-10",
+      "city": "Toulouse",
+      "country": "France",
+      "venue": "Cloître des Jacobins",
+      "program": null,
+      "location_tag": "europe",
+      "source_url": "https://ilyunburkev.com/en/portfolio/concerts/",
+      "first_seen": "2026-07-20"
+    }
+  ]
+}
