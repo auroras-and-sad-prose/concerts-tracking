@@ -229,6 +229,7 @@ function render() {
       lastMonthKey = monthKey;
     }
     const place = [c.venue, c.city, c.country].filter(Boolean).join(", ");
+    const safeUrl = isSafeUrl(c.source_url) ? c.source_url : null;
     html += `
       <div class="card">
         <div class="date-col">
@@ -240,7 +241,7 @@ function render() {
           <div class="place">${escapeHTML(place)}</div>
           ${c.program ? `<div class="program">${escapeHTML(c.program)}</div>` : ""}
         </div>
-        ${c.source_url ? `<a class="link" href="${escapeAttr(c.source_url)}" target="_blank" rel="noopener">Source →</a>` : ""}
+        ${safeUrl ? `<a class="link" href="${escapeHTML(safeUrl)}" target="_blank" rel="noopener">Source →</a>` : ""}
       </div>`;
   }
   main.innerHTML = html;
@@ -251,7 +252,16 @@ function escapeHTML(str) {
     "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
   }[s]));
 }
-function escapeAttr(str) { return escapeHTML(str); }
+
+function isSafeUrl(url) {
+  if (typeof url !== "string") return false;
+  try {
+    const parsed = new URL(url, window.location.href);
+    return parsed.protocol === "http:" || parsed.protocol === "https:";
+  } catch {
+    return false;
+  }
+}
 
 async function init() {
   try {
