@@ -263,6 +263,102 @@
       "location_tag": "germany",
       "source_url": "https://www.mariaduenasviolin.com/en/calendar",
       "first_seen": "2026-07-20"
+    },
+    {
+      "id": "duenas|2026-11-05|oxford",
+      "artist": "María Dueñas",
+      "date": "2026-11-05",
+      "city": "Oxford",
+      "country": "United Kingdom",
+      "venue": "Sheldonian Theatre",
+      "program": "Oxford Philharmonic Orchestra / Cayenna Ponchione-Bailey: Carwithen, Prokofiev, Tchaikovsky",
+      "location_tag": "europe",
+      "source_url": "https://bachtrack.com/performer/maria-duenas",
+      "first_seen": "2026-07-20"
+    },
+    {
+      "id": "duenas|2026-11-26|lugano",
+      "artist": "María Dueñas",
+      "date": "2026-11-26",
+      "city": "Lugano",
+      "country": "Switzerland",
+      "venue": "LAC Lugano Arte e Cultura: Sala Teatro",
+      "program": "Orchestra della Svizzera italiana / Markus Poschner: Brahms, Schubert",
+      "location_tag": "europe",
+      "source_url": "https://bachtrack.com/performer/maria-duenas",
+      "first_seen": "2026-07-20"
+    },
+    {
+      "id": "duenas|2027-02-05|bamberg",
+      "artist": "María Dueñas",
+      "date": "2027-02-05",
+      "city": "Bamberg",
+      "country": "Germany",
+      "venue": "Konzerthalle Bamberg: Joseph Keilberth Saal",
+      "program": "Bamberg Symphony / Jakub Hrůša: Martinů, Prokofiev, Beethoven (concerts Feb 5-6, 2027)",
+      "location_tag": "germany",
+      "source_url": "https://bachtrack.com/performer/maria-duenas",
+      "first_seen": "2026-07-20"
+    },
+    {
+      "id": "duenas|2027-02-19|dortmund",
+      "artist": "María Dueñas",
+      "date": "2027-02-19",
+      "city": "Dortmund",
+      "country": "Germany",
+      "venue": "Konzerthaus Dortmund",
+      "program": "Colombian Youth Philharmonic / Andrés Orozco-Estrada: Lalo, Stravinsky",
+      "location_tag": "germany",
+      "source_url": "https://bachtrack.com/performer/maria-duenas",
+      "first_seen": "2026-07-20"
+    },
+    {
+      "id": "duenas|2027-02-20|cologne",
+      "artist": "María Dueñas",
+      "date": "2027-02-20",
+      "city": "Cologne",
+      "country": "Germany",
+      "venue": "Kölner Philharmonie",
+      "program": "Colombian Youth Philharmonic / Andrés Orozco-Estrada: Lalo, Stravinsky",
+      "location_tag": "germany",
+      "source_url": "https://bachtrack.com/performer/maria-duenas",
+      "first_seen": "2026-07-20"
+    },
+    {
+      "id": "scheps|2027-02-14|andermatt",
+      "artist": "Olga Scheps",
+      "date": "2027-02-14",
+      "city": "Andermatt",
+      "country": "Switzerland",
+      "venue": "Konzerthalle",
+      "program": "Love is in the Air — Swiss Orchestra / Lena-Lisa Wüstendörfer: Schumann, Brahms",
+      "location_tag": "europe",
+      "source_url": "https://bachtrack.com/performer/olga-scheps",
+      "first_seen": "2026-07-20"
+    },
+    {
+      "id": "burkev|2026-11-19|sofia",
+      "artist": "İlyun Bürkev",
+      "date": "2026-11-19",
+      "city": "Sofia",
+      "country": "Bulgaria",
+      "venue": "Bulgaria Hall",
+      "program": "Natalia Ponomarchuk Presents — Sofia Philharmonic Orchestra / Natalia Ponomarchuk: Sibelius, Saint-Saëns",
+      "location_tag": "europe",
+      "source_url": "https://bachtrack.com/performer/ilyun-burkev",
+      "first_seen": "2026-07-20"
+    },
+    {
+      "id": "oganyan|2026-08-26|patmos",
+      "artist": "Maya Oganyan",
+      "date": "2026-08-26",
+      "city": "Patmos",
+      "country": "Greece",
+      "venue": "PATMION - Patmos Cultural Center",
+      "program": "A Tribute to Pauline Viardot — with Marie-Andrée Bouchard-Lesieur, Irène Duval, Alessandra Ammara: Viardot-García, Chopin",
+      "location_tag": "europe",
+      "source_url": "https://bachtrack.com/performer/maya-oganyan",
+      "first_seen": "2026-07-20"
     }
   ]
 }
