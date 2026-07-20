@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Upcoming Concerts</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --bg: #f7f7f8;
+    --card-bg: #ffffff;
+    --text: #1a1a1a;
+    --muted: #666;
+    --border: #e3e3e6;
+    --accent: #6b4fbb;
+    --accent-soft: #efeaf9;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #16161a;
+      --card-bg: #1f1f24;
+      --text: #eee;
+      --muted: #9a9aa2;
+      --border: #303038;
+      --accent: #a48ee8;
+      --accent-soft: #2a2440;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  header {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem 1.25rem 1rem;
+  }
+  h1 {
+    margin: 0 0 .25rem;
+    font-size: 1.6rem;
+  }
+  .subtitle {
+    color: var(--muted);
+    font-size: .9rem;
+  }
+  .controls {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 1.25rem 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: .6rem;
+  }
+  .controls select, .controls input {
+    background: var(--card-bg);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: .5rem .7rem;
+    font-size: .9rem;
+  }
+  .controls input[type="search"] {
+    flex: 1;
+    min-width: 160px;
+  }
+  main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 1.25rem 3rem;
+  }
+  .month-heading {
+    font-size: .8rem;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: var(--muted);
+    margin: 1.75rem 0 .6rem;
+  }
+  .month-heading:first-of-type {
+    margin-top: .5rem;
+  }
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: .9rem 1rem;
+    margin-bottom: .6rem;
+    display: flex;
+    gap: 1rem;
+    align-items: baseline;
+  }
+  .card .date-col {
+    flex: 0 0 auto;
+    width: 3.4rem;
+    text-align: center;
+  }
+  .date-col .day {
+    font-size: 1.3rem;
+    font-weight: 600;
+    line-height: 1;
+  }
+  .date-col .dow {
+    font-size: .7rem;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  .card .body {
+    flex: 1;
+    min-width: 0;
+  }
+  .card .artist {
+    font-weight: 600;
+    color: var(--accent);
+  }
+  .card .place {
+    font-size: .9rem;
+    color: var(--text);
+    margin-top: .15rem;
+  }
+  .card .program {
+    font-size: .82rem;
+    color: var(--muted);
+    margin-top: .3rem;
+  }
+  .card a.link {
+    font-size: .8rem;
+    text-decoration: none;
+    color: var(--accent);
+    white-space: nowrap;
+  }
+  .tag {
+    display: inline-block;
+    font-size: .7rem;
+    background: var(--accent-soft);
+    color: var(--accent);
+    border-radius: 999px;
+    padding: .1rem .55rem;
+    margin-left: .4rem;
+    vertical-align: middle;
+  }
+  .empty, .loading {
+    color: var(--muted);
+    padding: 2rem 0;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>Upcoming Concerts</h1>
+  <div class="subtitle" id="subtitle">Loading…</div>
+</header>
+
+<div class="controls">
+  <select id="artistFilter"><option value="">All artists</option></select>
+  <select id="countryFilter"><option value="">All countries</option></select>
+  <input type="search" id="searchBox" placeholder="Search city, venue, program…">
+</div>
+
+<main id="main">
+  <div class="loading">Loading concerts…</div>
+</main>
+
+<script>
+const DOW = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+const MONTH = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+
+let allConcerts = [];
+
+function todayISO() {
+  const d = new Date();
+  return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
+}
+
+function populateFilters(concerts) {
+  const artistSel = document.getElementById("artistFilter");
+  const countrySel = document.getElementById("countryFilter");
+  const artists = [...new Set(concerts.map(c => c.artist))].sort();
+  const countries = [...new Set(concerts.map(c => c.country).filter(Boolean))].sort();
+  for (const a of artists) {
+    const opt = document.createElement("option");
+    opt.value = a; opt.textContent = a;
+    artistSel.appendChild(opt);
+  }
+  for (const c of countries) {
+    const opt = document.createElement("option");
+    opt.value = c; opt.textContent = c;
+    countrySel.appendChild(opt);
+  }
+}
+
+function render() {
+  const artist = document.getElementById("artistFilter").value;
+  const country = document.getElementById("countryFilter").value;
+  const search = document.getElementById("searchBox").value.trim().toLowerCase();
+  const today = todayISO();
+
+  let list = allConcerts.filter(c => c.date >= today);
+  if (artist) list = list.filter(c => c.artist === artist);
+  if (country) list = list.filter(c => c.country === country);
+  if (search) {
+    list = list.filter(c =>
+      (c.city || "").toLowerCase().includes(search) ||
+      (c.venue || "").toLowerCase().includes(search) ||
+      (c.program || "").toLowerCase().includes(search) ||
+      (c.artist || "").toLowerCase().includes(search)
+    );
+  }
+  list.sort((a, b) => a.date.localeCompare(b.date));
+
+  const main = document.getElementById("main");
+  document.getElementById("subtitle").textContent =
+    `${list.length} upcoming concert${list.length === 1 ? "" : "s"}`;
+
+  if (list.length === 0) {
+    main.innerHTML = '<div class="empty">No upcoming concerts match your filters.</div>';
+    return;
+  }
+
+  let html = "";
+  let lastMonthKey = "";
+  for (const c of list) {
+    const d = new Date(c.date + "T00:00:00");
+    const monthKey = `${MONTH[d.getMonth()]} ${d.getFullYear()}`;
+    if (monthKey !== lastMonthKey) {
+      html += `<div class="month-heading">${monthKey}</div>`;
+      lastMonthKey = monthKey;
+    }
+    const place = [c.venue, c.city, c.country].filter(Boolean).join(", ");
+    html += `
+      <div class="card">
+        <div class="date-col">
+          <div class="day">${d.getDate()}</div>
+          <div class="dow">${DOW[d.getDay()]}</div>
+        </div>
+        <div class="body">
+          <div><span class="artist">${escapeHTML(c.artist)}</span>${c.location_tag ? `<span class="tag">${escapeHTML(c.location_tag)}</span>` : ""}</div>
+          <div class="place">${escapeHTML(place)}</div>
+          ${c.program ? `<div class="program">${escapeHTML(c.program)}</div>` : ""}
+        </div>
+        ${c.source_url ? `<a class="link" href="${escapeAttr(c.source_url)}" target="_blank" rel="noopener">Source →</a>` : ""}
+      </div>`;
+  }
+  main.innerHTML = html;
+}
+
+function escapeHTML(str) {
+  return String(str).replace(/[&<>"']/g, s => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+  }[s]));
+}
+function escapeAttr(str) { return escapeHTML(str); }
+
+async function init() {
+  try {
+    const res = await fetch("seen.json", { cache: "no-store" });
+    const data = await res.json();
+    allConcerts = data.concerts || [];
+    populateFilters(allConcerts);
+    render();
+  } catch (e) {
+    document.getElementById("main").innerHTML =
+      '<div class="empty">Could not load seen.json.</div>';
+    document.getElementById("subtitle").textContent = "Error";
+    console.error(e);
+  }
+}
+
+document.getElementById("artistFilter").addEventListener("change", render);
+document.getElementById("countryFilter").addEventListener("change", render);
+document.getElementById("searchBox").addEventListener("input", render);
+
+init();
+</script>
+</body>
+</html>
