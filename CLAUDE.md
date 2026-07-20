@@ -17,7 +17,8 @@ should follow to keep from producing bad rows in the first place.
 - has a concert year outside `now-1 .. now+3` (catches typoed years);
 - has a `location_tag` outside the allowed set (`europe`, `germany`, `berlin`);
 - has a `source_url` that is not http(s) on an allowlisted domain
-  (`ilyunburkev.com`, `olgascheps.com`, `mariaduenasviolin.com`, `bachtrack.com`);
+  (`ilyunburkev.com`, `olgascheps.com`, `mariaduenasviolin.com`,
+  `mayaoganyan.com`, `bachtrack.com`);
 - has an `id` whose shape isn't `<slug>|<date>|<city>` or whose date/city
   segments disagree with the row's own fields;
 - duplicates another entry's `id`.

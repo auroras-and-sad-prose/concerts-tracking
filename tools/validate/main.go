@@ -44,6 +44,7 @@ var allowedHosts = map[string]bool{
 	"ilyunburkev.com":       true,
 	"olgascheps.com":        true,
 	"mariaduenasviolin.com": true,
+	"mayaoganyan.com":       true,
 	"bachtrack.com":         true,
 }
 
