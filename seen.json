@@ -359,6 +359,18 @@
       "location_tag": "europe",
       "source_url": "https://bachtrack.com/performer/maya-oganyan",
       "first_seen": "2026-07-20"
+    },
+    {
+      "id": "duenas|2026-12-17|katowice",
+      "artist": "María Dueñas",
+      "date": "2026-12-17",
+      "city": "Katowice",
+      "country": "Poland",
+      "venue": "NOSPR Concert hall",
+      "program": "Marin Alsop, Polish National Radio Symphony Orchestra",
+      "location_tag": "europe",
+      "source_url": "https://www.mariaduenasviolin.com/en/calendar",
+      "first_seen": "2026-07-31"
     }
   ]
 }
