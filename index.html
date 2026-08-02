@@ -124,19 +124,27 @@
     color: var(--muted);
     margin-top: .3rem;
   }
-  .card ul.pieces {
+  .card .repertoire {
     font-size: .82rem;
-    margin: .3rem 0 0;
-    padding-left: 1.1rem;
+    margin-top: .35rem;
+    line-height: 1.5;
   }
-  .card ul.pieces li {
-    margin-top: .1rem;
+  .card .repertoire-label {
+    font-size: .68rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    color: var(--accent);
+    margin-right: .5rem;
   }
-  .card .pieces-note {
-    font-size: .82rem;
+  .card .repertoire .piece:not(:last-child)::after {
+    content: "·";
+    color: var(--border);
+    margin: 0 .5rem;
+  }
+  .card .repertoire.note .repertoire-text {
     color: var(--muted);
     font-style: italic;
-    margin-top: .3rem;
   }
   .card a.link {
     font-size: .8rem;
@@ -265,16 +273,18 @@ function render() {
 
 // `pieces` is an array of work titles when the repertoire is known, or a
 // descriptive string ("Programme not announced") when the source doesn't list
-// it. Render the two shapes differently: a list reads as fact, a note as an
-// absence of one.
+// it. Both get the same "Programme" label so it's always clear what this line
+// represents; the two shapes are then styled differently — a row of confirmed
+// works reads as fact, a note reads (italic, muted) as an absence of one.
 function piecesHTML(pieces) {
   if (Array.isArray(pieces)) {
     const items = pieces.filter(p => typeof p === "string" && p.trim());
     if (items.length === 0) return "";
-    return `<ul class="pieces">${items.map(p => `<li>${escapeHTML(p)}</li>`).join("")}</ul>`;
+    const list = items.map(p => `<span class="piece">${escapeHTML(p)}</span>`).join("");
+    return `<div class="repertoire"><span class="repertoire-label">Programme</span>${list}</div>`;
   }
   if (typeof pieces === "string" && pieces.trim()) {
-    return `<div class="pieces-note">${escapeHTML(pieces)}</div>`;
+    return `<div class="repertoire note"><span class="repertoire-label">Programme</span><span class="repertoire-text">${escapeHTML(pieces)}</span></div>`;
   }
   return "";
 }
