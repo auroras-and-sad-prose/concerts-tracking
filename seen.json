@@ -8,6 +8,7 @@
       "country": "Switzerland",
       "venue": "Evangelische Dorfkirche Samedan",
       "program": null,
+      "pieces": "Programme not announced",
       "location_tag": "europe",
       "source_url": "https://ilyunburkev.com/en/portfolio/concerts/",
       "first_seen": "2026-07-20"
@@ -20,6 +21,7 @@
       "country": "France",
       "venue": "Cloître des Jacobins",
       "program": null,
+      "pieces": "Programme not announced",
       "location_tag": "europe",
       "source_url": "https://ilyunburkev.com/en/portfolio/concerts/",
       "first_seen": "2026-07-20"
@@ -32,6 +34,10 @@
       "country": "Germany",
       "venue": "Kultur Gut Hasselburg",
       "program": "Chamber Music Academy: Mozart String Quartet in F major KV 590, Weinberg Piano Quintet in F minor Op. 18",
+      "pieces": [
+        "Mozart String Quartet in F major KV 590",
+        "Weinberg Piano Quintet in F minor Op. 18"
+      ],
       "location_tag": "germany",
       "source_url": "https://www.olgascheps.com/en/concerts/",
       "first_seen": "2026-07-20"
@@ -44,6 +50,10 @@
       "country": "Italy",
       "venue": "Oratorio di Santa Maria dell'Addolorata",
       "program": "Chamber Music Academy: Mozart String Quartet in F major KV 590, Weinberg Piano Quintet in F minor Op. 18",
+      "pieces": [
+        "Mozart String Quartet in F major KV 590",
+        "Weinberg Piano Quintet in F minor Op. 18"
+      ],
       "location_tag": "europe",
       "source_url": "https://www.olgascheps.com/en/concerts/",
       "first_seen": "2026-07-20"
@@ -56,6 +66,14 @@
       "country": "Germany",
       "venue": null,
       "program": "Solo Piano: Mozart Sonatas KV 310 & KV 545, Fantasy in D minor KV 397; Chopin Ballades Nos. 1 & 2, Fantasy in F minor",
+      "pieces": [
+        "Mozart Sonata KV 310",
+        "Mozart Sonata KV 545",
+        "Mozart Fantasy in D minor KV 397",
+        "Chopin Ballade No. 1",
+        "Chopin Ballade No. 2",
+        "Chopin Fantasy in F minor"
+      ],
       "location_tag": "germany",
       "source_url": "https://www.olgascheps.com/en/concerts/",
       "first_seen": "2026-07-20"
@@ -67,7 +85,13 @@
       "city": "Bad Saulgau",
       "country": "Germany",
       "venue": null,
-      "program": "Solo Piano: Mozart Sonatas KV 310 & KV 545; Chopin Fantasy in F minor Op. 49, Sonata No. 3 in B minor Op. 58",
+      "program": "Solo Piano: Mozart Piano Sonata No. 8 in A minor KV 310, Piano Sonata No. 16 in C major KV 545; Chopin Fantasy in F minor Op. 49, Sonata No. 3 in B minor Op. 58",
+      "pieces": [
+        "Mozart Piano Sonata No. 8 in A minor, KV 310",
+        "Mozart Piano Sonata No. 16 in C major, KV 545",
+        "Chopin Fantasy in F minor, Op. 49",
+        "Chopin Sonata No. 3 in B minor, Op. 58"
+      ],
       "location_tag": "germany",
       "source_url": "https://www.olgascheps.com/en/concerts/",
       "first_seen": "2026-07-20"
@@ -80,6 +104,7 @@
       "country": "Germany",
       "venue": null,
       "program": "Solo Piano Concerto",
+      "pieces": "Programme not announced",
       "location_tag": "germany",
       "source_url": "https://www.olgascheps.com/en/concerts/",
       "first_seen": "2026-07-20"
@@ -92,6 +117,9 @@
       "country": "Germany",
       "venue": "Kurhaus Baden-Baden",
       "program": "Baden-Baden Philharmonic / Tomás Brauner: Beethoven Piano Concerto No. 4",
+      "pieces": [
+        "Beethoven Piano Concerto No. 4"
+      ],
       "location_tag": "germany",
       "source_url": "https://www.olgascheps.com/en/concerts/",
       "first_seen": "2026-07-20"
@@ -104,6 +132,9 @@
       "country": "Germany",
       "venue": "Kultur + Kongresszentrum Rosenheim",
       "program": "Baden-Baden Philharmonic / Tomás Brauner: Beethoven Piano Concerto No. 4",
+      "pieces": [
+        "Beethoven Piano Concerto No. 4"
+      ],
       "location_tag": "germany",
       "source_url": "https://www.olgascheps.com/en/concerts/",
       "first_seen": "2026-07-20"
@@ -116,6 +147,9 @@
       "country": "Germany",
       "venue": "Rosengarten Mannheim",
       "program": "Royal Scottish National Orchestra / Thomas Søndergård: Rachmaninov Piano Concerto No. 2",
+      "pieces": [
+        "Rachmaninov Piano Concerto No. 2"
+      ],
       "location_tag": "germany",
       "source_url": "https://www.olgascheps.com/en/concerts/",
       "first_seen": "2026-07-20"
@@ -128,6 +162,9 @@
       "country": "Germany",
       "venue": "Universität Regensburg",
       "program": "Royal Scottish National Orchestra / Thomas Søndergård: Rachmaninov Piano Concerto No. 2",
+      "pieces": [
+        "Rachmaninov Piano Concerto No. 2"
+      ],
       "location_tag": "germany",
       "source_url": "https://www.olgascheps.com/en/concerts/",
       "first_seen": "2026-07-20"
@@ -140,6 +177,7 @@
       "country": "Austria",
       "venue": "Grafenegg Festival",
       "program": "Elim Chan, European Union Youth Orchestra",
+      "pieces": "Programme not announced",
       "location_tag": "europe",
       "source_url": "https://www.mariaduenasviolin.com/en/calendar",
       "first_seen": "2026-07-20"
@@ -152,6 +190,7 @@
       "country": "Germany",
       "venue": "Konzerthaus Berlin",
       "program": "Elim Chan, European Union Youth Orchestra",
+      "pieces": "Programme not announced",
       "location_tag": "berlin",
       "source_url": "https://www.mariaduenasviolin.com/en/calendar",
       "first_seen": "2026-07-20"
@@ -164,6 +203,7 @@
       "country": "Germany",
       "venue": "Ludwigsburger Festspiele",
       "program": "Elim Chan, European Union Youth Orchestra",
+      "pieces": "Programme not announced",
       "location_tag": "germany",
       "source_url": "https://www.mariaduenasviolin.com/en/calendar",
       "first_seen": "2026-07-20"
@@ -176,6 +216,7 @@
       "country": "Italy",
       "venue": "Teatro Communale Bolzano",
       "program": "Elim Chan, European Union Youth Orchestra",
+      "pieces": "Programme not announced",
       "location_tag": "europe",
       "source_url": "https://www.mariaduenasviolin.com/en/calendar",
       "first_seen": "2026-07-20"
@@ -188,6 +229,7 @@
       "country": "Spain",
       "venue": "Festival Internacional de Música de Santander",
       "program": "Alan Gilbert, Royal Swedish Orchestra",
+      "pieces": "Programme not announced",
       "location_tag": "europe",
       "source_url": "https://www.mariaduenasviolin.com/en/calendar",
       "first_seen": "2026-07-20"
@@ -200,6 +242,7 @@
       "country": "Germany",
       "venue": "Rheingau Festival, Schloss Johannisberg-Fürst-von Metternich Saal",
       "program": "Dueñas-Malofeev, Recital Violin-Piano",
+      "pieces": "Programme not announced",
       "location_tag": "germany",
       "source_url": "https://www.mariaduenasviolin.com/en/calendar",
       "first_seen": "2026-07-20"
@@ -212,6 +255,7 @@
       "country": "Germany",
       "venue": "Kurhaus Wiesbaden",
       "program": "Giedrė Šlekytė, Die Deutsche Kammerphilharmonie Bremen",
+      "pieces": "Programme not announced",
       "location_tag": "germany",
       "source_url": "https://www.mariaduenasviolin.com/en/calendar",
       "first_seen": "2026-07-20"
@@ -224,6 +268,7 @@
       "country": "Germany",
       "venue": "Musikfest Bremen",
       "program": "Giedrė Šlekytė, Die Deutsche Kammerphilharmonie Bremen",
+      "pieces": "Programme not announced",
       "location_tag": "germany",
       "source_url": "https://www.mariaduenasviolin.com/en/calendar",
       "first_seen": "2026-07-20"
@@ -236,6 +281,7 @@
       "country": "Poland",
       "venue": "Warsaw Concert Hall",
       "program": "Krzysztof Urbański, Warsaw Philharmonic Orchestra",
+      "pieces": "Programme not announced",
       "location_tag": "europe",
       "source_url": "https://www.mariaduenasviolin.com/en/calendar",
       "first_seen": "2026-07-20"
@@ -248,6 +294,7 @@
       "country": "Poland",
       "venue": "Warsaw Concert Hall",
       "program": "Krzysztof Urbański, Warsaw Philharmonic Orchestra",
+      "pieces": "Programme not announced",
       "location_tag": "europe",
       "source_url": "https://www.mariaduenasviolin.com/en/calendar",
       "first_seen": "2026-07-20"
@@ -260,6 +307,7 @@
       "country": "Germany",
       "venue": "Carmen Würth Forum",
       "program": "Vasily Petrenko, Würth Philharmonic",
+      "pieces": "Programme not announced",
       "location_tag": "germany",
       "source_url": "https://www.mariaduenasviolin.com/en/calendar",
       "first_seen": "2026-07-20"
@@ -272,6 +320,7 @@
       "country": "United Kingdom",
       "venue": "Sheldonian Theatre",
       "program": "Oxford Philharmonic Orchestra / Cayenna Ponchione-Bailey: Carwithen, Prokofiev, Tchaikovsky",
+      "pieces": "Composers only: Carwithen, Prokofiev, Tchaikovsky",
       "location_tag": "europe",
       "source_url": "https://bachtrack.com/performer/maria-duenas",
       "first_seen": "2026-07-20"
@@ -284,6 +333,7 @@
       "country": "Switzerland",
       "venue": "LAC Lugano Arte e Cultura: Sala Teatro",
       "program": "Orchestra della Svizzera italiana / Markus Poschner: Brahms, Schubert",
+      "pieces": "Composers only: Brahms, Schubert",
       "location_tag": "europe",
       "source_url": "https://bachtrack.com/performer/maria-duenas",
       "first_seen": "2026-07-20"
@@ -296,6 +346,7 @@
       "country": "Germany",
       "venue": "Konzerthalle Bamberg: Joseph Keilberth Saal",
       "program": "Bamberg Symphony / Jakub Hrůša: Martinů, Prokofiev, Beethoven (concerts Feb 5-6, 2027)",
+      "pieces": "Composers only: Martinů, Prokofiev, Beethoven",
       "location_tag": "germany",
       "source_url": "https://bachtrack.com/performer/maria-duenas",
       "first_seen": "2026-07-20"
@@ -308,6 +359,7 @@
       "country": "Germany",
       "venue": "Konzerthaus Dortmund",
       "program": "Colombian Youth Philharmonic / Andrés Orozco-Estrada: Lalo, Stravinsky",
+      "pieces": "Composers only: Lalo, Stravinsky",
       "location_tag": "germany",
       "source_url": "https://bachtrack.com/performer/maria-duenas",
       "first_seen": "2026-07-20"
@@ -320,6 +372,7 @@
       "country": "Germany",
       "venue": "Kölner Philharmonie",
       "program": "Colombian Youth Philharmonic / Andrés Orozco-Estrada: Lalo, Stravinsky",
+      "pieces": "Composers only: Lalo, Stravinsky",
       "location_tag": "germany",
       "source_url": "https://bachtrack.com/performer/maria-duenas",
       "first_seen": "2026-07-20"
@@ -332,6 +385,7 @@
       "country": "Switzerland",
       "venue": "Konzerthalle",
       "program": "Love is in the Air — Swiss Orchestra / Lena-Lisa Wüstendörfer: Schumann, Brahms",
+      "pieces": "Composers only: Schumann, Brahms",
       "location_tag": "europe",
       "source_url": "https://bachtrack.com/performer/olga-scheps",
       "first_seen": "2026-07-20"
@@ -344,6 +398,7 @@
       "country": "Bulgaria",
       "venue": "Bulgaria Hall",
       "program": "Natalia Ponomarchuk Presents — Sofia Philharmonic Orchestra / Natalia Ponomarchuk: Sibelius, Saint-Saëns",
+      "pieces": "Composers only: Sibelius, Saint-Saëns",
       "location_tag": "europe",
       "source_url": "https://bachtrack.com/performer/ilyun-burkev",
       "first_seen": "2026-07-20"
@@ -356,6 +411,7 @@
       "country": "Greece",
       "venue": "PATMION - Patmos Cultural Center",
       "program": "A Tribute to Pauline Viardot — with Marie-Andrée Bouchard-Lesieur, Irène Duval, Alessandra Ammara: Viardot-García, Chopin",
+      "pieces": "Composers only: Viardot-García, Chopin",
       "location_tag": "europe",
       "source_url": "https://bachtrack.com/performer/maya-oganyan",
       "first_seen": "2026-07-20"
@@ -368,6 +424,7 @@
       "country": "Poland",
       "venue": "NOSPR Concert hall",
       "program": "Marin Alsop, Polish National Radio Symphony Orchestra",
+      "pieces": "Programme not announced",
       "location_tag": "europe",
       "source_url": "https://www.mariaduenasviolin.com/en/calendar",
       "first_seen": "2026-07-31"
@@ -380,6 +437,7 @@
       "country": "Germany",
       "venue": "Elbphilharmonie: Grand Hall",
       "program": "Andrés Orozco-Estrada, Colombian Youth Philharmonic: Lalo, Stravinsky",
+      "pieces": "Composers only: Lalo, Stravinsky",
       "location_tag": "germany",
       "source_url": "https://bachtrack.com/performer/maria-duenas",
       "first_seen": "2026-08-02"
