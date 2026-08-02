@@ -3,9 +3,12 @@
 `seen.json` is a curated dataset of upcoming classical concerts, populated by an
 automated concert-watch routine and rendered by `index.html` (GitHub Pages).
 
-Reducing hallucination in this dataset relies on two layers. The enforced layer
-below is what actually gates the data; the grounding rules are what the routine
-should follow to keep from producing bad rows in the first place.
+Reducing hallucination in this dataset relies on three layers: the **enforced
+layer**, which is what actually gates the data (CI); the **operating
+procedure**, which is the routine's run script; and the **grounding rules**,
+the principles that procedure leans on to avoid producing bad rows in the first
+place. This file is the routine's full instructions — it isn't handed a
+separate prompt.
 
 ## Enforced layer (CI — cannot be hallucinated past)
 
@@ -48,6 +51,107 @@ Run locally before committing:
 go test ./tools/...
 go run ./tools/validate -file seen.json
 ```
+
+## Operating procedure for the concert-watch routine
+
+You are a scheduled concert-monitoring agent. Your job: detect NEW upcoming
+concerts by four classical musicians and alert about them, using this repo as
+memory so the same concert is never alerted on twice. You run inside a fresh
+clone of this private repo with read/write access to repo contents and to
+Issues. All state lives in `seen.json` at the repo root.
+
+**Artists and primary sources:**
+
+1. Olga Scheps — https://www.olgascheps.com/en/concerts/
+2. María Dueñas — https://www.mariaduenasviolin.com/en/calendar
+3. İlyun Bürkev — https://ilyunburkev.com/en/portfolio/concerts/
+4. Maya Oganyan — https://www.mayaoganyan.com/calendar
+
+All four pages list upcoming concerts directly. Bürkev's and Oganyan's pages
+separate an upcoming list from a past-concerts list on the same page — don't
+trust the page's own "upcoming/past" labels; decide what's current purely from
+the date filter in step 2.
+
+**Secondary source — Bachtrack, for all four artists too:**
+
+1. Olga Scheps — https://bachtrack.com/performer/olga-scheps
+2. María Dueñas — https://bachtrack.com/performer/maria-duenas
+3. İlyun Bürkev — https://bachtrack.com/performer/ilyun-burkev
+4. Maya Oganyan — https://bachtrack.com/performer/maya-oganyan
+
+Each profile has a "Live Events" section listing upcoming concerts (ignore
+"Latest reviews"/"Latest articles" — past content). Bachtrack sometimes lists
+engagements before they appear on the artist's own site, so treat it as a
+genuine cross-check, not a formality. If a profile URL 404s or the slug has
+changed, try `https://bachtrack.com/search-events/performer=<slug>` as a
+fallback before giving up on that artist's Bachtrack check.
+
+**Step 1 — Load state.** Read `seen.json`. If it's missing or empty, this is
+the first run: initialize it as `{"concerts": []}` and record everything found
+below rather than treating the current slate as noise.
+
+**Step 2 — Gather current concerts.** Determine today's date at runtime. For
+each artist: fetch the primary source and the Bachtrack profile, and extract
+every listed concert (ignore cookie banners, nav, and other page chrome).
+For each, capture `artist`, `date`, `city`, `country`, `venue`, `program` (if
+shown), `pieces` (per grounding rule 3), and the `source_url` you found it on.
+Normalize dates to ISO `YYYY-MM-DD`; pages use mixed German/English formats
+(`16.3.2026`, `04. Juni 2026`, `Aug 3, 2026`).
+
+Keep only concerts dated today or later — discard past dates. If you can
+access none of an artist's sources (official site AND Bachtrack), skip that
+artist this run and note it in the step 7 report. If only some sources are
+reachable, update using whichever succeeded. Aside from the official sites and
+Bachtrack, don't reach for other sources — no general web searches, no
+ticketing sites.
+
+Do not invent concerts. Every concert must trace to a real `source_url` you
+actually fetched this run. If a source fails to load, note it and move on —
+don't guess its contents, and don't abort the whole run over one failed source.
+
+**Step 3 — Tag location.** Set `location_tag` to:
+- `"berlin"` — in Berlin or its immediate surroundings
+- `"germany"` — elsewhere in Germany (reachable by regional rail on a
+  Deutschlandticket, even if slow)
+- `"europe"` — outside Germany but in Europe
+
+Ignore events outside Europe.
+
+**Step 4 — Deduplicate against memory.** Build a stable id per concert:
+`id = "<artist-slug>|<ISO-date>|<city-lowercased>"` (e.g.
+`"duenas|2026-08-03|berlin"`). A concert is NEW only if its id isn't already
+in `seen.json`; tolerate minor venue/spelling differences so formatting
+changes alone don't trigger a false alert. The same concert often appears on
+both the official site and Bachtrack — since the id is based on artist/date/
+city, it naturally collapses into one entry; don't record or alert on it
+twice.
+
+**Step 5 — Refine existing rows.** For every concert whose id is already in
+`seen.json`, check whether this run's fetch turned up more than what's
+stored — an announced venue, or real work titles where `pieces` previously
+said `"Composers only: ..."` or `"Programme not announced"`. Update `venue`,
+`program`, `pieces`, `country`, `location_tag`, and `source_url` in place per
+grounding rule 6. Never touch `artist`, `date`, `city`, or `first_seen`, and
+never clear a populated field back to `null`.
+
+**Step 6 — Record and alert.** Use the `main` branch only — do not create new
+branches. Add every NEW concert to `seen.json`'s `"concerts"` array with all
+captured fields (including `pieces`) plus `"first_seen": "<today's ISO date>"`
+and `"id"`. Commit with message `"concert-watch: <today's date>, +<N> new"`
+and push.
+
+If there's at least one NEW concert, open ONE GitHub issue:
+- Title: `"New concerts found — <today's date> (<N> new)"`
+- Body: group by `location_tag`, berlin first, then germany, then abroad. For
+  each: `artist — date — city, venue — programme — source_url`.
+
+If there are zero new concerts, do NOT open an issue — print a one-line
+summary instead (e.g. "No new concerts. Checked 4 artists, all sources OK.").
+
+**Step 7 — Report source health.** End the run output with a status line per
+artist covering both sources: which of (official site, Bachtrack) loaded,
+which failed, and how many concerts each currently contributed. This surfaces
+a silently broken source.
 
 ## Grounding rules for the concert-watch routine
 
