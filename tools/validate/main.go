@@ -9,16 +9,24 @@
 //   - concert dates fall within a sane window around "now" (catches typoed years);
 //   - location_tag is drawn from a fixed vocabulary;
 //   - source_url is http(s) and points at an allowlisted domain;
+//   - pieces is either a non-empty array of work titles or a descriptive string;
 //   - id has the canonical "<slug>|<date>|<city>" shape consistent with its row;
 //   - ids are unique.
 //
 // With -base pointing at the previous version of the file, it additionally
-// enforces that the change is append-only: existing entries may not be modified
-// or deleted, only new ones added. This keeps a bad generation from corrupting
-// rows that were already vetted.
+// enforces two rules on entries that already existed:
+//
+//   - entries may not be deleted, and the fields that pin a row to one specific
+//     concert (artist, date, city) plus its provenance (first_seen) may not
+//     change. Rewriting one of those would silently turn a vetted row into a
+//     different concert while keeping its id;
+//   - descriptive fields (venue, program, pieces, ...) may be refined as more is
+//     learned about an event, but a field that already carried information may
+//     not be emptied back out. Detail can be added or corrected, never erased.
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"flag"
 	"fmt"
@@ -55,6 +63,70 @@ var (
 	slugRe = regexp.MustCompile(`^[a-z]+$`)
 )
 
+// Pieces records the individual works to be performed. It is deliberately a
+// union of two JSON shapes:
+//
+//	["Chopin Ballade No. 1", "Chopin Ballade No. 2"]   works known individually
+//	"Composers only: Brahms, Schubert"                 works not listed by source
+//
+// The string form exists so the routine is never cornered into inventing work
+// titles just to produce an array: when a source names a conductor and two
+// composers but no repertoire, the honest answer is a sentence, not a list.
+type Pieces struct {
+	List []string // non-nil when the JSON value was an array
+	Text *string  // non-nil when the JSON value was a string
+}
+
+// UnmarshalJSON accepts an array of strings, a string, or null, and rejects
+// every other shape rather than coercing it.
+func (p *Pieces) UnmarshalJSON(data []byte) error {
+	trimmed := bytes.TrimSpace(data)
+	switch {
+	case len(trimmed) == 0 || string(trimmed) == "null":
+		*p = Pieces{}
+		return nil
+	case trimmed[0] == '[':
+		// Decoded via *string so a null element is caught here rather than
+		// silently becoming an empty title.
+		var raw []*string
+		if err := json.Unmarshal(trimmed, &raw); err != nil {
+			return fmt.Errorf("pieces array must contain only strings: %w", err)
+		}
+		list := make([]string, 0, len(raw)) // non-nil: "empty array" is not "absent"
+		for i, item := range raw {
+			if item == nil {
+				return fmt.Errorf("pieces[%d] is null; pieces array must contain only strings", i)
+			}
+			list = append(list, *item)
+		}
+		*p = Pieces{List: list}
+		return nil
+	case trimmed[0] == '"':
+		var s string
+		if err := json.Unmarshal(trimmed, &s); err != nil {
+			return err
+		}
+		*p = Pieces{Text: &s}
+		return nil
+	default:
+		return fmt.Errorf("pieces must be an array of work titles or a string, got %s", trimmed)
+	}
+}
+
+func (p Pieces) MarshalJSON() ([]byte, error) {
+	switch {
+	case p.List != nil:
+		return json.Marshal(p.List)
+	case p.Text != nil:
+		return json.Marshal(*p.Text)
+	default:
+		return []byte("null"), nil
+	}
+}
+
+// Present reports whether the field carries any value at all.
+func (p Pieces) Present() bool { return p.List != nil || p.Text != nil }
+
 // Concert mirrors one entry in seen.json. Nullable fields use *string so a JSON
 // null is accepted; required fields use string and are checked for emptiness.
 type Concert struct {
@@ -65,6 +137,7 @@ type Concert struct {
 	Country     string  `json:"country"`
 	Venue       *string `json:"venue"`
 	Program     *string `json:"program"`
+	Pieces      Pieces  `json:"pieces"`
 	LocationTag string  `json:"location_tag"`
 	SourceURL   string  `json:"source_url"`
 	FirstSeen   string  `json:"first_seen"`
@@ -164,6 +237,10 @@ func Validate(f File, base *File, now time.Time) []string {
 			problems = append(problems, fmt.Sprintf("%s: source_url %q is not http(s) on an allowlisted domain", label, c.SourceURL))
 		}
 
+		if msg := checkPieces(c.Pieces); msg != "" {
+			problems = append(problems, fmt.Sprintf("%s: %s", label, msg))
+		}
+
 		if c.ID != "" {
 			if msg := checkID(c.ID, c.Date, c.City); msg != "" {
 				problems = append(problems, fmt.Sprintf("%s: %s", label, msg))
@@ -208,6 +285,31 @@ func allowedHost(raw string) bool {
 	return allowedHosts[host]
 }
 
+// checkPieces enforces that the field is populated and well-formed. It is
+// required on every row: an unknown programme is stated in words, never left
+// silent, so that a row the routine simply failed to fill in is distinguishable
+// from one whose source genuinely lists no repertoire.
+func checkPieces(p Pieces) string {
+	switch {
+	case p.List != nil:
+		if len(p.List) == 0 {
+			return `pieces is an empty array; use a string such as "Programme not announced" instead`
+		}
+		for i, item := range p.List {
+			if strings.TrimSpace(item) == "" {
+				return fmt.Sprintf("pieces[%d] is empty", i)
+			}
+		}
+	case p.Text != nil:
+		if strings.TrimSpace(*p.Text) == "" {
+			return `pieces is an empty string; use a string such as "Programme not announced"`
+		}
+	default:
+		return `field "pieces" is required (an array of work titles, or a string such as "Programme not announced")`
+	}
+	return ""
+}
+
 // checkID verifies the id has the canonical "<slug>|<date>|<city>" shape and
 // that its date and city segments agree with the row's own fields.
 func checkID(id, date, city string) string {
@@ -227,8 +329,36 @@ func checkID(id, date, city string) string {
 	return ""
 }
 
-// checkAppendOnly ensures every entry present in base still exists unchanged in
-// head. New entries are allowed; modifications and deletions are not.
+// immutableFields pin a row to one specific concert, plus the date we first
+// recorded it. Changing any of them would quietly repoint a vetted row at a
+// different event while keeping its id, so they are frozen once written. (id
+// itself is the identity key, and the checkID rule ties it to date and city.)
+var immutableFields = []struct {
+	name string
+	get  func(Concert) string
+}{
+	{"artist", func(c Concert) string { return c.Artist }},
+	{"date", func(c Concert) string { return c.Date }},
+	{"city", func(c Concert) string { return c.City }},
+	{"first_seen", func(c Concert) string { return c.FirstSeen }},
+}
+
+// refinableFields are descriptive: a venue gets announced, a programme listed
+// only by composer later names its works. They may be rewritten freely, subject
+// only to the rule below that information is never erased once recorded.
+var refinableFields = []struct {
+	name     string
+	populate func(Concert) bool
+}{
+	{"venue", func(c Concert) bool { return c.Venue != nil }},
+	{"program", func(c Concert) bool { return c.Program != nil }},
+	{"pieces", func(c Concert) bool { return c.Pieces.Present() }},
+}
+
+// checkAppendOnly ensures every entry present in base still exists in head with
+// its identity intact. New entries are allowed, and descriptive detail may be
+// refined as more is learned; deletions, identity rewrites, and blanking out a
+// field that already had a value are not.
 func checkAppendOnly(base, head File) []string {
 	var problems []string
 	headByID := make(map[string]Concert, len(head.Concerts))
@@ -241,15 +371,18 @@ func checkAppendOnly(base, head File) []string {
 			problems = append(problems, fmt.Sprintf("append-only: existing entry %q was deleted", b.ID))
 			continue
 		}
-		if !sameConcert(b, h) {
-			problems = append(problems, fmt.Sprintf("append-only: existing entry %q was modified", b.ID))
+		for _, f := range immutableFields {
+			if was, now := f.get(b), f.get(h); was != now {
+				problems = append(problems, fmt.Sprintf(
+					"append-only: existing entry %q changed immutable field %s (%q -> %q)", b.ID, f.name, was, now))
+			}
+		}
+		for _, f := range refinableFields {
+			if f.populate(b) && !f.populate(h) {
+				problems = append(problems, fmt.Sprintf(
+					"append-only: existing entry %q cleared %s; detail may be refined but not erased", b.ID, f.name))
+			}
 		}
 	}
 	return problems
-}
-
-func sameConcert(a, b Concert) bool {
-	ab, _ := json.Marshal(a)
-	bb, _ := json.Marshal(b)
-	return string(ab) == string(bb)
 }
