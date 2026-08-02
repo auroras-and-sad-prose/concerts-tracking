@@ -371,6 +371,18 @@
       "location_tag": "europe",
       "source_url": "https://www.mariaduenasviolin.com/en/calendar",
       "first_seen": "2026-07-31"
+    },
+    {
+      "id": "duenas|2027-02-24|hamburg",
+      "artist": "María Dueñas",
+      "date": "2027-02-24",
+      "city": "Hamburg",
+      "country": "Germany",
+      "venue": "Elbphilharmonie: Grand Hall",
+      "program": "Andrés Orozco-Estrada, Colombian Youth Philharmonic: Lalo, Stravinsky",
+      "location_tag": "germany",
+      "source_url": "https://bachtrack.com/performer/maria-duenas",
+      "first_seen": "2026-08-02"
     }
   ]
 }
