@@ -125,24 +125,34 @@
     margin-top: .3rem;
   }
   .card .repertoire {
-    font-size: .82rem;
-    margin-top: .35rem;
-    line-height: 1.5;
+    margin-top: .5rem;
   }
   .card .repertoire-label {
+    display: block;
     font-size: .68rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: .05em;
     color: var(--accent);
-    margin-right: .5rem;
+    margin-bottom: .35rem;
   }
-  .card .repertoire .piece:not(:last-child)::after {
-    content: "·";
-    color: var(--border);
-    margin: 0 .5rem;
+  .card .repertoire-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .4rem;
+  }
+  .card .piece {
+    font-size: .78rem;
+    line-height: 1.3;
+    padding: .2rem .65rem;
+    border-radius: 999px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
   }
   .card .repertoire.note .repertoire-text {
+    display: block;
+    font-size: .82rem;
     color: var(--muted);
     font-style: italic;
   }
@@ -274,14 +284,14 @@ function render() {
 // `pieces` is an array of work titles when the repertoire is known, or a
 // descriptive string ("Programme not announced") when the source doesn't list
 // it. Both get the same "Programme" label so it's always clear what this line
-// represents; the two shapes are then styled differently — a row of confirmed
-// works reads as fact, a note reads (italic, muted) as an absence of one.
+// represents; the two shapes are then styled differently — confirmed works
+// read as a row of pill chips, a note reads (italic, muted) as prose.
 function piecesHTML(pieces) {
   if (Array.isArray(pieces)) {
     const items = pieces.filter(p => typeof p === "string" && p.trim());
     if (items.length === 0) return "";
-    const list = items.map(p => `<span class="piece">${escapeHTML(p)}</span>`).join("");
-    return `<div class="repertoire"><span class="repertoire-label">Programme</span>${list}</div>`;
+    const chips = items.map(p => `<span class="piece">${escapeHTML(p)}</span>`).join("");
+    return `<div class="repertoire"><span class="repertoire-label">Programme</span><div class="repertoire-list">${chips}</div></div>`;
   }
   if (typeof pieces === "string" && pieces.trim()) {
     return `<div class="repertoire note"><span class="repertoire-label">Programme</span><span class="repertoire-text">${escapeHTML(pieces)}</span></div>`;
