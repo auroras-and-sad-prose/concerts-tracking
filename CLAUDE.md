@@ -21,7 +21,7 @@ separate prompt.
 - has a `location_tag` outside the allowed set (`europe`, `germany`, `berlin`);
 - has a `source_url` that is not http(s) on an allowlisted domain
   (`ilyunburkev.com`, `olgascheps.com`, `mariaduenasviolin.com`,
-  `mayaoganyan.com`, `bachtrack.com`);
+  `mayaoganyan.com`, `janinejansen.com`, `bachtrack.com`);
 - has a `pieces` that is absent, an empty array, an empty string, or any shape
   other than an array of non-empty strings or a single non-empty string;
 - has an `id` whose shape isn't `<slug>|<date>|<city>` or whose date/city
@@ -55,7 +55,7 @@ go run ./tools/validate -file seen.json
 ## Operating procedure for the concert-watch routine
 
 You are a scheduled concert-monitoring agent. Your job: detect NEW upcoming
-concerts by four classical musicians and alert about them, using this repo as
+concerts by five classical musicians and alert about them, using this repo as
 memory so the same concert is never alerted on twice. You run inside a fresh
 clone of this private repo with read/write access to repo contents and to
 Issues. All state lives in `seen.json` at the repo root.
@@ -66,18 +66,20 @@ Issues. All state lives in `seen.json` at the repo root.
 2. María Dueñas — https://www.mariaduenasviolin.com/en/calendar
 3. İlyun Bürkev — https://ilyunburkev.com/en/portfolio/concerts/
 4. Maya Oganyan — https://www.mayaoganyan.com/calendar
+5. Janine Jansen — https://www.janinejansen.com/performances/
 
-All four pages list upcoming concerts directly. Bürkev's and Oganyan's pages
+All five pages list upcoming concerts directly. Bürkev's and Oganyan's pages
 separate an upcoming list from a past-concerts list on the same page — don't
 trust the page's own "upcoming/past" labels; decide what's current purely from
 the date filter in step 2.
 
-**Secondary source — Bachtrack, for all four artists too:**
+**Secondary source — Bachtrack, for all five artists too:**
 
 1. Olga Scheps — https://bachtrack.com/performer/olga-scheps
 2. María Dueñas — https://bachtrack.com/performer/maria-duenas
 3. İlyun Bürkev — https://bachtrack.com/performer/ilyun-burkev
 4. Maya Oganyan — https://bachtrack.com/performer/maya-oganyan
+5. Janine Jansen — https://bachtrack.com/performer/janine-jansen
 
 Each profile has a "Live Events" section listing upcoming concerts (ignore
 "Latest reviews"/"Latest articles" — past content). Bachtrack sometimes lists
@@ -146,7 +148,7 @@ If there's at least one NEW concert, open ONE GitHub issue:
   each: `artist — date — city, venue — programme — source_url`.
 
 If there are zero new concerts, do NOT open an issue — print a one-line
-summary instead (e.g. "No new concerts. Checked 4 artists, all sources OK.").
+summary instead (e.g. "No new concerts. Checked 5 artists, all sources OK.").
 
 **Step 7 — Report source health.** End the run output with a status line per
 artist covering both sources: which of (official site, Bachtrack) loaded,
