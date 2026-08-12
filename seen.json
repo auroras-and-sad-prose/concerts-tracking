@@ -441,6 +441,198 @@
       "location_tag": "germany",
       "source_url": "https://bachtrack.com/performer/maria-duenas",
       "first_seen": "2026-08-02"
+    },
+    {
+      "id": "jansen|2026-08-25|stockholm",
+      "artist": "Janine Jansen",
+      "date": "2026-08-25",
+      "city": "Stockholm",
+      "country": "Sweden",
+      "venue": "Berwaldhallen",
+      "program": "Baltic Sea Festival — Czech Philharmonic Orchestra / Semyon Bychkov: Shostakovich Violin Concerto No 1, Dvorak Symphony No 7",
+      "pieces": [
+        "Shostakovich: Violin Concerto No 1",
+        "Dvorak: Symphony No 7"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.janinejansen.com/performances/",
+      "first_seen": "2026-08-12"
+    },
+    {
+      "id": "jansen|2026-08-28|helsinki",
+      "artist": "Janine Jansen",
+      "date": "2026-08-28",
+      "city": "Helsinki",
+      "country": "Finland",
+      "venue": "Music Center",
+      "program": "Helsinki Festival — Czech Philharmonic Orchestra / Semyon Bychkov: Shostakovich Violin Concerto No 1, Dvorak Symphony No 7",
+      "pieces": [
+        "Shostakovich: Violin Concerto No 1",
+        "Dvorak: Symphony No 7"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.janinejansen.com/performances/",
+      "first_seen": "2026-08-12"
+    },
+    {
+      "id": "jansen|2026-08-29|copenhagen",
+      "artist": "Janine Jansen",
+      "date": "2026-08-29",
+      "city": "Copenhagen",
+      "country": "Denmark",
+      "venue": "Tivoli",
+      "program": "Tivoli Recital — with Denis Kozhukhin: Brahms Violin Sonata No 1, Prokofiev Five Melodies, Prokofiev Violin Sonata No 1",
+      "pieces": [
+        "Brahms: Violin Sonata No 1",
+        "Prokofiev: Five Melodies",
+        "Prokofiev: Violin Sonata No 1"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.janinejansen.com/performances/",
+      "first_seen": "2026-08-12"
+    },
+    {
+      "id": "jansen|2026-09-01|prague",
+      "artist": "Janine Jansen",
+      "date": "2026-09-01",
+      "city": "Prague",
+      "country": "Czech Republic",
+      "venue": "Rudolphinum",
+      "program": "Czech Philharmonic Season Opening — Czech Philharmonic Orchestra / Semyon Bychkov: Shostakovich Violin Concerto No 1",
+      "pieces": [
+        "Shostakovich: Violin Concerto No 1"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.janinejansen.com/performances/",
+      "first_seen": "2026-08-12"
+    },
+    {
+      "id": "jansen|2026-09-02|prague",
+      "artist": "Janine Jansen",
+      "date": "2026-09-02",
+      "city": "Prague",
+      "country": "Czech Republic",
+      "venue": "Rudolphinum",
+      "program": "Czech Philharmonic Season Opening — Czech Philharmonic Orchestra / Semyon Bychkov: Shostakovich Violin Concerto No 1",
+      "pieces": [
+        "Shostakovich: Violin Concerto No 1"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.janinejansen.com/performances/",
+      "first_seen": "2026-08-12"
+    },
+    {
+      "id": "jansen|2026-09-03|prague",
+      "artist": "Janine Jansen",
+      "date": "2026-09-03",
+      "city": "Prague",
+      "country": "Czech Republic",
+      "venue": "Rudolphinum",
+      "program": "Czech Philharmonic Season Opening — Czech Philharmonic Orchestra / Semyon Bychkov: Shostakovich Violin Concerto No 1",
+      "pieces": [
+        "Shostakovich: Violin Concerto No 1"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.janinejansen.com/performances/",
+      "first_seen": "2026-08-12"
+    },
+    {
+      "id": "jansen|2026-09-05|sion",
+      "artist": "Janine Jansen",
+      "date": "2026-09-05",
+      "city": "Sion",
+      "country": "Switzerland",
+      "venue": "Pôle Musique",
+      "program": "Sion Festival — with Boris Brovtsyn (violin), Amihai Grosz (viola), Daniel Blendulf (cello), Denis Kozhukhin & Nikola Meeuwsen (piano): Dohnanyi Piano Quintet No 2 Op 26, Schubert Piano Trio No 2 Op 100",
+      "pieces": [
+        "Dohnanyi: Piano Quintet No 2, Op 26",
+        "Schubert: Piano Trio No 2, Op 100"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.janinejansen.com/performances/",
+      "first_seen": "2026-08-12"
+    },
+    {
+      "id": "jansen|2026-09-06|sion",
+      "artist": "Janine Jansen",
+      "date": "2026-09-06",
+      "city": "Sion",
+      "country": "Switzerland",
+      "venue": "Eglise du Sacré-Coeur",
+      "program": "Sion Festival — with Boris Brovtsyn, Amihai Grosz, Daniel Blendulf, Jonathan Swensen: Schubert String Quintet D956",
+      "pieces": [
+        "Schubert: String Quintet D956"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.janinejansen.com/performances/",
+      "first_seen": "2026-08-12"
+    },
+    {
+      "id": "jansen|2026-10-14|oslo",
+      "artist": "Janine Jansen",
+      "date": "2026-10-14",
+      "city": "Oslo",
+      "country": "Norway",
+      "venue": "Oslo Concert Hall (Konserthus)",
+      "program": "Classical Hour — Oslo Philharmonic / Mirga Gražinytė-Tyla: Shostakovich Violin Concerto no. 1 in A minor, Op.77 or Op.99",
+      "pieces": [
+        "Shostakovich: Violin Concerto no. 1 in A minor, Op.77 or Op.99"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://bachtrack.com/performer/janine-jansen",
+      "first_seen": "2026-08-12"
+    },
+    {
+      "id": "jansen|2026-10-15|oslo",
+      "artist": "Janine Jansen",
+      "date": "2026-10-15",
+      "city": "Oslo",
+      "country": "Norway",
+      "venue": "Oslo Concert Hall (Konserthus)",
+      "program": "Janine Jansen Performs Shostakovich's Violin Concerto — Oslo Philharmonic / Mirga Gražinytė-Tyla",
+      "pieces": "Composers only: Shostakovich, Debussy, Britten",
+      "location_tag": "europe",
+      "source_url": "https://bachtrack.com/performer/janine-jansen",
+      "first_seen": "2026-08-12"
+    },
+    {
+      "id": "jansen|2026-11-11|munich",
+      "artist": "Janine Jansen",
+      "date": "2026-11-11",
+      "city": "Munich",
+      "country": "Germany",
+      "venue": "Isarphilharmonie",
+      "program": "Lahav Shani & Janine Jansen — Munich Philharmonic Orchestra / Lahav Shani",
+      "pieces": "Composers only: Shostakovich, Mussorgsky",
+      "location_tag": "germany",
+      "source_url": "https://bachtrack.com/performer/janine-jansen",
+      "first_seen": "2026-08-12"
+    },
+    {
+      "id": "jansen|2026-11-12|munich",
+      "artist": "Janine Jansen",
+      "date": "2026-11-12",
+      "city": "Munich",
+      "country": "Germany",
+      "venue": "Isarphilharmonie",
+      "program": "Lahav Shani & Janine Jansen — Munich Philharmonic Orchestra / Lahav Shani",
+      "pieces": "Composers only: Shostakovich, Mussorgsky",
+      "location_tag": "germany",
+      "source_url": "https://bachtrack.com/performer/janine-jansen",
+      "first_seen": "2026-08-12"
+    },
+    {
+      "id": "jansen|2026-11-15|munich",
+      "artist": "Janine Jansen",
+      "date": "2026-11-15",
+      "city": "Munich",
+      "country": "Germany",
+      "venue": "Isarphilharmonie",
+      "program": "Lahav Shani & Janine Jansen — Munich Philharmonic Orchestra / Lahav Shani",
+      "pieces": "Composers only: Shostakovich, Mussorgsky",
+      "location_tag": "germany",
+      "source_url": "https://bachtrack.com/performer/janine-jansen",
+      "first_seen": "2026-08-12"
     }
   ]
 }
