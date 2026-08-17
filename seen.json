@@ -633,6 +633,223 @@
       "location_tag": "germany",
       "source_url": "https://bachtrack.com/performer/janine-jansen",
       "first_seen": "2026-08-12"
+    },
+    {
+      "id": "fischer|2026-09-06|varna",
+      "artist": "Julia Fischer",
+      "date": "2026-09-06",
+      "city": "Varna",
+      "country": "Bulgaria",
+      "venue": "Festival- und Kongresszentrum",
+      "program": "Rundfunk-Sinfonieorchester Berlin / Vladimir Jurowski: Beethoven Violin Concerto in D major, Op. 61",
+      "pieces": [
+        "Beethoven Violin Concerto in D major, Op. 61"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.juliafischer.com/en/events",
+      "first_seen": "2026-08-17"
+    },
+    {
+      "id": "fischer|2026-09-17|frankfurt",
+      "artist": "Julia Fischer",
+      "date": "2026-09-17",
+      "city": "Frankfurt",
+      "country": "Germany",
+      "venue": "Alte Oper Frankfurt",
+      "program": "hr-Sinfonieorchester / Alain Altinoglu: Wieniawski Violin Concerto No. 1, Op. 14",
+      "pieces": [
+        "Wieniawski Violin Concerto No. 1, Op. 14"
+      ],
+      "location_tag": "germany",
+      "source_url": "https://www.juliafischer.com/en/events",
+      "first_seen": "2026-08-17"
+    },
+    {
+      "id": "fischer|2026-09-18|frankfurt",
+      "artist": "Julia Fischer",
+      "date": "2026-09-18",
+      "city": "Frankfurt",
+      "country": "Germany",
+      "venue": "Alte Oper Frankfurt",
+      "program": "hr-Sinfonieorchester / Alain Altinoglu: Wieniawski Violin Concerto No. 1, Op. 14",
+      "pieces": [
+        "Wieniawski Violin Concerto No. 1, Op. 14"
+      ],
+      "location_tag": "germany",
+      "source_url": "https://www.juliafischer.com/en/events",
+      "first_seen": "2026-08-17"
+    },
+    {
+      "id": "fischer|2026-09-30|bad wörishofen",
+      "artist": "Julia Fischer",
+      "date": "2026-09-30",
+      "city": "Bad Wörishofen",
+      "country": "Germany",
+      "venue": "Großer Kursaal",
+      "program": "Kammerorchester des Symphonieorchesters des Bayerischen Rundfunks / Radoslaw Szulc: Mendelssohn Sinfonia No. 8 in D major; Violin Concerto in D minor; Vivaldi The Four Seasons, Op. 8",
+      "pieces": [
+        "Mendelssohn Sinfonia No. 8 in D major",
+        "Mendelssohn Violin Concerto in D minor",
+        "Vivaldi The Four Seasons, Op. 8"
+      ],
+      "location_tag": "germany",
+      "source_url": "https://www.juliafischer.com/en/events",
+      "first_seen": "2026-08-17"
+    },
+    {
+      "id": "fischer|2026-09-23|london",
+      "artist": "Julia Fischer",
+      "date": "2026-09-23",
+      "city": "London",
+      "country": "United Kingdom",
+      "venue": "Royal Albert Hall",
+      "program": "Royal Philharmonic Orchestra at 80 — Royal Philharmonic Orchestra / Vasily Petrenko: Wallen, Beethoven, Strauss R.",
+      "pieces": "Composers only: Wallen, Beethoven, Strauss R.",
+      "location_tag": "europe",
+      "source_url": "https://bachtrack.com/performer/julia-fischer",
+      "first_seen": "2026-08-17"
+    },
+    {
+      "id": "fischer|2026-10-21|london",
+      "artist": "Julia Fischer",
+      "date": "2026-10-21",
+      "city": "London",
+      "country": "United Kingdom",
+      "venue": "Royal Festival Hall",
+      "program": "London Philharmonic Orchestra / Edward Gardner: Brahms Violin Concerto in D major, Op. 77",
+      "pieces": [
+        "Brahms Violin Concerto in D major, Op. 77"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.juliafischer.com/en/events",
+      "first_seen": "2026-08-17"
+    },
+    {
+      "id": "fischer|2026-10-26|barcelona",
+      "artist": "Julia Fischer",
+      "date": "2026-10-26",
+      "city": "Barcelona",
+      "country": "Spain",
+      "venue": "Palau de la Música Catalana",
+      "program": "London Philharmonic Orchestra / Edward Gardner: Brahms Violin Concerto in D major, Op. 77",
+      "pieces": [
+        "Brahms Violin Concerto in D major, Op. 77"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.juliafischer.com/en/events",
+      "first_seen": "2026-08-17"
+    },
+    {
+      "id": "fischer|2026-10-27|zaragoza",
+      "artist": "Julia Fischer",
+      "date": "2026-10-27",
+      "city": "Zaragoza",
+      "country": "Spain",
+      "venue": "Auditorio de Zaragoza",
+      "program": "London Philharmonic Orchestra / Edward Gardner: Brahms Concerto for Violin in D Major, Op. 77",
+      "pieces": [
+        "Brahms Concerto for Violin in D Major, Op. 77"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.juliafischer.com/en/events",
+      "first_seen": "2026-08-17"
+    },
+    {
+      "id": "fischer|2026-10-28|madrid",
+      "artist": "Julia Fischer",
+      "date": "2026-10-28",
+      "city": "Madrid",
+      "country": "Spain",
+      "venue": "Auditorio Nacional de Musica",
+      "program": "London Philharmonic Orchestra / Edward Gardner: Brahms Double Concerto for Violin and Cello in A minor, Op.102",
+      "pieces": [
+        "Brahms Double Concerto for Violin and Cello in A minor, Op.102"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.juliafischer.com/en/events",
+      "first_seen": "2026-08-17"
+    },
+    {
+      "id": "fischer|2026-10-29|madrid",
+      "artist": "Julia Fischer",
+      "date": "2026-10-29",
+      "city": "Madrid",
+      "country": "Spain",
+      "venue": "Auditorio Nacional de Musica",
+      "program": "London Philharmonic Orchestra / Edward Gardner: Brahms Concerto for Violin in D Major, Op. 77",
+      "pieces": [
+        "Brahms Concerto for Violin in D Major, Op. 77"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.juliafischer.com/en/events",
+      "first_seen": "2026-08-17"
+    },
+    {
+      "id": "fischer|2026-10-30|valencia",
+      "artist": "Julia Fischer",
+      "date": "2026-10-30",
+      "city": "Valencia",
+      "country": "Spain",
+      "venue": "Palau de la Música",
+      "program": "London Philharmonic Orchestra / Edward Gardner: Brahms Double Concerto for Violin and Cello in A minor, Op.102",
+      "pieces": [
+        "Brahms Double Concerto for Violin and Cello in A minor, Op.102"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.juliafischer.com/en/events",
+      "first_seen": "2026-08-17"
+    },
+    {
+      "id": "fischer|2026-11-30|hamburg",
+      "artist": "Julia Fischer",
+      "date": "2026-11-30",
+      "city": "Hamburg",
+      "country": "Germany",
+      "venue": "Elbphilharmonie: Grand Hall",
+      "program": "Orchestre National de France / Cristian Măcelaru: Berlioz, Saint-Saëns, Dvořák",
+      "pieces": "Composers only: Berlioz, Saint-Saëns, Dvořák",
+      "location_tag": "germany",
+      "source_url": "https://bachtrack.com/performer/julia-fischer",
+      "first_seen": "2026-08-17"
+    },
+    {
+      "id": "fischer|2026-12-04|düsseldorf",
+      "artist": "Julia Fischer",
+      "date": "2026-12-04",
+      "city": "Düsseldorf",
+      "country": "Germany",
+      "venue": "Tonhalle: Mendelssohn Saal",
+      "program": "Orchestre National de France / Cristian Măcelaru: Berlioz, Saint-Saëns, Dvořák",
+      "pieces": "Composers only: Berlioz, Saint-Saëns, Dvořák",
+      "location_tag": "germany",
+      "source_url": "https://bachtrack.com/performer/julia-fischer",
+      "first_seen": "2026-08-17"
+    },
+    {
+      "id": "fischer|2026-12-09|amsterdam",
+      "artist": "Julia Fischer",
+      "date": "2026-12-09",
+      "city": "Amsterdam",
+      "country": "Netherlands",
+      "venue": "Concertgebouw: Main Hall",
+      "program": "Brahms's Second Symphony with Fabio Luisi — Royal Concertgebouw Orchestra / Fabio Luisi: Meyer, Henze, Brahms",
+      "pieces": "Composers only: Meyer, Henze, Brahms",
+      "location_tag": "europe",
+      "source_url": "https://bachtrack.com/performer/julia-fischer",
+      "first_seen": "2026-08-17"
+    },
+    {
+      "id": "fischer|2026-12-11|amsterdam",
+      "artist": "Julia Fischer",
+      "date": "2026-12-11",
+      "city": "Amsterdam",
+      "country": "Netherlands",
+      "venue": "Concertgebouw: Main Hall",
+      "program": "Brahms's Second Symphony with Fabio Luisi — Royal Concertgebouw Orchestra / Fabio Luisi: Meyer, Henze, Brahms",
+      "pieces": "Composers only: Meyer, Henze, Brahms",
+      "location_tag": "europe",
+      "source_url": "https://bachtrack.com/performer/julia-fischer",
+      "first_seen": "2026-08-17"
     }
   ]
 }
