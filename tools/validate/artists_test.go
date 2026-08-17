@@ -94,6 +94,41 @@ func TestArtistNameMismatchRejected(t *testing.T) {
 	}
 }
 
+// A row may narrow the roster to the instrument this engagement calls for:
+// Julia Fischer plays both, so either — or both — is a valid claim for one
+// concert, while leaving it unstated stays valid too.
+func TestConcertInstrumentsMayNarrowRoster(t *testing.T) {
+	for _, list := range [][]string{nil, {"piano"}, {"violin"}, {"violin", "piano"}} {
+		c := valid()
+		c.ID = "fischer|2026-09-12|altenkrempe"
+		c.Artist = "Julia Fischer"
+		c.Instruments = list
+		if p := CheckRoster(File{Concerts: []Concert{c}}, roster()); len(p) != 0 {
+			t.Fatalf("instruments %v should be accepted for Julia Fischer, got %v", list, p)
+		}
+	}
+}
+
+// Claiming an instrument the artist isn't recorded as playing means either a
+// misread source or a stale roster; both need a human, so the build fails.
+func TestConcertInstrumentOutsideRosterRejected(t *testing.T) {
+	c := valid() // Olga Scheps, a pianist on this roster
+	c.Instruments = []string{"violin"}
+	if p := CheckRoster(File{Concerts: []Concert{c}}, roster()); len(p) == 0 {
+		t.Fatal("expected a problem for an instrument the artist does not play")
+	}
+}
+
+// An instrument outside the vocabulary is Validate's complaint; CheckRoster
+// must not add a second, redundant one about the same value.
+func TestUnknownInstrumentNotDoubleReported(t *testing.T) {
+	c := valid()
+	c.Instruments = []string{"theremin"}
+	if p := CheckRoster(File{Concerts: []Concert{c}}, roster()); len(p) != 0 {
+		t.Fatalf("expected vocabulary errors to be left to Validate, got %v", p)
+	}
+}
+
 // A roster entry with no concerts yet is normal: an artist is added to the
 // roster before their first engagement is recorded.
 func TestRosterMayHaveUnusedArtists(t *testing.T) {

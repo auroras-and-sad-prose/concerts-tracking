@@ -172,6 +172,11 @@
     margin-left: .4rem;
     vertical-align: middle;
   }
+  .tag.instrument {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+  }
   .empty, .loading {
     color: var(--muted);
     padding: 2rem 0;
@@ -225,10 +230,38 @@ function loadRoster(artists) {
   }
 }
 
-function instrumentsOf(concert) {
+// Every instrument the artist plays, from the roster.
+function rosterInstrumentsOf(concert) {
   return instrumentsByName.get(concert.artist)
     || instrumentsBySlug.get(String(concert.id || "").split("|")[0])
     || [];
+}
+
+// What this row itself says the engagement calls for — often nothing, since
+// most listings don't mention it.
+function statedInstrumentsOf(concert) {
+  return Array.isArray(concert.instruments)
+    ? concert.instruments.filter(i => typeof i === "string" && i.trim())
+    : [];
+}
+
+// The instruments a concert counts as. A row that names its own narrows the
+// roster to those; one that doesn't matches every instrument its artist plays,
+// so an unstated Fischer date shows under both Piano and Violin rather than
+// disappearing from the filter or pretending to know which it was.
+function instrumentsOf(concert) {
+  const stated = statedInstrumentsOf(concert);
+  return stated.length ? stated : rosterInstrumentsOf(concert);
+}
+
+// Shown only for artists who play more than one instrument — that is where the
+// row-level detail answers a real question. For a pianist it would just repeat
+// what the name already tells you.
+function instrumentTagsHTML(concert) {
+  if (rosterInstrumentsOf(concert).length < 2) return "";
+  return statedInstrumentsOf(concert)
+    .map(i => `<span class="tag instrument">${escapeHTML(i)}</span>`)
+    .join("");
 }
 
 function titleCase(s) {
@@ -311,7 +344,7 @@ function render() {
           <div class="dow">${DOW[d.getDay()]}</div>
         </div>
         <div class="body">
-          <div><span class="artist">${escapeHTML(c.artist)}</span>${c.location_tag ? `<span class="tag">${escapeHTML(c.location_tag)}</span>` : ""}</div>
+          <div><span class="artist">${escapeHTML(c.artist)}</span>${c.location_tag ? `<span class="tag">${escapeHTML(c.location_tag)}</span>` : ""}${instrumentTagsHTML(c)}</div>
           <div class="place">${escapeHTML(place)}</div>
           ${c.program ? `<div class="program">${escapeHTML(c.program)}</div>` : ""}
           ${piecesHTML(c.pieces)}

@@ -10,6 +10,7 @@
 //   - location_tag is drawn from a fixed vocabulary;
 //   - source_url is http(s) and points at an allowlisted domain;
 //   - pieces is either a non-empty array of work titles or a descriptive string;
+//   - instruments, when stated, holds distinct values from the allowed set;
 //   - id has the canonical "<slug>|<date>|<city>" shape consistent with its row;
 //   - ids are unique;
 //   - every artist is registered in artists.json, under the same slug and name
@@ -146,6 +147,12 @@ type Concert struct {
 	LocationTag string  `json:"location_tag"`
 	SourceURL   string  `json:"source_url"`
 	FirstSeen   string  `json:"first_seen"`
+
+	// Instruments narrows the artist's roster instruments to the one(s) this
+	// particular engagement calls for — a pianist-and-violinist may appear on
+	// either. It is null when the source doesn't say, which the page reads as
+	// "could be any of them" rather than as a claim. See artists.go.
+	Instruments []string `json:"instruments"`
 }
 
 // File is the top-level shape of seen.json.
@@ -261,6 +268,18 @@ func Validate(f File, base *File, now time.Time) []string {
 			problems = append(problems, fmt.Sprintf("%s: %s", label, msg))
 		}
 
+		// Unlike pieces, an absent instruments list is fine — "the source
+		// didn't say" is the normal case, and the page falls back to every
+		// instrument the artist plays. An empty array says the same thing in a
+		// shape that reads as a claim, so it is rejected in favour of null.
+		if c.Instruments != nil && len(c.Instruments) == 0 {
+			problems = append(problems, fmt.Sprintf(
+				"%s: instruments is an empty array; use null when the source doesn't say which instrument", label))
+		}
+		for _, m := range checkInstrumentValues(c.Instruments) {
+			problems = append(problems, fmt.Sprintf("%s: %s", label, m))
+		}
+
 		if c.ID != "" {
 			if msg := checkID(c.ID, c.Date, c.City); msg != "" {
 				problems = append(problems, fmt.Sprintf("%s: %s", label, msg))
@@ -373,6 +392,7 @@ var refinableFields = []struct {
 	{"venue", func(c Concert) bool { return c.Venue != nil }},
 	{"program", func(c Concert) bool { return c.Program != nil }},
 	{"pieces", func(c Concert) bool { return c.Pieces.Present() }},
+	{"instruments", func(c Concert) bool { return c.Instruments != nil }},
 }
 
 // checkAppendOnly ensures every entry present in base still exists in head with

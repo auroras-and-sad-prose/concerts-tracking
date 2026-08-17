@@ -24,6 +24,27 @@ var allowedInstruments = map[string]bool{
 	"violin": true,
 }
 
+// checkInstrumentValues validates the entries of an instruments list against
+// the closed vocabulary and rejects repeats. Whether the list may be absent
+// altogether is the caller's business: the roster requires one (an artist
+// always plays something), a concert row does not (the source often doesn't
+// say which instrument an engagement calls for).
+func checkInstrumentValues(list []string) []string {
+	var problems []string
+	seen := make(map[string]bool, len(list))
+	for i, ins := range list {
+		switch {
+		case !allowedInstruments[ins]:
+			problems = append(problems, fmt.Sprintf("instruments[%d] %q is not in the allowed set", i, ins))
+		case seen[ins]:
+			problems = append(problems, fmt.Sprintf("instruments lists %q twice", ins))
+		default:
+			seen[ins] = true
+		}
+	}
+	return problems
+}
+
 // Artist is one entry in artists.json. slug is the identity key, and matches
 // the first segment of a concert id ("scheps|2026-09-12|altenkrempe").
 type Artist struct {
@@ -75,16 +96,8 @@ func ValidateArtists(a Artists) []string {
 		if len(ar.Instruments) == 0 {
 			problems = append(problems, fmt.Sprintf("%s: field %q is required (every artist plays at least one instrument)", label, "instruments"))
 		}
-		seen := make(map[string]bool, len(ar.Instruments))
-		for j, ins := range ar.Instruments {
-			switch {
-			case !allowedInstruments[ins]:
-				problems = append(problems, fmt.Sprintf("%s: instruments[%d] %q is not in the allowed set", label, j, ins))
-			case seen[ins]:
-				problems = append(problems, fmt.Sprintf("%s: instruments lists %q twice", label, ins))
-			default:
-				seen[ins] = true
-			}
+		for _, m := range checkInstrumentValues(ar.Instruments) {
+			problems = append(problems, fmt.Sprintf("%s: %s", label, m))
 		}
 	}
 
@@ -92,9 +105,13 @@ func ValidateArtists(a Artists) []string {
 }
 
 // CheckRoster ties seen.json to the roster: a concert's id slug must name a
-// registered artist, and that artist's name must be exactly the row's artist
-// field. Concerts whose id is malformed are skipped here — Validate already
-// reports those, and re-reporting them as "unknown artist" would be noise.
+// registered artist, that artist's name must be exactly the row's artist
+// field, and a row that states its own instruments may only narrow the ones
+// the roster lists for that artist. A row claiming an instrument the artist
+// isn't recorded as playing is either a misread source or a stale roster —
+// both worth a human look, so it fails the build. Concerts whose id is
+// malformed are skipped here — Validate already reports those, and
+// re-reporting them as "unknown artist" would be noise.
 //
 // The reverse direction is intentionally not checked: a newly tracked artist
 // legitimately sits in the roster with no concerts recorded yet.
@@ -124,6 +141,20 @@ func CheckRoster(f File, a Artists) []string {
 		if ar.Name != c.Artist {
 			problems = append(problems, fmt.Sprintf(
 				"%s: artist %q does not match artists.json name %q for slug %q", label, c.Artist, ar.Name, ar.Slug))
+		}
+
+		plays := make(map[string]bool, len(ar.Instruments))
+		for _, ins := range ar.Instruments {
+			plays[ins] = true
+		}
+		for _, ins := range c.Instruments {
+			// Values outside the vocabulary are already reported by Validate;
+			// calling them "not on the roster" too would just be noise.
+			if allowedInstruments[ins] && !plays[ins] {
+				problems = append(problems, fmt.Sprintf(
+					"%s: instrument %q is not among the roster instruments for %s (%s)",
+					label, ins, ar.Name, strings.Join(ar.Instruments, ", ")))
+			}
 		}
 	}
 
