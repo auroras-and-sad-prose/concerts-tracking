@@ -263,31 +263,23 @@ function titleCase(s) {
   return s.charAt(0).toUpperCase() + s.slice(1);
 }
 
+function addOptions(selectId, values, label = v => v) {
+  const sel = document.getElementById(selectId);
+  for (const v of [...new Set(values)].sort()) {
+    const opt = document.createElement("option");
+    opt.value = v; opt.textContent = label(v);
+    sel.appendChild(opt);
+  }
+  return sel;
+}
+
 function populateFilters(concerts) {
-  const artistSel = document.getElementById("artistFilter");
-  const instrumentSel = document.getElementById("instrumentFilter");
-  const countrySel = document.getElementById("countryFilter");
-  const artists = [...new Set(concerts.map(c => c.artist))].sort();
-  const instruments = [...new Set(concerts.flatMap(instrumentsOf))].sort();
-  const countries = [...new Set(concerts.map(c => c.country).filter(Boolean))].sort();
-  for (const a of artists) {
-    const opt = document.createElement("option");
-    opt.value = a; opt.textContent = a;
-    artistSel.appendChild(opt);
-  }
-  for (const i of instruments) {
-    const opt = document.createElement("option");
-    opt.value = i; opt.textContent = titleCase(i);
-    instrumentSel.appendChild(opt);
-  }
+  addOptions("artistFilter", concerts.map(c => c.artist));
   // Stays hidden when the roster is unavailable or tells us nothing, so the
   // page still works with only seen.json rather than showing a dead control.
-  instrumentSel.hidden = instruments.length === 0;
-  for (const c of countries) {
-    const opt = document.createElement("option");
-    opt.value = c; opt.textContent = c;
-    countrySel.appendChild(opt);
-  }
+  const instrumentSel = addOptions("instrumentFilter", concerts.flatMap(instrumentsOf), titleCase);
+  instrumentSel.hidden = instrumentSel.options.length <= 1;
+  addOptions("countryFilter", concerts.map(c => c.country).filter(Boolean));
 }
 
 function render() {
