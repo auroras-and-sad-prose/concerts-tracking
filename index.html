@@ -187,6 +187,7 @@
 
 <div class="controls">
   <select id="artistFilter"><option value="">All artists</option></select>
+  <select id="instrumentFilter" hidden><option value="">All instruments</option></select>
   <select id="countryFilter"><option value="">All countries</option></select>
   <input type="search" id="searchBox" placeholder="Search city, venue, program, pieces…">
 </div>
@@ -201,21 +202,59 @@ const MONTH = ["January","February","March","April","May","June","July","August"
 
 let allConcerts = [];
 
+// Which instruments each artist plays, from artists.json. That roster is
+// curated and static — an instrument is a fact about the performer, not about
+// one concert — so it lives outside seen.json and is joined in here by artist
+// name (with the concert id's slug as a fallback).
+let instrumentsByName = new Map();
+let instrumentsBySlug = new Map();
+
 function todayISO() {
   const d = new Date();
   return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
 }
 
+function loadRoster(artists) {
+  instrumentsByName = new Map();
+  instrumentsBySlug = new Map();
+  for (const a of artists) {
+    if (!Array.isArray(a.instruments)) continue;
+    const list = a.instruments.filter(i => typeof i === "string" && i.trim());
+    if (a.name) instrumentsByName.set(a.name, list);
+    if (a.slug) instrumentsBySlug.set(a.slug, list);
+  }
+}
+
+function instrumentsOf(concert) {
+  return instrumentsByName.get(concert.artist)
+    || instrumentsBySlug.get(String(concert.id || "").split("|")[0])
+    || [];
+}
+
+function titleCase(s) {
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
 function populateFilters(concerts) {
   const artistSel = document.getElementById("artistFilter");
+  const instrumentSel = document.getElementById("instrumentFilter");
   const countrySel = document.getElementById("countryFilter");
   const artists = [...new Set(concerts.map(c => c.artist))].sort();
+  const instruments = [...new Set(concerts.flatMap(instrumentsOf))].sort();
   const countries = [...new Set(concerts.map(c => c.country).filter(Boolean))].sort();
   for (const a of artists) {
     const opt = document.createElement("option");
     opt.value = a; opt.textContent = a;
     artistSel.appendChild(opt);
   }
+  for (const i of instruments) {
+    const opt = document.createElement("option");
+    opt.value = i; opt.textContent = titleCase(i);
+    instrumentSel.appendChild(opt);
+  }
+  // Stays hidden when the roster is unavailable or tells us nothing, so the
+  // page still works with only seen.json rather than showing a dead control.
+  instrumentSel.hidden = instruments.length === 0;
   for (const c of countries) {
     const opt = document.createElement("option");
     opt.value = c; opt.textContent = c;
@@ -225,12 +264,14 @@ function populateFilters(concerts) {
 
 function render() {
   const artist = document.getElementById("artistFilter").value;
+  const instrument = document.getElementById("instrumentFilter").value;
   const country = document.getElementById("countryFilter").value;
   const search = document.getElementById("searchBox").value.trim().toLowerCase();
   const today = todayISO();
 
   let list = allConcerts.filter(c => c.date >= today);
   if (artist) list = list.filter(c => c.artist === artist);
+  if (instrument) list = list.filter(c => instrumentsOf(c).includes(instrument));
   if (country) list = list.filter(c => c.country === country);
   if (search) {
     list = list.filter(c =>
@@ -320,11 +361,24 @@ function isSafeUrl(url) {
   }
 }
 
+async function fetchJSON(path) {
+  const res = await fetch(path, { cache: "no-store" });
+  if (!res.ok) throw new Error(`${path}: HTTP ${res.status}`);
+  return res.json();
+}
+
 async function init() {
+  // The roster is supporting data: if it can't be loaded, the concert list
+  // still renders and only the instrument filter drops out.
+  const roster = fetchJSON("artists.json").catch(e => {
+    console.error(e);
+    return null;
+  });
   try {
-    const res = await fetch("seen.json", { cache: "no-store" });
-    const data = await res.json();
+    const data = await fetchJSON("seen.json");
     allConcerts = data.concerts || [];
+    const artists = await roster;
+    loadRoster((artists && artists.artists) || []);
     populateFilters(allConcerts);
     render();
   } catch (e) {
@@ -336,6 +390,7 @@ async function init() {
 }
 
 document.getElementById("artistFilter").addEventListener("change", render);
+document.getElementById("instrumentFilter").addEventListener("change", render);
 document.getElementById("countryFilter").addEventListener("change", render);
 document.getElementById("searchBox").addEventListener("input", render);
 

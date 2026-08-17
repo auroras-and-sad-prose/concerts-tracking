@@ -1,0 +1,39 @@
+{
+  "artists": [
+    {
+      "slug": "scheps",
+      "name": "Olga Scheps",
+      "instruments": ["piano"]
+    },
+    {
+      "slug": "duenas",
+      "name": "María Dueñas",
+      "instruments": ["violin"]
+    },
+    {
+      "slug": "burkev",
+      "name": "İlyun Bürkev",
+      "instruments": ["piano"]
+    },
+    {
+      "slug": "oganyan",
+      "name": "Maya Oganyan",
+      "instruments": ["piano"]
+    },
+    {
+      "slug": "jansen",
+      "name": "Janine Jansen",
+      "instruments": ["violin"]
+    },
+    {
+      "slug": "fischer",
+      "name": "Julia Fischer",
+      "instruments": ["violin", "piano"]
+    },
+    {
+      "slug": "perlman",
+      "name": "Itzhak Perlman",
+      "instruments": ["violin"]
+    }
+  ]
+}

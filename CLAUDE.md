@@ -2,6 +2,8 @@
 
 `seen.json` is a curated dataset of upcoming classical concerts, populated by an
 automated concert-watch routine and rendered by `index.html` (GitHub Pages).
+`artists.json` is the hand-maintained roster of the musicians tracked and the
+instrument(s) each one plays — see "The artist roster" below.
 
 Reducing hallucination in this dataset relies on three layers: the **enforced
 layer**, which is what actually gates the data (CI); the **operating
@@ -27,7 +29,9 @@ separate prompt.
   other than an array of non-empty strings or a single non-empty string;
 - has an `id` whose shape isn't `<slug>|<date>|<city>` or whose date/city
   segments disagree with the row's own fields;
-- duplicates another entry's `id`.
+- duplicates another entry's `id`;
+- names an artist absent from `artists.json`, or whose `artist` string disagrees
+  with the name registered there for that id slug.
 
 It also constrains how existing entries may change. Entries may never be
 **deleted**, and the fields that pin a row to one specific concert — `artist`,
@@ -46,12 +50,40 @@ back to `null`. Detail can be added or corrected, never blanked out.
 Extending the tag/domain allowlists, or clearing a field back to `null`, is a
 reviewed change to this repo — not something the routine does on its own.
 
-Run locally before committing:
+Run locally before committing (the validator reads `artists.json` from the
+working directory too; `-artists ""` turns the roster checks off):
 
 ```sh
 go test ./tools/...
 go run ./tools/validate -file seen.json
 ```
+
+## The artist roster (`artists.json`)
+
+Which instrument a musician plays is a stable fact about the performer, not
+something that varies per concert, so it is stored once in `artists.json`
+rather than re-derived from concert pages on every run:
+
+```json
+{
+  "artists": [
+    { "slug": "fischer", "name": "Julia Fischer", "instruments": ["violin", "piano"] }
+  ]
+}
+```
+
+`slug` is the same slug used in a concert `id`, `name` must match the `artist`
+string used in `seen.json` rows exactly, and `instruments` is a non-empty list
+drawn from a closed vocabulary (`piano`, `violin`). CI validates the roster and
+cross-checks it against `seen.json`, so an artist appearing in a concert row
+without a roster entry — or under a subtly different name — fails the build.
+`index.html` joins the two files to offer an instrument filter.
+
+**The concert-watch routine never writes this file.** Adding an artist,
+correcting an instrument, or extending the instrument vocabulary is a reviewed
+change to this repo, exactly like extending the tag/domain allowlists. If a
+concert turns up for an artist who is not on the roster, raise it rather than
+editing the roster mid-run.
 
 ## Operating procedure for the concert-watch routine
 
