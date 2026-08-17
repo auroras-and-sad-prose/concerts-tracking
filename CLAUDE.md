@@ -2,6 +2,8 @@
 
 `seen.json` is a curated dataset of upcoming classical concerts, populated by an
 automated concert-watch routine and rendered by `index.html` (GitHub Pages).
+`artists.json` is the hand-maintained roster of the musicians tracked and the
+instrument(s) each one plays — see "The artist roster" below.
 
 Reducing hallucination in this dataset relies on three layers: the **enforced
 layer**, which is what actually gates the data (CI); the **operating
@@ -27,7 +29,12 @@ separate prompt.
   other than an array of non-empty strings or a single non-empty string;
 - has an `id` whose shape isn't `<slug>|<date>|<city>` or whose date/city
   segments disagree with the row's own fields;
-- duplicates another entry's `id`.
+- duplicates another entry's `id`;
+- names an artist absent from `artists.json`, or whose `artist` string disagrees
+  with the name registered there for that id slug;
+- has an `instruments` that is an empty array, repeats a value, contains
+  anything outside the allowed set (`piano`, `violin`), or names an instrument
+  the artist isn't recorded as playing in `artists.json`.
 
 It also constrains how existing entries may change. Entries may never be
 **deleted**, and the fields that pin a row to one specific concert — `artist`,
@@ -38,20 +45,59 @@ ties it to `date` and `city`.)
 
 The remaining fields are **refinable**. Concert details firm up over time — a
 venue gets announced, a programme listed only by composer later names its works —
-so `venue`, `program`, `pieces`, `country`, `location_tag`, and `source_url` may
-be updated by a later run. The one limit is that information may not be *erased*:
-a `venue`, `program`, or `pieces` that already carried a value may not be set
-back to `null`. Detail can be added or corrected, never blanked out.
+so `venue`, `program`, `pieces`, `instruments`, `country`, `location_tag`, and
+`source_url` may be updated by a later run. The one limit is that information may
+not be *erased*: a `venue`, `program`, `pieces`, or `instruments` that already
+carried a value may not be set back to `null`. Detail can be added or corrected,
+never blanked out.
 
 Extending the tag/domain allowlists, or clearing a field back to `null`, is a
 reviewed change to this repo — not something the routine does on its own.
 
-Run locally before committing:
+Run locally before committing (the validator reads `artists.json` from the
+working directory too; `-artists ""` turns the roster checks off):
 
 ```sh
 go test ./tools/...
 go run ./tools/validate -file seen.json
 ```
+
+## The artist roster (`artists.json`)
+
+Which instrument a musician plays is a stable fact about the performer, not
+something that varies per concert, so it is stored once in `artists.json`
+rather than re-derived from concert pages on every run:
+
+```json
+{
+  "artists": [
+    { "slug": "fischer", "name": "Julia Fischer", "instruments": ["violin", "piano"] }
+  ]
+}
+```
+
+`slug` is the same slug used in a concert `id`, `name` must match the `artist`
+string used in `seen.json` rows exactly, and `instruments` is a non-empty list
+drawn from a closed vocabulary (`piano`, `violin`). CI validates the roster and
+cross-checks it against `seen.json`, so an artist appearing in a concert row
+without a roster entry — or under a subtly different name — fails the build.
+`index.html` joins the two files to offer an instrument filter.
+
+The roster says what an artist *can* play; a single concert may call for only
+one of those. So a `seen.json` row carries its own optional `instruments` —
+`["piano"]` on a Fischer date the source describes as a piano recital — which
+must be a subset of that artist's roster instruments. It is `null` whenever the
+source doesn't say, which is the normal case and not a defect: the page then
+treats the concert as a candidate for every instrument the artist plays, so an
+unstated Fischer date appears under both Piano and Violin rather than claiming
+one. A later run may narrow it once a source states which (rule 6); it is never
+narrowed by inference from the repertoire.
+
+**The concert-watch routine never writes this file.** Adding an artist,
+correcting an instrument, or extending the instrument vocabulary is a reviewed
+change to this repo, exactly like extending the tag/domain allowlists. If a
+concert turns up for an artist who is not on the roster, raise it rather than
+editing the roster mid-run.
 
 ## Operating procedure for the concert-watch routine
 
@@ -101,7 +147,8 @@ below rather than treating the current slate as noise.
 each artist: fetch the primary source and the Bachtrack profile, and extract
 every listed concert (ignore cookie banners, nav, and other page chrome).
 For each, capture `artist`, `date`, `city`, `country`, `venue`, `program` (if
-shown), `pieces` (per grounding rule 3), and the `source_url` you found it on.
+shown), `pieces` (per grounding rule 3), `instruments` (per grounding rule 7),
+and the `source_url` you found it on.
 Normalize dates to ISO `YYYY-MM-DD`; pages use mixed German/English formats
 (`16.3.2026`, `04. Juni 2026`, `Aug 3, 2026`).
 
@@ -135,16 +182,17 @@ twice.
 
 **Step 5 — Refine existing rows.** For every concert whose id is already in
 `seen.json`, check whether this run's fetch turned up more than what's
-stored — an announced venue, or real work titles where `pieces` previously
-said `"Composers only: ..."` or `"Programme not announced"`. Update `venue`,
-`program`, `pieces`, `country`, `location_tag`, and `source_url` in place per
-grounding rule 6. Never touch `artist`, `date`, `city`, or `first_seen`, and
-never clear a populated field back to `null`.
+stored — an announced venue, real work titles where `pieces` previously said
+`"Composers only: ..."` or `"Programme not announced"`, or a now-stated
+instrument for a row whose `instruments` is still `null`. Update `venue`,
+`program`, `pieces`, `instruments`, `country`, `location_tag`, and `source_url`
+in place per grounding rule 6. Never touch `artist`, `date`, `city`, or
+`first_seen`, and never clear a populated field back to `null`.
 
 **Step 6 — Record and alert.** Use the `main` branch only — do not create new
 branches. Add every NEW concert to `seen.json`'s `"concerts"` array with all
-captured fields (including `pieces`) plus `"first_seen": "<today's ISO date>"`
-and `"id"`. Commit with message `"concert-watch: <today's date>, +<N> new"`
+captured fields (including `pieces` and `instruments`) plus
+`"first_seen": "<today's ISO date>"` and `"id"`. Commit with message `"concert-watch: <today's date>, +<N> new"`
 and push.
 
 If there's at least one NEW concert, open ONE GitHub issue:
@@ -200,3 +248,14 @@ a silently broken source.
    fetched in that run, not from what you happen to know about the repertoire.
    Never change `artist`, `date`, `city`, or `first_seen`, and never clear a
    populated field back to `null` — raise that as a normal PR for review.
+7. **`instruments` records what the source says, not what you can infer.** Set a
+   row's `instruments` only when the page itself pins the instrument down for
+   that engagement — a billing like "Julia Fischer, piano", a listing titled
+   "Klavierabend", a concerto named with its soloist's instrument. Otherwise
+   leave it `null`; the page then shows the concert under every instrument that
+   artist plays, which is the truthful answer. Do not infer it from the
+   repertoire, from who else is on the bill, or from what the artist usually
+   does, and never widen it beyond the instruments `artists.json` records for
+   them — for a single-instrument artist the field adds nothing, so `null` is
+   fine there too. The roster itself stays out of the routine's hands (see "The
+   artist roster").

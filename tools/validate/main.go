@@ -10,8 +10,11 @@
 //   - location_tag is drawn from a fixed vocabulary;
 //   - source_url is http(s) and points at an allowlisted domain;
 //   - pieces is either a non-empty array of work titles or a descriptive string;
+//   - instruments, when stated, holds distinct values from the allowed set;
 //   - id has the canonical "<slug>|<date>|<city>" shape consistent with its row;
-//   - ids are unique.
+//   - ids are unique;
+//   - every artist is registered in artists.json, under the same slug and name
+//     (see artists.go, which also validates that roster itself).
 //
 // With -base pointing at the previous version of the file, it additionally
 // enforces two rules on entries that already existed:
@@ -144,6 +147,12 @@ type Concert struct {
 	LocationTag string  `json:"location_tag"`
 	SourceURL   string  `json:"source_url"`
 	FirstSeen   string  `json:"first_seen"`
+
+	// Instruments narrows the artist's roster instruments to the one(s) this
+	// particular engagement calls for — a pianist-and-violinist may appear on
+	// either. It is null when the source doesn't say, which the page reads as
+	// "could be any of them" rather than as a claim. See artists.go.
+	Instruments []string `json:"instruments"`
 }
 
 // File is the top-level shape of seen.json.
@@ -154,9 +163,10 @@ type File struct {
 func main() {
 	filePath := flag.String("file", "seen.json", "path to the concerts JSON file to validate")
 	basePath := flag.String("base", "", "optional path to the previous version of the file; enables the append-only check")
+	artistsPath := flag.String("artists", "artists.json", "path to the artist roster; empty disables the roster checks")
 	flag.Parse()
 
-	f, err := loadFile(*filePath)
+	f, err := loadJSON[File](*filePath)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "error: cannot read %s: %v\n", *filePath, err)
 		os.Exit(1)
@@ -164,7 +174,7 @@ func main() {
 
 	var base *File
 	if *basePath != "" {
-		b, err := loadFile(*basePath)
+		b, err := loadJSON[File](*basePath)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "error: cannot read base %s: %v\n", *basePath, err)
 			os.Exit(1)
@@ -173,6 +183,19 @@ func main() {
 	}
 
 	problems := Validate(f, base, time.Now().UTC())
+
+	if *artistsPath != "" {
+		artists, err := loadJSON[Artists](*artistsPath)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "error: cannot read %s: %v\n", *artistsPath, err)
+			os.Exit(1)
+		}
+		for _, p := range ValidateArtists(artists) {
+			problems = append(problems, fmt.Sprintf("%s: %s", *artistsPath, p))
+		}
+		problems = append(problems, CheckRoster(f, artists)...)
+	}
+
 	if len(problems) > 0 {
 		fmt.Fprintf(os.Stderr, "%s: %d problem(s) found:\n", *filePath, len(problems))
 		for _, p := range problems {
@@ -183,20 +206,21 @@ func main() {
 	fmt.Printf("%s: OK (%d concerts)\n", *filePath, len(f.Concerts))
 }
 
-// loadFile decodes a concerts file, rejecting any unknown fields so that a
-// stray or hallucinated key surfaces as an error rather than being ignored.
-func loadFile(path string) (File, error) {
+// loadJSON decodes one of the repo's data files, rejecting any unknown fields
+// so that a stray or hallucinated key surfaces as an error rather than being
+// ignored.
+func loadJSON[T any](path string) (T, error) {
+	var v T
 	data, err := os.ReadFile(path)
 	if err != nil {
-		return File{}, err
+		return v, err
 	}
-	dec := json.NewDecoder(strings.NewReader(string(data)))
+	dec := json.NewDecoder(bytes.NewReader(data))
 	dec.DisallowUnknownFields()
-	var f File
-	if err := dec.Decode(&f); err != nil {
-		return File{}, err
+	if err := dec.Decode(&v); err != nil {
+		return v, err
 	}
-	return f, nil
+	return v, nil
 }
 
 // Validate returns a human-readable list of every problem found. An empty slice
@@ -242,6 +266,18 @@ func Validate(f File, base *File, now time.Time) []string {
 
 		if msg := checkPieces(c.Pieces); msg != "" {
 			problems = append(problems, fmt.Sprintf("%s: %s", label, msg))
+		}
+
+		// Unlike pieces, an absent instruments list is fine — "the source
+		// didn't say" is the normal case, and the page falls back to every
+		// instrument the artist plays. An empty array says the same thing in a
+		// shape that reads as a claim, so it is rejected in favour of null.
+		if c.Instruments != nil && len(c.Instruments) == 0 {
+			problems = append(problems, fmt.Sprintf(
+				"%s: instruments is an empty array; use null when the source doesn't say which instrument", label))
+		}
+		for _, m := range checkInstrumentValues(c.Instruments) {
+			problems = append(problems, fmt.Sprintf("%s: %s", label, m))
 		}
 
 		if c.ID != "" {
@@ -356,6 +392,7 @@ var refinableFields = []struct {
 	{"venue", func(c Concert) bool { return c.Venue != nil }},
 	{"program", func(c Concert) bool { return c.Program != nil }},
 	{"pieces", func(c Concert) bool { return c.Pieces.Present() }},
+	{"instruments", func(c Concert) bool { return c.Instruments != nil }},
 }
 
 // checkAppendOnly ensures every entry present in base still exists in head with

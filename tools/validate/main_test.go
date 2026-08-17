@@ -56,6 +56,9 @@ func TestFieldChecks(t *testing.T) {
 		{"empty pieces array", func(c *Concert) { c.Pieces = Pieces{List: []string{}} }},
 		{"blank piece title", func(c *Concert) { c.Pieces = pieceList("Chopin Ballade No. 1", "  ") }},
 		{"blank pieces string", func(c *Concert) { c.Pieces = pieceText("   ") }},
+		{"empty instruments array", func(c *Concert) { c.Instruments = []string{} }},
+		{"unknown instrument", func(c *Concert) { c.Instruments = []string{"theremin"} }},
+		{"repeated instrument", func(c *Concert) { c.Instruments = []string{"piano", "piano"} }},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -63,6 +66,27 @@ func TestFieldChecks(t *testing.T) {
 			tt.mutel(&c)
 			if p := Validate(File{Concerts: []Concert{c}}, nil, now); len(p) == 0 {
 				t.Fatalf("expected a problem for %q, got none", tt.name)
+			}
+		})
+	}
+}
+
+// The whole point of the field being optional: most rows won't state an
+// instrument, and one that does states a real one.
+func TestInstrumentsAcceptedShapes(t *testing.T) {
+	for _, tt := range []struct {
+		name string
+		list []string
+	}{
+		{"absent", nil},
+		{"single", []string{"piano"}},
+		{"both", []string{"violin", "piano"}},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			c := valid()
+			c.Instruments = tt.list
+			if p := Validate(File{Concerts: []Concert{c}}, nil, now); len(p) != 0 {
+				t.Fatalf("expected no problems, got %v", p)
 			}
 		})
 	}
@@ -163,6 +187,7 @@ func TestExistingEntriesMayBeRefined(t *testing.T) {
 	refined.Venue = strptr("Kurhaus Baden-Baden")
 	refined.Program = strptr("Baden-Baden Philharmonic: Beethoven Piano Concerto No. 4")
 	refined.Pieces = pieceList("Beethoven Piano Concerto No. 4")
+	refined.Instruments = []string{"piano"}
 	refined.LocationTag = "europe"
 	refined.SourceURL = "https://bachtrack.com/performer/olga-scheps"
 
@@ -172,7 +197,9 @@ func TestExistingEntriesMayBeRefined(t *testing.T) {
 }
 
 func TestExistingDetailMayNotBeErased(t *testing.T) {
-	base := File{Concerts: []Concert{valid()}}
+	withInstrument := valid()
+	withInstrument.Instruments = []string{"piano"}
+	base := File{Concerts: []Concert{withInstrument}}
 
 	for _, tt := range []struct {
 		name  string
@@ -180,9 +207,12 @@ func TestExistingDetailMayNotBeErased(t *testing.T) {
 	}{
 		{"venue", func(c *Concert) { c.Venue = nil }},
 		{"pieces", func(c *Concert) { c.Pieces = Pieces{} }},
+		{"instruments", func(c *Concert) { c.Instruments = nil }},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
-			c := valid()
+			// Start from the fully populated row so each case erases exactly
+			// one field and the others stay intact.
+			c := withInstrument
 			tt.mutel(&c)
 			if p := Validate(File{Concerts: []Concert{c}}, &base, now); len(p) == 0 {
 				t.Fatalf("clearing %s on an existing entry should be rejected", tt.name)

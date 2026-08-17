@@ -3,9 +3,9 @@ name: validate-seen
 on:
   push:
     branches: [main]
-    paths: ["seen.json", "tools/**", "go.mod"]
+    paths: ["seen.json", "artists.json", "tools/**", "go.mod"]
   pull_request:
-    paths: ["seen.json", "tools/**", "go.mod"]
+    paths: ["seen.json", "artists.json", "tools/**", "go.mod"]
 
 jobs:
   validate:

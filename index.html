@@ -172,6 +172,11 @@
     margin-left: .4rem;
     vertical-align: middle;
   }
+  .tag.instrument {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+  }
   .empty, .loading {
     color: var(--muted);
     padding: 2rem 0;
@@ -187,6 +192,7 @@
 
 <div class="controls">
   <select id="artistFilter"><option value="">All artists</option></select>
+  <select id="instrumentFilter" hidden><option value="">All instruments</option></select>
   <select id="countryFilter"><option value="">All countries</option></select>
   <input type="search" id="searchBox" placeholder="Search city, venue, program, pieces…">
 </div>
@@ -201,36 +207,91 @@ const MONTH = ["January","February","March","April","May","June","July","August"
 
 let allConcerts = [];
 
+// Which instruments each artist plays, from artists.json. That roster is
+// curated and static — an instrument is a fact about the performer, not about
+// one concert — so it lives outside seen.json and is joined in here by artist
+// name, which CI guarantees matches the roster exactly.
+let instrumentsByName = new Map();
+
 function todayISO() {
   const d = new Date();
   return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
 }
 
-function populateFilters(concerts) {
-  const artistSel = document.getElementById("artistFilter");
-  const countrySel = document.getElementById("countryFilter");
-  const artists = [...new Set(concerts.map(c => c.artist))].sort();
-  const countries = [...new Set(concerts.map(c => c.country).filter(Boolean))].sort();
+function loadRoster(artists) {
+  instrumentsByName = new Map();
   for (const a of artists) {
-    const opt = document.createElement("option");
-    opt.value = a; opt.textContent = a;
-    artistSel.appendChild(opt);
+    if (a.name && Array.isArray(a.instruments)) {
+      instrumentsByName.set(a.name, a.instruments.filter(i => typeof i === "string" && i.trim()));
+    }
   }
-  for (const c of countries) {
+}
+
+// Every instrument the artist plays, from the roster.
+function rosterInstrumentsOf(concert) {
+  return instrumentsByName.get(concert.artist) || [];
+}
+
+// What this row itself says the engagement calls for — often nothing, since
+// most listings don't mention it.
+function statedInstrumentsOf(concert) {
+  return Array.isArray(concert.instruments)
+    ? concert.instruments.filter(i => typeof i === "string" && i.trim())
+    : [];
+}
+
+// The instruments a concert counts as. A row that names its own narrows the
+// roster to those; one that doesn't matches every instrument its artist plays,
+// so an unstated Fischer date shows under both Piano and Violin rather than
+// disappearing from the filter or pretending to know which it was.
+function instrumentsOf(concert) {
+  const stated = statedInstrumentsOf(concert);
+  return stated.length ? stated : rosterInstrumentsOf(concert);
+}
+
+// Shown only for artists who play more than one instrument — that is where the
+// row-level detail answers a real question. For a pianist it would just repeat
+// what the name already tells you.
+function instrumentTagsHTML(concert) {
+  if (rosterInstrumentsOf(concert).length < 2) return "";
+  return statedInstrumentsOf(concert)
+    .map(i => `<span class="tag instrument">${escapeHTML(i)}</span>`)
+    .join("");
+}
+
+function titleCase(s) {
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
+function addOptions(selectId, values, label = v => v) {
+  const sel = document.getElementById(selectId);
+  for (const v of [...new Set(values)].sort()) {
     const opt = document.createElement("option");
-    opt.value = c; opt.textContent = c;
-    countrySel.appendChild(opt);
+    opt.value = v; opt.textContent = label(v);
+    sel.appendChild(opt);
   }
+  return sel;
+}
+
+function populateFilters(concerts) {
+  addOptions("artistFilter", concerts.map(c => c.artist));
+  // Stays hidden when the roster is unavailable or tells us nothing, so the
+  // page still works with only seen.json rather than showing a dead control.
+  const instrumentSel = addOptions("instrumentFilter", concerts.flatMap(instrumentsOf), titleCase);
+  instrumentSel.hidden = instrumentSel.options.length <= 1;
+  addOptions("countryFilter", concerts.map(c => c.country).filter(Boolean));
 }
 
 function render() {
   const artist = document.getElementById("artistFilter").value;
+  const instrument = document.getElementById("instrumentFilter").value;
   const country = document.getElementById("countryFilter").value;
   const search = document.getElementById("searchBox").value.trim().toLowerCase();
   const today = todayISO();
 
   let list = allConcerts.filter(c => c.date >= today);
   if (artist) list = list.filter(c => c.artist === artist);
+  if (instrument) list = list.filter(c => instrumentsOf(c).includes(instrument));
   if (country) list = list.filter(c => c.country === country);
   if (search) {
     list = list.filter(c =>
@@ -270,7 +331,7 @@ function render() {
           <div class="dow">${DOW[d.getDay()]}</div>
         </div>
         <div class="body">
-          <div><span class="artist">${escapeHTML(c.artist)}</span>${c.location_tag ? `<span class="tag">${escapeHTML(c.location_tag)}</span>` : ""}</div>
+          <div><span class="artist">${escapeHTML(c.artist)}</span>${c.location_tag ? `<span class="tag">${escapeHTML(c.location_tag)}</span>` : ""}${instrumentTagsHTML(c)}</div>
           <div class="place">${escapeHTML(place)}</div>
           ${c.program ? `<div class="program">${escapeHTML(c.program)}</div>` : ""}
           ${piecesHTML(c.pieces)}
@@ -320,11 +381,24 @@ function isSafeUrl(url) {
   }
 }
 
+async function fetchJSON(path) {
+  const res = await fetch(path, { cache: "no-store" });
+  if (!res.ok) throw new Error(`${path}: HTTP ${res.status}`);
+  return res.json();
+}
+
 async function init() {
+  // The roster is supporting data: if it can't be loaded, the concert list
+  // still renders and only the instrument filter drops out.
+  const roster = fetchJSON("artists.json").catch(e => {
+    console.error(e);
+    return null;
+  });
   try {
-    const res = await fetch("seen.json", { cache: "no-store" });
-    const data = await res.json();
+    const data = await fetchJSON("seen.json");
     allConcerts = data.concerts || [];
+    const artists = await roster;
+    loadRoster((artists && artists.artists) || []);
     populateFilters(allConcerts);
     render();
   } catch (e) {
@@ -336,6 +410,7 @@ async function init() {
 }
 
 document.getElementById("artistFilter").addEventListener("change", render);
+document.getElementById("instrumentFilter").addEventListener("change", render);
 document.getElementById("countryFilter").addEventListener("change", render);
 document.getElementById("searchBox").addEventListener("input", render);
 
