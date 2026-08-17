@@ -210,9 +210,8 @@ let allConcerts = [];
 // Which instruments each artist plays, from artists.json. That roster is
 // curated and static — an instrument is a fact about the performer, not about
 // one concert — so it lives outside seen.json and is joined in here by artist
-// name (with the concert id's slug as a fallback).
+// name, which CI guarantees matches the roster exactly.
 let instrumentsByName = new Map();
-let instrumentsBySlug = new Map();
 
 function todayISO() {
   const d = new Date();
@@ -221,20 +220,16 @@ function todayISO() {
 
 function loadRoster(artists) {
   instrumentsByName = new Map();
-  instrumentsBySlug = new Map();
   for (const a of artists) {
-    if (!Array.isArray(a.instruments)) continue;
-    const list = a.instruments.filter(i => typeof i === "string" && i.trim());
-    if (a.name) instrumentsByName.set(a.name, list);
-    if (a.slug) instrumentsBySlug.set(a.slug, list);
+    if (a.name && Array.isArray(a.instruments)) {
+      instrumentsByName.set(a.name, a.instruments.filter(i => typeof i === "string" && i.trim()));
+    }
   }
 }
 
 // Every instrument the artist plays, from the roster.
 function rosterInstrumentsOf(concert) {
-  return instrumentsByName.get(concert.artist)
-    || instrumentsBySlug.get(String(concert.id || "").split("|")[0])
-    || [];
+  return instrumentsByName.get(concert.artist) || [];
 }
 
 // What this row itself says the engagement calls for — often nothing, since

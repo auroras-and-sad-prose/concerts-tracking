@@ -13,6 +13,7 @@ package main
 
 import (
 	"fmt"
+	"slices"
 	"strings"
 )
 
@@ -31,15 +32,12 @@ var allowedInstruments = map[string]bool{
 // say which instrument an engagement calls for).
 func checkInstrumentValues(list []string) []string {
 	var problems []string
-	seen := make(map[string]bool, len(list))
 	for i, ins := range list {
 		switch {
 		case !allowedInstruments[ins]:
 			problems = append(problems, fmt.Sprintf("instruments[%d] %q is not in the allowed set", i, ins))
-		case seen[ins]:
+		case slices.Contains(list[:i], ins):
 			problems = append(problems, fmt.Sprintf("instruments lists %q twice", ins))
-		default:
-			seen[ins] = true
 		}
 	}
 	return problems
@@ -143,14 +141,10 @@ func CheckRoster(f File, a Artists) []string {
 				"%s: artist %q does not match artists.json name %q for slug %q", label, c.Artist, ar.Name, ar.Slug))
 		}
 
-		plays := make(map[string]bool, len(ar.Instruments))
-		for _, ins := range ar.Instruments {
-			plays[ins] = true
-		}
 		for _, ins := range c.Instruments {
 			// Values outside the vocabulary are already reported by Validate;
 			// calling them "not on the roster" too would just be noise.
-			if allowedInstruments[ins] && !plays[ins] {
+			if allowedInstruments[ins] && !slices.Contains(ar.Instruments, ins) {
 				problems = append(problems, fmt.Sprintf(
 					"%s: instrument %q is not among the roster instruments for %s (%s)",
 					label, ins, ar.Name, strings.Join(ar.Instruments, ", ")))

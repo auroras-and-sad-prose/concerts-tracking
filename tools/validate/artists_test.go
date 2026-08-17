@@ -6,15 +6,6 @@ import (
 	"testing"
 )
 
-func writeTemp(t *testing.T, content string) string {
-	t.Helper()
-	path := filepath.Join(t.TempDir(), "artists.json")
-	if err := os.WriteFile(path, []byte(content), 0o600); err != nil {
-		t.Fatalf("write temp file: %v", err)
-	}
-	return path
-}
-
 // roster is a correct two-artist roster; tests mutate a copy.
 func roster() Artists {
 	return Artists{Artists: []Artist{
@@ -60,7 +51,11 @@ func TestRosterFieldChecks(t *testing.T) {
 // An unknown field in artists.json (say, a hand-edit that misspells
 // "instruments") must fail rather than decode to an empty roster entry.
 func TestRosterRejectsUnknownFields(t *testing.T) {
-	path := writeTemp(t, `{"artists":[{"slug":"scheps","name":"Olga Scheps","instrument":["piano"]}]}`)
+	path := filepath.Join(t.TempDir(), "artists.json")
+	content := `{"artists":[{"slug":"scheps","name":"Olga Scheps","instrument":["piano"]}]}`
+	if err := os.WriteFile(path, []byte(content), 0o600); err != nil {
+		t.Fatalf("write temp file: %v", err)
+	}
 	if _, err := loadJSON[Artists](path); err == nil {
 		t.Fatal("expected unknown field to be rejected")
 	}
