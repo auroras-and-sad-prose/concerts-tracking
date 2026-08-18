@@ -6,47 +6,50 @@
 <title>Upcoming Concerts</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,400..700;1,400..600&family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
 <style>
+  /* Newspaper typographic split: a serif carries the "headline" elements —
+     page title, month, artist name, day numeral — while a Franklin-style sans
+     carries every piece of interface text. Both stacks fall back to widely
+     installed faces so the page still reads correctly if the webfonts fail. */
   :root {
     color-scheme: light dark;
-    --bg: #faf7f2;
+    --serif: "PT Serif", Georgia, "Times New Roman", serif;
+    --sans: "Libre Franklin", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+    --bg: #f5f7fa;
     --card-bg: #ffffff;
-    --text: #221e1a;
-    --muted: #837b6f;
-    --border: #e8e1d5;
-    --border-strong: #d9d0bf;
-    --accent: #8e3b46;
-    --accent-ink: #7a5a28;
-    --accent-soft: #f6e9e6;
-    --gold: #b18d4f;
-    --gold-soft: #f3ead9;
-    --chip-bg: #f6f2ea;
-    --shadow: 0 1px 2px rgba(60, 45, 20, .05), 0 8px 24px -18px rgba(60, 45, 20, .35);
-    --shadow-hover: 0 2px 4px rgba(60, 45, 20, .06), 0 14px 34px -18px rgba(60, 45, 20, .4);
-    --serif: "Fraunces", "Iowan Old Style", Georgia, "Times New Roman", serif;
-    --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --text: #151b26;
+    --muted: #667085;
+    --faint: #98a1b3;
+    --border: #e4e8ef;
+    --border-strong: #cfd6e2;
+    --accent: #24548c;
+    --accent-soft: #e8eff8;
+    --on-accent: #ffffff;
+    --chip-bg: #eef1f6;
+    --shadow: 0 1px 2px rgba(21, 27, 38, .04);
+    --shadow-hover: 0 8px 24px -16px rgba(21, 27, 38, .45);
   }
   @media (prefers-color-scheme: dark) {
     :root {
-      --bg: #191612;
-      --card-bg: #221e19;
-      --text: #ede7dc;
-      --muted: #a29a8b;
-      --border: #38322a;
-      --border-strong: #4a4234;
-      --accent: #d78d97;
-      --accent-ink: #dfa08f;
-      --accent-soft: #3a2a2b;
-      --gold: #cfae74;
-      --gold-soft: #362e1f;
-      --chip-bg: #2b2620;
-      --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 8px 24px -18px rgba(0, 0, 0, .7);
-      --shadow-hover: 0 2px 4px rgba(0, 0, 0, .35), 0 14px 34px -18px rgba(0, 0, 0, .8);
+      --bg: #12151b;
+      --card-bg: #191d25;
+      --text: #e9ecf2;
+      --muted: #97a0b1;
+      --faint: #6f7889;
+      --border: #262c37;
+      --border-strong: #39414f;
+      --accent: #86b4e8;
+      --accent-soft: #1c2a3c;
+      --on-accent: #0f151d;
+      --chip-bg: #212734;
+      --shadow: 0 1px 2px rgba(0, 0, 0, .35);
+      --shadow-hover: 0 8px 24px -16px rgba(0, 0, 0, .85);
     }
   }
+
   * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
   body {
     margin: 0;
     background: var(--bg);
@@ -56,325 +59,155 @@
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
   }
-
-  /* ---------- Header ---------- */
-  header {
-    max-width: 920px;
-    margin: 0 auto;
-    padding: 3.25rem 1.25rem 1.5rem;
-    text-align: center;
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 4px;
   }
+
+  /* ---------- Masthead ---------- */
+  header { max-width: 860px; margin: 0 auto; padding: 3.5rem 1.5rem 1.25rem; }
   .eyebrow {
-    font-size: .72rem;
-    font-weight: 600;
-    letter-spacing: .28em;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: .9rem;
+    font-size: .7rem; font-weight: 700; letter-spacing: .09em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: .85rem;
   }
   h1 {
     margin: 0;
-    font-family: var(--serif);
-    font-weight: 420;
-    font-size: clamp(2.1rem, 5.5vw, 3.1rem);
-    letter-spacing: -.01em;
-    line-height: 1.1;
+    font-family: var(--serif); font-weight: 700;
+    font-size: clamp(2rem, 5vw, 2.6rem);
+    letter-spacing: -.012em; line-height: 1.06;
   }
-  .rule {
-    width: 72px;
-    margin: 1.1rem auto .9rem;
-    border: 0;
-    border-top: 1px solid var(--gold);
-    position: relative;
-  }
-  .rule::after {
-    content: "";
-    position: absolute;
-    left: 0; right: 0; top: 2px;
-    border-top: 1px solid var(--gold);
-    opacity: .45;
-  }
-  .subtitle {
-    color: var(--muted);
-    font-family: var(--serif);
-    font-style: italic;
-    font-size: 1rem;
-  }
+  .subtitle { margin-top: .5rem; color: var(--muted); font-size: .92rem; }
 
-  /* ---------- Controls ---------- */
+  /* ---------- Filters ---------- */
   .controls-wrap {
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    background: color-mix(in srgb, var(--bg) 82%, transparent);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    position: sticky; top: 0; z-index: 10;
+    background: var(--bg);
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
     border-bottom: 1px solid var(--border);
   }
   .controls {
-    max-width: 920px;
-    margin: 0 auto;
-    padding: .8rem 1.25rem;
-    display: flex;
-    flex-wrap: wrap;
-    gap: .55rem;
+    max-width: 860px; margin: 0 auto;
+    padding: .85rem 1.5rem;
+    display: flex; flex-wrap: wrap; gap: .45rem;
   }
   .controls select, .controls input {
-    background: var(--card-bg);
-    color: var(--text);
-    border: 1px solid var(--border-strong);
-    border-radius: 999px;
-    padding: .5rem 1rem;
-    font-size: .86rem;
-    font-family: var(--sans);
-    box-shadow: var(--shadow);
+    background: var(--card-bg); color: var(--text);
+    border: 1px solid var(--border-strong); border-radius: 8px;
+    padding: .45rem .75rem; font-size: .85rem; font-family: var(--sans);
     transition: border-color .15s ease, box-shadow .15s ease;
   }
   .controls select {
-    appearance: none;
-    -webkit-appearance: none;
-    padding-right: 2.1rem;
-    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23837b6f' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right .9rem center;
-    cursor: pointer;
+    appearance: none; -webkit-appearance: none;
+    padding-right: 1.9rem; cursor: pointer;
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23667085' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right .7rem center;
   }
-  .controls select:hover, .controls input:hover {
-    border-color: var(--gold);
-  }
-  .controls select:focus, .controls input:focus {
-    outline: none;
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px var(--accent-soft);
-  }
-  .controls input[type="search"] {
-    flex: 1;
-    min-width: 170px;
-  }
-  .controls input[type="search"]::placeholder { color: var(--muted); }
+  .controls select option { background: var(--card-bg); color: var(--text); }
+  .controls select:hover, .controls input:hover { border-color: var(--faint); }
+  .controls select:focus-visible, .controls input:focus-visible { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+  .controls input[type="search"] { flex: 1; min-width: 170px; }
+  .controls input[type="search"]::placeholder { color: var(--faint); }
 
-  /* ---------- List ---------- */
-  main {
-    max-width: 920px;
-    margin: 0 auto;
-    padding: .5rem 1.25rem 4.5rem;
-  }
+  /* ---------- Listing ---------- */
+  main { max-width: 860px; margin: 0 auto; padding: .5rem 1.5rem 5rem; }
   .month-heading {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin: 2.4rem 0 1rem;
-    font-family: var(--serif);
-    font-style: italic;
-    font-size: 1.05rem;
-    color: var(--muted);
-    white-space: nowrap;
+    margin: 2.4rem 0 .8rem;
+    font-family: var(--serif); font-weight: 700;
+    font-size: 1.12rem; letter-spacing: -.005em;
   }
-  .month-heading::before, .month-heading::after {
-    content: "";
-    flex: 1;
-    border-top: 1px solid var(--border);
-  }
-  .month-heading::before { max-width: 2.2rem; flex: 0 0 2.2rem; }
-  .month-heading:first-of-type { margin-top: 1.4rem; }
+  .month-heading:first-of-type { margin-top: 1.1rem; }
 
   .card {
     position: relative;
     background: var(--card-bg);
     border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 1.05rem 1.15rem;
-    margin-bottom: .7rem;
-    display: flex;
-    gap: 1.1rem;
-    align-items: flex-start;
+    border-radius: 10px;
+    padding: .95rem 1.1rem;
+    margin-bottom: .45rem;
+    display: flex; gap: 1.1rem; align-items: flex-start;
     box-shadow: var(--shadow);
-    transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
-    animation: rise .35s ease both;
+    transition: border-color .15s ease, box-shadow .15s ease, transform .15s ease;
   }
   .card:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-hover);
     border-color: var(--border-strong);
-  }
-  @keyframes rise {
-    from { opacity: 0; transform: translateY(6px); }
-    to   { opacity: 1; transform: none; }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .card { animation: none; }
-    .card:hover { transform: none; }
-    html { scroll-behavior: auto; }
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-1px);
   }
 
   .date-col {
-    flex: 0 0 auto;
-    width: 3.7rem;
-    text-align: center;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: .45rem 0 .4rem;
-    background:
-      linear-gradient(to bottom, var(--chip-bg), transparent 55%);
+    flex: 0 0 auto; width: 3.4rem; text-align: center;
+    border: 1px solid var(--border); border-radius: 8px;
+    padding: .35rem 0 .3rem;
+    background: var(--chip-bg);
+    font-variant-numeric: tabular-nums;
   }
-  .date-col .mon {
-    font-size: .62rem;
-    font-weight: 600;
-    letter-spacing: .14em;
-    text-transform: uppercase;
-    color: var(--accent);
-  }
-  .date-col .day {
-    font-family: var(--serif);
-    font-size: 1.55rem;
-    font-weight: 500;
-    line-height: 1.15;
-  }
-  .date-col .dow {
-    font-size: .62rem;
-    letter-spacing: .1em;
-    color: var(--muted);
-    text-transform: uppercase;
-  }
+  .date-col .mon { font-size: .6rem; font-weight: 700; letter-spacing: .11em; text-transform: uppercase; color: var(--accent); }
+  .date-col .day { font-family: var(--serif); font-weight: 700; font-size: 1.42rem; letter-spacing: -.01em; line-height: 1.12; }
+  .date-col .dow { font-size: .6rem; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--faint); }
 
   .card .body { flex: 1; min-width: 0; }
-  .card .topline {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: .3rem .5rem;
-  }
+  .card .topline { display: flex; flex-wrap: wrap; align-items: center; gap: .35rem .55rem; }
   .card .artist {
-    font-family: var(--serif);
-    font-size: 1.22rem;
-    font-weight: 520;
-    letter-spacing: .005em;
-    color: var(--text);
+    font-family: var(--serif); font-weight: 700;
+    font-size: 1.16rem; letter-spacing: -.003em;
   }
-  .card .place {
-    font-size: .88rem;
-    color: var(--muted);
-    margin-top: .28rem;
-  }
-  .card .place .city { color: var(--text); font-weight: 500; }
-  .card .program {
-    font-size: .84rem;
-    color: var(--muted);
-    margin-top: .45rem;
-  }
-  .card .repertoire { margin-top: .6rem; }
+  .card .place { font-size: .86rem; color: var(--muted); margin-top: .2rem; }
+  .card .place .city { color: var(--text); font-weight: 600; }
+  .card .program { font-size: .82rem; color: var(--muted); margin-top: .4rem; line-height: 1.45; max-width: 62ch; }
+
+  .card .repertoire { margin-top: .55rem; }
   .card .repertoire-label {
-    display: block;
-    font-size: .64rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: .16em;
-    color: var(--gold);
-    margin-bottom: .4rem;
+    display: block; font-size: .6rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .14em;
+    color: var(--faint); margin-bottom: .32rem;
   }
-  .card .repertoire-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: .4rem;
-  }
+  .card .repertoire-list { display: flex; flex-wrap: wrap; gap: .32rem; }
   .card .piece {
-    font-size: .78rem;
-    line-height: 1.35;
-    padding: .22rem .7rem;
-    border-radius: 999px;
-    background: var(--chip-bg);
-    border: 1px solid var(--border);
-    color: var(--text);
+    font-size: .77rem; line-height: 1.35; font-weight: 500;
+    padding: .18rem .55rem; border-radius: 6px;
+    background: var(--accent-soft); color: var(--accent);
   }
   .card .repertoire.note .repertoire-text {
-    display: block;
-    font-family: var(--serif);
-    font-style: italic;
-    font-size: .88rem;
-    color: var(--muted);
+    display: block; font-family: var(--serif); font-style: italic;
+    font-size: .89rem; color: var(--muted);
   }
+
   .card a.link {
-    align-self: flex-start;
-    font-size: .78rem;
-    font-weight: 500;
-    text-decoration: none;
-    color: var(--accent);
-    white-space: nowrap;
-    border: 1px solid transparent;
-    border-radius: 999px;
-    padding: .28rem .7rem;
-    margin: -.1rem -.3rem 0 0;
-    transition: background .15s ease, border-color .15s ease;
+    align-self: center;
+    font-size: .78rem; font-weight: 600; text-decoration: none;
+    color: var(--accent); white-space: nowrap;
+    border-radius: 6px; padding: .3rem .55rem;
+    transition: background .15s ease;
   }
-  .card a.link:hover {
-    background: var(--accent-soft);
-    border-color: var(--border);
-  }
+  .card a.link:hover { background: var(--accent-soft); }
 
   /* ---------- Tags ---------- */
   .tag {
     display: inline-block;
-    font-size: .66rem;
-    font-weight: 600;
-    letter-spacing: .06em;
-    text-transform: uppercase;
-    border-radius: 999px;
-    padding: .16rem .6rem;
-    vertical-align: middle;
-    background: var(--chip-bg);
-    border: 1px solid var(--border);
-    color: var(--muted);
+    font-size: .65rem; font-weight: 600; letter-spacing: .03em;
+    border-radius: 5px; padding: .13rem .45rem;
+    background: var(--chip-bg); color: var(--muted);
   }
-  .tag.loc-berlin {
-    background: var(--accent-soft);
-    border-color: transparent;
-    color: var(--accent);
-  }
-  .tag.loc-germany {
-    background: var(--gold-soft);
-    border-color: transparent;
-    color: var(--accent-ink);
-  }
-  .tag.instrument {
-    background: transparent;
-    border: 1px solid var(--border);
-    color: var(--muted);
-  }
+  .tag.loc-berlin { background: var(--accent); color: var(--on-accent); }
+  .tag.loc-germany { background: var(--accent-soft); color: var(--accent); }
+  .tag.loc-europe { background: var(--chip-bg); color: var(--faint); }
+  .tag.instrument { background: transparent; color: var(--faint); box-shadow: inset 0 0 0 1px var(--border-strong); }
 
-  .empty, .loading {
-    color: var(--muted);
-    font-family: var(--serif);
-    font-style: italic;
-    font-size: 1.05rem;
-    padding: 3.5rem 0;
-    text-align: center;
-  }
-
-  footer {
-    max-width: 920px;
-    margin: 0 auto;
-    padding: 0 1.25rem 2.5rem;
-    text-align: center;
-    color: var(--muted);
-    font-size: .78rem;
-  }
-  footer .fleuron {
-    font-family: var(--serif);
-    font-size: 1rem;
-    color: var(--gold);
-    display: block;
-    margin-bottom: .4rem;
-  }
+  .empty, .loading { color: var(--muted); padding: 4rem 0; text-align: center; font-size: .95rem; }
+  footer { max-width: 860px; margin: 0 auto; padding: 0 1.5rem 3rem; color: var(--faint); font-size: .78rem; }
 
   @media (max-width: 560px) {
-    .card { padding: .9rem .9rem; gap: .85rem; }
-    .date-col { width: 3.3rem; }
-    .card .artist { font-size: 1.1rem; }
-    .card a.link {
-      position: absolute;
-      top: .7rem;
-      right: .7rem;
-    }
+    header { padding-top: 2.5rem; }
+    .card { padding: .9rem .95rem; gap: .85rem; }
+    .date-col { width: 3rem; }
+    .card a.link { position: absolute; top: .8rem; right: .8rem; align-self: flex-start; }
+    .card .topline { padding-right: 4.5rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+    .card:hover { transform: none; }
   }
 </style>
 </head>
@@ -382,7 +215,6 @@
 <header>
   <div class="eyebrow">Concert Watch</div>
   <h1>Upcoming Concerts</h1>
-  <hr class="rule">
   <div class="subtitle" id="subtitle">Loading…</div>
 </header>
 
@@ -399,10 +231,7 @@
   <div class="loading">Loading concerts…</div>
 </main>
 
-<footer>
-  <span class="fleuron">❦</span>
-  Curated from the artists’ own calendars and Bachtrack.
-</footer>
+<footer>Curated from the artists’ own calendars and Bachtrack.</footer>
 
 <script>
 const DOW = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
@@ -486,7 +315,7 @@ function populateFilters(concerts) {
   addOptions("countryFilter", concerts.map(c => c.country).filter(Boolean));
 }
 
-// The location tag doubles as a color class so Berlin and Germany dates stand
+// The location tag doubles as a colour class so Berlin and Germany dates stand
 // out from the rest of Europe at a glance; the class list is closed by CI's
 // location_tag allowlist.
 function locationTagHTML(tag) {
@@ -528,7 +357,6 @@ function render() {
 
   let html = "";
   let lastMonthKey = "";
-  let i = 0;
   for (const c of list) {
     const d = new Date(c.date + "T00:00:00");
     const monthKey = `${MONTH[d.getMonth()]} ${d.getFullYear()}`;
@@ -536,16 +364,15 @@ function render() {
       html += `<div class="month-heading">${monthKey}</div>`;
       lastMonthKey = monthKey;
     }
-    const wherePieces = [c.venue, c.country].filter(Boolean);
+    // City leads and is emphasised — it is what you scan for — with venue and
+    // country trailing it.
     const whereHTML = [
       c.city ? `<span class="city">${escapeHTML(c.city)}</span>` : "",
-      ...wherePieces.map(escapeHTML)
+      ...[c.venue, c.country].filter(Boolean).map(escapeHTML)
     ].filter(Boolean).join(" · ");
     const safeUrl = isSafeUrl(c.source_url) ? c.source_url : null;
-    // Stagger the entrance animation slightly, capped so long lists don't lag.
-    const delay = Math.min(i++, 12) * 25;
     html += `
-      <div class="card" style="animation-delay:${delay}ms">
+      <div class="card">
         <div class="date-col">
           <div class="mon">${MONTH_ABBR[d.getMonth()]}</div>
           <div class="day">${d.getDate()}</div>
@@ -567,7 +394,7 @@ function render() {
 // descriptive string ("Programme not announced") when the source doesn't list
 // it. Both get the same "Programme" label so it's always clear what this line
 // represents; the two shapes are then styled differently — confirmed works
-// read as a row of pill chips, a note reads (italic, muted) as prose.
+// read as a row of chips, a note reads (serif italic, muted) as prose.
 function piecesHTML(pieces) {
   if (Array.isArray(pieces)) {
     const items = pieces.filter(p => typeof p === "string" && p.trim());
