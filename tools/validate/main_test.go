@@ -59,6 +59,10 @@ func TestFieldChecks(t *testing.T) {
 		{"empty detail_url", func(c *Concert) { c.DetailURL = strptr("  ") }},
 		{"relative detail_url", func(c *Concert) { c.DetailURL = strptr("/programm/2026-09-12") }},
 		{"javascript detail_url", func(c *Concert) { c.DetailURL = strptr("javascript:alert(1)") }},
+		{"status without note", func(c *Concert) { c.Status = strptr("cancelled") }},
+		{"status with blank note", func(c *Concert) { c.Status = strptr("cancelled"); c.StatusNote = strptr(" ") }},
+		{"note without status", func(c *Concert) { c.StatusNote = strptr("called off") }},
+		{"unknown status", func(c *Concert) { c.Status = strptr("rained off"); c.StatusNote = strptr("wet") }},
 		{"empty instruments array", func(c *Concert) { c.Instruments = []string{} }},
 		{"unknown instrument", func(c *Concert) { c.Instruments = []string{"theremin"} }},
 		{"repeated instrument", func(c *Concert) { c.Instruments = []string{"piano", "piano"} }},
@@ -114,6 +118,52 @@ func TestDetailURLAcceptedShapes(t *testing.T) {
 				t.Fatalf("expected no problems, got %v", p)
 			}
 		})
+	}
+}
+
+// A row can't be deleted or re-dated, so status is the only way the dataset
+// can say a concert is off — and it only counts with the source's words behind
+// it.
+func TestStatusAcceptedShapes(t *testing.T) {
+	for _, tt := range []struct {
+		name         string
+		status, note *string
+	}{
+		{"on as announced", nil, nil},
+		{"cancelled", strptr("cancelled"), strptr("Tivoli: cancelled due to illness")},
+		{"artist replaced", strptr("artist_replaced"), strptr("Karen Gomyo replaces Janine Jansen")},
+		{"postponed", strptr("postponed"), strptr("moved to a date to be announced")},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			c := valid()
+			c.Status, c.StatusNote = tt.status, tt.note
+			if p := Validate(File{Concerts: []Concert{c}}, nil, now); len(p) != 0 {
+				t.Fatalf("expected no problems, got %v", p)
+			}
+		})
+	}
+}
+
+// A replacement that turns into an outright cancellation is a correction, not
+// an erasure — but dropping the status entirely would quietly put a called-off
+// concert back on the page.
+func TestStatusMayBeCorrectedButNotDropped(t *testing.T) {
+	off := valid()
+	off.Status = strptr("artist_replaced")
+	off.StatusNote = strptr("Karen Gomyo replaces Janine Jansen")
+	base := File{Concerts: []Concert{off}}
+
+	worse := off
+	worse.Status = strptr("cancelled")
+	worse.StatusNote = strptr("the concert is cancelled")
+	if p := Validate(File{Concerts: []Concert{worse}}, &base, now); len(p) != 0 {
+		t.Fatalf("correcting a status should be allowed, got %v", p)
+	}
+
+	back := off
+	back.Status, back.StatusNote = nil, nil
+	if p := Validate(File{Concerts: []Concert{back}}, &base, now); len(p) == 0 {
+		t.Fatal("clearing a status on an existing entry should be rejected")
 	}
 }
 

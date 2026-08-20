@@ -460,11 +460,13 @@
       "city": "Stockholm",
       "country": "Sweden",
       "venue": "Berwaldhallen",
-      "program": "Baltic Sea Festival — Czech Philharmonic Orchestra / Semyon Bychkov: Shostakovich Violin Concerto No 1, Dvorak Symphony No 7. Berwaldhallen states Janine Jansen is replaced by Karen Gomyo in the Shostakovich due to illness",
+      "program": "Baltic Sea Festival — Czech Philharmonic Orchestra / Semyon Bychkov: Shostakovich Violin Concerto No 1, Dvorak Symphony No 7",
       "pieces": [
         "Shostakovich: Violin Concerto No. 1 in A minor, Op. 77",
         "Dvořák: Symphony No. 7 in D minor, Op. 70"
       ],
+      "status": "artist_replaced",
+      "status_note": "Berwaldhallen: \"Due to illness, Karen Gomyo will replace Janine Jansen in Dmitri Shostakovich's Violin Concerto No 1 in A minor, Op. 77.\"",
       "location_tag": "europe",
       "source_url": "https://www.janinejansen.com/performances/",
       "detail_url": "https://www.berwaldhallen.se/en/concert/passion-and-protest",
@@ -477,11 +479,13 @@
       "city": "Helsinki",
       "country": "Finland",
       "venue": "Helsinki Music Centre, Concert Hall",
-      "program": "Helsinki Festival — Czech Philharmonic Orchestra / Semyon Bychkov: Shostakovich Violin Concerto No 1, Dvorak Symphony No 7. Helsinki Festival states Janine Jansen's appearance is cancelled for health reasons; Karen Gomyo plays the Shostakovich",
+      "program": "Helsinki Festival — Czech Philharmonic Orchestra / Semyon Bychkov: Shostakovich Violin Concerto No 1, Dvorak Symphony No 7",
       "pieces": [
         "Shostakovich: Violin Concerto No. 1 in A minor, Op. 77",
         "Dvořák: Symphony No. 7 in D minor, Op. 70"
       ],
+      "status": "artist_replaced",
+      "status_note": "Helsinki Festival: \"Unfortunately, Janine Jansen's appearance as a soloist with the Czech Philharmonic in the concert on August 28 has been cancelled due to health reasons.\" Karen Gomyo plays the Shostakovich.",
       "location_tag": "europe",
       "source_url": "https://www.janinejansen.com/performances/",
       "detail_url": "https://helsinkifestival.fi/en/event/czech-philharmonic-semyon-bychkov-janine-jansen/",
@@ -494,12 +498,14 @@
       "city": "Copenhagen",
       "country": "Denmark",
       "venue": "Tivoli, The Glass Hall Theatre",
-      "program": "Tivoli Recital — with Denis Kozhukhin: Brahms Violin Sonata No 1, Prokofiev Five Melodies, Prokofiev Violin Sonata No 1. Tivoli states the concert is cancelled due to illness",
+      "program": "Tivoli Recital — with Denis Kozhukhin: Brahms Violin Sonata No 1, Prokofiev Five Melodies, Prokofiev Violin Sonata No 1",
       "pieces": [
         "Brahms: Violin Sonata No 1",
         "Prokofiev: Five Melodies",
         "Prokofiev: Violin Sonata No 1"
       ],
+      "status": "cancelled",
+      "status_note": "Tivoli: the concert is cancelled due to illness.",
       "location_tag": "europe",
       "source_url": "https://www.janinejansen.com/performances/",
       "detail_url": "https://www.tivoli.dk/en/programme/summer-classical/janine-jansen-denis-kozhukhin",

@@ -10,6 +10,8 @@
 //   - location_tag is drawn from a fixed vocabulary;
 //   - source_url is http(s) and points at an allowlisted domain;
 //   - detail_url, when stated, is a real absolute http(s) link;
+//   - status is drawn from a fixed vocabulary and carries a status_note saying
+//     what the source reported, and neither appears without the other;
 //   - pieces is either a non-empty array of work titles or a descriptive string;
 //   - instruments, when stated, holds distinct values from the allowed set;
 //   - id has the canonical "<slug>|<date>|<city>" shape consistent with its row;
@@ -61,6 +63,16 @@ var allowedHosts = map[string]bool{
 	"juliafischer.com":      true,
 	"itzhakperlman.com":     true,
 	"bachtrack.com":         true,
+}
+
+// allowedStatuses is the closed vocabulary for status: the ways a listed
+// concert can stop being the concert we recorded. A row without one of these is
+// simply on as announced, which is why the field is null on almost every row.
+// Extend it via review, like the other vocabularies.
+var allowedStatuses = map[string]bool{
+	"cancelled":       true, // the concert is not happening
+	"postponed":       true, // moved to a date this row cannot represent
+	"artist_replaced": true, // the concert is on; our artist is not playing it
 }
 
 const dateLayout = "2006-01-02"
@@ -165,6 +177,17 @@ type Concert struct {
 	// once its pieces no longer appear on source_url itself. Null when the
 	// entry carried no such link, or the link could not be fetched.
 	DetailURL *string `json:"detail_url"`
+
+	// Status records that a listed concert has stopped being the concert this
+	// row describes — called off, moved, or handed to another soloist. It is
+	// null on a concert that is simply on as announced, which is nearly all of
+	// them. Because a row can never be deleted and its date can never be
+	// rewritten, this is the only way the dataset can say "don't travel for
+	// this one", so a status always travels with StatusNote, the source's own
+	// words for what happened. Neither is ever inferred from silence: a page
+	// that stops listing a concert says nothing about it.
+	Status     *string `json:"status"`
+	StatusNote *string `json:"status_note"`
 }
 
 // File is the top-level shape of seen.json.
@@ -290,6 +313,10 @@ func Validate(f File, base *File, now time.Time) []string {
 			}
 		}
 
+		for _, m := range checkStatus(c.Status, c.StatusNote) {
+			problems = append(problems, fmt.Sprintf("%s: %s", label, m))
+		}
+
 		if msg := checkPieces(c.Pieces); msg != "" {
 			problems = append(problems, fmt.Sprintf("%s: %s", label, msg))
 		}
@@ -386,6 +413,27 @@ func checkPieces(p Pieces) string {
 	return ""
 }
 
+// checkStatus enforces that status and status_note stand or fall together. A
+// bare "cancelled" with nothing behind it would be the one claim in the dataset
+// that no source could be checked against, and a note with no status would be a
+// warning the page never shows.
+func checkStatus(status, note *string) []string {
+	var problems []string
+	switch {
+	case status == nil && note == nil:
+		return nil
+	case status == nil:
+		problems = append(problems, "status_note is set without a status; use null for both when the concert is on as announced")
+	case note == nil || strings.TrimSpace(*note) == "":
+		problems = append(problems, fmt.Sprintf(
+			"status %q has no status_note; quote what the source says happened", *status))
+	}
+	if status != nil && !allowedStatuses[*status] {
+		problems = append(problems, fmt.Sprintf("status %q is not in the allowed set", *status))
+	}
+	return problems
+}
+
 // checkID verifies the id has the canonical "<slug>|<date>|<city>" shape and
 // that its date and city segments agree with the row's own fields.
 func checkID(id, date, city string) string {
@@ -431,6 +479,12 @@ var refinableFields = []struct {
 	{"pieces", func(c Concert) bool { return c.Pieces.Present() }},
 	{"instruments", func(c Concert) bool { return c.Instruments != nil }},
 	{"detail_url", func(c Concert) bool { return c.DetailURL != nil }},
+	// A status may be corrected to another value as a source firms up (a
+	// replacement that becomes an outright cancellation), but dropping it
+	// altogether — quietly turning a called-off concert back into a live one —
+	// is a reviewed change, like every other erasure here.
+	{"status", func(c Concert) bool { return c.Status != nil }},
+	{"status_note", func(c Concert) bool { return c.StatusNote != nil }},
 }
 
 // checkAppendOnly ensures every entry present in base still exists in head with

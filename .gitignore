@@ -1,0 +1,2 @@
+# go build ./tools/... drops the compiled validator here
+/validate
