@@ -131,6 +131,24 @@ So a row can have two links, and they answer different questions:
   say *which* concert a row is. It is `null` when the entry linked nowhere, when
   the link could not be fetched, or when the listing already said everything.
 
+What the sources actually hand over, measured while backfilling the existing
+rows on 2026-08-20:
+
+- **Scheps, Fischer and Jansen** link most entries to the promoter, venue or
+  ticket page, and those pages print the full bill. Nearly all the detail this
+  step recovers comes from here — a hall where the calendar gave none, a
+  one-concerto listing that is really a three-work programme.
+- **Dueñas and Bürkev** hand over nothing to follow: her calendar's ticket
+  links don't survive the fetch, and his upcoming entries carry no links at all.
+  Their rows depend on Bachtrack.
+- **Bachtrack event pages load their programme by script**, so the fetch returns
+  a stub: expect no repertoire from one. It still earns its `detail_url` when
+  the page title names the artist — that confirms the engagement and gives the
+  reader the concert's own page instead of a performer index. When the title
+  names only the orchestra, nothing on the stub confirms the artist, so it
+  fails the check and the row keeps `null`. One such title can cover several
+  dates ("Nov 11, 12, 15"), which confirms each of those rows.
+
 `detail_url` also keeps the dataset auditable. Once a programme comes from the
 promoter's page rather than the calendar, "re-read `source_url` and check" no
 longer reaches the text the row was built from — recording the page that did
@@ -270,12 +288,14 @@ the one page its listing entry links to and re-read the concert from it.
   that — a first run, or a big Bachtrack batch — spend the budget on the
   soonest dates first, and within a date on the rows whose `pieces` is still a
   string. Concerts left undrilled just keep `detail_url` `null`.
-- **Spare budget drains the backlog.** If the new concerts don't use the 40,
-  spend the rest on rows already in `seen.json` whose `detail_url` is `null` and
-  whose `pieces` is still a string, again soonest first — rows that were capped
-  out by an earlier run, or predate this step, would otherwise never be drilled
-  at all. Same rules apply, and step 6's refinement limits still govern what may
-  be written.
+- **Spare budget drains the backlog, which is normally empty.** Every row that
+  existed when this step was introduced was drilled in one backfill pass, so an
+  old row with `detail_url` still `null` is one whose listing offered nothing
+  followable, not one waiting its turn. The only way a backlog reappears is a
+  run that hits the cap above, so: if the new concerts don't use the 40, spend
+  what's left on rows already in `seen.json` whose `detail_url` is `null` and
+  whose `pieces` is still a string, soonest first. Same rules apply, and step
+  6's refinement limits still govern what may be written.
 
 What it looks like when it works: Olga Scheps' calendar lists 16.09.2026 in
 Kempen with no venue at all, and links that entry to
