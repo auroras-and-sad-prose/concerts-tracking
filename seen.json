@@ -645,6 +645,9 @@
       "pieces": [
         "Beethoven Violin Concerto in D major, Op. 61"
       ],
+      "instruments": [
+        "violin"
+      ],
       "location_tag": "europe",
       "source_url": "https://www.juliafischer.com/en/events",
       "first_seen": "2026-08-17"
@@ -660,6 +663,9 @@
       "pieces": [
         "Wieniawski Violin Concerto No. 1, Op. 14"
       ],
+      "instruments": [
+        "violin"
+      ],
       "location_tag": "germany",
       "source_url": "https://www.juliafischer.com/en/events",
       "first_seen": "2026-08-17"
@@ -674,6 +680,9 @@
       "program": "hr-Sinfonieorchester / Alain Altinoglu: Wieniawski Violin Concerto No. 1, Op. 14",
       "pieces": [
         "Wieniawski Violin Concerto No. 1, Op. 14"
+      ],
+      "instruments": [
+        "violin"
       ],
       "location_tag": "germany",
       "source_url": "https://www.juliafischer.com/en/events",
@@ -691,6 +700,9 @@
         "Mendelssohn Sinfonia No. 8 in D major",
         "Mendelssohn Violin Concerto in D minor",
         "Vivaldi The Four Seasons, Op. 8"
+      ],
+      "instruments": [
+        "violin"
       ],
       "location_tag": "germany",
       "source_url": "https://www.juliafischer.com/en/events",
@@ -720,6 +732,9 @@
       "pieces": [
         "Brahms Violin Concerto in D major, Op. 77"
       ],
+      "instruments": [
+        "violin"
+      ],
       "location_tag": "europe",
       "source_url": "https://www.juliafischer.com/en/events",
       "first_seen": "2026-08-17"
@@ -734,6 +749,9 @@
       "program": "London Philharmonic Orchestra / Edward Gardner: Brahms Violin Concerto in D major, Op. 77",
       "pieces": [
         "Brahms Violin Concerto in D major, Op. 77"
+      ],
+      "instruments": [
+        "violin"
       ],
       "location_tag": "europe",
       "source_url": "https://www.juliafischer.com/en/events",
@@ -750,6 +768,9 @@
       "pieces": [
         "Brahms Concerto for Violin in D Major, Op. 77"
       ],
+      "instruments": [
+        "violin"
+      ],
       "location_tag": "europe",
       "source_url": "https://www.juliafischer.com/en/events",
       "first_seen": "2026-08-17"
@@ -764,6 +785,9 @@
       "program": "London Philharmonic Orchestra / Edward Gardner: Brahms Double Concerto for Violin and Cello in A minor, Op.102",
       "pieces": [
         "Brahms Double Concerto for Violin and Cello in A minor, Op.102"
+      ],
+      "instruments": [
+        "violin"
       ],
       "location_tag": "europe",
       "source_url": "https://www.juliafischer.com/en/events",
@@ -780,6 +804,9 @@
       "pieces": [
         "Brahms Concerto for Violin in D Major, Op. 77"
       ],
+      "instruments": [
+        "violin"
+      ],
       "location_tag": "europe",
       "source_url": "https://www.juliafischer.com/en/events",
       "first_seen": "2026-08-17"
@@ -794,6 +821,9 @@
       "program": "London Philharmonic Orchestra / Edward Gardner: Brahms Double Concerto for Violin and Cello in A minor, Op.102",
       "pieces": [
         "Brahms Double Concerto for Violin and Cello in A minor, Op.102"
+      ],
+      "instruments": [
+        "violin"
       ],
       "location_tag": "europe",
       "source_url": "https://www.juliafischer.com/en/events",
