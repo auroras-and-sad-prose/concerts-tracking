@@ -32,14 +32,15 @@
       "date": "2026-09-12",
       "city": "Altenkrempe",
       "country": "Germany",
-      "venue": "Kultur Gut Hasselburg",
+      "venue": "Herrenhaus des Kultur Gut Hasselburg",
       "program": "Chamber Music Academy: Mozart String Quartet in F major KV 590, Weinberg Piano Quintet in F minor Op. 18",
       "pieces": [
         "Mozart String Quartet in F major KV 590",
         "Weinberg Piano Quintet in F minor Op. 18"
       ],
       "location_tag": "germany",
-      "source_url": "https://www.olgascheps.com/en/concerts/",
+      "source_url": "https://www.olgascheps.com/konzerte",
+      "detail_url": "https://www.deutsche-stiftung-musikleben.de/aktuelles/kammermusik-mit-olga-scheps/",
       "first_seen": "2026-07-20"
     },
     {
@@ -55,7 +56,8 @@
         "Weinberg Piano Quintet in F minor Op. 18"
       ],
       "location_tag": "europe",
-      "source_url": "https://www.olgascheps.com/en/concerts/",
+      "source_url": "https://www.olgascheps.com/konzerte",
+      "detail_url": "https://www.deutsche-stiftung-musikleben.de/aktuelles/kammermusik-mit-olga-scheps/",
       "first_seen": "2026-07-20"
     },
     {
@@ -64,7 +66,7 @@
       "date": "2026-09-16",
       "city": "Kempen",
       "country": "Germany",
-      "venue": null,
+      "venue": "Paterskirche",
       "program": "Solo Piano: Mozart Sonatas KV 310 & KV 545, Fantasy in D minor KV 397; Chopin Ballades Nos. 1 & 2, Fantasy in F minor",
       "pieces": [
         "Mozart Sonata KV 310",
@@ -75,7 +77,8 @@
         "Chopin Fantasy in F minor"
       ],
       "location_tag": "germany",
-      "source_url": "https://www.olgascheps.com/en/concerts/",
+      "source_url": "https://www.olgascheps.com/konzerte",
+      "detail_url": "https://kempen-klassik.de/programm-details/olga-scheps-klavier-20260916.html",
       "first_seen": "2026-07-20"
     },
     {
@@ -84,7 +87,7 @@
       "date": "2026-09-23",
       "city": "Bad Saulgau",
       "country": "Germany",
-      "venue": null,
+      "venue": "Lichthof im Alten Kloster",
       "program": "Solo Piano: Mozart Piano Sonata No. 8 in A minor KV 310, Piano Sonata No. 16 in C major KV 545; Chopin Fantasy in F minor Op. 49, Sonata No. 3 in B minor Op. 58",
       "pieces": [
         "Mozart Piano Sonata No. 8 in A minor, KV 310",
@@ -93,7 +96,8 @@
         "Chopin Sonata No. 3 in B minor, Op. 58"
       ],
       "location_tag": "germany",
-      "source_url": "https://www.olgascheps.com/en/concerts/",
+      "source_url": "https://www.olgascheps.com/konzerte",
+      "detail_url": "https://www.bad-saulgau.de/de/kultur-freizeit-einkaufen/kultur/tonkunst/",
       "first_seen": "2026-07-20"
     },
     {
@@ -106,7 +110,7 @@
       "program": "Solo Piano Concerto",
       "pieces": "Programme not announced",
       "location_tag": "germany",
-      "source_url": "https://www.olgascheps.com/en/concerts/",
+      "source_url": "https://www.olgascheps.com/konzerte",
       "first_seen": "2026-07-20"
     },
     {
@@ -121,7 +125,7 @@
         "Beethoven Piano Concerto No. 4"
       ],
       "location_tag": "germany",
-      "source_url": "https://www.olgascheps.com/en/concerts/",
+      "source_url": "https://www.olgascheps.com/konzerte",
       "first_seen": "2026-07-20"
     },
     {
@@ -136,7 +140,7 @@
         "Beethoven Piano Concerto No. 4"
       ],
       "location_tag": "germany",
-      "source_url": "https://www.olgascheps.com/en/concerts/",
+      "source_url": "https://www.olgascheps.com/konzerte",
       "first_seen": "2026-07-20"
     },
     {
@@ -146,12 +150,15 @@
       "city": "Mannheim",
       "country": "Germany",
       "venue": "Rosengarten Mannheim",
-      "program": "Royal Scottish National Orchestra / Thomas Søndergård: Rachmaninov Piano Concerto No. 2",
+      "program": "Royal Scottish National Orchestra / Thomas Søndergård: Tchaikovsky Eugene Onegin Overture, Rachmaninov Piano Concerto No. 2, Brahms Symphony No. 4",
       "pieces": [
-        "Rachmaninov Piano Concerto No. 2"
+        "Tchaikovsky Overture from the opera Eugene Onegin, Op. 24",
+        "Rachmaninov Piano Concerto No. 2 in C minor, Op. 18",
+        "Brahms Symphony No. 4 in E minor, Op. 98"
       ],
       "location_tag": "germany",
-      "source_url": "https://www.olgascheps.com/en/concerts/",
+      "source_url": "https://www.olgascheps.com/konzerte",
+      "detail_url": "https://www.mannheim.de/de/veranstaltung/royal-scottish-national-orchestra-olga-scheps-thomas-sondergard",
       "first_seen": "2026-07-20"
     },
     {
@@ -160,13 +167,16 @@
       "date": "2026-11-21",
       "city": "Regensburg",
       "country": "Germany",
-      "venue": "Universität Regensburg",
-      "program": "Royal Scottish National Orchestra / Thomas Søndergård: Rachmaninov Piano Concerto No. 2",
+      "venue": "Audimax der Universität Regensburg",
+      "program": "Royal Scottish National Orchestra / Thomas Søndergård: Tchaikovsky Eugene Onegin Overture, Rachmaninov Piano Concerto No. 2, Brahms Symphony No. 4",
       "pieces": [
-        "Rachmaninov Piano Concerto No. 2"
+        "Tchaikovsky Overture from the opera Eugene Onegin, Op. 24",
+        "Rachmaninov Piano Concerto No. 2 in C minor, Op. 18",
+        "Brahms Symphony No. 4 in E minor, Op. 98"
       ],
       "location_tag": "germany",
-      "source_url": "https://www.olgascheps.com/en/concerts/",
+      "source_url": "https://www.olgascheps.com/konzerte",
+      "detail_url": "https://www.odeon-concerte.de/konzerte-karten/details/royal_scottish_national_orchestra/show.html",
       "first_seen": "2026-07-20"
     },
     {
@@ -349,6 +359,7 @@
       "pieces": "Composers only: Martinů, Prokofiev, Beethoven",
       "location_tag": "germany",
       "source_url": "https://bachtrack.com/performer/maria-duenas",
+      "detail_url": "https://bachtrack.com/concert-event/jakub-hrusa-maria-duenas-bamberg-symphony-konzerthalle-bamberg-joseph-keilberth-saal-5-february-2027/441968",
       "first_seen": "2026-07-20"
     },
     {
@@ -451,11 +462,14 @@
       "venue": "Berwaldhallen",
       "program": "Baltic Sea Festival — Czech Philharmonic Orchestra / Semyon Bychkov: Shostakovich Violin Concerto No 1, Dvorak Symphony No 7",
       "pieces": [
-        "Shostakovich: Violin Concerto No 1",
-        "Dvorak: Symphony No 7"
+        "Shostakovich: Violin Concerto No. 1 in A minor, Op. 77",
+        "Dvořák: Symphony No. 7 in D minor, Op. 70"
       ],
+      "status": "artist_replaced",
+      "status_note": "Berwaldhallen: \"Due to illness, Karen Gomyo will replace Janine Jansen in Dmitri Shostakovich's Violin Concerto No 1 in A minor, Op. 77.\"",
       "location_tag": "europe",
       "source_url": "https://www.janinejansen.com/performances/",
+      "detail_url": "https://www.berwaldhallen.se/en/concert/passion-and-protest",
       "first_seen": "2026-08-12"
     },
     {
@@ -464,14 +478,17 @@
       "date": "2026-08-28",
       "city": "Helsinki",
       "country": "Finland",
-      "venue": "Music Center",
+      "venue": "Helsinki Music Centre, Concert Hall",
       "program": "Helsinki Festival — Czech Philharmonic Orchestra / Semyon Bychkov: Shostakovich Violin Concerto No 1, Dvorak Symphony No 7",
       "pieces": [
-        "Shostakovich: Violin Concerto No 1",
-        "Dvorak: Symphony No 7"
+        "Shostakovich: Violin Concerto No. 1 in A minor, Op. 77",
+        "Dvořák: Symphony No. 7 in D minor, Op. 70"
       ],
+      "status": "artist_replaced",
+      "status_note": "Helsinki Festival: \"Unfortunately, Janine Jansen's appearance as a soloist with the Czech Philharmonic in the concert on August 28 has been cancelled due to health reasons.\" Karen Gomyo plays the Shostakovich.",
       "location_tag": "europe",
       "source_url": "https://www.janinejansen.com/performances/",
+      "detail_url": "https://helsinkifestival.fi/en/event/czech-philharmonic-semyon-bychkov-janine-jansen/",
       "first_seen": "2026-08-12"
     },
     {
@@ -480,15 +497,18 @@
       "date": "2026-08-29",
       "city": "Copenhagen",
       "country": "Denmark",
-      "venue": "Tivoli",
+      "venue": "Tivoli, The Glass Hall Theatre",
       "program": "Tivoli Recital — with Denis Kozhukhin: Brahms Violin Sonata No 1, Prokofiev Five Melodies, Prokofiev Violin Sonata No 1",
       "pieces": [
         "Brahms: Violin Sonata No 1",
         "Prokofiev: Five Melodies",
         "Prokofiev: Violin Sonata No 1"
       ],
+      "status": "cancelled",
+      "status_note": "Tivoli: the concert is cancelled due to illness.",
       "location_tag": "europe",
       "source_url": "https://www.janinejansen.com/performances/",
+      "detail_url": "https://www.tivoli.dk/en/programme/summer-classical/janine-jansen-denis-kozhukhin",
       "first_seen": "2026-08-12"
     },
     {
@@ -497,13 +517,15 @@
       "date": "2026-09-01",
       "city": "Prague",
       "country": "Czech Republic",
-      "venue": "Rudolphinum",
-      "program": "Czech Philharmonic Season Opening — Czech Philharmonic Orchestra / Semyon Bychkov: Shostakovich Violin Concerto No 1",
+      "venue": "Rudolfinum, Dvořák Hall",
+      "program": "Czech Philharmonic Season Opening — Czech Philharmonic Orchestra / Semyon Bychkov: Shostakovich Violin Concerto No 1, Dvořák Symphony No 7. The orchestra's page lists both Janine Jansen and Karen Gomyo (violin)",
       "pieces": [
-        "Shostakovich: Violin Concerto No 1"
+        "Shostakovich: Violin Concerto No. 1 in A minor, Op. 77",
+        "Dvořák: Symphony No. 7 in D minor, Op. 70"
       ],
       "location_tag": "europe",
       "source_url": "https://www.janinejansen.com/performances/",
+      "detail_url": "https://www.ceskafilharmonie.cz/en/event/35547-season-opening-concerts-czech-philharmonic/",
       "first_seen": "2026-08-12"
     },
     {
@@ -512,13 +534,15 @@
       "date": "2026-09-02",
       "city": "Prague",
       "country": "Czech Republic",
-      "venue": "Rudolphinum",
-      "program": "Czech Philharmonic Season Opening — Czech Philharmonic Orchestra / Semyon Bychkov: Shostakovich Violin Concerto No 1",
+      "venue": "Rudolfinum, Dvořák Hall",
+      "program": "Czech Philharmonic Season Opening — Czech Philharmonic Orchestra / Semyon Bychkov: Shostakovich Violin Concerto No 1, Dvořák Symphony No 7. The orchestra's page lists both Janine Jansen and Karen Gomyo (violin)",
       "pieces": [
-        "Shostakovich: Violin Concerto No 1"
+        "Shostakovich: Violin Concerto No. 1 in A minor, Op. 77",
+        "Dvořák: Symphony No. 7 in D minor, Op. 70"
       ],
       "location_tag": "europe",
       "source_url": "https://www.janinejansen.com/performances/",
+      "detail_url": "https://www.ceskafilharmonie.cz/en/event/35547-season-opening-concerts-czech-philharmonic/",
       "first_seen": "2026-08-12"
     },
     {
@@ -527,13 +551,15 @@
       "date": "2026-09-03",
       "city": "Prague",
       "country": "Czech Republic",
-      "venue": "Rudolphinum",
-      "program": "Czech Philharmonic Season Opening — Czech Philharmonic Orchestra / Semyon Bychkov: Shostakovich Violin Concerto No 1",
+      "venue": "Rudolfinum, Dvořák Hall",
+      "program": "Czech Philharmonic Season Opening — Czech Philharmonic Orchestra / Semyon Bychkov: Shostakovich Violin Concerto No 1, Dvořák Symphony No 7. The orchestra's page lists both Janine Jansen and Karen Gomyo (violin)",
       "pieces": [
-        "Shostakovich: Violin Concerto No 1"
+        "Shostakovich: Violin Concerto No. 1 in A minor, Op. 77",
+        "Dvořák: Symphony No. 7 in D minor, Op. 70"
       ],
       "location_tag": "europe",
       "source_url": "https://www.janinejansen.com/performances/",
+      "detail_url": "https://www.ceskafilharmonie.cz/en/event/35547-season-opening-concerts-czech-philharmonic/",
       "first_seen": "2026-08-12"
     },
     {
@@ -542,14 +568,16 @@
       "date": "2026-09-05",
       "city": "Sion",
       "country": "Switzerland",
-      "venue": "Pôle Musique",
-      "program": "Sion Festival — with Boris Brovtsyn (violin), Amihai Grosz (viola), Daniel Blendulf (cello), Denis Kozhukhin & Nikola Meeuwsen (piano): Dohnanyi Piano Quintet No 2 Op 26, Schubert Piano Trio No 2 Op 100",
+      "venue": "Black Box, Pôle Musique",
+      "program": "Sion Festival — with Boris Brovtsyn (violin), Amihai Grosz (viola), Daniel Blendulf (cello), Denis Kozhukhin & Nikola Meeuwsen (piano): Schubert Fantaisie in F minor D 940, Dohnanyi Piano Quintet No 2 Op 26, Schubert Piano Trio No 2 Op 100",
       "pieces": [
+        "Schubert: Fantaisie in F minor, D. 940",
         "Dohnanyi: Piano Quintet No 2, Op 26",
         "Schubert: Piano Trio No 2, Op 100"
       ],
       "location_tag": "europe",
       "source_url": "https://www.janinejansen.com/performances/",
+      "detail_url": "https://sion-violon-musique.ch/en/events/schubert-dohnanyi-chamber-music-sion-festival/",
       "first_seen": "2026-08-12"
     },
     {
@@ -558,13 +586,14 @@
       "date": "2026-09-06",
       "city": "Sion",
       "country": "Switzerland",
-      "venue": "Eglise du Sacré-Coeur",
+      "venue": "Église du Sacré-Coeur",
       "program": "Sion Festival — with Boris Brovtsyn, Amihai Grosz, Daniel Blendulf, Jonathan Swensen: Schubert String Quintet D956",
       "pieces": [
         "Schubert: String Quintet D956"
       ],
       "location_tag": "europe",
       "source_url": "https://www.janinejansen.com/performances/",
+      "detail_url": "https://sion-violon-musique.ch/en/events/church-tour-concert-shostakovich-sion-festival/",
       "first_seen": "2026-08-12"
     },
     {
@@ -580,6 +609,7 @@
       ],
       "location_tag": "europe",
       "source_url": "https://bachtrack.com/performer/janine-jansen",
+      "detail_url": "https://bachtrack.com/concert-event/classical-hour-janine-jansen-performs-shostakovichs-violin-concerto-oslo-philharmonic-oslo-concert-hall-konserthus-14-october-2026/444248",
       "first_seen": "2026-08-12"
     },
     {
@@ -593,6 +623,7 @@
       "pieces": "Composers only: Shostakovich, Debussy, Britten",
       "location_tag": "europe",
       "source_url": "https://bachtrack.com/performer/janine-jansen",
+      "detail_url": "https://bachtrack.com/concert-event/janine-jansen-performs-shostakovichs-violin-concerto-oslo-philharmonic-oslo-concert-hall-konserthus-15-october-2026/444249",
       "first_seen": "2026-08-12"
     },
     {
@@ -606,6 +637,7 @@
       "pieces": "Composers only: Shostakovich, Mussorgsky",
       "location_tag": "germany",
       "source_url": "https://bachtrack.com/performer/janine-jansen",
+      "detail_url": "https://bachtrack.com/concert-event/lahav-shani-janine-jansen-munich-philharmonic-orchestra-isarphilharmonie-11-november-2026/437024",
       "first_seen": "2026-08-12"
     },
     {
@@ -619,6 +651,7 @@
       "pieces": "Composers only: Shostakovich, Mussorgsky",
       "location_tag": "germany",
       "source_url": "https://bachtrack.com/performer/janine-jansen",
+      "detail_url": "https://bachtrack.com/concert-event/lahav-shani-janine-jansen-munich-philharmonic-orchestra-isarphilharmonie-11-november-2026/437024",
       "first_seen": "2026-08-12"
     },
     {
@@ -632,6 +665,7 @@
       "pieces": "Composers only: Shostakovich, Mussorgsky",
       "location_tag": "germany",
       "source_url": "https://bachtrack.com/performer/janine-jansen",
+      "detail_url": "https://bachtrack.com/concert-event/lahav-shani-janine-jansen-munich-philharmonic-orchestra-isarphilharmonie-11-november-2026/437024",
       "first_seen": "2026-08-12"
     },
     {
@@ -641,15 +675,17 @@
       "city": "Varna",
       "country": "Bulgaria",
       "venue": "Festival- und Kongresszentrum",
-      "program": "Rundfunk-Sinfonieorchester Berlin / Vladimir Jurowski: Beethoven Violin Concerto in D major, Op. 61",
+      "program": "Rundfunk-Sinfonieorchester Berlin / Vladimir Jurowski: Beethoven Violin Concerto in D major, Op. 61, Brahms Symphony No. 2 in D major, Op. 73",
       "pieces": [
-        "Beethoven Violin Concerto in D major, Op. 61"
+        "Beethoven Violin Concerto in D major, Op. 61",
+        "Brahms Symphony No. 2 in D major, Op. 73"
       ],
       "instruments": [
         "violin"
       ],
       "location_tag": "europe",
       "source_url": "https://www.juliafischer.com/en/events",
+      "detail_url": "https://www.rsb-online.de/konzerte/rsb-on-tour-varna/",
       "first_seen": "2026-08-17"
     },
     {
@@ -706,6 +742,7 @@
       ],
       "location_tag": "germany",
       "source_url": "https://www.juliafischer.com/en/events",
+      "detail_url": "https://www.muenchenticket.de/event/festival-der-nationen-2026-34205/437274/",
       "first_seen": "2026-08-17"
     },
     {
@@ -746,15 +783,18 @@
       "city": "Barcelona",
       "country": "Spain",
       "venue": "Palau de la Música Catalana",
-      "program": "London Philharmonic Orchestra / Edward Gardner: Brahms Violin Concerto in D major, Op. 77",
+      "program": "London Philharmonic Orchestra / Edward Gardner: Casals Prelude from the oratorio El pessebre, Brahms Violin Concerto in D major, Op. 77, Sibelius Symphony No. 5 in E flat major, Op. 82",
       "pieces": [
-        "Brahms Violin Concerto in D major, Op. 77"
+        "Casals Prelude from the oratorio El pessebre",
+        "Brahms Violin Concerto in D major, Op. 77",
+        "Sibelius Symphony No. 5 in E flat major, Op. 82"
       ],
       "instruments": [
         "violin"
       ],
       "location_tag": "europe",
       "source_url": "https://www.juliafischer.com/en/events",
+      "detail_url": "https://www.palaumusica.cat/en/london-philharmonic-gardner_1586381",
       "first_seen": "2026-08-17"
     },
     {
@@ -763,16 +803,19 @@
       "date": "2026-10-27",
       "city": "Zaragoza",
       "country": "Spain",
-      "venue": "Auditorio de Zaragoza",
-      "program": "London Philharmonic Orchestra / Edward Gardner: Brahms Concerto for Violin in D Major, Op. 77",
+      "venue": "Sala Luis Galve, Auditorio de Zaragoza",
+      "program": "London Philharmonic Orchestra / Edward Gardner: Casals Prelude from the oratorio El pessebre, Brahms Concerto for Violin in D Major, Op. 77, Sibelius Symphony No. 5 in E flat major, Op. 82",
       "pieces": [
-        "Brahms Concerto for Violin in D Major, Op. 77"
+        "Casals Prelude from the oratorio El pessebre",
+        "Brahms Concerto for Violin in D Major, Op. 77",
+        "Sibelius Symphony No. 5 in E flat major, Op. 82"
       ],
       "instruments": [
         "violin"
       ],
       "location_tag": "europe",
       "source_url": "https://www.juliafischer.com/en/events",
+      "detail_url": "https://auditoriozaragoza.com/en/programacion/london-philharmonic-orchestra/",
       "first_seen": "2026-08-17"
     },
     {
@@ -782,15 +825,18 @@
       "city": "Madrid",
       "country": "Spain",
       "venue": "Auditorio Nacional de Musica",
-      "program": "London Philharmonic Orchestra / Edward Gardner: Brahms Double Concerto for Violin and Cello in A minor, Op.102",
+      "program": "London Philharmonic Orchestra / Edward Gardner: Casals Prelude from the oratorio El pessebre, Brahms Double Concerto for Violin and Cello in A minor, Op.102, Sibelius Symphony No. 5",
       "pieces": [
-        "Brahms Double Concerto for Violin and Cello in A minor, Op.102"
+        "Casals Prelude from the oratorio El pessebre",
+        "Brahms Double Concerto for Violin and Cello in A minor, Op.102",
+        "Sibelius Symphony No. 5"
       ],
       "instruments": [
         "violin"
       ],
       "location_tag": "europe",
       "source_url": "https://www.juliafischer.com/en/events",
+      "detail_url": "https://www.ibermusica.es/es/concierto/310/london-philharmonic-orchestra",
       "first_seen": "2026-08-17"
     },
     {
@@ -800,15 +846,17 @@
       "city": "Madrid",
       "country": "Spain",
       "venue": "Auditorio Nacional de Musica",
-      "program": "London Philharmonic Orchestra / Edward Gardner: Brahms Concerto for Violin in D Major, Op. 77",
+      "program": "London Philharmonic Orchestra / Edward Gardner: Brahms Concerto for Violin in D Major, Op. 77, Tchaikovsky Manfred Symphony in B minor, Op. 58",
       "pieces": [
-        "Brahms Concerto for Violin in D Major, Op. 77"
+        "Brahms Concerto for Violin in D Major, Op. 77",
+        "Tchaikovsky Manfred Symphony in B minor, Op. 58"
       ],
       "instruments": [
         "violin"
       ],
       "location_tag": "europe",
       "source_url": "https://www.juliafischer.com/en/events",
+      "detail_url": "https://www.ibermusica.es/en/concert/311/london-philharmonic-orchestra",
       "first_seen": "2026-08-17"
     },
     {
