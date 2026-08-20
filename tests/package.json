@@ -1,0 +1,13 @@
+{
+  "name": "concerts-tracking-tests",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Browser smoke tests for index.html",
+  "type": "module",
+  "scripts": {
+    "test": "node --test"
+  },
+  "devDependencies": {
+    "playwright": "1.62.1"
+  }
+}

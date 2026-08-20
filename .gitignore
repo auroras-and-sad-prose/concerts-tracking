@@ -1,2 +1,5 @@
 # go build ./tools/... drops the compiled validator here
 /validate
+
+# npm install in tests/ drops Playwright here
+/tests/node_modules/
