@@ -296,7 +296,12 @@ the one page its listing entry links to and re-read the concert from it.
   `detail_url` stays `null`. Some calendars render their links by script, so a
   fetch returns the entry's text without a target; that counts as no link.
   Never reconstruct one from the venue's name or a URL pattern you've seen
-  before — a followed link is one the page handed you. When a concert was
+  before — a followed link is one the page handed you. A link that lands on a
+  promoter's front page is not a detail link either, even when today's carousel
+  happens to feature the concert: next month it won't, and the row would be
+  left pointing at a page that says nothing about it. A season or series page
+  that does set out this concert's date and programme is fine — what matters is
+  that the page is about the concert, not that it is exclusively about it. When a concert was
   listed on both the artist's site and Bachtrack, prefer the artist site's
   link; use the Bachtrack event page if the artist entry has no link, or if
   its page fails below.
