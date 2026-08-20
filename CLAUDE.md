@@ -110,20 +110,26 @@ Issues. All state lives in `seen.json` at the repo root.
 
 **Artists and primary sources:**
 
-1. Olga Scheps — https://www.olgascheps.com/en/concerts/
+1. Olga Scheps — https://www.olgascheps.com/konzerte (the `/en/concerts/`
+   English version is dead — 404s — so this is the German-language site;
+   expect German date formats here, which step 2's normalization already
+   covers)
 2. María Dueñas — https://www.mariaduenasviolin.com/en/calendar
 3. İlyun Bürkev — https://ilyunburkev.com/en/portfolio/concerts/
 4. Maya Oganyan — https://www.mayaoganyan.com/calendar
 5. Janine Jansen — https://www.janinejansen.com/performances/
 6. Julia Fischer — https://www.juliafischer.com/en/events
-7. Itzhak Perlman — https://itzhakperlman.com/performances/
+7. Itzhak Perlman — no primary source. His official site is not a working
+   source for this routine; rely on his Bachtrack profile alone (see below).
+   Do not attempt to fetch itzhakperlman.com.
 
-All seven pages list upcoming concerts directly. Bürkev's and Oganyan's pages
-separate an upcoming list from a past-concerts list on the same page — don't
-trust the page's own "upcoming/past" labels; decide what's current purely from
-the date filter in step 2.
+These six pages list upcoming concerts directly (Perlman has no primary
+source — see above). Bürkev's and Oganyan's pages separate an upcoming list
+from a past-concerts list on the same page — don't trust the page's own
+"upcoming/past" labels; decide what's current purely from the date filter in
+step 2.
 
-**Secondary source — Bachtrack, for all seven artists too:**
+**Secondary source — Bachtrack, for all seven artists (Perlman's only source):**
 
 1. Olga Scheps — https://bachtrack.com/performer/olga-scheps
 2. María Dueñas — https://bachtrack.com/performer/maria-duenas
@@ -147,6 +153,8 @@ below rather than treating the current slate as noise.
 **Step 2 — Gather current concerts.** Determine today's date at runtime. For
 each artist: fetch the primary source and the Bachtrack profile, and extract
 every listed concert (ignore cookie banners, nav, and other page chrome).
+Perlman has no primary source, so fetch his Bachtrack profile only — don't
+attempt itzhakperlman.com.
 For each, capture `artist`, `date`, `city`, `country`, `venue`, `program` (if
 shown), `pieces` (per grounding rule 3), `instruments` (per grounding rule 7),
 and the `source_url` you found it on.
@@ -154,11 +162,11 @@ Normalize dates to ISO `YYYY-MM-DD`; pages use mixed German/English formats
 (`16.3.2026`, `04. Juni 2026`, `Aug 3, 2026`).
 
 Keep only concerts dated today or later — discard past dates. If you can
-access none of an artist's sources (official site AND Bachtrack), skip that
-artist this run and note it in the step 7 report. If only some sources are
-reachable, update using whichever succeeded. Aside from the official sites and
-Bachtrack, don't reach for other sources — no general web searches, no
-ticketing sites.
+access none of an artist's sources (official site AND Bachtrack — or, for
+Perlman, just his Bachtrack profile), skip that artist this run and note it
+in the step 7 report. If only some sources are reachable, update using
+whichever succeeded. Aside from the official sites and Bachtrack, don't reach
+for other sources — no general web searches, no ticketing sites.
 
 Do not invent concerts. Every concert must trace to a real `source_url` you
 actually fetched this run. If a source fails to load, note it and move on —
