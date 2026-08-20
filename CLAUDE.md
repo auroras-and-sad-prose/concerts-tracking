@@ -90,8 +90,9 @@ must be a subset of that artist's roster instruments. It is `null` whenever the
 source doesn't say, which is the normal case and not a defect: the page then
 treats the concert as a candidate for every instrument the artist plays, so an
 unstated Fischer date appears under both Piano and Violin rather than claiming
-one. A later run may narrow it once a source states which (rule 6); it is never
-narrowed by inference from the repertoire.
+one. A later run may narrow it once a source settles the question (rule 6) —
+either by billing the instrument outright or by printing it in a work title,
+which rule 7 admits as the one permitted inference.
 
 **The concert-watch routine never writes this file.** Adding an artist,
 correcting an instrument, or extending the instrument vocabulary is a reviewed
@@ -183,8 +184,11 @@ twice.
 **Step 5 — Refine existing rows.** For every concert whose id is already in
 `seen.json`, check whether this run's fetch turned up more than what's
 stored — an announced venue, real work titles where `pieces` previously said
-`"Composers only: ..."` or `"Programme not announced"`, or a now-stated
-instrument for a row whose `instruments` is still `null`. Update `venue`,
+`"Composers only: ..."` or `"Programme not announced"`, or an instrument the
+page now pins down (rule 7) for a row whose `instruments` is still `null`.
+Note that a programme firming up can settle both at once: `"Composers only:
+Brahms"` becoming `"Brahms Violin Concerto in D major, Op. 77"` fills in
+`pieces` and, for a multi-instrument artist, `instruments` too. Update `venue`,
 `program`, `pieces`, `instruments`, `country`, `location_tag`, and `source_url`
 in place per grounding rule 6. Never touch `artist`, `date`, `city`, or
 `first_seen`, and never clear a populated field back to `null`.
@@ -212,7 +216,9 @@ a silently broken source.
 
 1. **Fetch before writing.** Every field must come from text actually returned by
    fetching that row's `source_url` during the run — never from memory or
-   inference. If you didn't fetch it, don't record it.
+   inference. If you didn't fetch it, don't record it. The single reading step
+   allowed on top of fetched text is rule 7's instrument inference, and it is
+   confined to an instrument the page itself spells out in a work title.
 2. **Null over guessing.** If `venue` or `program` isn't stated on the source
    page, leave it `null`. Never invent a venue, conductor, opus number, or
    program.
@@ -248,14 +254,37 @@ a silently broken source.
    fetched in that run, not from what you happen to know about the repertoire.
    Never change `artist`, `date`, `city`, or `first_seen`, and never clear a
    populated field back to `null` — raise that as a normal PR for review.
-7. **`instruments` records what the source says, not what you can infer.** Set a
-   row's `instruments` only when the page itself pins the instrument down for
-   that engagement — a billing like "Julia Fischer, piano", a listing titled
-   "Klavierabend", a concerto named with its soloist's instrument. Otherwise
-   leave it `null`; the page then shows the concert under every instrument that
-   artist plays, which is the truthful answer. Do not infer it from the
-   repertoire, from who else is on the bill, or from what the artist usually
-   does, and never widen it beyond the instruments `artists.json` records for
-   them — for a single-instrument artist the field adds nothing, so `null` is
-   fine there too. The roster itself stays out of the routine's hands (see "The
-   artist roster").
+7. **`instruments` records what the page's words say — including an instrument
+   the page names in a work title.** Set a row's `instruments` when the page
+   pins the instrument down for that engagement. Usually that is direct: a
+   billing like "Julia Fischer, piano", a listing titled "Klavierabend", a
+   soloist credit. It may also come through the repertoire — a programme
+   reading "Brahms Violin Concerto in D major, Op. 77" says which instrument
+   she is holding as plainly as a billing would, and refusing to read it helps
+   nobody. Take that inference only in its clear-cut form, which requires all
+   three of:
+
+   - **The instrument word is printed on the page.** "Violin Concerto",
+     "Concerto for Violin and Cello", "Klavierkonzert", "Violinsonate" all
+     qualify. A work you happen to know is a violin concerto does not: if the
+     page says only "Beethoven Op. 61", or `"Composers only: Brahms"`, there is
+     nothing to read and the field stays `null`. Rule 1 is not suspended here —
+     the instrument must still come from text you fetched this run, so this is
+     a claim about the page's wording, never about your knowledge of the
+     catalogue.
+   - **The work is one this artist is playing.** If the page names a different
+     soloist for it, or bills the artist as conductor, or lists them among
+     several chamber players without saying who plays what, infer nothing.
+   - **The programme points at a single instrument.** If it names works for two
+     instruments the artist plays — a Grieg piano concerto and a Mozart violin
+     concerto on one bill — the page has not settled the question, so leave
+     `null` rather than picking one.
+
+   Everything outside that stays off limits: don't infer from who else is on
+   the bill, from what the artist usually plays, or from the hall or ensemble,
+   and never widen beyond the instruments `artists.json` records for them — for
+   a single-instrument artist the field adds nothing, so `null` is fine there
+   too. When none of this settles it, `null` remains the truthful answer, and
+   the page then shows the concert under every instrument that artist plays.
+   The roster itself stays out of the routine's hands (see "The artist
+   roster").
