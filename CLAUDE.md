@@ -113,12 +113,12 @@ editing the roster mid-run.
 
 Calendar pages are terse. Most entries give a date, a city and — if you are
 lucky — a venue, while the programme sits one click away on the page the entry
-links to. María Dueñas' calendar is the clearest case: her own listing names
-almost no repertoire, and hands each entry a ticket link to whoever is running
-the concert — where the works usually are. Bachtrack is the same story in a
-tidier form —
-its performer profiles link each engagement to a `bachtrack.com/concert-event/…`
-page carrying the full bill.
+links to. Olga Scheps' calendar announced a Kempen recital with no hall at all;
+the promoter it links to names one in its first paragraph. María Dueñas'
+calendar is the sharper version of the problem: it names almost no repertoire
+anywhere, so what it links to is all there is to read. Which of the seven
+artists this actually works for is measured below — the answer is not "all of
+them".
 
 So a row can have two links, and they answer different questions:
 
@@ -310,9 +310,9 @@ the one page its listing entry links to and re-read the concert from it.
 - **What it may contribute.** `venue`, `program`, `pieces`, `instruments`,
   `country`, and — when the page says the concert is off, moved, or has a
   different soloist — `status` with its `status_note`. Nothing else. `artist`,
-  `date` and `city` come from the
-  allowlisted listing and are never taken from a detail page, so a mislinked
-  page can add noise but can never repoint a row at a different concert. Where
+  `date` and `city` come from the allowlisted listing and are never taken from
+  a detail page, so a mislinked page can add noise but can never repoint a row
+  at a different concert. Where
   the two disagree on a refinable field, prefer the detail page: it is the
   specific source, and a calendar's one-line summary is the abbreviation of it.
   `location_tag` follows from the city, which the detail page didn't set, so
@@ -359,9 +359,9 @@ also report that a concert is off or has a different soloist — set `status` an
 `status_note` from its words, per "When a concert falls through" above; a row
 merely missing from the page this run reports nothing. Update `venue`,
 `program`, `pieces`, `instruments`, `country`, `location_tag`, `source_url`,
-`detail_url`, `status`, and `status_note`
-in place per grounding rule 6. Never touch `artist`, `date`,
-`city`, or `first_seen`, and never clear a populated field back to `null`.
+`detail_url`, `status`, and `status_note` in place per grounding rule 6. Never
+touch `artist`, `date`, `city`, or `first_seen`, and never clear a populated
+field back to `null`.
 
 Existing rows are refined from the listing pages fetched in step 2 — the ones
 step 5 reached with spare budget are the exception, and they refine from their

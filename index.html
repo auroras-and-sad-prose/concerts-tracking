@@ -347,9 +347,6 @@ function populateFilters(concerts) {
   addOptions("countryFilter", concerts.map(c => c.country).filter(Boolean));
 }
 
-// The location tag doubles as a colour class so Berlin and Germany dates stand
-// out from the rest of Europe at a glance; the class list is closed by CI's
-// location_tag allowlist.
 // `status` says a listed concert is no longer the concert this row describes —
 // called off, moved, or handed to another soloist — and `status_note` carries
 // the source's own words for it. Both are null on a concert that is simply on.
@@ -368,6 +365,9 @@ function statusLineHTML(concert) {
   return `<div class="status-line">${escapeHTML(note || statusLabel(concert.status))}</div>`;
 }
 
+// The location tag doubles as a colour class so Berlin and Germany dates stand
+// out from the rest of Europe at a glance; the class list is closed by CI's
+// location_tag allowlist.
 function locationTagHTML(tag) {
   if (!tag) return "";
   const cls = tag === "berlin" ? "loc-berlin" : tag === "germany" ? "loc-germany" : "loc-europe";
