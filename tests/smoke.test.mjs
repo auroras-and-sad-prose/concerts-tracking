@@ -6,9 +6,10 @@
 // Run from this directory:
 //
 //   npm install
+//   npx playwright install chromium   # once per Playwright version
 //   npm test
 //
-// Chromium comes from Playwright's usual browser location; set
+// Chromium goes to Playwright's usual browser location; set
 // PLAYWRIGHT_BROWSERS_PATH if the machine keeps it elsewhere.
 
 import { after, before, describe, test } from "node:test";

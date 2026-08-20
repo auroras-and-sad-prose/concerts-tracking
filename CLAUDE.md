@@ -80,7 +80,7 @@ catch a page that has stopped working, not a subtly wrong one, and they say
 nothing about whether the data is right, which is the validator's job above.
 
 ```sh
-cd tests && npm install && npm test
+cd tests && npm install && npx playwright install chromium && npm test
 ```
 
 ## The artist roster (`artists.json`)
