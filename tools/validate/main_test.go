@@ -56,6 +56,9 @@ func TestFieldChecks(t *testing.T) {
 		{"empty pieces array", func(c *Concert) { c.Pieces = Pieces{List: []string{}} }},
 		{"blank piece title", func(c *Concert) { c.Pieces = pieceList("Chopin Ballade No. 1", "  ") }},
 		{"blank pieces string", func(c *Concert) { c.Pieces = pieceText("   ") }},
+		{"empty detail_url", func(c *Concert) { c.DetailURL = strptr("  ") }},
+		{"relative detail_url", func(c *Concert) { c.DetailURL = strptr("/programm/2026-09-12") }},
+		{"javascript detail_url", func(c *Concert) { c.DetailURL = strptr("javascript:alert(1)") }},
 		{"empty instruments array", func(c *Concert) { c.Instruments = []string{} }},
 		{"unknown instrument", func(c *Concert) { c.Instruments = []string{"theremin"} }},
 		{"repeated instrument", func(c *Concert) { c.Instruments = []string{"piano", "piano"} }},
@@ -85,6 +88,28 @@ func TestInstrumentsAcceptedShapes(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			c := valid()
 			c.Instruments = tt.list
+			if p := Validate(File{Concerts: []Concert{c}}, nil, now); len(p) != 0 {
+				t.Fatalf("expected no problems, got %v", p)
+			}
+		})
+	}
+}
+
+// detail_url points at whatever page the listing links to for that concert —
+// usually a promoter or venue site, which is exactly why it is not held to the
+// source_url allowlist.
+func TestDetailURLAcceptedShapes(t *testing.T) {
+	for _, tt := range []struct {
+		name string
+		url  *string
+	}{
+		{"absent", nil},
+		{"offlist promoter page", strptr("https://kempen-klassik.de/programm-details/olga-scheps-klavier-20260916.html")},
+		{"bachtrack event page", strptr("https://bachtrack.com/concert-event/example/443111")},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			c := valid()
+			c.DetailURL = tt.url
 			if p := Validate(File{Concerts: []Concert{c}}, nil, now); len(p) != 0 {
 				t.Fatalf("expected no problems, got %v", p)
 			}
@@ -190,6 +215,7 @@ func TestExistingEntriesMayBeRefined(t *testing.T) {
 	refined.Instruments = []string{"piano"}
 	refined.LocationTag = "europe"
 	refined.SourceURL = "https://bachtrack.com/performer/olga-scheps"
+	refined.DetailURL = strptr("https://www.festspielhaus.de/en/events/beethoven-4/")
 
 	if p := Validate(File{Concerts: []Concert{refined}}, &base, now); len(p) != 0 {
 		t.Fatalf("refining descriptive fields should be allowed, got %v", p)
@@ -199,6 +225,7 @@ func TestExistingEntriesMayBeRefined(t *testing.T) {
 func TestExistingDetailMayNotBeErased(t *testing.T) {
 	withInstrument := valid()
 	withInstrument.Instruments = []string{"piano"}
+	withInstrument.DetailURL = strptr("https://kempen-klassik.de/programm-details/olga-scheps-klavier-20260916.html")
 	base := File{Concerts: []Concert{withInstrument}}
 
 	for _, tt := range []struct {
@@ -208,6 +235,7 @@ func TestExistingDetailMayNotBeErased(t *testing.T) {
 		{"venue", func(c *Concert) { c.Venue = nil }},
 		{"pieces", func(c *Concert) { c.Pieces = Pieces{} }},
 		{"instruments", func(c *Concert) { c.Instruments = nil }},
+		{"detail_url", func(c *Concert) { c.DetailURL = nil }},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
 			// Start from the fully populated row so each case erases exactly

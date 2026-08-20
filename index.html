@@ -174,14 +174,21 @@
     font-size: .89rem; color: var(--muted);
   }
 
+  /* A card carries up to two links: the calendar it was found on, and the
+     concert's own page when the calendar linked to one. */
+  .card .links {
+    align-self: center; flex: 0 0 auto;
+    display: flex; flex-direction: column; align-items: flex-end; gap: .1rem;
+  }
   .card a.link {
-    align-self: center;
     font-size: .78rem; font-weight: 600; text-decoration: none;
     color: var(--accent); white-space: nowrap;
     border-radius: 6px; padding: .3rem .55rem;
     transition: background .15s ease;
   }
   .card a.link:hover { background: var(--accent-soft); }
+  .card a.link.secondary { font-weight: 500; color: var(--muted); }
+  .card a.link.secondary:hover { color: var(--accent); }
 
   /* ---------- Tags ---------- */
   .tag {
@@ -200,10 +207,15 @@
 
   @media (max-width: 560px) {
     header { padding-top: 2.5rem; }
-    .card { padding: .9rem .95rem; gap: .85rem; }
+    .card { padding: .9rem .95rem; gap: .85rem; flex-wrap: wrap; }
     .date-col { width: 3rem; }
-    .card a.link { position: absolute; top: .8rem; right: .8rem; align-self: flex-start; }
-    .card .topline { padding-right: 4.5rem; }
+    /* Too narrow to keep a column of links beside the text: they wrap onto
+       their own row under the card instead. */
+    .card .links {
+      flex-direction: row; justify-content: flex-end;
+      width: 100%; gap: .2rem; margin-top: .15rem;
+    }
+    .card a.link { padding: .25rem .4rem; }
   }
   @media (prefers-reduced-motion: reduce) {
     * { transition: none !important; }
@@ -371,6 +383,14 @@ function render() {
       ...[c.venue, c.country].filter(Boolean).map(escapeHTML)
     ].filter(Boolean).join(" · ");
     const safeUrl = isSafeUrl(c.source_url) ? c.source_url : null;
+    // The detail page is where a programme missing from the calendar came
+    // from, so it is worth offering alongside the source — but only when it
+    // is somewhere else than the source itself.
+    const detailUrl = isSafeUrl(c.detail_url) && c.detail_url !== c.source_url ? c.detail_url : null;
+    const linksHTML = [
+      safeUrl ? `<a class="link" href="${escapeHTML(safeUrl)}" target="_blank" rel="noopener">Source ↗</a>` : "",
+      detailUrl ? `<a class="link secondary" href="${escapeHTML(detailUrl)}" target="_blank" rel="noopener">Details ↗</a>` : ""
+    ].filter(Boolean).join("");
     html += `
       <div class="card">
         <div class="date-col">
@@ -384,7 +404,7 @@ function render() {
           ${c.program ? `<div class="program">${escapeHTML(c.program)}</div>` : ""}
           ${piecesHTML(c.pieces)}
         </div>
-        ${safeUrl ? `<a class="link" href="${escapeHTML(safeUrl)}" target="_blank" rel="noopener">Source ↗</a>` : ""}
+        ${linksHTML ? `<div class="links">${linksHTML}</div>` : ""}
       </div>`;
   }
   main.innerHTML = html;

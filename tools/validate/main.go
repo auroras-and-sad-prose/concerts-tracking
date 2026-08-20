@@ -9,6 +9,7 @@
 //   - concert dates fall within a sane window around "now" (catches typoed years);
 //   - location_tag is drawn from a fixed vocabulary;
 //   - source_url is http(s) and points at an allowlisted domain;
+//   - detail_url, when stated, is a real absolute http(s) link;
 //   - pieces is either a non-empty array of work titles or a descriptive string;
 //   - instruments, when stated, holds distinct values from the allowed set;
 //   - id has the canonical "<slug>|<date>|<city>" shape consistent with its row;
@@ -153,6 +154,17 @@ type Concert struct {
 	// either. It is null when the source doesn't say, which the page reads as
 	// "could be any of them" rather than as a claim. See artists.go.
 	Instruments []string `json:"instruments"`
+
+	// DetailURL is the concert's own page: the link the listing at source_url
+	// attaches to this one entry, followed once when the concert was first
+	// recorded. Artist calendars mostly point at the promoter, venue or ticket
+	// shop rather than at a page of their own, and that page is where a
+	// programme the calendar omits actually lives — so unlike source_url this
+	// is deliberately not restricted to the allowlisted domains. It records
+	// where the extra detail came from, which is what keeps a row auditable
+	// once its pieces no longer appear on source_url itself. Null when the
+	// entry carried no such link, or the link could not be fetched.
+	DetailURL *string `json:"detail_url"`
 }
 
 // File is the top-level shape of seen.json.
@@ -264,6 +276,20 @@ func Validate(f File, base *File, now time.Time) []string {
 			problems = append(problems, fmt.Sprintf("%s: source_url %q is not http(s) on an allowlisted domain", label, c.SourceURL))
 		}
 
+		// detail_url is off-allowlist by design (see Concert.DetailURL), so all
+		// that can be checked is that it is a real link rather than a fragment,
+		// a relative path, or an empty string standing in for "none".
+		if c.DetailURL != nil {
+			switch {
+			case strings.TrimSpace(*c.DetailURL) == "":
+				problems = append(problems, fmt.Sprintf(
+					"%s: detail_url is empty; use null when the listing links to no detail page", label))
+			case !httpURL(*c.DetailURL):
+				problems = append(problems, fmt.Sprintf(
+					"%s: detail_url %q is not an absolute http(s) URL", label, *c.DetailURL))
+			}
+		}
+
 		if msg := checkPieces(c.Pieces); msg != "" {
 			problems = append(problems, fmt.Sprintf("%s: %s", label, msg))
 		}
@@ -317,12 +343,23 @@ func yearOf(s string) int {
 
 func allowedHost(raw string) bool {
 	u, err := url.Parse(raw)
-	if err != nil || (u.Scheme != "http" && u.Scheme != "https") {
+	if err != nil || !isHTTP(u) {
 		return false
 	}
 	host := strings.TrimPrefix(strings.ToLower(u.Hostname()), "www.")
 	return allowedHosts[host]
 }
+
+// httpURL is the weaker of the two link checks: it asks only that the value is
+// an absolute http(s) URL naming some host. source_url must clear allowedHost
+// on top of this; detail_url, which by design points off the allowlist, only
+// has to be a link someone can actually follow.
+func httpURL(raw string) bool {
+	u, err := url.Parse(raw)
+	return err == nil && isHTTP(u) && u.Hostname() != ""
+}
+
+func isHTTP(u *url.URL) bool { return u.Scheme == "http" || u.Scheme == "https" }
 
 // checkPieces enforces that the field is populated and well-formed. It is
 // required on every row: an unknown programme is stated in words, never left
@@ -393,6 +430,7 @@ var refinableFields = []struct {
 	{"program", func(c Concert) bool { return c.Program != nil }},
 	{"pieces", func(c Concert) bool { return c.Pieces.Present() }},
 	{"instruments", func(c Concert) bool { return c.Instruments != nil }},
+	{"detail_url", func(c Concert) bool { return c.DetailURL != nil }},
 }
 
 // checkAppendOnly ensures every entry present in base still exists in head with
