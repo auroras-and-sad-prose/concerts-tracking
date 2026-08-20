@@ -1,0 +1,32 @@
+name: smoke-page
+
+on:
+  push:
+    branches: [main]
+    paths: ["index.html", "seen.json", "artists.json", "tests/**"]
+  pull_request:
+    paths: ["index.html", "seen.json", "artists.json", "tests/**"]
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: tests/package-lock.json
+
+      - name: Install
+        working-directory: tests
+        run: npm ci
+
+      - name: Install Chromium
+        working-directory: tests
+        run: npx playwright install --with-deps chromium
+
+      - name: Smoke tests
+        working-directory: tests
+        run: npm test

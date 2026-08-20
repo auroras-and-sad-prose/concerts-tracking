@@ -71,6 +71,18 @@ go test ./tools/...
 go run ./tools/validate -file seen.json
 ```
 
+A second workflow (`.github/workflows/smoke.yml`) runs `tests/smoke.test.mjs`,
+a small Playwright suite that loads `index.html` in a headless browser and
+checks that the page comes up, renders its dataset, filters and searches, and
+reports a load failure instead of hanging — plus one pass over the real
+`seen.json` asserting the browser logged nothing. They are smoke tests: they
+catch a page that has stopped working, not a subtly wrong one, and they say
+nothing about whether the data is right, which is the validator's job above.
+
+```sh
+cd tests && npm install && npm test
+```
+
 ## The artist roster (`artists.json`)
 
 Which instrument a musician plays is a stable fact about the performer, not
