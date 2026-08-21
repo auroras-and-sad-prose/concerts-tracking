@@ -263,11 +263,15 @@
       "date": "2026-08-30",
       "city": "Wiesbaden",
       "country": "Germany",
-      "venue": "Kurhaus Wiesbaden",
+      "venue": "Kurhaus Wiesbaden, Friedrich-von-Thiersch-Saal",
       "program": "Giedrė Šlekytė, Die Deutsche Kammerphilharmonie Bremen",
-      "pieces": "Programme not announced",
+      "pieces": [
+        "Max Bruch: Violin Concerto No. 1 in G minor, op. 26",
+        "Johannes Brahms: Symphony No. 2 in D major, op. 73"
+      ],
       "location_tag": "germany",
       "source_url": "https://www.mariaduenasviolin.com/en/calendar",
+      "detail_url": "https://www.rheingau-musik-festival.de/programm-karten/programmuebersicht/detail/maria-duenas-die-deutsche-kammerphilharmonie-bremen-giedre-slekyte",
       "first_seen": "2026-07-20"
     },
     {
@@ -276,11 +280,16 @@
       "date": "2026-09-01",
       "city": "Bremen",
       "country": "Germany",
-      "venue": "Musikfest Bremen",
+      "venue": "Musikfest Bremen, Die Glocke (Großer Saal)",
       "program": "Giedrė Šlekytė, Die Deutsche Kammerphilharmonie Bremen",
-      "pieces": "Programme not announced",
+      "pieces": [
+        "Franz Schubert: Ouvertüre C-Dur zu \"Die Zauberharfe\" D 644 (\"Rosamunde-Ouvertüre\")",
+        "Max Bruch: Violinkonzert Nr. 1 g-Moll op. 26",
+        "Johannes Brahms: Sinfonie Nr. 2 D-Dur op. 73"
+      ],
       "location_tag": "germany",
       "source_url": "https://www.mariaduenasviolin.com/en/calendar",
+      "detail_url": "https://musikfest-bremen.de/veranstaltung/spaetromantische-geniestreiche/",
       "first_seen": "2026-07-20"
     },
     {
@@ -289,11 +298,15 @@
       "date": "2026-11-20",
       "city": "Warsaw",
       "country": "Poland",
-      "venue": "Warsaw Concert Hall",
+      "venue": "Warsaw Philharmonic, Concert Hall",
       "program": "Krzysztof Urbański, Warsaw Philharmonic Orchestra",
-      "pieces": "Programme not announced",
+      "pieces": [
+        "Johannes Brahms: Violin Concerto in D major, Op. 77",
+        "Johannes Brahms: Symphony No. 2 in D major, Op. 73"
+      ],
       "location_tag": "europe",
       "source_url": "https://www.mariaduenasviolin.com/en/calendar",
+      "detail_url": "https://filharmonia.pl/en/repertuar/symphonic-concert-822722532",
       "first_seen": "2026-07-20"
     },
     {
@@ -302,11 +315,15 @@
       "date": "2026-11-21",
       "city": "Warsaw",
       "country": "Poland",
-      "venue": "Warsaw Concert Hall",
+      "venue": "Warsaw Philharmonic, Concert Hall",
       "program": "Krzysztof Urbański, Warsaw Philharmonic Orchestra",
-      "pieces": "Programme not announced",
+      "pieces": [
+        "Johannes Brahms: Violin Concerto in D major, Op. 77",
+        "Johannes Brahms: Symphony No. 2 in D major, Op. 73"
+      ],
       "location_tag": "europe",
       "source_url": "https://www.mariaduenasviolin.com/en/calendar",
+      "detail_url": "https://filharmonia.pl/en/repertuar/symphonic-concert-263451320",
       "first_seen": "2026-07-20"
     },
     {
@@ -343,9 +360,13 @@
       "country": "Switzerland",
       "venue": "LAC Lugano Arte e Cultura: Sala Teatro",
       "program": "Orchestra della Svizzera italiana / Markus Poschner: Brahms, Schubert",
-      "pieces": "Composers only: Brahms, Schubert",
+      "pieces": [
+        "Johannes Brahms: Concerto per violino e orchestra in re maggiore op. 77",
+        "Franz Schubert: Sinfonia n. 9 in do maggiore D 944 \"La Grande\""
+      ],
       "location_tag": "europe",
       "source_url": "https://bachtrack.com/performer/maria-duenas",
+      "detail_url": "https://www.osi.swiss/concerti/tutti-i-concerti/2026-11-26-20-00",
       "first_seen": "2026-07-20"
     },
     {
@@ -435,9 +456,14 @@
       "country": "Poland",
       "venue": "NOSPR Concert hall",
       "program": "Marin Alsop, Polish National Radio Symphony Orchestra",
-      "pieces": "Programme not announced",
+      "pieces": [
+        "Mikołaj Majkusiak: Symphony of Anxiety (world premiere)",
+        "Samuel Barber: Violin Concerto, Op. 14",
+        "Johannes Brahms: Symphony No. 2 in D major, Op. 73"
+      ],
       "location_tag": "europe",
       "source_url": "https://www.mariaduenasviolin.com/en/calendar",
+      "detail_url": "https://nospr.org.pl/en/kalendarz/nospr-s1-alsop-duenas",
       "first_seen": "2026-07-31"
     },
     {
