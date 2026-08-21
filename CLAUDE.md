@@ -150,7 +150,8 @@ So a row can have two links, and they answer different questions:
   the link could not be fetched, or when the listing already said everything.
 
 What the sources actually hand over, measured while backfilling the existing
-rows on 2026-08-20:
+rows on 2026-08-20, and re-measured for Dueñas and Bürkev on 2026-08-21 when
+the first two entries turned out to be wrong:
 
 - **Scheps, Fischer and Jansen** link most entries to the promoter, venue or
   ticket page, and those pages print the full bill. Nearly all the detail this
@@ -317,6 +318,14 @@ the one page its listing entry links to and re-read the concert from it.
   detail links — if the entry linked nowhere, there is nothing to follow and
   `detail_url` stays `null`. Never reconstruct one from the venue's name or a
   URL pattern you've seen before — a followed link is one the page handed you.
+  A link that lands on a promoter's front page is not a detail link either,
+  even when today's carousel happens to feature the concert: next month it
+  won't, and the row would be left pointing at a page that says nothing about
+  it. A season or series page that does set out this concert's date and
+  programme is fine — what matters is that the page is about the concert, not
+  that it is exclusively about it. When a concert was listed on both the
+  artist's site and Bachtrack, prefer the artist site's link; use the Bachtrack
+  event page if the artist entry has no link, or if its page fails below.
 - **Where the link is.** "Handed you" means printed in the bytes you fetched
   for that entry, not necessarily clickable in a rendered view. Before
   concluding an entry links nowhere, look in both places:
@@ -342,15 +351,7 @@ the one page its listing entry links to and re-read the concert from it.
   like any other.
 
   An artist whose entries *all* come back linkless is a symptom to check, not a
-  fact to record. A link that lands on a
-  promoter's front page is not a detail link either, even when today's carousel
-  happens to feature the concert: next month it won't, and the row would be
-  left pointing at a page that says nothing about it. A season or series page
-  that does set out this concert's date and programme is fine — what matters is
-  that the page is about the concert, not that it is exclusively about it. When a concert was
-  listed on both the artist's site and Bachtrack, prefer the artist site's
-  link; use the Bachtrack event page if the artist entry has no link, or if
-  its page fails below.
+  fact to record.
 - **One hop.** Fetch that page and stop. Do not follow links found *on* it, and
   do not go hunting for the concert elsewhere. At most two fetches per concert,
   and the second only as the fallback described above.
