@@ -355,11 +355,31 @@ the one page its listing entry links to and re-read the concert from it.
   fact to record.
 - **One hop.** Fetch that page and stop. Do not follow links found *on* it, and
   do not go hunting for the concert elsewhere. At most two fetches per concert,
-  and the second only as the fallback described above.
+  and the second only as the fallback described above. A session bootstrap
+  (below) is not one of the two: it retrieves no content of its own and exists
+  only to make the linked page fetchable.
+- **A ticket-shop link may need a session first.** Shops publish deep links —
+  a seat map, a basket URL — that only resolve inside a session. Fetched cold
+  they return the shop's own "your session has been terminated" page, which
+  names neither artist nor date and so fails the check below. That is an
+  artefact of how it was fetched, not a dead link: a person clicking from the
+  calendar gets a session on the way in, and a bare fetch does not. Before
+  recording the failure, request the shop's entry point once to pick up its
+  cookie and re-request the link holding that cookie (`curl -c jar -b jar`).
+  That is still the one hop — the same page, fetched the way a browser
+  reaches it — not a second source, and it is tried once. The Rheingau shop is
+  the worked example: `trm.jetticket.net/rmf/webticket/seatmap?eventId=419`
+  errors cold, but after one call to `/rmf/webticket/shop` it names María
+  Dueñas, Alexander Malofeev, 23.08.2026 and the hall. Expect a venue, a
+  billing and a date from a shop page — not a programme, since it is selling
+  seats rather than describing the evening.
 - **Confirm before believing it.** The page must corroborate the concert: the
   artist's name and the same date, both present on the fetched page. Promoters
   reuse URLs and calendars mislink; a page that doesn't show both is a failed
-  fetch. Record nothing from it and leave `detail_url` `null`.
+  fetch. Record nothing from it and leave `detail_url` `null`. Apply the
+  session retry above before calling a shop link failed — a "session expired"
+  page is the one failure that is reliably the fetch's fault rather than the
+  link's.
 - **What it may contribute.** `venue`, `program`, `pieces`, `instruments`,
   `country`, and — when the page says the concert is off, moved, or has a
   different soloist — `status` with its `status_note`. Nothing else. `artist`,
