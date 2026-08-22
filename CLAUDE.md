@@ -558,13 +558,21 @@ If there's at least one NEW concert, open ONE GitHub issue:
 If any existing row gained a `status` this run, that is news too — a concert
 already alerted on is one the reader may be holding tickets for. Add a
 **Changes** section to that issue listing each as
-`artist — date — city — <status>: <status_note>`. If there are no new concerts
-but a status was set, open an issue for the changes alone, titled
-`"Concert changes — <today's date> (<N> changed)"`.
+`artist — date — city — <status>: <status_note>`.
 
-If there are zero new concerts and no status changed, do NOT open an issue —
-print a one-line summary instead (e.g. "No new concerts. Checked 7 artists, all
-sources OK.").
+A conflict left unresolved under rule 10 is also news, and the issue is where
+a human will see it. Add a **Conflicts** section listing each as
+`artist — what page A said — what page B said`, with both links, and say
+plainly that nothing was changed. These are the run's open questions: whether
+it is two concerts, a moved date or a bad listing is for a person to settle.
+
+If there are no new concerts but a status was set or a conflict was found,
+open an issue for those alone, titled `"Concert changes — <today's date>
+(<N> changed)"`.
+
+If there are zero new concerts, no status changed and no conflict was found,
+do NOT open an issue — print a one-line summary instead (e.g. "No new
+concerts. Checked 7 artists, all sources OK.").
 
 **Step 8 — Report source health.** End the run output with a status line per
 artist covering both sources: which of (official site, Bachtrack) loaded,
