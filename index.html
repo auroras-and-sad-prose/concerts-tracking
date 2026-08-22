@@ -173,13 +173,15 @@
     padding: .18rem .55rem; border-radius: 6px;
     background: var(--accent-soft); color: var(--accent);
   }
+  /* Unlabelled, so it sits closer to the programme line it qualifies. */
+  .card .repertoire.note { margin-top: .35rem; }
   .card .repertoire.note .repertoire-text {
     display: block; font-family: var(--serif); font-style: italic;
     font-size: .89rem; color: var(--muted);
   }
 
-  /* A card carries up to two links: the calendar it was found on, and the
-     concert's own page when the calendar linked to one. */
+  /* A card carries up to two links: the concert's own page when the calendar
+     linked to one, then the calendar it was found on. */
   .card .links {
     align-self: center; flex: 0 0 auto;
     display: flex; flex-direction: column; align-items: flex-end; gap: .1rem;
@@ -426,9 +428,12 @@ function render() {
     // from, so it is worth offering alongside the source — but only when it
     // is somewhere else than the source itself.
     const detailUrl = isSafeUrl(c.detail_url) && c.detail_url !== c.source_url ? c.detail_url : null;
+    // The concert's own page leads: a reader deciding whether to go wants the
+    // hall's page, not the calendar it was spotted on. The calendar stays
+    // reachable underneath as the row's provenance.
     const linksHTML = [
-      safeUrl ? `<a class="link" href="${escapeHTML(safeUrl)}" target="_blank" rel="noopener">Source ↗</a>` : "",
-      detailUrl ? `<a class="link secondary" href="${escapeHTML(detailUrl)}" target="_blank" rel="noopener">Details ↗</a>` : ""
+      detailUrl ? `<a class="link" href="${escapeHTML(detailUrl)}" target="_blank" rel="noopener">Details ↗</a>` : "",
+      safeUrl ? `<a class="link${detailUrl ? " secondary" : ""}" href="${escapeHTML(safeUrl)}" target="_blank" rel="noopener">Source ↗</a>` : ""
     ].filter(Boolean).join("");
     html += `
       <div class="card${c.status ? " flagged" : ""}">
@@ -451,10 +456,13 @@ function render() {
 }
 
 // `pieces` is an array of work titles when the repertoire is known, or a
-// descriptive string ("Programme not announced") when the source doesn't list
-// it. Both get the same "Programme" label so it's always clear what this line
-// represents; the two shapes are then styled differently — confirmed works
-// read as a row of chips, a note reads (serif italic, muted) as prose.
+// descriptive string ("Programme not announced", "Composers only: Brahms")
+// when the source doesn't list one. Only the array gets the "Programme"
+// label: it heads a list of works that would otherwise be unlabelled chips.
+// The string form already names itself, so labelling it produced a card
+// reading "PROGRAMME / Programme not announced" — doubly odd directly under a
+// `program` line that does say who is playing. It reads as prose instead
+// (serif italic, muted), which is also how it differs from confirmed works.
 function piecesHTML(pieces) {
   if (Array.isArray(pieces)) {
     const items = pieces.filter(p => typeof p === "string" && p.trim());
@@ -463,7 +471,7 @@ function piecesHTML(pieces) {
     return `<div class="repertoire"><span class="repertoire-label">Programme</span><div class="repertoire-list">${chips}</div></div>`;
   }
   if (typeof pieces === "string" && pieces.trim()) {
-    return `<div class="repertoire note"><span class="repertoire-label">Programme</span><span class="repertoire-text">${escapeHTML(pieces)}</span></div>`;
+    return `<div class="repertoire note"><span class="repertoire-text">${escapeHTML(pieces)}</span></div>`;
   }
   return "";
 }
