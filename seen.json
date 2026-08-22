@@ -21,9 +21,12 @@
       "country": "France",
       "venue": "Cloître des Jacobins",
       "program": null,
-      "pieces": "Programme not announced",
+      "pieces": [
+        "Piano Sonata No. 21 in C major 'Waldstein', Op. 53"
+      ],
       "location_tag": "europe",
       "source_url": "https://ilyunburkev.com/en/portfolio/concerts/",
+      "detail_url": "https://bachtrack.com/concert-event/ilyun-burkev-cloitre-des-jacobins-10-september-2026/447187",
       "first_seen": "2026-07-20"
     },
     {
