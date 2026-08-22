@@ -340,8 +340,9 @@ the one page its listing entry links to and re-read the concert from it.
   anchor: the entry comes back reading "Tickets" with no target while the
   promoter URL sits in the payload you already downloaded. When a listing's
   entries come back with no targets, re-fetch the raw HTML (`curl`) and search
-  it before recording `null`. Dueñas' calendar is the worked example — her
-  whole slate looked linkless for months on exactly this mistake.
+  it before recording `null`. Dueñas' calendar is the worked example — every
+  row of hers looked linkless from 2026-07-20 to 2026-08-21 on exactly this
+  mistake.
 
   Taking a URL out of the page's data for that entry is still the page handing
   it to you: the site itself attached it to that concert's record. What stays
