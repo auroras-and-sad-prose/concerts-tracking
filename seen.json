@@ -250,11 +250,12 @@
       "date": "2026-08-23",
       "city": "Geisenheim",
       "country": "Germany",
-      "venue": "Rheingau Festival, Schloss Johannisberg-Fürst-von Metternich Saal",
+      "venue": "Rheingau Festival, Schloss Johannisberg, Fürst-von-Metternich-Saal",
       "program": "Dueñas-Malofeev, Recital Violin-Piano",
       "pieces": "Programme not announced",
       "location_tag": "germany",
       "source_url": "https://www.mariaduenasviolin.com/en/calendar",
+      "detail_url": "https://trm.jetticket.net/rmf/webticket/seatmap?eventId=419",
       "first_seen": "2026-07-20"
     },
     {
