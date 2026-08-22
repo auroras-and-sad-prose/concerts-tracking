@@ -150,15 +150,24 @@ So a row can have two links, and they answer different questions:
   the link could not be fetched, or when the listing already said everything.
 
 What the sources actually hand over, measured while backfilling the existing
-rows on 2026-08-20:
+rows on 2026-08-20, and re-measured for Dueñas and Bürkev on 2026-08-21 when
+the first two entries turned out to be wrong:
 
 - **Scheps, Fischer and Jansen** link most entries to the promoter, venue or
   ticket page, and those pages print the full bill. Nearly all the detail this
   step recovers comes from here — a hall where the calendar gave none, a
   one-concerto listing that is really a three-work programme.
-- **Dueñas and Bürkev** hand over nothing to follow: her calendar's ticket
-  links don't survive the fetch, and his upcoming entries carry no links at all.
-  Their rows depend on Bachtrack.
+- **Dueñas** attaches a ticket link to nearly every entry, but not as an
+  `<a href>`: her calendar is an Angular app whose "Tickets" control is a
+  `<button>`, and the URL lives in the page's embedded state blob
+  (`<script id="mariaduenasviolin-app-state" type="application/json">`), one
+  `ticketsUrl` per event record. Read as text the entry shows the word
+  "Tickets" with nothing behind it, which is why these rows went `null` until
+  2026-08-21; read as HTML the promoter link is right there. See "Where the
+  link is" in step 5.
+- **Bürkev** uses ordinary anchors, but only on entries that have a ticket
+  page; several of his upcoming tiles carry no link at all and legitimately
+  stay `null`.
 - **Bachtrack event pages load their programme by script**, so the fetch returns
   a stub: expect no repertoire from one. It still earns its `detail_url` when
   the page title names the artist — that confirms the engagement and gives the
@@ -264,7 +273,9 @@ Normalize dates to ISO `YYYY-MM-DD`; pages use mixed German/English formats
 
 Also note, per entry, the URL of any link the listing attaches to that one
 concert — the event title link, "More info", "Tickets", or Bachtrack's "Read
-more". Just record it; step 5 decides which of them are worth fetching.
+more". Just record it; step 5 decides which of them are worth fetching. If the
+entries come back with no targets on them, don't conclude the site publishes
+none: check the raw HTML per step 5's "Where the link is" first.
 
 Keep only concerts dated today or later — discard past dates. If you can
 access none of an artist's sources (official site AND Bachtrack — or, for
@@ -305,18 +316,43 @@ the one page its listing entry links to and re-read the concert from it.
 - **Which link.** The one the listing attached to *that* concert (step 2 noted
   it). Nav, footer, sponsor, newsletter, artist-bio and social links are not
   detail links — if the entry linked nowhere, there is nothing to follow and
-  `detail_url` stays `null`. Some calendars render their links by script, so a
-  fetch returns the entry's text without a target; that counts as no link.
-  Never reconstruct one from the venue's name or a URL pattern you've seen
-  before — a followed link is one the page handed you. A link that lands on a
-  promoter's front page is not a detail link either, even when today's carousel
-  happens to feature the concert: next month it won't, and the row would be
-  left pointing at a page that says nothing about it. A season or series page
-  that does set out this concert's date and programme is fine — what matters is
-  that the page is about the concert, not that it is exclusively about it. When a concert was
-  listed on both the artist's site and Bachtrack, prefer the artist site's
-  link; use the Bachtrack event page if the artist entry has no link, or if
-  its page fails below.
+  `detail_url` stays `null`. Never reconstruct one from the venue's name or a
+  URL pattern you've seen before — a followed link is one the page handed you.
+  A link that lands on a promoter's front page is not a detail link either,
+  even when today's carousel happens to feature the concert: next month it
+  won't, and the row would be left pointing at a page that says nothing about
+  it. A season or series page that does set out this concert's date and
+  programme is fine — what matters is that the page is about the concert, not
+  that it is exclusively about it. When a concert was listed on both the
+  artist's site and Bachtrack, prefer the artist site's link; use the Bachtrack
+  event page if the artist entry has no link, or if its page fails below.
+- **Where the link is.** "Handed you" means printed in the bytes you fetched
+  for that entry, not necessarily clickable in a rendered view. Before
+  concluding an entry links nowhere, look in both places:
+  1. the entry's anchor `href`;
+  2. the entry's own record in the page's embedded data — a
+     `<script type="application/json">` state blob (Angular, Next.js and
+     friends hydrate their calendars from one), JSON-LD, or schema.org
+     microdata. A calendar whose "Tickets" control is a `<button>` keeps its
+     URL there instead of in an href.
+
+  This matters because fetching a page as markdown drops what isn't an
+  anchor: the entry comes back reading "Tickets" with no target while the
+  promoter URL sits in the payload you already downloaded. When a listing's
+  entries come back with no targets, re-fetch the raw HTML (`curl`) and search
+  it before recording `null`. Dueñas' calendar is the worked example — every
+  row of hers looked linkless from 2026-07-20 to 2026-08-21 on exactly this
+  mistake.
+
+  Taking a URL out of the page's data for that entry is still the page handing
+  it to you: the site itself attached it to that concert's record. What stays
+  forbidden is *reconstruction* — deriving a URL from a venue's name, a search,
+  or the shape of another row's link. And a payload link earns nothing extra by
+  being found this way: it is followed one hop and must corroborate the concert
+  like any other.
+
+  An artist whose entries *all* come back linkless is a symptom to check, not a
+  fact to record.
 - **One hop.** Fetch that page and stop. Do not follow links found *on* it, and
   do not go hunting for the concert elsewhere. At most two fetches per concert,
   and the second only as the fallback described above.
@@ -416,7 +452,9 @@ Finish with one line for step 5: how many detail pages were fetched out of the
 budget, how many confirmed the concert, how many failed or were left undrilled,
 and how many rows gained a real programme from one. A site that quietly starts
 serving its listings without links, or whose pages stop confirming, shows up as
-that count going to zero.
+that count going to zero. Name any artist whose entries yielded no links at
+all — that is the signature of a link hiding in the page's data rather than a
+site that stopped publishing them.
 
 ## Grounding rules for the concert-watch routine
 
