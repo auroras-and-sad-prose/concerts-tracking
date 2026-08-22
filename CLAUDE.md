@@ -154,7 +154,10 @@ A row carries two links, answering different questions:
 - **`detail_url` — the concert's own page, the best one reached.** Where the
   detail came from: typically the promoter, venue or ticket page. It is `null`
   when nothing followable was offered, when what was offered could not be
-  fetched, or when the listing already said everything.
+  fetched, or when the listing already said everything. It is also `null` when
+  the page that stated the concert is itself the page with the detail — a
+  festival page that both bills the date and prints the works is one link, not
+  two, and it belongs in `source_url`.
 
 Openness costs something, so the safeguards that used to be the domain list now
 have to do real work, and every one of them is load-bearing:
@@ -365,7 +368,6 @@ about *this* concert, and stop as soon as it isn't.
   name, from another row's URL shape, or from a truncated listing line, and do
   not put the concert into a search engine. A URL that is nearly right fetches
   a real page about the wrong concert, which is worse than no page at all.
-
 - **Which link to take first.** The one the listing attached to *that* concert
   (step 2 noted it); if the entry offered nothing, there is nothing to follow
   and `detail_url` stays `null`. A link that lands on a promoter's front page
@@ -448,7 +450,9 @@ about *this* concert, and stop as soon as it isn't.
   are never taken from a followed page, so a mislinked page can add noise but
   can never repoint a row at a different concert. That limit is what makes
   following links this freely safe, and it holds however authoritative the
-  page looks. Where two pages disagree on a refinable field, prefer the more
+  page looks. It governs the row you are drilling. A *different* concert that
+  a followed page happens to set out is not a refinement of that row at all —
+  it is a discovery, handled below. Where two pages disagree on a refinable field, prefer the more
   specific one — the organiser's page over an aggregator's summary, which is
   usually an abbreviation of it. Where they disagree on date, city or venue,
   that is not a refinement at all: see rule 10. `location_tag` follows from the
@@ -474,6 +478,17 @@ about *this* concert, and stop as soon as it isn't.
   old `null` is not evidence that a row has nothing to find: it may date from a
   run that read pages less thoroughly than this step now does, so re-drill it
   and let the fetch decide.
+- **A concert found along the way.** A page you reach may set out another date
+  for a tracked artist — a festival billing the same soloist twice, a series
+  page listing the whole run. That is a discovery (rule 4), not a refinement,
+  and it does not belong to the row you were drilling. Take it back through
+  the steps it skipped: tag it (step 3), build its id and dedupe it (step 4),
+  and record and alert on it in step 7 like any other NEW concert, with the
+  page that set it out as its `source_url`. It must clear everything a swept
+  concert clears — rule 5's re-fetch, the roster (an artist not in
+  `artists.json` is raised, never added), and the European filter. Following
+  links to *find* concerts is still out of bounds: this is for one that turned
+  up on a page you were already reading for a concert in hand.
 
 What it looks like when it works: Olga Scheps' calendar lists 16.09.2026 in
 Kempen with no venue at all, and links that entry to
