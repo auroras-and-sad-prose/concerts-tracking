@@ -1028,6 +1028,55 @@
       "source_url": "https://bachtrack.com/performer/julia-fischer",
       "detail_url": "https://bachtrack.com/concert-event/brahmss-second-symphony-with-fabio-luisi-royal-concertgebouw-orchestra-concertgebouw-main-hall-9-december-2026/439582",
       "first_seen": "2026-08-17"
+    },
+    {
+      "id": "jansen|2026-09-10|hamburg",
+      "artist": "Janine Jansen",
+      "date": "2026-09-10",
+      "city": "Hamburg",
+      "country": "Germany",
+      "venue": "Elbphilharmonie, Großer Saal",
+      "program": "NDR Elbphilharmonie Orchester / Alan Gilbert: John Adams Lollapalooza, Karol Szymanowski Violinkonzert Nr. 1 op. 35, Johannes Brahms Sinfonie Nr. 1 c-Moll op. 68",
+      "pieces": [
+        "John Adams: Lollapalooza",
+        "Karol Szymanowski: Violinkonzert Nr. 1 op. 35",
+        "Johannes Brahms: Sinfonie Nr. 1 c-Moll op. 68"
+      ],
+      "location_tag": "germany",
+      "source_url": "https://www.janinejansen.com/performances/",
+      "detail_url": "https://www.ndr.de/orchester_chor/elbphilharmonieorchester/konzerte/alan-gilbert-janine-jansen,gilbert-172.html",
+      "first_seen": "2026-08-26"
+    },
+    {
+      "id": "jansen|2026-09-11|hamburg",
+      "artist": "Janine Jansen",
+      "date": "2026-09-11",
+      "city": "Hamburg",
+      "country": "Germany",
+      "venue": "Elbphilharmonie, Großer Saal",
+      "program": "NDR Elbphilharmonie Orchester / Alan Gilbert: John Adams Lollapalooza, Karol Szymanowski Violinkonzert Nr. 1 op. 35, Johannes Brahms Sinfonie Nr. 1 c-Moll op. 68",
+      "pieces": [
+        "John Adams: Lollapalooza",
+        "Karol Szymanowski: Violinkonzert Nr. 1 op. 35",
+        "Johannes Brahms: Sinfonie Nr. 1 c-Moll op. 68"
+      ],
+      "location_tag": "germany",
+      "source_url": "https://www.janinejansen.com/performances/",
+      "detail_url": "https://www.ndr.de/orchester_chor/elbphilharmonieorchester/konzerte/alan-gilbert-janine-jansen,gilbert-172.html",
+      "first_seen": "2026-08-26"
+    },
+    {
+      "id": "jansen|2026-11-16|vienna",
+      "artist": "Janine Jansen",
+      "date": "2026-11-16",
+      "city": "Vienna",
+      "country": "Austria",
+      "venue": "Musikverein: Großer Saal",
+      "program": "Munich Philharmonic Orchestra / Lahav Shani: Shostakovich, Mussorgsky",
+      "pieces": "Composers only: Shostakovich, Mussorgsky",
+      "location_tag": "europe",
+      "source_url": "https://bachtrack.com/performer/janine-jansen",
+      "first_seen": "2026-08-26"
     }
   ]
 }
