@@ -586,6 +586,8 @@
         "Shostakovich: Violin Concerto No. 1 in A minor, Op. 77",
         "Dvořák: Symphony No. 7 in D minor, Op. 70"
       ],
+      "status": "artist_replaced",
+      "status_note": "Czech Philharmonic's own event page shows \"Janine Jansen violin\" struck through under Performers, with \"Karen Gomyo violin\" listed as the current soloist; the page's own structured performer data now names only Karen Gomyo and Semyon Bychkov, not Jansen. No reason given.",
       "location_tag": "europe",
       "source_url": "https://www.janinejansen.com/performances/",
       "detail_url": "https://www.ceskafilharmonie.cz/en/event/35547-season-opening-concerts-czech-philharmonic/",
@@ -603,6 +605,8 @@
         "Shostakovich: Violin Concerto No. 1 in A minor, Op. 77",
         "Dvořák: Symphony No. 7 in D minor, Op. 70"
       ],
+      "status": "artist_replaced",
+      "status_note": "Czech Philharmonic's own event page shows \"Janine Jansen violin\" struck through under Performers, with \"Karen Gomyo violin\" listed as the current soloist; the page's own structured performer data now names only Karen Gomyo and Semyon Bychkov, not Jansen. No reason given.",
       "location_tag": "europe",
       "source_url": "https://www.janinejansen.com/performances/",
       "detail_url": "https://www.ceskafilharmonie.cz/en/event/35547-season-opening-concerts-czech-philharmonic/",
@@ -620,6 +624,8 @@
         "Shostakovich: Violin Concerto No. 1 in A minor, Op. 77",
         "Dvořák: Symphony No. 7 in D minor, Op. 70"
       ],
+      "status": "artist_replaced",
+      "status_note": "Czech Philharmonic's own event page shows \"Janine Jansen violin\" struck through under Performers, with \"Karen Gomyo violin\" listed as the current soloist; the page's own structured performer data now names only Karen Gomyo and Semyon Bychkov, not Jansen. No reason given.",
       "location_tag": "europe",
       "source_url": "https://www.janinejansen.com/performances/",
       "detail_url": "https://www.ceskafilharmonie.cz/en/event/35547-season-opening-concerts-czech-philharmonic/",
@@ -1073,10 +1079,86 @@
       "country": "Austria",
       "venue": "Musikverein: Großer Saal",
       "program": "Munich Philharmonic Orchestra / Lahav Shani: Shostakovich, Mussorgsky",
-      "pieces": "Composers only: Shostakovich, Mussorgsky",
+      "pieces": [
+        "Shostakovich: Violin Concerto No. 1 in A minor, Op.77 or Op.99",
+        "Mussorgsky: Pictures at an Exhibition"
+      ],
       "location_tag": "europe",
       "source_url": "https://bachtrack.com/performer/janine-jansen",
+      "detail_url": "https://bachtrack.com/concert-event/munich-philharmonic-orchestra-munich-philharmonic-orchestra-musikverein-grosser-saal-16-november-2026/443834",
       "first_seen": "2026-08-26"
+    },
+    {
+      "id": "scheps|2026-10-31|marburg",
+      "artist": "Olga Scheps",
+      "date": "2026-10-31",
+      "city": "Marburg",
+      "country": "Germany",
+      "venue": "Erwin-Piscator-Haus",
+      "program": "Marburger Konzertverein",
+      "pieces": [
+        "Mozart Sonate Nr. 8 a-moll KV 310",
+        "Mozart Sonate Nr. 16 C-Dur KV 545",
+        "Mozart Fantasie d-moll KV 397",
+        "Chopin Fantasie f-moll op. 49",
+        "Chopin Sonate Nr. 3 h-moll op. 58"
+      ],
+      "location_tag": "germany",
+      "source_url": "https://www.olgascheps.com/konzerte",
+      "detail_url": null,
+      "first_seen": "2026-08-27"
+    },
+    {
+      "id": "jansen|2026-09-12|wismar",
+      "artist": "Janine Jansen",
+      "date": "2026-09-12",
+      "city": "Wismar",
+      "country": "Germany",
+      "venue": "St Georgen Kirche",
+      "program": "Festspiele Mecklenburg-Vorpommern — Alan Gilbert, NDR Elbphilharmonie Orchester",
+      "pieces": [
+        "Szymanowski: Violin Concerto No. 1, Op. 35"
+      ],
+      "location_tag": "germany",
+      "source_url": "https://www.janinejansen.com/performances/",
+      "detail_url": null,
+      "first_seen": "2026-08-27"
+    },
+    {
+      "id": "jansen|2026-09-24|örebro",
+      "artist": "Janine Jansen",
+      "date": "2026-09-24",
+      "city": "Örebro",
+      "country": "Sweden",
+      "venue": "Örebro Konserthus",
+      "program": "Swedish Chamber Orchestra / Martin Fröst: Andrée, Bruch, Beethoven",
+      "pieces": [
+        "Andrée: Concert-Overture in D",
+        "Bruch: Violin Concerto",
+        "Beethoven: Symphony No. 1"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.janinejansen.com/performances/",
+      "detail_url": null,
+      "first_seen": "2026-08-27"
+    },
+    {
+      "id": "jansen|2026-09-26|gothenburg",
+      "artist": "Janine Jansen",
+      "date": "2026-09-26",
+      "city": "Gothenburg",
+      "country": "Sweden",
+      "venue": "Gothenburg Konserthus",
+      "program": "Swedish Chamber Orchestra / Martin Fröst: Andrée, Bruch, Beethoven",
+      "pieces": [
+        "Andrée: Concert-Overture in D",
+        "Bruch: Violin Concerto",
+        "Beethoven: Symphony No. 1"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.janinejansen.com/performances/",
+      "detail_url": null,
+      "first_seen": "2026-08-27"
     }
   ]
 }
