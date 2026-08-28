@@ -392,7 +392,11 @@
       "country": "Germany",
       "venue": "Konzerthalle Bamberg: Joseph Keilberth Saal",
       "program": "Bamberg Symphony / Jakub Hrůša: Martinů, Prokofiev, Beethoven (concerts Feb 5-6, 2027)",
-      "pieces": "Composers only: Martinů, Prokofiev, Beethoven",
+      "pieces": [
+        "Martinů: Symphony no. 6, \"Fantaisies symphoniques\" H 343",
+        "Prokofiev: Violin Concerto no. 1 in D major, Op.19",
+        "Beethoven: Symphony no. 8 in F major, Op.93"
+      ],
       "location_tag": "germany",
       "source_url": "https://bachtrack.com/performer/maria-duenas",
       "detail_url": "https://bachtrack.com/concert-event/jakub-hrusa-maria-duenas-bamberg-symphony-konzerthalle-bamberg-joseph-keilberth-saal-5-february-2027/441968",
@@ -1117,11 +1121,12 @@
       "venue": "St Georgen Kirche",
       "program": "Festspiele Mecklenburg-Vorpommern — Alan Gilbert, NDR Elbphilharmonie Orchester",
       "pieces": [
-        "Szymanowski: Violin Concerto No. 1, Op. 35"
+        "Szymanowski: Violin Concerto No. 1, Op. 35",
+        "Brahms: Symphony No. 1 in C minor, Op. 68"
       ],
       "location_tag": "germany",
       "source_url": "https://www.janinejansen.com/performances/",
-      "detail_url": null,
+      "detail_url": "https://festspiele-mv.de/alle-konzerte/konzerte/program/janine-jansen-alan-gilbert-das-ndr-elbphilharmonie-orchester",
       "first_seen": "2026-08-27"
     },
     {
@@ -1133,13 +1138,13 @@
       "venue": "Örebro Konserthus",
       "program": "Swedish Chamber Orchestra / Martin Fröst: Andrée, Bruch, Beethoven",
       "pieces": [
-        "Andrée: Concert-Overture in D",
-        "Bruch: Violin Concerto",
-        "Beethoven: Symphony No. 1"
+        "Andrée: Concert Overture in D major",
+        "Bruch: Violin Concerto No. 1 in G minor, Op. 26",
+        "Beethoven: Symphony No. 1 in C major, Op. 21"
       ],
       "location_tag": "europe",
       "source_url": "https://www.janinejansen.com/performances/",
-      "detail_url": null,
+      "detail_url": "https://www.orebrokonserthus.com/evenemang/janine-jansen/",
       "first_seen": "2026-08-27"
     },
     {
@@ -1151,13 +1156,13 @@
       "venue": "Gothenburg Konserthus",
       "program": "Swedish Chamber Orchestra / Martin Fröst: Andrée, Bruch, Beethoven",
       "pieces": [
-        "Andrée: Concert-Overture in D",
-        "Bruch: Violin Concerto",
+        "Andrée: Concert-Ouverture in D",
+        "Bruch: Violin Concerto No. 1",
         "Beethoven: Symphony No. 1"
       ],
       "location_tag": "europe",
       "source_url": "https://www.janinejansen.com/performances/",
-      "detail_url": null,
+      "detail_url": "https://www.gso.se/en/programme/concerts/svenska-kammarorkestern-och-janine-jansen/",
       "first_seen": "2026-08-27"
     }
   ]
