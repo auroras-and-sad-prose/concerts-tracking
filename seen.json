@@ -838,11 +838,18 @@
       "city": "London",
       "country": "United Kingdom",
       "venue": "Royal Albert Hall",
-      "program": "Royal Philharmonic Orchestra at 80 — Royal Philharmonic Orchestra / Vasily Petrenko: Wallen, Beethoven, Strauss R.",
-      "pieces": "Composers only: Wallen, Beethoven, Strauss R.",
+      "program": "Royal Philharmonic Orchestra at 80 — Royal Philharmonic Orchestra / Vasily Petrenko: Wallen FLARE (world premiere), Beethoven Triple Concerto for Violin, Cello and Piano in C Major, Op. 56, Strauss Ein Heldenleben",
+      "pieces": [
+        "Errollyn Wallen: FLARE (world premiere)",
+        "Ludwig van Beethoven: Triple Concerto for Violin, Cello and Piano in C Major, Op. 56",
+        "Richard Strauss: Ein Heldenleben"
+      ],
+      "instruments": [
+        "violin"
+      ],
       "location_tag": "europe",
       "source_url": "https://bachtrack.com/performer/julia-fischer",
-      "detail_url": "https://bachtrack.com/concert-event/royal-philharmonic-orchestra-at-80-royal-philharmonic-orchestra-royal-albert-hall-23-september-2026/439927",
+      "detail_url": "https://www.rpo.co.uk/tickets-memberships/event/2026/royal-philharmonic-orchestra-at-80",
       "first_seen": "2026-08-17"
     },
     {
@@ -1164,6 +1171,78 @@
       "source_url": "https://www.janinejansen.com/performances/",
       "detail_url": "https://www.gso.se/en/programme/concerts/svenska-kammarorkestern-och-janine-jansen/",
       "first_seen": "2026-08-27"
+    },
+    {
+      "id": "jansen|2026-10-02|kronberg",
+      "artist": "Janine Jansen",
+      "date": "2026-10-02",
+      "city": "Kronberg",
+      "country": "Germany",
+      "venue": "Casals Forum: Großer Saal",
+      "program": "Kronberg Festival — Arensky Quartet No 2 in A minor op 35, Jeffrey Ching An die Musik, Schubert String Quintet in C major D 956",
+      "pieces": [
+        "Arensky: Quartet No 2 in A minor, op 35",
+        "Jeffrey Ching: An die Musik",
+        "Schubert: String Quintet in C major, D 956"
+      ],
+      "location_tag": "germany",
+      "source_url": "https://www.janinejansen.com/performances/",
+      "detail_url": "https://www.kronbergacademy.de/konzerte-projekte/kalender/2026-10#c456",
+      "first_seen": "2026-08-29"
+    },
+    {
+      "id": "jansen|2026-10-04|uppsala",
+      "artist": "Janine Jansen",
+      "date": "2026-10-04",
+      "city": "Uppsala",
+      "country": "Sweden",
+      "venue": "Uppsala Concert & Congress: Hall B",
+      "program": "Uppsala Chamber Music — Arensky Quartet No 2 in A minor op 35, Jeffrey Ching An die Musik, Schubert String Quintet in C major D 956",
+      "pieces": [
+        "Arensky: Quartet No 2 in A minor, op 35",
+        "Jeffrey Ching: An die Musik",
+        "Schubert: String Quintet in C major, D 956"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.janinejansen.com/performances/",
+      "detail_url": "https://ukk.se/en/poste-restante-4-10/",
+      "first_seen": "2026-08-29"
+    },
+    {
+      "id": "jansen|2026-10-19|luxembourg",
+      "artist": "Janine Jansen",
+      "date": "2026-10-19",
+      "city": "Luxembourg",
+      "country": "Luxembourg",
+      "venue": "Philharmonie: Salle de Musique de Chambre",
+      "program": "Luxembourg Recital — with Denis Kozhukhin: Beethoven Violin Sonata Op 96, Prokofiev Cinq mélodies op. 35, Beethoven Violin Sonata Op 12/3, Prokofiev Violin Sonata No 1 op 80",
+      "pieces": [
+        "Beethoven: Violin Sonata, Op 96",
+        "Prokofiev: Cinq mélodies, Op. 35",
+        "Beethoven: Violin Sonata, Op 12/3",
+        "Prokofiev: Violin Sonata No 1, Op 80"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.janinejansen.com/performances/",
+      "detail_url": "https://www.philharmonie.lu/en/programme/2026-27/janine-jansen-denis-kozhukhin-000000e9001c9988",
+      "first_seen": "2026-08-29"
+    },
+    {
+      "id": "jansen|2026-11-21|dortmund",
+      "artist": "Janine Jansen",
+      "date": "2026-11-21",
+      "city": "Dortmund",
+      "country": "Germany",
+      "venue": "Konzerthaus Dortmund",
+      "program": "Lahav Shani & Janine Jansen — Munich Philharmonic Orchestra / Lahav Shani: Shostakovich, Mussorgsky",
+      "pieces": [
+        "Shostakovich: Violin Concerto No. 1 in A minor, Op.77 or Op.99",
+        "Mussorgsky: Pictures at an Exhibition"
+      ],
+      "location_tag": "germany",
+      "source_url": "https://bachtrack.com/performer/janine-jansen",
+      "detail_url": "https://bachtrack.com/concert-event/janine-jansen-munchner-philharmoniker-munich-philharmonic-orchestra-konzerthaus-dortmund-21-november-2026/439599",
+      "first_seen": "2026-08-29"
     }
   ]
 }
