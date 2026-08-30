@@ -254,12 +254,10 @@ changed, try `https://bachtrack.com/search-events/performer=<slug>` as a
 fallback before giving up on that artist's Bachtrack check.
 
 **Tertiary source — record label tour pages, for signed artists.** A label
-routinely announces a date before the artist's own site or Bachtrack catch up
-— María Dueñas' 13 January 2027 Berlin engagement (Staatsoper Unter den
-Linden, Staatskapelle Berlin/Thielemann) sat on Deutsche Grammophon's tour
-page for weeks while her own calendar's events feed still ended in
-December 2026 and Bachtrack had nothing. Where an artist has a label page
-like this, it is fetched every run exactly like the other two:
+can announce a date before the artist's own site or Bachtrack catch up (this
+is how a Dueñas Berlin date was missed — see the repo history). Where an
+artist has a label page like this, it is fetched every run exactly like the
+other two:
 
 1. María Dueñas — https://www.deutschegrammophon.com/en/artists/maria-duenas/on-tour
 
