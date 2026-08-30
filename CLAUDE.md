@@ -253,6 +253,22 @@ genuine cross-check, not a formality. If a profile URL 404s or the slug has
 changed, try `https://bachtrack.com/search-events/performer=<slug>` as a
 fallback before giving up on that artist's Bachtrack check.
 
+**Tertiary source — record label tour pages, for signed artists.** A label
+can announce a date before the artist's own site or Bachtrack catch up (this
+is how a Dueñas Berlin date was missed — see the repo history). Where an
+artist has a label page like this, it is fetched every run exactly like the
+other two:
+
+1. María Dueñas — https://www.deutschegrammophon.com/en/artists/maria-duenas/on-tour
+
+No other tracked artist currently has one listed here — don't invent a label
+page for the rest; add one to this list (a reviewed change, same as adding an
+artist to `artists.json`) only once a working URL has actually been found and
+fetched. The page renders a plain date/city/venue/work table, so pull rows
+from it the same way as the other two sources, subject to the same grounding
+rules (rule 1: only what the page states; rule 3 for `pieces`; rule 7 for
+`instruments`).
+
 **Step 1 — Load state.** First settle which branch this run works from, because
 that branch's `seen.json` is your memory:
 
@@ -275,10 +291,11 @@ like any other row. "Not merged yet" is a fact about review, not about what is
 known.
 
 **Step 2 — Gather current concerts.** Determine today's date at runtime. For
-each artist: fetch the primary source and the Bachtrack profile, and extract
-every listed concert (ignore cookie banners, nav, and other page chrome).
-Perlman has no primary source, so fetch his Bachtrack profile only — don't
-attempt itzhakperlman.com.
+each artist: fetch the primary source and the Bachtrack profile, and — for an
+artist listed under "Tertiary source" above — that label page too, and
+extract every listed concert (ignore cookie banners, nav, and other page
+chrome). Perlman has no primary source, so fetch his Bachtrack profile
+only — don't attempt itzhakperlman.com.
 For each, capture `artist`, `date`, `city`, `country`, `venue`, `program` (if
 shown), `pieces` (per grounding rule 3), `instruments` (per grounding rule 7),
 and the `source_url` you found it on.
@@ -292,12 +309,16 @@ entries come back with no targets on them, don't conclude the site publishes
 none: check the raw HTML per step 5's "Where the link is" first.
 
 Keep only concerts dated today or later — discard past dates. If you can
-access none of an artist's sources (official site AND Bachtrack — or, for
-Perlman, just his Bachtrack profile), skip that artist this run and note it
-in the step 8 report. If only some sources are reachable, update using
-whichever succeeded. A source that failed is not an invitation to go looking
-elsewhere: pages enter the run by being linked to, never by being searched for
-(grounding rule 4), and step 5 is where that following happens.
+access none of an artist's *required* sources (official site AND Bachtrack —
+or, for Perlman, just his Bachtrack profile), skip that artist this run and
+note it in the step 8 report. A tertiary label page, where one is listed, is
+an addition to that pair, not a replacement for either: it does not gate
+whether the artist is skipped, and its own failure just means one fewer
+source for that artist this run, noted in step 8 like any other. If only some
+sources are reachable, update using whichever succeeded. A source that failed
+is not an invitation to go looking elsewhere: pages enter the run by being
+linked to, never by being searched for (grounding rule 4), and step 5 is
+where that following happens.
 
 Do not invent concerts. Every concert must trace to a real `source_url` you
 actually fetched this run. If a source fails to load, note it and move on —
@@ -369,9 +390,10 @@ about *this* concert, and stop as soon as it isn't.
   that says nothing about it. A season or series page that does set out this
   concert's date and programme is fine — what matters is that the page is about
   the concert, not that it is exclusively about it. When a concert was listed
-  on both the artist's site and Bachtrack, prefer the artist site's link; use
-  the Bachtrack event page if the artist entry has no link, or if its page
-  fails below.
+  on more than one source — the artist's site, Bachtrack, and where one
+  applies, the label page — prefer the artist site's link; fall back to the
+  Bachtrack event page, then the label page's link, if an earlier one has no
+  link or its page fails below.
 - **Where the link is.** "Handed you" means printed in the bytes you fetched
   for that entry, not necessarily clickable in a rendered view. Before
   concluding an entry links nowhere, look in both places:
@@ -602,9 +624,10 @@ behind, opens no PR, and sends no notification: with nothing to say, saying it
 loudly is how a daily routine trains its reader to ignore it.
 
 **Step 8 — Report source health.** End the run output with a status line per
-artist covering both sources: which of (official site, Bachtrack) loaded,
-which failed, and how many concerts each currently contributed. This surfaces
-a silently broken source.
+artist covering every source that applies to them — official site and
+Bachtrack for all, plus the label page for an artist listed under "Tertiary
+source": which loaded, which failed, and how many concerts each currently
+contributed. This surfaces a silently broken source.
 
 Finish with one line for step 5: how many pages were fetched out of the budget,
 how many confirmed the concert, how many failed or were left undrilled, how
