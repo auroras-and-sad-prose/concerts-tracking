@@ -1249,6 +1249,54 @@
       "source_url": "https://bachtrack.com/performer/janine-jansen",
       "detail_url": "https://bachtrack.com/concert-event/janine-jansen-munchner-philharmoniker-munich-philharmonic-orchestra-konzerthaus-dortmund-21-november-2026/439599",
       "first_seen": "2026-08-29"
+    },
+    {
+      "id": "duenas|2027-01-12|berlin",
+      "artist": "María Dueñas",
+      "date": "2027-01-12",
+      "city": "Berlin",
+      "country": "Germany",
+      "venue": "Staatsoper Unter den Linden",
+      "program": "Staatskapelle Berlin / Christian Thielemann: Mendelssohn Violin Concerto in D minor",
+      "pieces": [
+        "Mendelssohn: Violin Concerto in D minor"
+      ],
+      "location_tag": "berlin",
+      "source_url": "https://www.deutschegrammophon.com/en/artists/maria-duenas/on-tour",
+      "detail_url": "https://www.deutschegrammophon.com/en/artists/maria-duenas/on-tour/12-01-2027-staatsoper-unter-den-linden-berlin-mendelssohn-violin-concerto-in-d-minor-1159886",
+      "first_seen": "2026-08-31"
+    },
+    {
+      "id": "duenas|2027-01-13|berlin",
+      "artist": "María Dueñas",
+      "date": "2027-01-13",
+      "city": "Berlin",
+      "country": "Germany",
+      "venue": "Staatsoper Unter den Linden",
+      "program": "Staatskapelle Berlin / Christian Thielemann: Mendelssohn Violin Concerto in D minor",
+      "pieces": [
+        "Mendelssohn: Violin Concerto in D minor"
+      ],
+      "location_tag": "berlin",
+      "source_url": "https://www.deutschegrammophon.com/en/artists/maria-duenas/on-tour",
+      "detail_url": "https://www.deutschegrammophon.com/en/artists/maria-duenas/on-tour/13-01-2027-staatsoper-unter-den-linden-berlin-mendelssohn-violin-concerto-in-d-minor-1166599",
+      "first_seen": "2026-08-31"
+    },
+    {
+      "id": "duenas|2027-01-15|vienna",
+      "artist": "María Dueñas",
+      "date": "2027-01-15",
+      "city": "Vienna",
+      "country": "Austria",
+      "venue": "Konzerthaus",
+      "program": "Wiener Symphoniker / Petr Popelka: Barber Violin Concerto",
+      "pieces": [
+        "Barber: Violin Concerto"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.deutschegrammophon.com/en/artists/maria-duenas/on-tour",
+      "detail_url": "https://www.deutschegrammophon.com/en/artists/maria-duenas/on-tour/15-01-2027-konzerthaus-vienna-barber-violin-concerto-1159887",
+      "first_seen": "2026-08-31"
     }
   ]
 }
