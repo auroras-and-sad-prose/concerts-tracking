@@ -344,9 +344,12 @@
       "country": "Germany",
       "venue": "Carmen Würth Forum",
       "program": "Vasily Petrenko, Würth Philharmonic",
-      "pieces": "Programme not announced",
+      "pieces": [
+        "Barber: Violin Concerto"
+      ],
       "location_tag": "germany",
       "source_url": "https://www.mariaduenasviolin.com/en/calendar",
+      "detail_url": "https://www.deutschegrammophon.com/en/artists/maria-duenas/on-tour/12-12-2026-carmen-wuerth-forum-kuenzelsau-barber-violin-concerto-1159884",
       "first_seen": "2026-07-20"
     },
     {
@@ -870,6 +873,7 @@
       ],
       "location_tag": "europe",
       "source_url": "https://www.juliafischer.com/en/events",
+      "detail_url": "https://bachtrack.com/concert-event/julia-fischer-plays-brahms-london-philharmonic-orchestra-southbank-centre-royal-festival-hall-21-october-2026/440058",
       "first_seen": "2026-08-17"
     },
     {
