@@ -53,16 +53,20 @@ var allowedTags = map[string]bool{
 
 // allowedHosts is the set of registrable domains a source_url may point at,
 // compared after stripping a leading "www.". Anything else is treated as an
-// untrusted (possibly fabricated) source.
+// untrusted (possibly fabricated) source. It holds exactly the sources
+// CLAUDE.md sends the routine to sweep — the artist sites, Bachtrack, and the
+// label tour pages listed under "Tertiary source" — so adding a source there
+// means adding its domain here too, or rows citing it fail validation.
 var allowedHosts = map[string]bool{
-	"ilyunburkev.com":       true,
-	"olgascheps.com":        true,
-	"mariaduenasviolin.com": true,
-	"mayaoganyan.com":       true,
-	"janinejansen.com":      true,
-	"juliafischer.com":      true,
-	"itzhakperlman.com":     true,
-	"bachtrack.com":         true,
+	"ilyunburkev.com":        true,
+	"olgascheps.com":         true,
+	"mariaduenasviolin.com":  true,
+	"mayaoganyan.com":        true,
+	"janinejansen.com":       true,
+	"juliafischer.com":       true,
+	"itzhakperlman.com":      true,
+	"bachtrack.com":          true,
+	"deutschegrammophon.com": true, // Dueñas' label tour page (tertiary source)
 }
 
 // allowedStatuses is the closed vocabulary for status: the ways a listed

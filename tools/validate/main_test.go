@@ -167,6 +167,28 @@ func TestStatusMayBeCorrectedButNotDropped(t *testing.T) {
 	}
 }
 
+// The allowlist has to cover every source CLAUDE.md sends the routine to,
+// including the label tour pages under "Tertiary source" — a concert that only
+// that page lists is unrecordable otherwise.
+func TestSweptSourcesAreAllowed(t *testing.T) {
+	for _, tt := range []struct {
+		name string
+		url  string
+	}{
+		{"artist site", "https://www.olgascheps.com/konzerte"},
+		{"bachtrack profile", "https://bachtrack.com/performer/maria-duenas"},
+		{"label tour page", "https://www.deutschegrammophon.com/en/artists/maria-duenas/on-tour"},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			c := valid()
+			c.SourceURL = tt.url
+			if p := Validate(File{Concerts: []Concert{c}}, nil, now); len(p) != 0 {
+				t.Fatalf("expected no problems, got %v", p)
+			}
+		})
+	}
+}
+
 func TestDuplicateID(t *testing.T) {
 	c := valid()
 	if p := Validate(File{Concerts: []Concert{c, c}}, nil, now); len(p) == 0 {
