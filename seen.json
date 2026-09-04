@@ -654,7 +654,9 @@
       "location_tag": "europe",
       "source_url": "https://www.janinejansen.com/performances/",
       "detail_url": "https://sion-violon-musique.ch/en/events/schubert-dohnanyi-chamber-music-sion-festival/",
-      "first_seen": "2026-08-12"
+      "first_seen": "2026-08-12",
+      "status": "artist_replaced",
+      "status_note": "Sion Festival: \"For health reasons, Janine Jansen and Nikola Meeuwsen, who were originally scheduled to perform in this concert, have unfortunately had to withdraw from the programme... Nevertheless, the concert will go ahead with an adapted line-up and programme.\""
     },
     {
       "id": "jansen|2026-09-06|sion",
@@ -670,7 +672,9 @@
       "location_tag": "europe",
       "source_url": "https://www.janinejansen.com/performances/",
       "detail_url": "https://sion-violon-musique.ch/en/events/church-tour-concert-shostakovich-sion-festival/",
-      "first_seen": "2026-08-12"
+      "first_seen": "2026-08-12",
+      "status": "artist_replaced",
+      "status_note": "Sion Festival: \"For health reasons, Janine Jansen and Nikola Meeuwsen, who were originally scheduled to perform in these concerts, have unfortunately had to withdraw from the programme... the concerts will go ahead as planned in their entirety, with a slightly adapted line-up.\""
     },
     {
       "id": "jansen|2026-10-14|oslo",
@@ -991,7 +995,9 @@
         "Saint-Saëns: Violin Concerto No. 3 in B minor, Op.61",
         "Dvořák: Symphony No. 8 in G major, Op.88"
       ],
-      "instruments": ["violin"],
+      "instruments": [
+        "violin"
+      ],
       "location_tag": "germany",
       "source_url": "https://bachtrack.com/performer/julia-fischer",
       "detail_url": "https://bachtrack.com/concert-event/orchestre-national-de-france-orchestre-national-de-france-elbphilharmonie-grand-hall-30-november-2026/439797",
@@ -1010,7 +1016,9 @@
         "Saint-Saëns: Violin Concerto No. 3 in B minor, Op.61",
         "Dvořák: Symphony No. 8 in G major, Op.88"
       ],
-      "instruments": ["violin"],
+      "instruments": [
+        "violin"
+      ],
       "location_tag": "germany",
       "source_url": "https://bachtrack.com/performer/julia-fischer",
       "detail_url": "https://bachtrack.com/concert-event/orchestre-national-de-france-orchestre-national-de-france-tonhalle-mendelssohn-saal-4-december-2026/437306",
@@ -1032,7 +1040,10 @@
       "location_tag": "europe",
       "source_url": "https://bachtrack.com/performer/julia-fischer",
       "detail_url": "https://bachtrack.com/concert-event/brahmss-second-symphony-with-fabio-luisi-royal-concertgebouw-orchestra-concertgebouw-main-hall-9-december-2026/439582",
-      "first_seen": "2026-08-17"
+      "first_seen": "2026-08-17",
+      "instruments": [
+        "violin"
+      ]
     },
     {
       "id": "fischer|2026-12-11|amsterdam",
@@ -1050,7 +1061,10 @@
       "location_tag": "europe",
       "source_url": "https://bachtrack.com/performer/julia-fischer",
       "detail_url": "https://bachtrack.com/concert-event/brahmss-second-symphony-with-fabio-luisi-royal-concertgebouw-orchestra-concertgebouw-main-hall-9-december-2026/439582",
-      "first_seen": "2026-08-17"
+      "first_seen": "2026-08-17",
+      "instruments": [
+        "violin"
+      ]
     },
     {
       "id": "jansen|2026-09-10|hamburg",
@@ -1062,13 +1076,15 @@
       "program": "NDR Elbphilharmonie Orchester / Alan Gilbert: John Adams Lollapalooza, Karol Szymanowski Violinkonzert Nr. 1 op. 35, Johannes Brahms Sinfonie Nr. 1 c-Moll op. 68",
       "pieces": [
         "John Adams: Lollapalooza",
-        "Karol Szymanowski: Violinkonzert Nr. 1 op. 35",
-        "Johannes Brahms: Sinfonie Nr. 1 c-Moll op. 68"
+        "Korngold: Violin Concerto in D major, Op. 35",
+        "Brahms: Symphony No. 1 in C minor, Op. 68"
       ],
       "location_tag": "germany",
       "source_url": "https://www.janinejansen.com/performances/",
       "detail_url": "https://www.ndr.de/orchester_chor/elbphilharmonieorchester/konzerte/alan-gilbert-janine-jansen,gilbert-172.html",
-      "first_seen": "2026-08-26"
+      "first_seen": "2026-08-26",
+      "status": "artist_replaced",
+      "status_note": "NDR: \"Besetzungs- und Programmänderung! Leider musste Janine Jansen die Konzerte mit dem NDR EO im September krankheitsbedingt absagen. Simone Lamsma übernimmt mit dem Violinkonzert von Erich Wolfgang Korngold.\" (cast/programme change: Jansen cancelled due to illness; Simone Lamsma steps in with Korngold's Violin Concerto.)"
     },
     {
       "id": "jansen|2026-09-11|hamburg",
@@ -1080,13 +1096,15 @@
       "program": "NDR Elbphilharmonie Orchester / Alan Gilbert: John Adams Lollapalooza, Karol Szymanowski Violinkonzert Nr. 1 op. 35, Johannes Brahms Sinfonie Nr. 1 c-Moll op. 68",
       "pieces": [
         "John Adams: Lollapalooza",
-        "Karol Szymanowski: Violinkonzert Nr. 1 op. 35",
-        "Johannes Brahms: Sinfonie Nr. 1 c-Moll op. 68"
+        "Korngold: Violin Concerto in D major, Op. 35",
+        "Brahms: Symphony No. 1 in C minor, Op. 68"
       ],
       "location_tag": "germany",
       "source_url": "https://www.janinejansen.com/performances/",
       "detail_url": "https://www.ndr.de/orchester_chor/elbphilharmonieorchester/konzerte/alan-gilbert-janine-jansen,gilbert-172.html",
-      "first_seen": "2026-08-26"
+      "first_seen": "2026-08-26",
+      "status": "artist_replaced",
+      "status_note": "NDR: \"Besetzungs- und Programmänderung! Leider musste Janine Jansen die Konzerte mit dem NDR EO im September krankheitsbedingt absagen. Simone Lamsma übernimmt mit dem Violinkonzert von Erich Wolfgang Korngold.\" (cast/programme change: Jansen cancelled due to illness; Simone Lamsma steps in with Korngold's Violin Concerto.)"
     },
     {
       "id": "jansen|2026-11-16|vienna",
@@ -1134,13 +1152,15 @@
       "venue": "St Georgen Kirche",
       "program": "Festspiele Mecklenburg-Vorpommern — Alan Gilbert, NDR Elbphilharmonie Orchester",
       "pieces": [
-        "Szymanowski: Violin Concerto No. 1, Op. 35",
+        "Korngold: Violin Concerto in D major, Op. 35",
         "Brahms: Symphony No. 1 in C minor, Op. 68"
       ],
       "location_tag": "germany",
       "source_url": "https://www.janinejansen.com/performances/",
-      "detail_url": "https://festspiele-mv.de/alle-konzerte/konzerte/program/janine-jansen-alan-gilbert-das-ndr-elbphilharmonie-orchester",
-      "first_seen": "2026-08-27"
+      "detail_url": "https://www.ndr.de/orchester_chor/elbphilharmonieorchester/konzerte/abschlusskonzert-des-festspielsommers-mv-2026-mit-gilbert-lamsma,gilbert-174.html",
+      "first_seen": "2026-08-27",
+      "status": "artist_replaced",
+      "status_note": "NDR (Festspiele Mecklenburg-Vorpommern programme page): \"Besetzungs- und Programmänderung! Leider musste Janine Jansen die Konzerte mit dem NDR EO im September krankheitsbedingt absagen. Simone Lamsma übernimmt mit dem Violinkonzert von Erich Wolfgang Korngold.\" The original festspiele-mv.de detail page now 404s; NDR's own programme page for this concert confirms the same substitution."
     },
     {
       "id": "jansen|2026-09-24|örebro",
@@ -1313,6 +1333,220 @@
       "source_url": "https://www.deutschegrammophon.com/en/artists/maria-duenas/on-tour",
       "detail_url": "https://www.deutschegrammophon.com/en/artists/maria-duenas/on-tour/17-01-2027-konzerthaus-vienna-barber-violin-concerto-1166416",
       "first_seen": "2026-09-01"
+    },
+    {
+      "id": "scheps|2026-11-29|braunschweig",
+      "artist": "Olga Scheps",
+      "date": "2026-11-29",
+      "city": "Braunschweig",
+      "country": "Germany",
+      "venue": "Altstadtrathaus Braunschweig",
+      "program": "Kammermusikabend mit Josef Ziga, Violine",
+      "pieces": [
+        "Mozart: Sonate für Violine und Klavier Nr. 21, KV 304",
+        "Chopin: Fantasie f-Moll",
+        "Paganini: 24 Capricen, Op. 1 (ded. \"Agli Artisti\")",
+        "Bach: Chaconne aus der Partita Nr. 2 d-Moll, BWV 1004",
+        "Franck: Sonate für Violine und Klavier A-Dur"
+      ],
+      "location_tag": "germany",
+      "source_url": "https://www.olgascheps.com/konzerte",
+      "detail_url": null,
+      "first_seen": "2026-09-04",
+      "instruments": null
+    },
+    {
+      "id": "scheps|2026-12-06|rostock",
+      "artist": "Olga Scheps",
+      "date": "2026-12-06",
+      "city": "Rostock",
+      "country": "Germany",
+      "venue": "Volkstheater Rostock",
+      "program": "Norddeutsche Philharmonie Rostock / Rasmus Baumann: 4. Philharmonisches Konzert / Monumente",
+      "pieces": [
+        "Dvořák: Piano Concerto in G minor, Op. 33"
+      ],
+      "location_tag": "germany",
+      "source_url": "https://www.olgascheps.com/konzerte",
+      "detail_url": null,
+      "first_seen": "2026-09-04",
+      "instruments": null
+    },
+    {
+      "id": "scheps|2026-12-07|rostock",
+      "artist": "Olga Scheps",
+      "date": "2026-12-07",
+      "city": "Rostock",
+      "country": "Germany",
+      "venue": "Volkstheater Rostock",
+      "program": "Norddeutsche Philharmonie Rostock / Rasmus Baumann: 4. Philharmonisches Konzert / Monumente",
+      "pieces": [
+        "Dvořák: Piano Concerto in G minor, Op. 33"
+      ],
+      "location_tag": "germany",
+      "source_url": "https://www.olgascheps.com/konzerte",
+      "detail_url": null,
+      "first_seen": "2026-09-04",
+      "instruments": null
+    },
+    {
+      "id": "scheps|2026-12-08|rostock",
+      "artist": "Olga Scheps",
+      "date": "2026-12-08",
+      "city": "Rostock",
+      "country": "Germany",
+      "venue": "Volkstheater Rostock",
+      "program": "Norddeutsche Philharmonie Rostock / Rasmus Baumann: 4. Philharmonisches Konzert / Monumente",
+      "pieces": [
+        "Dvořák: Piano Concerto in G minor, Op. 33",
+        "Shostakovich: Symphony No. 12 in D minor, Op. 112 \"The Year 1917\""
+      ],
+      "location_tag": "germany",
+      "source_url": "https://www.olgascheps.com/konzerte",
+      "detail_url": "https://www.volkstheater-rostock.de/spielplan/monatsplan/4-philharmonisches-konzert-monumente/6042/",
+      "first_seen": "2026-09-04",
+      "instruments": null
+    },
+    {
+      "id": "scheps|2026-12-09|oviedo",
+      "artist": "Olga Scheps",
+      "date": "2026-12-09",
+      "city": "Oviedo",
+      "country": "Spain",
+      "venue": null,
+      "program": "Soloabend",
+      "pieces": [
+        "Mozart: Sonate Nr. 8, KV 310",
+        "Mozart: Sonate Nr. 16, KV 545",
+        "Mozart: Fantasie, KV 397",
+        "Chopin: Fantasie, Op. 49",
+        "Chopin: Sonate Nr. 3, Op. 58"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.olgascheps.com/konzerte",
+      "detail_url": null,
+      "first_seen": "2026-09-04",
+      "instruments": null
+    },
+    {
+      "id": "jansen|2026-11-23|amsterdam",
+      "artist": "Janine Jansen",
+      "date": "2026-11-23",
+      "city": "Amsterdam",
+      "country": "Netherlands",
+      "venue": "Concertgebouw: Main Hall",
+      "program": "Lahav Shani & Janine Jansen — Munich Philharmonic Orchestra / Lahav Shani: Shostakovich, Mahler",
+      "pieces": [
+        "Shostakovich: Violin Concerto no. 1 in A minor, Op.77 or Op.99",
+        "Mahler: Symphony no. 1 in D major \"Titan\""
+      ],
+      "location_tag": "europe",
+      "source_url": "https://bachtrack.com/performer/janine-jansen",
+      "detail_url": "https://bachtrack.com/concert-event/mahlers-symphony-no-1-and-janine-jansen-plays-shostakovich-munich-philharmonic-orchestra-concertgebouw-main-hall-23-november-2026/439451",
+      "first_seen": "2026-09-04",
+      "instruments": null
+    },
+    {
+      "id": "fischer|2026-11-19|paris",
+      "artist": "Julia Fischer",
+      "date": "2026-11-19",
+      "city": "Paris",
+      "country": "France",
+      "venue": "Maison de la Radio et de la Musique - Auditorium",
+      "program": "Orchestre National de France / Cristian Măcelaru: Mendelssohn, Concerto pour violon",
+      "pieces": [
+        "Smetana: The Moldau",
+        "Mendelssohn: Violin Concerto No. 1 in E minor",
+        "Barber: Essay for Orchestra No. 2",
+        "Sohy: Symphonie \"Grande Guerre\""
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.juliafischer.com/en/events",
+      "detail_url": "https://www.maisondelaradioetdelamusique.fr/evenement/mendelssohn-concerto-pour-violon-cristian-macelaru-julia-fischer",
+      "instruments": [
+        "violin"
+      ],
+      "first_seen": "2026-09-04"
+    },
+    {
+      "id": "fischer|2026-12-02|munich",
+      "artist": "Julia Fischer",
+      "date": "2026-12-02",
+      "city": "Munich",
+      "country": "Germany",
+      "venue": "Isarphilharmonie",
+      "program": "Orchestre National de France / Cristian Măcelaru: Brahms Double Concerto",
+      "pieces": [
+        "Brahms: Concerto for Violin, Cello and Orchestra in A minor, Op. 102"
+      ],
+      "location_tag": "germany",
+      "source_url": "https://www.juliafischer.com/en/events",
+      "detail_url": null,
+      "instruments": [
+        "violin"
+      ],
+      "first_seen": "2026-09-04"
+    },
+    {
+      "id": "fischer|2026-12-03|stuttgart",
+      "artist": "Julia Fischer",
+      "date": "2026-12-03",
+      "city": "Stuttgart",
+      "country": "Germany",
+      "venue": "Kultur- und Kongresszentrum Liederhalle",
+      "program": "Orchestre National de France / Cristian Măcelaru: Saint-Saëns",
+      "pieces": [
+        "Saint-Saëns: Violin Concerto No. 3 in B minor, Op. 61"
+      ],
+      "location_tag": "germany",
+      "source_url": "https://www.juliafischer.com/en/events",
+      "detail_url": null,
+      "instruments": [
+        "violin"
+      ],
+      "first_seen": "2026-09-04"
+    },
+    {
+      "id": "fischer|2026-12-10|heerlen",
+      "artist": "Julia Fischer",
+      "date": "2026-12-10",
+      "city": "Heerlen",
+      "country": "Netherlands",
+      "venue": "Parkstad Limburg Theaters",
+      "program": "Royal Concertgebouw Orchestra / Fabio Luisi: Brahms's Second Symphony",
+      "pieces": [
+        "Meyer: Fleur de verre",
+        "Henze: Il Vitalino raddoppiato",
+        "Brahms: Symphony No. 2"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.juliafischer.com/en/events",
+      "detail_url": "https://www.concertgebouworkest.nl/en/calendar/brahmss-second-symphony-with-fabio-luisi-2026-12-10/",
+      "instruments": [
+        "violin"
+      ],
+      "first_seen": "2026-09-04"
+    },
+    {
+      "id": "fischer|2027-01-08|bilbao",
+      "artist": "Julia Fischer",
+      "date": "2027-01-08",
+      "city": "Bilbao",
+      "country": "Spain",
+      "venue": "Sociedad Filarmónica",
+      "program": "Julia Fischer, Alexander Sitkovetsky, Nils Mönkemeyer, Benjamin Nyffenegger: chamber recital",
+      "pieces": [
+        "Mendelssohn: String Quintet No. 1 in A major, Op. 18",
+        "Robert Herrmann: Echoes for String Quartet",
+        "Dvořák: String Quintet No. 3 in E-flat major, Op. 97"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.juliafischer.com/en/events",
+      "detail_url": null,
+      "instruments": [
+        "violin"
+      ],
+      "first_seen": "2026-09-04"
     }
   ]
 }
