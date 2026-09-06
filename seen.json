@@ -1364,11 +1364,12 @@
       "venue": "Volkstheater Rostock",
       "program": "Norddeutsche Philharmonie Rostock / Rasmus Baumann: 4. Philharmonisches Konzert / Monumente",
       "pieces": [
-        "Dvořák: Piano Concerto in G minor, Op. 33"
+        "Dvořák: Piano Concerto in G minor, Op. 33",
+        "Shostakovich: Symphony No. 12 in D minor, Op. 112 \"The Year 1917\""
       ],
       "location_tag": "germany",
       "source_url": "https://www.olgascheps.com/konzerte",
-      "detail_url": null,
+      "detail_url": "https://www.volkstheater-rostock.de/spielplan/monatsplan/4-philharmonisches-konzert-monumente/6042/",
       "first_seen": "2026-09-04",
       "instruments": null
     },
@@ -1381,11 +1382,12 @@
       "venue": "Volkstheater Rostock",
       "program": "Norddeutsche Philharmonie Rostock / Rasmus Baumann: 4. Philharmonisches Konzert / Monumente",
       "pieces": [
-        "Dvořák: Piano Concerto in G minor, Op. 33"
+        "Dvořák: Piano Concerto in G minor, Op. 33",
+        "Shostakovich: Symphony No. 12 in D minor, Op. 112 \"The Year 1917\""
       ],
       "location_tag": "germany",
       "source_url": "https://www.olgascheps.com/konzerte",
-      "detail_url": null,
+      "detail_url": "https://www.volkstheater-rostock.de/spielplan/monatsplan/4-philharmonisches-konzert-monumente/6042/",
       "first_seen": "2026-09-04",
       "instruments": null
     },
@@ -1547,6 +1549,550 @@
         "violin"
       ],
       "first_seen": "2026-09-04"
+    },
+    {
+      "id": "fischer|2027-01-09|madrid",
+      "artist": "Julia Fischer",
+      "date": "2027-01-09",
+      "city": "Madrid",
+      "country": "Spain",
+      "venue": "Auditorio Nacional de Musica - Sala de Cámara XXI",
+      "program": "Julia Fischer, Alexander Sitkovetsky, Nils Mönkemeyer, Benjamin Nyffenegger, Amihai Grosz: chamber recital",
+      "pieces": [
+        "Felix Mendelssohn Bartholdy: String Quintet No. 1 in A major, Op. 18",
+        "Bernard Herrmann: Echoes, for String Quartet",
+        "Antonín Dvořák: String Quintet No. 3 in E-flat major, \"American\", Op. 97"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.juliafischer.com/en/events",
+      "instruments": [
+        "violin"
+      ],
+      "first_seen": "2026-09-06"
+    },
+    {
+      "id": "fischer|2027-01-10|la palma",
+      "artist": "Julia Fischer",
+      "date": "2027-01-10",
+      "city": "La Palma",
+      "country": "Spain",
+      "venue": "Teatro Circo de Marte",
+      "program": "Julia Fischer, Alexander Sitkovetsky, Nils Mönkemeyer, Benjamin Nyffenegger: chamber recital",
+      "pieces": [
+        "Joseph Haydn: String Quartet in F minor, Op. 20, No. 5, Hob. III:35",
+        "Bernard Herrmann: Echoes, for String Quartet",
+        "Antonín Dvořák: String Quartet No. 14 in A-flat major, Op. 105"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.juliafischer.com/en/events",
+      "instruments": [
+        "violin"
+      ],
+      "first_seen": "2026-09-06"
+    },
+    {
+      "id": "fischer|2027-01-11|tenerife",
+      "artist": "Julia Fischer",
+      "date": "2027-01-11",
+      "city": "Tenerife",
+      "country": "Spain",
+      "venue": "Teatro Leal",
+      "program": "Julia Fischer, Alexander Sitkovetsky, Nils Mönkemeyer, Benjamin Nyffenegger: chamber recital",
+      "pieces": [
+        "Joseph Haydn: String Quartet in F minor, Op. 20, No. 5, Hob. III:35",
+        "Bernard Herrmann: Echoes, for String Quartet",
+        "Antonín Dvořák: String Quartet No. 14 in A-flat major, Op. 105"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.juliafischer.com/en/events",
+      "instruments": [
+        "violin"
+      ],
+      "first_seen": "2026-09-06"
+    },
+    {
+      "id": "fischer|2027-01-12|gran canaria",
+      "artist": "Julia Fischer",
+      "date": "2027-01-12",
+      "city": "Gran Canaria",
+      "country": "Spain",
+      "venue": "Teatro Pérez Galdós",
+      "program": "Julia Fischer, Alexander Sitkovetsky, Nils Mönkemeyer, Benjamin Nyffenegger: chamber recital",
+      "pieces": [
+        "Joseph Haydn: String Quartet in F minor, Op. 20, No. 5, Hob. III:35",
+        "Bernard Herrmann: Echoes, for String Quartet",
+        "Antonín Dvořák: String Quartet No. 14 in A-flat major, Op. 105"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.juliafischer.com/en/events",
+      "instruments": [
+        "violin"
+      ],
+      "first_seen": "2026-09-06"
+    },
+    {
+      "id": "fischer|2027-01-14|london",
+      "artist": "Julia Fischer",
+      "date": "2027-01-14",
+      "city": "London",
+      "country": "United Kingdom",
+      "venue": "Wigmore Hall",
+      "program": "Julia Fischer, Alexander Sitkovetsky, Nils Mönkemeyer, Benjamin Nyffenegger: chamber recital",
+      "pieces": [
+        "Joseph Haydn: String Quartet in F minor, Op. 20, No. 5, Hob. III:35",
+        "Bernard Herrmann: Echoes, for String Quartet",
+        "Antonín Dvořák: String Quartet No. 14 in A-flat major, Op. 105"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.juliafischer.com/en/events",
+      "instruments": [
+        "violin"
+      ],
+      "first_seen": "2026-09-06"
+    },
+    {
+      "id": "fischer|2027-01-15|denmark",
+      "artist": "Julia Fischer",
+      "date": "2027-01-15",
+      "city": "Denmark",
+      "country": "Denmark",
+      "venue": "Louisiana Museum of Modern Art",
+      "program": "Julia Fischer, Alexander Sitkovetsky, Nils Mönkemeyer, Benjamin Nyffenegger: chamber recital",
+      "pieces": [
+        "Joseph Haydn: String Quartet in F minor, Op. 20, No. 5, Hob. III:35",
+        "Bernard Herrmann: Echoes, for String Quartet",
+        "Antonín Dvořák: String Quartet No. 14 in A-flat major, Op. 105"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.juliafischer.com/en/events",
+      "instruments": [
+        "violin"
+      ],
+      "first_seen": "2026-09-06"
+    },
+    {
+      "id": "fischer|2027-01-16|diez",
+      "artist": "Julia Fischer",
+      "date": "2027-01-16",
+      "city": "Diez",
+      "country": "Germany",
+      "venue": "Schloss Oranienstein",
+      "program": "Julia Fischer Quartett: Neujahrskonzert (New Year's concert) with Alexander Sitkovetsky, Nils Mönkemeyer, Benjamin Nyffenegger",
+      "pieces": "Programme not announced",
+      "location_tag": "germany",
+      "source_url": "https://www.juliafischer.com/en/events",
+      "instruments": [
+        "violin"
+      ],
+      "first_seen": "2026-09-06"
+    },
+    {
+      "id": "fischer|2027-01-17|seon",
+      "artist": "Julia Fischer",
+      "date": "2027-01-17",
+      "city": "Seon",
+      "country": "Switzerland",
+      "venue": "Reformierte Kirche",
+      "program": "Julia Fischer, Alexander Sitkovetsky, Nils Mönkemeyer, Benjamin Nyffenegger: chamber recital",
+      "pieces": [
+        "Joseph Haydn: String Quartet in F minor, Op. 20, No. 5, Hob. III:35",
+        "Bernard Herrmann: Echoes, for String Quartet",
+        "Antonín Dvořák: String Quartet No. 14 in A-flat major, Op. 105"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.juliafischer.com/en/events",
+      "instruments": [
+        "violin"
+      ],
+      "first_seen": "2026-09-06"
+    },
+    {
+      "id": "fischer|2027-02-02|munich",
+      "artist": "Julia Fischer",
+      "date": "2027-02-02",
+      "city": "Munich",
+      "country": "Germany",
+      "venue": "Isarphilharmonie",
+      "program": "Rundfunk-Sinfonieorchester Berlin / Vladimir Jurowski: Sibelius Violin Concerto in D minor, Op. 47",
+      "pieces": [
+        "Jean Sibelius: Violin Concerto in D minor, Op. 47"
+      ],
+      "location_tag": "germany",
+      "source_url": "https://www.juliafischer.com/en/events",
+      "instruments": [
+        "violin"
+      ],
+      "first_seen": "2026-09-06"
+    },
+    {
+      "id": "fischer|2027-02-03|erlangen",
+      "artist": "Julia Fischer",
+      "date": "2027-02-03",
+      "city": "Erlangen",
+      "country": "Germany",
+      "venue": "Stadthalle - Heinrich-Lades-Halle",
+      "program": "Rundfunk-Sinfonieorchester Berlin / Vladimir Jurowski: Sibelius Violin Concerto in D minor, Op. 47",
+      "pieces": [
+        "Jean Sibelius: Violin Concerto in D minor, Op. 47"
+      ],
+      "location_tag": "germany",
+      "source_url": "https://www.juliafischer.com/en/events",
+      "instruments": [
+        "violin"
+      ],
+      "first_seen": "2026-09-06"
+    },
+    {
+      "id": "fischer|2027-02-05|berlin",
+      "artist": "Julia Fischer",
+      "date": "2027-02-05",
+      "city": "Berlin",
+      "country": "Germany",
+      "venue": "Konzerthaus Berlin",
+      "program": "Rundfunk-Sinfonieorchester Berlin / Vladimir Jurowski: Sibelius Violin Concerto in D minor, Op. 47",
+      "pieces": [
+        "Jean Sibelius: Violin Concerto in D minor, Op. 47"
+      ],
+      "location_tag": "berlin",
+      "source_url": "https://www.juliafischer.com/en/events",
+      "instruments": [
+        "violin"
+      ],
+      "first_seen": "2026-09-06"
+    },
+    {
+      "id": "fischer|2027-02-10|vienna",
+      "artist": "Julia Fischer",
+      "date": "2027-02-10",
+      "city": "Vienna",
+      "country": "Austria",
+      "venue": "Wiener Konzerthaus - Großer Saal",
+      "program": "Rundfunk-Sinfonieorchester Berlin / Vladimir Jurowski: Sibelius Violin Concerto in D minor, Op. 47",
+      "pieces": [
+        "Jean Sibelius: Violin Concerto in D minor, Op. 47"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.juliafischer.com/en/events",
+      "instruments": [
+        "violin"
+      ],
+      "first_seen": "2026-09-06"
+    },
+    {
+      "id": "fischer|2027-02-11|innsbruck",
+      "artist": "Julia Fischer",
+      "date": "2027-02-11",
+      "city": "Innsbruck",
+      "country": "Austria",
+      "venue": "Congress Innsbruck, Saal Tirol",
+      "program": "Rundfunk-Sinfonieorchester Berlin / Vladimir Jurowski: Sibelius Violin Concerto in D minor, Op. 47",
+      "pieces": [
+        "Jean Sibelius: Violin Concerto in D minor, Op. 47"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.juliafischer.com/en/events",
+      "instruments": [
+        "violin"
+      ],
+      "first_seen": "2026-09-06"
+    },
+    {
+      "id": "fischer|2027-02-13|coesfeld",
+      "artist": "Julia Fischer",
+      "date": "2027-02-13",
+      "city": "Coesfeld",
+      "country": "Germany",
+      "venue": "Konzert Theater Coesfeld",
+      "program": "Rundfunk-Sinfonieorchester Berlin / Vladimir Jurowski: Sibelius Violin Concerto in D minor, Op. 47",
+      "pieces": [
+        "Jean Sibelius: Violin Concerto in D minor, Op. 47"
+      ],
+      "location_tag": "germany",
+      "source_url": "https://www.juliafischer.com/en/events",
+      "instruments": [
+        "violin"
+      ],
+      "first_seen": "2026-09-06"
+    },
+    {
+      "id": "fischer|2027-03-06|dresden",
+      "artist": "Julia Fischer",
+      "date": "2027-03-06",
+      "city": "Dresden",
+      "country": "Germany",
+      "venue": "Dresdner Philharmonie - Kulturpalast, Konzertsaal",
+      "program": "Dresdner Philharmonie / Vasily Petrenko: Barber Violin Concerto, Op. 14",
+      "pieces": [
+        "Samuel Barber: Violin Concerto, Op. 14"
+      ],
+      "location_tag": "germany",
+      "source_url": "https://www.juliafischer.com/en/events",
+      "instruments": [
+        "violin"
+      ],
+      "first_seen": "2026-09-06"
+    },
+    {
+      "id": "fischer|2027-03-11|celle",
+      "artist": "Julia Fischer",
+      "date": "2027-03-11",
+      "city": "Celle",
+      "country": "Germany",
+      "venue": "Kammermusikring - Schlosstheater Celle e. V.",
+      "program": "Julia Fischer, Yulianna Avdeeva: Handel, Respighi, Beethoven Kreutzer Sonata",
+      "pieces": [
+        "Georg Friedrich Händel: Violin Sonata No. 3 in F major, HWV 370",
+        "Ottorino Respighi: Sonata for Violin and Piano in B minor, P 110",
+        "Ludwig van Beethoven: Sonata for Piano and Violin No. 9 in A major, Op. 47, \"Kreutzer Sonata\""
+      ],
+      "location_tag": "germany",
+      "source_url": "https://www.juliafischer.com/en/events",
+      "instruments": [
+        "violin"
+      ],
+      "first_seen": "2026-09-06"
+    },
+    {
+      "id": "fischer|2027-03-14|london",
+      "artist": "Julia Fischer",
+      "date": "2027-03-14",
+      "city": "London",
+      "country": "United Kingdom",
+      "venue": "The Southbank Centre",
+      "program": "Julia Fischer",
+      "pieces": "Programme not announced",
+      "location_tag": "europe",
+      "source_url": "https://www.juliafischer.com/en/events",
+      "first_seen": "2026-09-06"
+    },
+    {
+      "id": "fischer|2027-03-15|nijmegen",
+      "artist": "Julia Fischer",
+      "date": "2027-03-15",
+      "city": "Nijmegen",
+      "country": "Netherlands",
+      "venue": "De Vereeniging Grote Zaal",
+      "program": "Julia Fischer, Yulianna Avdeeva: Handel, Respighi, Beethoven Kreutzer Sonata",
+      "pieces": [
+        "Georg Friedrich Händel: Violin Sonata No. 3 in F major, HWV 370",
+        "Ottorino Respighi: Sonata for Violin and Piano in B minor, P 110",
+        "Ludwig van Beethoven: Sonata for Piano and Violin No. 9 in A major, Op. 47, \"Kreutzer Sonata\""
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.juliafischer.com/en/events",
+      "instruments": [
+        "violin"
+      ],
+      "first_seen": "2026-09-06"
+    },
+    {
+      "id": "fischer|2027-03-16|copenhagen",
+      "artist": "Julia Fischer",
+      "date": "2027-03-16",
+      "city": "Copenhagen",
+      "country": "Denmark",
+      "venue": "The Black Diamond, The Queen's Hall",
+      "program": "Julia Fischer, Yulianna Avdeeva: Handel, Respighi, Beethoven Kreutzer Sonata",
+      "pieces": [
+        "Georg Friedrich Händel: Violin Sonata No. 3 in F major, HWV 370",
+        "Ottorino Respighi: Sonata for Violin and Piano in B minor, P 110",
+        "Ludwig van Beethoven: Sonata for Piano and Violin No. 9 in A major, Op. 47, \"Kreutzer Sonata\""
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.juliafischer.com/en/events",
+      "instruments": [
+        "violin"
+      ],
+      "first_seen": "2026-09-06"
+    },
+    {
+      "id": "fischer|2027-03-17|celle",
+      "artist": "Julia Fischer",
+      "date": "2027-03-17",
+      "city": "Celle",
+      "country": "Germany",
+      "venue": null,
+      "program": "Julia Fischer",
+      "pieces": "Programme not announced",
+      "location_tag": "germany",
+      "source_url": "https://www.juliafischer.com/en/events",
+      "first_seen": "2026-09-06"
+    },
+    {
+      "id": "fischer|2027-03-18|heidelberg",
+      "artist": "Julia Fischer",
+      "date": "2027-03-18",
+      "city": "Heidelberg",
+      "country": "Germany",
+      "venue": "Stadthalle Heidelberg",
+      "program": "Julia Fischer",
+      "pieces": "Programme not announced",
+      "location_tag": "germany",
+      "source_url": "https://www.juliafischer.com/en/events",
+      "first_seen": "2026-09-06"
+    },
+    {
+      "id": "fischer|2027-03-20|paris",
+      "artist": "Julia Fischer",
+      "date": "2027-03-20",
+      "city": "Paris",
+      "country": "France",
+      "venue": "L'Auditorium de Radio France - Maison de Radio France",
+      "program": "Julia Fischer, Yulianna Avdeeva: Handel, Respighi, Beethoven Kreutzer Sonata",
+      "pieces": [
+        "Georg Friederich Händel: Sonata in F major",
+        "Ottorino Respighi: Sonata in B minor",
+        "Ludwig van Beethoven: Sonata No. 9 \"Kreutzer\""
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.juliafischer.com/en/events",
+      "instruments": [
+        "violin"
+      ],
+      "first_seen": "2026-09-06"
+    },
+    {
+      "id": "fischer|2027-04-08|hamburg",
+      "artist": "Julia Fischer",
+      "date": "2027-04-08",
+      "city": "Hamburg",
+      "country": "Germany",
+      "venue": "Elbphilharmonie Hamburg - Großer Saal",
+      "program": "NDR Elbphilharmonie Orchester / Alan Gilbert: Barber Concerto for Violin and Orchestra, Op. 14",
+      "pieces": [
+        "Samuel Barber: Concerto for Violin and Orchestra, Op. 14"
+      ],
+      "location_tag": "germany",
+      "source_url": "https://www.juliafischer.com/en/events",
+      "instruments": [
+        "violin"
+      ],
+      "first_seen": "2026-09-06"
+    },
+    {
+      "id": "fischer|2027-04-09|kiel",
+      "artist": "Julia Fischer",
+      "date": "2027-04-09",
+      "city": "Kiel",
+      "country": "Germany",
+      "venue": "Opernhaus Kiel",
+      "program": "NDR Elbphilharmonie Orchester / Alan Gilbert: Barber Concerto for Violin and Orchestra, Op. 14",
+      "pieces": [
+        "Samuel Barber: Concerto for Violin and Orchestra, Op. 14"
+      ],
+      "location_tag": "germany",
+      "source_url": "https://www.juliafischer.com/en/events",
+      "instruments": [
+        "violin"
+      ],
+      "first_seen": "2026-09-06"
+    },
+    {
+      "id": "fischer|2027-04-11|hamburg",
+      "artist": "Julia Fischer",
+      "date": "2027-04-11",
+      "city": "Hamburg",
+      "country": "Germany",
+      "venue": "Elbphilharmonie Hamburg - Großer Saal",
+      "program": "NDR Elbphilharmonie Orchester / Alan Gilbert: Barber Concerto for Violin and Orchestra, Op. 14",
+      "pieces": [
+        "Samuel Barber: Concerto for Violin and Orchestra, Op. 14"
+      ],
+      "location_tag": "germany",
+      "source_url": "https://www.juliafischer.com/en/events",
+      "instruments": [
+        "violin"
+      ],
+      "first_seen": "2026-09-06"
+    },
+    {
+      "id": "fischer|2027-04-15|toulouse",
+      "artist": "Julia Fischer",
+      "date": "2027-04-15",
+      "city": "Toulouse",
+      "country": "France",
+      "venue": "Halle aux Grains, Toulouse",
+      "program": "Orchestre Philharmonique de Radio France / Tugan Sokhiev: Mozart Violin Concerto No. 5 in A major, K. 219",
+      "pieces": [
+        "Wolfgang Amadeus Mozart: Violin Concerto No. 5 in A major, K. 219"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.juliafischer.com/en/events",
+      "instruments": [
+        "violin"
+      ],
+      "first_seen": "2026-09-06"
+    },
+    {
+      "id": "fischer|2027-04-16|paris",
+      "artist": "Julia Fischer",
+      "date": "2027-04-16",
+      "city": "Paris",
+      "country": "France",
+      "venue": "Philharmonie de Paris - Grande Salle, Pierre Boulez",
+      "program": "Orchestre Philharmonique de Radio France / Tugan Sokhiev: Mozart Violin Concerto No. 5 in A major, K. 219",
+      "pieces": [
+        "Wolfgang Amadeus Mozart: Violin Concerto No. 5 in A major, K. 219"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.juliafischer.com/en/events",
+      "instruments": [
+        "violin"
+      ],
+      "first_seen": "2026-09-06"
+    },
+    {
+      "id": "fischer|2027-05-18|leipzig",
+      "artist": "Julia Fischer",
+      "date": "2027-05-18",
+      "city": "Leipzig",
+      "country": "Germany",
+      "venue": "Mendelssohn-Saal",
+      "program": "Julia Fischer, Marie-Elisabeth Hecker, Martin Helmchen: Beethoven chamber programme",
+      "pieces": [
+        "Ludwig van Beethoven: Sonata for Violin and Piano No. 1 in D major, Op. 12, No. 1",
+        "Ludwig van Beethoven: Sonata for Cello and Piano No. 3 in A major, Op. 69",
+        "Ludwig van Beethoven: Piano Trio No. 5 in D major, Op. 70, No. 1, \"Ghost\""
+      ],
+      "location_tag": "germany",
+      "source_url": "https://www.juliafischer.com/en/events",
+      "instruments": [
+        "violin"
+      ],
+      "first_seen": "2026-09-06"
+    },
+    {
+      "id": "fischer|2027-05-20|leipzig",
+      "artist": "Julia Fischer",
+      "date": "2027-05-20",
+      "city": "Leipzig",
+      "country": "Germany",
+      "venue": "Mendelssohn-Saal",
+      "program": "Julia Fischer, Marie-Elisabeth Hecker, Martin Helmchen: Beethoven chamber programme",
+      "pieces": [
+        "Ludwig van Beethoven: Seven Variations on the Duet \"Bei Männern, welche Liebe fühlen\" from Mozart's The Magic Flute, for Cello and Piano in E-flat major, WoO 46",
+        "Ludwig van Beethoven: Sonata for Violin and Piano No. 7 in C minor, Op. 30, No. 2",
+        "Ludwig van Beethoven: Piano Trio No. 7 in B-flat major, Op. 97, \"Archduke Trio\""
+      ],
+      "location_tag": "germany",
+      "source_url": "https://www.juliafischer.com/en/events",
+      "instruments": [
+        "violin"
+      ],
+      "first_seen": "2026-09-06"
+    },
+    {
+      "id": "fischer|2027-06-02|munich",
+      "artist": "Julia Fischer",
+      "date": "2027-06-02",
+      "city": "Munich",
+      "country": "Germany",
+      "venue": null,
+      "program": "Julia Fischer, Herbert Schuch",
+      "pieces": "Programme not announced",
+      "location_tag": "germany",
+      "source_url": "https://www.juliafischer.com/en/events",
+      "first_seen": "2026-09-06"
     }
   ]
 }
