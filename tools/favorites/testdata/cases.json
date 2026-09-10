@@ -1,0 +1,76 @@
+{
+  "_comment": [
+    "Conformance fixture, read by two test suites: favorites_test.go here, and",
+    "the browser smoke tests in tests/smoke.test.mjs. The Go matcher and the",
+    "JavaScript mirror inside index.html must produce identical results for",
+    "every case below, which is what keeps the page's highlighting and the",
+    "run's alerting from disagreeing about what counts as a favourite.",
+    "Add a case here whenever either implementation changes."
+  ],
+
+  "normalize": [
+    {
+      "in": "Beethoven: Piano Sonata No. 21 in C major \"Waldstein\", Op.53",
+      "out": "beethoven piano sonata no 21 in c major waldstein op 53"
+    },
+    {
+      "in": "Max Bruch: Violinkonzert Nr. 1 g-Moll op. 26",
+      "out": "max bruch violinkonzert nr 1 g moll op 26"
+    },
+    {
+      "in": "Franz Schubert: Ouvertüre C-Dur zu »Die Zauberharfe« D 644",
+      "out": "franz schubert ouverture c dur zu die zauberharfe d 644"
+    },
+    { "in": "Antonín Dvořák: Humoresque", "out": "antonin dvorak humoresque" },
+    { "in": "Beethoven: Große Fuge, Op. 133", "out": "beethoven grosse fuge op 133" },
+    { "in": "İlyun Bürkev", "out": "ilyun burkev" },
+    { "in": "Antonín", "out": "antonin" },
+    { "in": "   Chopin — Ballade No. 1   ", "out": "chopin ballade no 1" },
+    { "in": "Rachmaninoff / Rachmaninov", "out": "rachmaninoff rachmaninov" },
+    { "in": "Fauré · Élégie", "out": "faure elegie" },
+    { "in": "«»", "out": "" },
+    { "in": "", "out": "" }
+  ],
+
+  "favorites": [
+    {
+      "slug": "chopin-ballade-1",
+      "title": "Chopin — Ballade No. 1 in G minor, Op. 23",
+      "patterns": [
+        ["chopin", "ballade", "no 1"],
+        ["chopin", "ballade", "nr 1"],
+        ["ballade", "op 23"]
+      ]
+    },
+    {
+      "slug": "beethoven-piano-concerto-4",
+      "title": "Beethoven — Piano Concerto No. 4 in G major, Op. 58",
+      "patterns": [
+        ["beethoven", "piano concerto", "no 4"],
+        ["beethoven", "klavierkonzert", "nr 4"],
+        ["beethoven", "op 58"]
+      ]
+    },
+    {
+      "slug": "bruch-violin-concerto-1",
+      "title": "Bruch — Violin Concerto No. 1 in G minor, Op. 26",
+      "patterns": [
+        ["bruch", "violin concerto", "no 1"],
+        ["bruch", "violinkonzert", "nr 1"]
+      ]
+    }
+  ],
+
+  "match": [
+    { "piece": "Chopin Ballade No. 1", "slugs": ["chopin-ballade-1"] },
+    { "piece": "Chopin Ballade No. 2", "slugs": [] },
+    { "piece": "Ballade Nr. 1 g-Moll op. 23", "slugs": ["chopin-ballade-1"] },
+    { "piece": "Max Bruch: Violinkonzert Nr. 1 g-Moll op. 26", "slugs": ["bruch-violin-concerto-1"] },
+    { "piece": "Beethoven Piano Concerto No. 4", "slugs": ["beethoven-piano-concerto-4"] },
+    { "piece": "Beethoven: Klavierkonzert Nr. 4 G-Dur op. 58", "slugs": ["beethoven-piano-concerto-4"] },
+    { "piece": "Beethoven Piano Concerto No. 40", "slugs": [] },
+    { "piece": "Beethoven: Piano Sonata No. 21 in C major \"Waldstein\", Op.53", "slugs": [] },
+    { "piece": "Programme not announced", "slugs": [] },
+    { "piece": "Brahms Ballade No. 1, Op. 10", "slugs": [] }
+  ]
+}

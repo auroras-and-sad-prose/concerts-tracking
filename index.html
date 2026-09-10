@@ -30,6 +30,11 @@
     --chip-bg: #eef1f6;
     --alert: #a3282d;
     --alert-soft: #fbe9e9;
+    /* Gold, and deliberately nothing like the accent blue: a favourite is a
+       different kind of claim from a location or an instrument, and should be
+       findable by colour alone while scrolling. */
+    --fav: #8a5a10;
+    --fav-soft: #fbf0d9;
     --shadow: 0 1px 2px rgba(21, 27, 38, .04);
     --shadow-hover: 0 8px 24px -16px rgba(21, 27, 38, .45);
   }
@@ -48,6 +53,8 @@
       --chip-bg: #212734;
       --alert: #f08a8f;
       --alert-soft: #3a1f22;
+      --fav: #e5b45c;
+      --fav-soft: #33280f;
       --shadow: 0 1px 2px rgba(0, 0, 0, .35);
       --shadow-hover: 0 8px 24px -16px rgba(0, 0, 0, .85);
     }
@@ -111,6 +118,10 @@
   .controls select option { background: var(--card-bg); color: var(--text); }
   .controls select:hover, .controls input:hover { border-color: var(--faint); }
   .controls select:focus-visible, .controls input:focus-visible { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+  /* Work titles are long enough to push everything else off the row, so this
+     one control is capped and left to clip: the full title is readable in the
+     open dropdown, which is where you pick from it anyway. */
+  .controls select#favoriteFilter { max-width: min(100%, 15rem); }
   .controls input[type="search"] { flex: 1; min-width: 170px; }
   .controls input[type="search"]::placeholder { color: var(--faint); }
 
@@ -173,6 +184,15 @@
     padding: .18rem .55rem; border-radius: 6px;
     background: var(--accent-soft); color: var(--accent);
   }
+  /* A work on the curated favourites list. The chip that matched is marked
+     rather than the whole programme, so a bill with one starred work among six
+     says which one it is. */
+  .card .piece.favorite {
+    background: var(--fav-soft); color: var(--fav); font-weight: 600;
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--fav) 35%, transparent);
+  }
+  .card .piece.favorite::before { content: "★"; margin-right: .3rem; }
+
   /* Unlabelled, so it sits closer to the programme line it qualifies. */
   .card .repertoire.note { margin-top: .35rem; }
   .card .repertoire.note .repertoire-text {
@@ -210,6 +230,12 @@
   /* card-bg, not white: the alert red flips light in dark mode, and the label
      has to stay legible on both. */
   .tag.status { background: var(--alert); color: var(--card-bg); text-transform: uppercase; letter-spacing: .06em; }
+  .tag.favorite { background: var(--fav-soft); color: var(--fav); }
+
+  /* Declared before .card.flagged so that, on a card which is both, the red
+     edge wins: a concert that has been called off is news that outranks a
+     programme you'd have liked. */
+  .card.favorite { border-left: 3px solid var(--fav); }
 
   /* A concert that is off, moved, or handed to another soloist stays on the
      page — the row can never be deleted, and a reader who has tickets needs to
@@ -256,6 +282,7 @@
   <div class="controls">
     <select id="artistFilter" aria-label="Filter by artist"><option value="">All artists</option></select>
     <select id="instrumentFilter" hidden aria-label="Filter by instrument"><option value="">All instruments</option></select>
+    <select id="favoriteFilter" hidden aria-label="Filter by favourite work"><option value="">All programmes</option></select>
     <select id="countryFilter" aria-label="Filter by country"><option value="">All countries</option></select>
     <input type="search" id="searchBox" placeholder="Search city, venue, programme…" aria-label="Search concerts">
   </div>
@@ -326,6 +353,127 @@ function instrumentTagsHTML(concert) {
     .join("");
 }
 
+// ---------- Favourite works ----------
+//
+// favorites.json is the curated list of works worth travelling for. Whether a
+// concert plays one is derived here rather than stored on the row: it is a
+// function of the row's pieces and the list, so computing it means starring a
+// new work lights up every concert already in the dataset, and means seen.json
+// carries no field that could disagree with either input.
+//
+// Everything from here to favoriteHitsIn() is a mirror of the Go matcher in
+// tools/favorites, which the concert-watch routine uses to decide what to
+// alert on. The two must agree, or the page would highlight concerts the alert
+// never mentioned. tools/favorites/testdata/cases.json is the shared fixture
+// that holds them to it, checked from this side by tests/smoke.test.mjs.
+//
+// Any edit below is an edit to favorites.go as well.
+
+// Lowercase accented Latin letters and the plain letters they fold to. Applied
+// as an explicit table rather than via String.normalize("NFD") because the Go
+// side applies this same table: two tables equal by construction cannot drift,
+// where decomposition would differ on every letter that has none — ø, ł, ß, æ.
+const FOLD_FROM =
+  "àáâãäåāăą" + "çćĉċč" + "ďđ" + "èéêëēĕėęě" + "ĝğġģ" + "ĥħ" +
+  "ìíîïĩīĭįı" + "ĵ" + "ķ" + "ĺļľŀł" + "ñńņň" + "òóôõöōŏőø" + "ŕŗř" +
+  "śŝşš" + "ţťŧ" + "ùúûüũūŭůűų" + "ŵ" + "ýÿŷ" + "źżž";
+const FOLD_TO =
+  "aaaaaaaaa" + "ccccc" + "dd" + "eeeeeeeee" + "gggg" + "hh" +
+  "iiiiiiiii" + "j" + "k" + "lllll" + "nnnn" + "ooooooooo" + "rrr" +
+  "ssss" + "ttt" + "uuuuuuuuuu" + "w" + "yyy" + "zzz";
+const FOLD_EXPAND = { "ß": "ss", "æ": "ae", "œ": "oe", "ĳ": "ij", "þ": "th", "ð": "d" };
+const FOLD_SINGLE = new Map([...FOLD_FROM].map((ch, i) => [ch, [...FOLD_TO][i]]));
+
+// Reduces a work title to the form patterns are compared in: lowercase,
+// unaccented, punctuation turned into token boundaries.
+//
+//   `Max Bruch: Violinkonzert Nr. 1 g-Moll op. 26`
+//   → "max bruch violinkonzert nr 1 g moll op 26"
+//
+// Punctuation becomes a space rather than vanishing, so "g-Moll" stays two
+// tokens and can never be matched as "gmoll".
+function normalizeTitle(s) {
+  let out = "";
+  let space = true; // leading spaces are never emitted
+  for (const ch of String(s).toLowerCase()) {
+    const code = ch.codePointAt(0);
+    // A combining mark: dropped, so an already-decomposed title ("a" + U+0301)
+    // folds the same way a precomposed "á" does. This also disposes of the
+    // combining dot that lowercasing Turkish "İ" leaves behind.
+    if (code >= 0x300 && code <= 0x36f) continue;
+    if ((ch >= "a" && ch <= "z") || (ch >= "0" && ch <= "9")) { out += ch; space = false; continue; }
+    const folded = FOLD_SINGLE.get(ch);
+    if (folded !== undefined) { out += folded; space = false; continue; }
+    const expanded = FOLD_EXPAND[ch];
+    if (expanded !== undefined) { out += expanded; space = false; continue; }
+    if (!space) { out += " "; space = true; }
+  }
+  return out.replace(/ $/, "");
+}
+
+// The curated list, with every pattern term pre-normalised.
+let favorites = [];
+
+// A pattern holding a term with nothing to match on is dropped whole rather
+// than shortened: dropping just the term would silently widen the pattern —
+// ["chopin", "—"] would become "anything by Chopin". CI rejects such a file
+// outright; this is what the page does if one reaches it anyway.
+function parseFavorites(list) {
+  const out = [];
+  for (const fav of Array.isArray(list) ? list : []) {
+    if (!fav || typeof fav.slug !== "string" || typeof fav.title !== "string") continue;
+    const patterns = (Array.isArray(fav.patterns) ? fav.patterns : [])
+      .filter(p => Array.isArray(p) && p.length > 0)
+      .map(p => p.map(term => normalizeTitle(term)))
+      .filter(p => p.every(term => term.length > 0));
+    if (patterns.length === 0) continue;
+    out.push({ slug: fav.slug, title: fav.title, patterns });
+  }
+  return out;
+}
+
+// Every favourite found in a row's pieces, as {pieceIndex, slug, title}.
+//
+// Only the array form is matched. The string form — "Programme not announced",
+// "Composers only: Chopin" — says the works are unknown, and reading a
+// favourite out of it would turn "we don't know" into "your piece is on the
+// bill". A term matches only on whole tokens, so "op 2" misses "Op. 23".
+function favoriteHitsIn(pieces, favs) {
+  const hits = [];
+  if (!Array.isArray(pieces)) return hits;
+  pieces.forEach((piece, pieceIndex) => {
+    if (typeof piece !== "string") return;
+    const normalized = normalizeTitle(piece);
+    if (!normalized) return;
+    const padded = " " + normalized + " ";
+    for (const fav of favs) {
+      if (fav.patterns.some(p => p.every(term => padded.includes(" " + term + " ")))) {
+        hits.push({ pieceIndex, slug: fav.slug, title: fav.title });
+      }
+    }
+  });
+  return hits;
+}
+
+// Concert row -> its hits, computed once when the data loads rather than on
+// every keystroke in the search box.
+let favoriteHits = new Map();
+
+function hitsOf(concert) {
+  return favoriteHits.get(concert) || [];
+}
+
+function indexFavorites(concerts) {
+  favoriteHits = new Map(concerts.map(c => [c, favoriteHitsIn(c.pieces, favorites)]));
+}
+
+function favoriteTagHTML(concert) {
+  const count = new Set(hitsOf(concert).map(h => h.slug)).size;
+  if (count === 0) return "";
+  const label = count === 1 ? "Favourite" : `${count} favourites`;
+  return `<span class="tag favorite">★ ${escapeHTML(label)}</span>`;
+}
+
 function titleCase(s) {
   return s.charAt(0).toUpperCase() + s.slice(1);
 }
@@ -347,6 +495,26 @@ function populateFilters(concerts) {
   const instrumentSel = addOptions("instrumentFilter", concerts.flatMap(instrumentsOf), titleCase);
   instrumentSel.hidden = instrumentSel.options.length <= 1;
   addOptions("countryFilter", concerts.map(c => c.country).filter(Boolean));
+}
+
+// Left in the curated file's order rather than sorted: the list is short and
+// hand-arranged, and "Any favourite" leads either way. Like the instrument
+// control it stays hidden when there is nothing behind it, so a missing or
+// empty favorites.json costs the page nothing.
+function populateFavoriteFilter() {
+  const sel = document.getElementById("favoriteFilter");
+  if (favorites.length === 0) return;
+  const any = document.createElement("option");
+  any.value = "*";
+  any.textContent = "★ Any favourite";
+  sel.appendChild(any);
+  for (const fav of favorites) {
+    const opt = document.createElement("option");
+    opt.value = fav.slug;
+    opt.textContent = fav.title;
+    sel.appendChild(opt);
+  }
+  sel.hidden = false;
 }
 
 // `status` says a listed concert is no longer the concert this row describes —
@@ -379,6 +547,7 @@ function locationTagHTML(tag) {
 function render() {
   const artist = document.getElementById("artistFilter").value;
   const instrument = document.getElementById("instrumentFilter").value;
+  const favorite = document.getElementById("favoriteFilter").value;
   const country = document.getElementById("countryFilter").value;
   const search = document.getElementById("searchBox").value.trim().toLowerCase();
   const today = todayISO();
@@ -386,6 +555,9 @@ function render() {
   let list = allConcerts.filter(c => c.date >= today);
   if (artist) list = list.filter(c => c.artist === artist);
   if (instrument) list = list.filter(c => instrumentsOf(c).includes(instrument));
+  // "*" is every favourite at once — the question the list is usually asked.
+  if (favorite === "*") list = list.filter(c => hitsOf(c).length > 0);
+  else if (favorite) list = list.filter(c => hitsOf(c).some(h => h.slug === favorite));
   if (country) list = list.filter(c => c.country === country);
   if (search) {
     list = list.filter(c =>
@@ -400,8 +572,10 @@ function render() {
   list.sort((a, b) => a.date.localeCompare(b.date));
 
   const main = document.getElementById("main");
+  const withFavorite = list.filter(c => hitsOf(c).length > 0).length;
   document.getElementById("subtitle").textContent =
-    `${list.length} upcoming concert${list.length === 1 ? "" : "s"}`;
+    `${list.length} upcoming concert${list.length === 1 ? "" : "s"}` +
+    (withFavorite ? ` · ${withFavorite} with a favourite` : "");
 
   if (list.length === 0) {
     main.innerHTML = '<div class="empty">No upcoming concerts match your filters.</div>';
@@ -435,19 +609,20 @@ function render() {
       detailUrl ? `<a class="link" href="${escapeHTML(detailUrl)}" target="_blank" rel="noopener">Details ↗</a>` : "",
       safeUrl ? `<a class="link${detailUrl ? " secondary" : ""}" href="${escapeHTML(safeUrl)}" target="_blank" rel="noopener">Source ↗</a>` : ""
     ].filter(Boolean).join("");
+    const hits = hitsOf(c);
     html += `
-      <div class="card${c.status ? " flagged" : ""}">
+      <div class="card${hits.length ? " favorite" : ""}${c.status ? " flagged" : ""}">
         <div class="date-col">
           <div class="mon">${MONTH_ABBR[d.getMonth()]}</div>
           <div class="day">${d.getDate()}</div>
           <div class="dow">${DOW[d.getDay()]}</div>
         </div>
         <div class="body">
-          <div class="topline"><span class="artist">${escapeHTML(c.artist)}</span>${statusTagHTML(c)}${locationTagHTML(c.location_tag)}${instrumentTagsHTML(c)}</div>
+          <div class="topline"><span class="artist">${escapeHTML(c.artist)}</span>${statusTagHTML(c)}${favoriteTagHTML(c)}${locationTagHTML(c.location_tag)}${instrumentTagsHTML(c)}</div>
           <div class="place">${whereHTML}</div>
           ${statusLineHTML(c)}
           ${c.program ? `<div class="program">${escapeHTML(c.program)}</div>` : ""}
-          ${piecesHTML(c.pieces)}
+          ${piecesHTML(c.pieces, hits)}
         </div>
         ${linksHTML ? `<div class="links">${linksHTML}</div>` : ""}
       </div>`;
@@ -463,11 +638,27 @@ function render() {
 // reading "PROGRAMME / Programme not announced" — doubly odd directly under a
 // `program` line that does say who is playing. It reads as prose instead
 // (serif italic, muted), which is also how it differs from confirmed works.
-function piecesHTML(pieces) {
+//
+// `hits` are the favourites found in this row, and they mark the individual
+// works that matched — the tooltip names the curated entry, since a source's
+// wording for it is often terser than the one you'd recognise.
+function piecesHTML(pieces, hits = []) {
   if (Array.isArray(pieces)) {
-    const items = pieces.filter(p => typeof p === "string" && p.trim());
-    if (items.length === 0) return "";
-    const chips = items.map(p => `<span class="piece">${escapeHTML(p)}</span>`).join("");
+    // Keyed by position in the original array: the chips below skip empty
+    // entries, so a filtered index would star the wrong work.
+    const starred = new Map();
+    for (const h of hits) {
+      if (!starred.has(h.pieceIndex)) starred.set(h.pieceIndex, []);
+      starred.get(h.pieceIndex).push(h.title);
+    }
+    const chips = pieces.map((p, i) => {
+      if (typeof p !== "string" || !p.trim()) return "";
+      const titles = starred.get(i);
+      if (!titles) return `<span class="piece">${escapeHTML(p)}</span>`;
+      const tip = `On your favourites list: ${titles.join("; ")}`;
+      return `<span class="piece favorite" title="${escapeHTML(tip)}">${escapeHTML(p)}</span>`;
+    }).filter(Boolean).join("");
+    if (!chips) return "";
     return `<div class="repertoire"><span class="repertoire-label">Programme</span><div class="repertoire-list">${chips}</div></div>`;
   }
   if (typeof pieces === "string" && pieces.trim()) {
@@ -504,18 +695,25 @@ async function fetchJSON(path) {
 }
 
 async function init() {
-  // The roster is supporting data: if it can't be loaded, the concert list
-  // still renders and only the instrument filter drops out.
+  // Both of these are supporting data: if either can't be loaded, the concert
+  // list still renders and only its own control drops out.
   const roster = fetchJSON("artists.json").catch(e => {
+    console.error(e);
+    return null;
+  });
+  const starred = fetchJSON("favorites.json").catch(e => {
     console.error(e);
     return null;
   });
   try {
     const data = await fetchJSON("seen.json");
     allConcerts = data.concerts || [];
-    const artists = await roster;
+    const [artists, favoritesFile] = await Promise.all([roster, starred]);
     loadRoster((artists && artists.artists) || []);
+    favorites = parseFavorites((favoritesFile && favoritesFile.favorites) || []);
+    indexFavorites(allConcerts);
     populateFilters(allConcerts);
+    populateFavoriteFilter();
     render();
   } catch (e) {
     document.getElementById("main").innerHTML =
@@ -527,6 +725,7 @@ async function init() {
 
 document.getElementById("artistFilter").addEventListener("change", render);
 document.getElementById("instrumentFilter").addEventListener("change", render);
+document.getElementById("favoriteFilter").addEventListener("change", render);
 document.getElementById("countryFilter").addEventListener("change", render);
 document.getElementById("searchBox").addEventListener("input", render);
 
