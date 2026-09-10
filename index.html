@@ -30,7 +30,7 @@
     --chip-bg: #eef1f6;
     --alert: #a3282d;
     --alert-soft: #fbe9e9;
-    /* Gold, and deliberately nothing like the accent blue: a favourite is a
+    /* Gold, and deliberately nothing like the accent blue: a favorite is a
        different kind of claim from a location or an instrument, and should be
        findable by colour alone while scrolling. */
     --fav: #8a5a10;
@@ -184,7 +184,7 @@
     padding: .18rem .55rem; border-radius: 6px;
     background: var(--accent-soft); color: var(--accent);
   }
-  /* A work on the curated favourites list. The chip that matched is marked
+  /* A work on the curated favorites list. The chip that matched is marked
      rather than the whole programme, so a bill with one starred work among six
      says which one it is. */
   .card .piece.favorite {
@@ -282,7 +282,7 @@
   <div class="controls">
     <select id="artistFilter" aria-label="Filter by artist"><option value="">All artists</option></select>
     <select id="instrumentFilter" hidden aria-label="Filter by instrument"><option value="">All instruments</option></select>
-    <select id="favoriteFilter" hidden aria-label="Filter by favourite work"><option value="">All programmes</option></select>
+    <select id="favoriteFilter" hidden aria-label="Filter by favorite work"><option value="">All programmes</option></select>
     <select id="countryFilter" aria-label="Filter by country"><option value="">All countries</option></select>
     <input type="search" id="searchBox" placeholder="Search city, venue, programme…" aria-label="Search concerts">
   </div>
@@ -353,7 +353,7 @@ function instrumentTagsHTML(concert) {
     .join("");
 }
 
-// ---------- Favourite works ----------
+// ---------- Favorite works ----------
 //
 // favorites.json is the curated list of works worth travelling for. Whether a
 // concert plays one is derived here rather than stored on the row: it is a
@@ -411,7 +411,7 @@ function normalizeTitle(s) {
   return out.replace(/ $/, "");
 }
 
-// The curated list, with every pattern term pre-normalised.
+// The curated list, with every pattern term pre-normalized.
 let favorites = [];
 
 // A pattern holding a term with nothing to match on is dropped whole rather
@@ -432,11 +432,11 @@ function parseFavorites(list) {
   return out;
 }
 
-// Every favourite found in a row's pieces, as {pieceIndex, slug, title}.
+// Every favorite found in a row's pieces, as {pieceIndex, slug, title}.
 //
 // Only the array form is matched. The string form — "Programme not announced",
 // "Composers only: Chopin" — says the works are unknown, and reading a
-// favourite out of it would turn "we don't know" into "your piece is on the
+// favorite out of it would turn "we don't know" into "your piece is on the
 // bill". A term matches only on whole tokens, so "op 2" misses "Op. 23".
 function favoriteHitsIn(pieces, favs) {
   const hits = [];
@@ -470,7 +470,7 @@ function indexFavorites(concerts) {
 function favoriteTagHTML(concert) {
   const count = new Set(hitsOf(concert).map(h => h.slug)).size;
   if (count === 0) return "";
-  const label = count === 1 ? "Favourite" : `${count} favourites`;
+  const label = count === 1 ? "Favorite" : `${count} favorites`;
   return `<span class="tag favorite">★ ${escapeHTML(label)}</span>`;
 }
 
@@ -498,7 +498,7 @@ function populateFilters(concerts) {
 }
 
 // Left in the curated file's order rather than sorted: the list is short and
-// hand-arranged, and "Any favourite" leads either way. Like the instrument
+// hand-arranged, and "Any favorite" leads either way. Like the instrument
 // control it stays hidden when there is nothing behind it, so a missing or
 // empty favorites.json costs the page nothing.
 function populateFavoriteFilter() {
@@ -506,7 +506,7 @@ function populateFavoriteFilter() {
   if (favorites.length === 0) return;
   const any = document.createElement("option");
   any.value = "*";
-  any.textContent = "★ Any favourite";
+  any.textContent = "★ Any favorite";
   sel.appendChild(any);
   for (const fav of favorites) {
     const opt = document.createElement("option");
@@ -555,7 +555,7 @@ function render() {
   let list = allConcerts.filter(c => c.date >= today);
   if (artist) list = list.filter(c => c.artist === artist);
   if (instrument) list = list.filter(c => instrumentsOf(c).includes(instrument));
-  // "*" is every favourite at once — the question the list is usually asked.
+  // "*" is every favorite at once — the question the list is usually asked.
   if (favorite === "*") list = list.filter(c => hitsOf(c).length > 0);
   else if (favorite) list = list.filter(c => hitsOf(c).some(h => h.slug === favorite));
   if (country) list = list.filter(c => c.country === country);
@@ -575,7 +575,7 @@ function render() {
   const withFavorite = list.filter(c => hitsOf(c).length > 0).length;
   document.getElementById("subtitle").textContent =
     `${list.length} upcoming concert${list.length === 1 ? "" : "s"}` +
-    (withFavorite ? ` · ${withFavorite} with a favourite` : "");
+    (withFavorite ? ` · ${withFavorite} with a favorite` : "");
 
   if (list.length === 0) {
     main.innerHTML = '<div class="empty">No upcoming concerts match your filters.</div>';
@@ -639,7 +639,7 @@ function render() {
 // `program` line that does say who is playing. It reads as prose instead
 // (serif italic, muted), which is also how it differs from confirmed works.
 //
-// `hits` are the favourites found in this row, and they mark the individual
+// `hits` are the favorites found in this row, and they mark the individual
 // works that matched — the tooltip names the curated entry, since a source's
 // wording for it is often terser than the one you'd recognise.
 function piecesHTML(pieces, hits = []) {
@@ -655,7 +655,7 @@ function piecesHTML(pieces, hits = []) {
       if (typeof p !== "string" || !p.trim()) return "";
       const titles = starred.get(i);
       if (!titles) return `<span class="piece">${escapeHTML(p)}</span>`;
-      const tip = `On your favourites list: ${titles.join("; ")}`;
+      const tip = `On your favorites list: ${titles.join("; ")}`;
       return `<span class="piece favorite" title="${escapeHTML(tip)}">${escapeHTML(p)}</span>`;
     }).filter(Boolean).join("");
     if (!chips) return "";

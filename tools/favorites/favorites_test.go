@@ -54,7 +54,7 @@ func TestMatchSharedCases(t *testing.T) {
 	c := loadCases(t)
 	f := File{Favorites: c.Favorites}
 	if problems := Validate(f); len(problems) > 0 {
-		t.Fatalf("fixture favourites do not validate: %v", problems)
+		t.Fatalf("fixture favorites do not validate: %v", problems)
 	}
 	for _, tc := range c.Match {
 		got := Slugs(f.Hits([]string{tc.Piece}))
@@ -88,7 +88,7 @@ func TestNormalizeFoldsWithoutJoiningTokens(t *testing.T) {
 	}
 }
 
-func TestHitsReportsEveryPieceAndFavourite(t *testing.T) {
+func TestHitsReportsEveryPieceAndFavorite(t *testing.T) {
 	f := File{Favorites: []Favorite{
 		{Slug: "chopin-ballade-1", Title: "Chopin Ballade No. 1", Patterns: [][]string{{"chopin", "ballade", "no 1"}}},
 		{Slug: "chopin-any", Title: "Anything by Chopin", Patterns: [][]string{{"chopin"}}},
@@ -104,7 +104,7 @@ func TestHitsReportsEveryPieceAndFavourite(t *testing.T) {
 		t.Errorf("Hits = %v, want %v", hits, want)
 	}
 
-	// A favourite found twice is still one favourite when the row is reported.
+	// A favorite found twice is still one favorite when the row is reported.
 	if got := Slugs(hits); !slices.Equal(got, []string{"chopin-ballade-1", "chopin-any"}) {
 		t.Errorf("Slugs = %v", got)
 	}
@@ -202,7 +202,7 @@ func TestValidateRejects(t *testing.T) {
 }
 
 // A pattern that Validate rejects must also never match at run time: the file
-// could reach the page before anyone fixes it, and a match-all favourite would
+// could reach the page before anyone fixes it, and a match-all favorite would
 // star every concert in the dataset.
 func TestEmptyPatternNeverMatches(t *testing.T) {
 	f := File{Favorites: []Favorite{{Slug: "x", Title: "T", Patterns: [][]string{{}, {"nothing here"}}}}}

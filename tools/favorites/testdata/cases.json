@@ -4,7 +4,7 @@
     "the browser smoke tests in tests/smoke.test.mjs. The Go matcher and the",
     "JavaScript mirror inside index.html must produce identical results for",
     "every case below, which is what keeps the page's highlighting and the",
-    "run's alerting from disagreeing about what counts as a favourite.",
+    "run's alerting from disagreeing about what counts as a favorite.",
     "Add a case here whenever either implementation changes."
   ],
 

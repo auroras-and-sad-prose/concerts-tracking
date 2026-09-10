@@ -209,8 +209,8 @@ func main() {
 	filePath := flag.String("file", "seen.json", "path to the concerts JSON file to validate")
 	basePath := flag.String("base", "", "optional path to the previous version of the file; enables the append-only check")
 	artistsPath := flag.String("artists", "artists.json", "path to the artist roster; empty disables the roster checks")
-	favoritesPath := flag.String("favorites", "favorites.json", "path to the curated favourite works; empty disables the favourites checks")
-	favoritesReport := flag.Bool("favorites-report", false, "print which upcoming concerts play a favourite work; with -base, mark which of those are news")
+	favoritesPath := flag.String("favorites", "favorites.json", "path to the curated favorite works; empty disables the favorites checks")
+	favoritesReport := flag.Bool("favorites-report", false, "print which upcoming concerts play a favorite work; with -base, mark which of those are news")
 	flag.Parse()
 
 	now := time.Now().UTC()

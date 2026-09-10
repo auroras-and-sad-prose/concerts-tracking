@@ -3,9 +3,9 @@
 // routine — see tools/favorites for the file's shape and the matching rule.
 //
 // Nothing in seen.json points at it, so there is no cross-check to run the way
-// CheckRoster ties concerts to artists: a favourite that no concert plays is
+// CheckRoster ties concerts to artists: a favorite that no concert plays is
 // the ordinary case, and a concert playing none of them is too. What this file
-// adds instead is the report — which upcoming concerts play a favourite, and
+// adds instead is the report — which upcoming concerts play a favorite, and
 // which of those the reader has not been told about yet.
 //
 // The report exists so that a run alerts by copying a computed answer rather
@@ -24,7 +24,7 @@ import (
 	"github.com/auroras-and-sad-prose/concerts-tracking/tools/favorites"
 )
 
-// favoriteRow is one upcoming concert that plays at least one favourite.
+// favoriteRow is one upcoming concert that plays at least one favorite.
 type favoriteRow struct {
 	concert Concert
 	hits    []favorites.Hit
@@ -32,17 +32,17 @@ type favoriteRow struct {
 	newly   []string // slugs matched now that were not matched in the base file
 }
 
-// reportFavorites writes the favourites report to w. It never affects the exit
+// reportFavorites writes the favorites report to w. It never affects the exit
 // code: the curated list is a lens on valid data, not another gate on it.
 //
 // With base non-nil it also says what changed, which is what a run alerts on: a
 // concert new to the file, or an existing row whose programme has since been
-// filled in and turns out to contain a favourite. Both are computed against the
+// filled in and turns out to contain a favorite. Both are computed against the
 // current list, so this reports news about concerts, not about the list — after
 // starring a new work, run it without -base to see every concert it catches.
 func reportFavorites(w io.Writer, f File, base *File, fav favorites.File, now time.Time) {
 	if len(fav.Favorites) == 0 {
-		fmt.Fprintln(w, "favourites: the list is empty; nothing to match")
+		fmt.Fprintln(w, "favorites: the list is empty; nothing to match")
 		return
 	}
 
@@ -93,12 +93,12 @@ func reportFavorites(w io.Writer, f File, base *File, fav favorites.File, now ti
 	})
 
 	if len(rows) == 0 {
-		fmt.Fprintf(w, "favourites: none of the %d upcoming concert(s) plays a work on the list (%d favourite(s))\n",
+		fmt.Fprintf(w, "favorites: none of the %d upcoming concert(s) plays a work on the list (%d favorite(s))\n",
 			upcoming, len(fav.Favorites))
 		return
 	}
 
-	fmt.Fprintf(w, "favourites: %d of %d upcoming concert(s) play a work on the list\n", len(rows), upcoming)
+	fmt.Fprintf(w, "favorites: %d of %d upcoming concert(s) play a work on the list\n", len(rows), upcoming)
 	for _, row := range rows {
 		fmt.Fprintf(w, "  %s\n", favoriteHeadline(row))
 		newly := map[string]bool{}
@@ -116,7 +116,7 @@ func reportFavorites(w io.Writer, f File, base *File, fav favorites.File, now ti
 }
 
 // favoriteHeadline is the concert's one-line billing. A status is printed loudly
-// beside it: a cancelled concert can still match a favourite, and reporting it
+// beside it: a cancelled concert can still match a favorite, and reporting it
 // as good news is exactly the mistake status exists to prevent.
 func favoriteHeadline(row favoriteRow) string {
 	c := row.concert

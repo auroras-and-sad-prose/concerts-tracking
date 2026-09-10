@@ -71,7 +71,7 @@ const FIXTURE_ARTISTS = {
   ],
 };
 
-// One favourite the fixture programmes play, one named only by a row whose
+// One favorite the fixture programmes play, one named only by a row whose
 // pieces are the string form (which must never match), and one nothing plays.
 const FIXTURE_FAVORITES = {
   favorites: [
@@ -198,11 +198,11 @@ describe("the concert page", () => {
     assert.deepEqual(errors, []);
     // A dataset whose dates have all passed is legitimate, so the count is not
     // asserted — only that the page reported one instead of failing. The
-    // favourites clause is likewise optional: whether the real dataset happens
+    // favorites clause is likewise optional: whether the real dataset happens
     // to play one today is not this suite's business.
     assert.match(
       await page.locator("#subtitle").innerText(),
-      /^\d+ upcoming concerts?( · \d+ with a favourite)?$/);
+      /^\d+ upcoming concerts?( · \d+ with a favorite)?$/);
     await page.close();
   });
 
@@ -210,7 +210,7 @@ describe("the concert page", () => {
     const { page, errors } = await open({});
 
     assert.equal(await page.locator(".card").count(), 3);
-    assert.equal(await page.locator("#subtitle").innerText(), "3 upcoming concerts · 1 with a favourite");
+    assert.equal(await page.locator("#subtitle").innerText(), "3 upcoming concerts · 1 with a favorite");
     assert.ok(await page.locator(".month-heading").count() >= 1);
 
     const text = await page.locator("#main").innerText();
@@ -262,13 +262,13 @@ describe("the concert page", () => {
     await page.close();
   });
 
-  test("marks the works on the favourites list", async () => {
+  test("marks the works on the favorites list", async () => {
     const { page, errors } = await open({});
 
     const starred = page.locator(".card.favorite");
     assert.equal(await starred.count(), 1);
     assert.match(await starred.innerText(), /Julia Fischer/);
-    assert.match(await starred.locator(".tag.favorite").innerText(), /Favourite/);
+    assert.match(await starred.locator(".tag.favorite").innerText(), /Favorite/);
 
     // The individual work is marked, not the whole programme.
     assert.equal(await page.locator(".piece.favorite").count(), 1);
@@ -281,9 +281,9 @@ describe("the concert page", () => {
     await page.close();
   });
 
-  // "Composers only: Mozart" says the works are unknown. Reading a favourite
+  // "Composers only: Mozart" says the works are unknown. Reading a favorite
   // out of it would turn "we don't know" into "your piece is on the bill".
-  test("never reads a favourite out of an unannounced programme", async () => {
+  test("never reads a favorite out of an unannounced programme", async () => {
     const { page, errors } = await open({});
 
     await page.selectOption("#favoriteFilter", "mozart-any");
@@ -294,19 +294,19 @@ describe("the concert page", () => {
     await page.close();
   });
 
-  test("filters by favourite work", async () => {
+  test("filters by favorite work", async () => {
     const { page, errors } = await open({});
 
     assert.equal(await page.locator("#favoriteFilter").isHidden(), false);
 
     await page.selectOption("#favoriteFilter", "*");
     assert.equal(await page.locator(".card").count(), 1);
-    assert.equal(await page.locator("#subtitle").innerText(), "1 upcoming concert · 1 with a favourite");
+    assert.equal(await page.locator("#subtitle").innerText(), "1 upcoming concert · 1 with a favorite");
 
     await page.selectOption("#favoriteFilter", "brahms-violin-concerto");
     assert.equal(await page.locator(".card").count(), 1);
 
-    // A favourite nothing on the calendar plays is still offered — that it
+    // A favorite nothing on the calendar plays is still offered — that it
     // narrows to nothing is the answer.
     await page.selectOption("#favoriteFilter", "chopin-ballade-1");
     assert.equal(await page.locator(".card").count(), 0);
@@ -318,12 +318,12 @@ describe("the concert page", () => {
     await page.close();
   });
 
-  // The page highlights favourites and the concert-watch routine alerts on
+  // The page highlights favorites and the concert-watch routine alerts on
   // them, from two implementations of one rule (index.html and
   // tools/favorites). This is the fixture that keeps them from drifting: if it
   // fails here, the page and the alerts have started disagreeing about what
-  // counts as a favourite.
-  test("matches favourites exactly as the Go implementation does", async () => {
+  // counts as a favorite.
+  test("matches favorites exactly as the Go implementation does", async () => {
     const { page, errors } = await open({});
     const cases = JSON.parse(
       await readFile(join(REPO_ROOT, "tools", "favorites", "testdata", "cases.json"), "utf8"));
@@ -393,7 +393,7 @@ describe("the concert page", () => {
     await page.close();
   });
 
-  test("still lists concerts when the favourites list is missing", async () => {
+  test("still lists concerts when the favorites list is missing", async () => {
     const page = await browser.newPage();
     const crashes = [];
     page.on("pageerror", err => crashes.push(String(err)));

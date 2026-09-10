@@ -1,4 +1,4 @@
-// Package favorites implements the curated favourite-works list and the rule
+// Package favorites implements the curated favorite-works list and the rule
 // that decides whether a concert's programme contains one of them.
 //
 // The list is hand-maintained in favorites.json, exactly like the artist
@@ -7,28 +7,28 @@
 //
 // # Why nothing is written into seen.json
 //
-// "This concert plays a favourite" is a function of two things already in the
+// "This concert plays a favorite" is a function of two things already in the
 // repo — the row's pieces and the curated list — so it is computed wherever it
 // is needed (the page, the run report) rather than stored on the row. A
 // favorites field on a concert would be one more field a run could get wrong,
 // gating nothing that the two inputs don't already gate, and it would go stale
 // the moment the curated list changed. Deriving it also means adding a
-// favourite immediately lights up every concert already in the dataset.
+// favorite immediately lights up every concert already in the dataset.
 //
 // # How a work is matched
 //
 // Sources phrase the same work a dozen ways — "Chopin Ballade No. 1",
 // "Ballade Nr. 1 g-Moll op. 23", "F. Chopin: Ballade No.1" — and the routine
-// copies whatever the page printed rather than normalising it (grounding rule
-// 3). So a favourite does not carry one canonical title to compare against; it
+// copies whatever the page printed rather than normalizing it (grounding rule
+// 3). So a favorite does not carry one canonical title to compare against; it
 // carries the phrasings that identify it, curated by a person:
 //
 //	"patterns": [["chopin", "ballade", "no 1"],
 //	             ["chopin", "ballade", "nr 1"],
 //	             ["ballade", "op 23"]]
 //
-// A favourite matches a work title when every term of any one pattern appears
-// in it (OR of ANDs). Both sides are normalised first — case, accents and
+// A favorite matches a work title when every term of any one pattern appears
+// in it (OR of ANDs). Both sides are normalized first — case, accents and
 // punctuation folded away — and a term matches only on whole-token boundaries,
 // so "op 2" does not match "Op. 23".
 //
@@ -41,7 +41,7 @@
 // # Two implementations
 //
 // index.html carries a JavaScript mirror of Normalize and the matching rule, so
-// that the page can highlight favourites without a build step. The two must
+// that the page can highlight favorites without a build step. The two must
 // agree; testdata/cases.json is the shared conformance fixture that proves they
 // do, read by favorites_test.go here and by the browser smoke tests.
 package favorites
@@ -65,7 +65,7 @@ type Favorite struct {
 	// source phrases it. It is never matched against — Patterns does that.
 	Title string `json:"title"`
 	// Patterns are the alternative phrasings that identify this work. The
-	// favourite matches a title when all terms of any one pattern appear in it.
+	// favorite matches a title when all terms of any one pattern appear in it.
 	Patterns [][]string `json:"patterns"`
 }
 
@@ -74,16 +74,16 @@ type File struct {
 	Favorites []Favorite `json:"favorites"`
 }
 
-// Hit records one favourite found in one element of a row's pieces array.
+// Hit records one favorite found in one element of a row's pieces array.
 type Hit struct {
 	PieceIndex int    // index into the pieces array that matched
-	Slug       string // the favourite's slug
-	Title      string // the favourite's curated title
+	Slug       string // the favorite's slug
+	Title      string // the favorite's curated title
 }
 
 // Validate checks the curated file in isolation: well-formed slugs and titles,
 // and patterns that can actually match something. An empty list is allowed —
-// "I have no favourites recorded yet" is a legitimate state, and the page just
+// "I have no favorites recorded yet" is a legitimate state, and the page just
 // hides the control.
 func Validate(f File) []string {
 	var problems []string
@@ -127,7 +127,7 @@ func Validate(f File) []string {
 				continue
 			}
 			for k, term := range pattern {
-				// A term that normalises away to nothing — punctuation, an
+				// A term that normalizes away to nothing — punctuation, an
 				// em-dash, whitespace — would be trivially "found" in every
 				// title, quietly turning its pattern into a match-all.
 				if Normalize(term) == "" {
@@ -141,13 +141,13 @@ func Validate(f File) []string {
 	return problems
 }
 
-// Hits reports every favourite found in a row's pieces, in pieces order and
-// then in file order, one Hit per (piece, favourite) pair so the page can
+// Hits reports every favorite found in a row's pieces, in pieces order and
+// then in file order, one Hit per (piece, favorite) pair so the page can
 // highlight the individual work that matched.
 //
 // It is only ever given the array form of pieces. The string form —
 // "Programme not announced", "Composers only: Chopin" — says the works are
-// unknown, and reading a favourite out of it would turn "we don't know" into
+// unknown, and reading a favorite out of it would turn "we don't know" into
 // "your piece is on the bill".
 func (f File) Hits(pieces []string) []Hit {
 	var hits []Hit
@@ -165,7 +165,7 @@ func (f File) Hits(pieces []string) []Hit {
 	return hits
 }
 
-// Titles reduces a row's hits to the distinct favourites found, in first-seen
+// Titles reduces a row's hits to the distinct favorites found, in first-seen
 // order — what a report or an alert wants to name.
 func Titles(hits []Hit) []string {
 	seen := make(map[string]bool, len(hits))
@@ -179,7 +179,7 @@ func Titles(hits []Hit) []string {
 	return titles
 }
 
-// Slugs reduces a row's hits to the distinct favourites found, in first-seen
+// Slugs reduces a row's hits to the distinct favorites found, in first-seen
 // order.
 func Slugs(hits []Hit) []string {
 	seen := make(map[string]bool, len(hits))
@@ -193,8 +193,8 @@ func Slugs(hits []Hit) []string {
 	return slugs
 }
 
-// matches reports whether any one of the favourite's patterns is wholly present
-// in an already-normalised work title.
+// matches reports whether any one of the favorite's patterns is wholly present
+// in an already-normalized work title.
 func (f Favorite) matches(normalizedTitle string) bool {
 	for _, pattern := range f.Patterns {
 		if len(pattern) == 0 {
@@ -216,7 +216,7 @@ func (f Favorite) matches(normalizedTitle string) bool {
 }
 
 // containsTerm looks for a term as a whole run of tokens rather than as a bare
-// substring. Both arguments are normalised, so tokens are separated by exactly
+// substring. Both arguments are normalized, so tokens are separated by exactly
 // one space and padding both sides turns the substring test into a boundary
 // test: " op 2 " is not found in " ... op 23 ", though "op 2" is a substring of
 // "op 23".
@@ -232,7 +232,7 @@ func containsTerm(haystack, term string) bool {
 // the JavaScript mirror in index.html applies this same table: two tables that
 // are equal by construction cannot drift, where "Go decomposes, JS calls
 // normalize('NFD')" would differ on every letter that has no decomposition —
-// ø, ł, ß, æ — in ways nobody would notice until a favourite silently stopped
+// ø, ł, ß, æ — in ways nobody would notice until a favorite silently stopped
 // matching.
 const (
 	foldFrom = "àáâãäåāăą" + "çćĉċč" + "ďđ" + "èéêëēĕėęě" + "ĝğġģ" + "ĥħ" +
@@ -275,7 +275,7 @@ func buildFoldSingle() map[rune]rune {
 //	→ "max bruch violinkonzert nr 1 g moll op 26"
 //
 // It folds accents but does not translate: "Violinkonzert" and "Violin
-// Concerto" stay different words, which is why a favourite carries a pattern
+// Concerto" stay different words, which is why a favorite carries a pattern
 // for each language a source might print it in.
 //
 // The JavaScript mirror in index.html must produce byte-identical output;
