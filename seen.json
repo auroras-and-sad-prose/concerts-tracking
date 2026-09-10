@@ -1140,7 +1140,7 @@
       ],
       "location_tag": "germany",
       "source_url": "https://www.olgascheps.com/konzerte",
-      "detail_url": null,
+      "detail_url": "https://www.marburger-konzertverein.de/konzert?Saison=2026&ID=03",
       "first_seen": "2026-08-27"
     },
     {
@@ -1479,11 +1479,13 @@
       "venue": "Isarphilharmonie",
       "program": "Orchestre National de France / Cristian Măcelaru: Brahms Double Concerto",
       "pieces": [
-        "Brahms: Concerto for Violin, Cello and Orchestra in A minor, Op. 102"
+        "Berlioz: Overture to Béatrice et Bénédict",
+        "Brahms: Concerto for Violin, Cello and Orchestra in A minor, Op. 102",
+        "Dvořák: Symphony No. 8 in G major, Op. 88"
       ],
       "location_tag": "germany",
       "source_url": "https://www.juliafischer.com/en/events",
-      "detail_url": null,
+      "detail_url": "https://www.gasteig.de/veranstaltungen/orchestre-national-de-france/",
       "instruments": [
         "violin"
       ],
@@ -1502,7 +1504,7 @@
       ],
       "location_tag": "germany",
       "source_url": "https://www.juliafischer.com/en/events",
-      "detail_url": null,
+      "detail_url": "https://liederhalle.de/veranstaltung/orchestre-national-de-france",
       "instruments": [
         "violin"
       ],
@@ -1544,7 +1546,7 @@
       ],
       "location_tag": "europe",
       "source_url": "https://www.juliafischer.com/en/events",
-      "detail_url": null,
+      "detail_url": "https://www.filarmonica.org/programacion/programacion-enero_2627.html#13",
       "instruments": [
         "violin"
       ],
@@ -1568,7 +1570,8 @@
       "instruments": [
         "violin"
       ],
-      "first_seen": "2026-09-06"
+      "first_seen": "2026-09-06",
+      "detail_url": "https://auditorionacional.inaem.gob.es/es/programacion/cndm-9"
     },
     {
       "id": "fischer|2027-01-10|la palma",
@@ -1668,7 +1671,8 @@
       "instruments": [
         "violin"
       ],
-      "first_seen": "2026-09-06"
+      "first_seen": "2026-09-06",
+      "detail_url": "https://louisiana.dk/en/event/subscription-series-fischer-sitkovetsky-monkemeyer-nyfenegger-15-january-2027/"
     },
     {
       "id": "fischer|2027-01-16|diez",
@@ -1684,7 +1688,8 @@
       "instruments": [
         "violin"
       ],
-      "first_seen": "2026-09-06"
+      "first_seen": "2026-09-06",
+      "detail_url": "https://oraniensteiner-konzerte.de/konzert/vorschau-neujahrskonzert-2027"
     },
     {
       "id": "fischer|2027-01-17|seon",
@@ -1704,7 +1709,8 @@
       "instruments": [
         "violin"
       ],
-      "first_seen": "2026-09-06"
+      "first_seen": "2026-09-06",
+      "detail_url": "https://seetalclassics.ch/konzert/5-julia-fischer-quartett/"
     },
     {
       "id": "fischer|2027-02-02|munich",
@@ -1715,14 +1721,17 @@
       "venue": "Isarphilharmonie",
       "program": "Rundfunk-Sinfonieorchester Berlin / Vladimir Jurowski: Sibelius Violin Concerto in D minor, Op. 47",
       "pieces": [
-        "Jean Sibelius: Violin Concerto in D minor, Op. 47"
+        "Beethoven: Overture to König Stephan, Op. 117",
+        "Sibelius: Concerto for Violin and Orchestra in D minor, Op. 47",
+        "Tchaikovsky: Symphony No. 6 in B minor, Op. 74 \"Pathétique\""
       ],
       "location_tag": "germany",
       "source_url": "https://www.juliafischer.com/en/events",
       "instruments": [
         "violin"
       ],
-      "first_seen": "2026-09-06"
+      "first_seen": "2026-09-06",
+      "detail_url": "https://www.muenchenmusik.de/mm/veranstaltungen/rundfunk-sinfonieorchester-berlin-2227"
     },
     {
       "id": "fischer|2027-02-03|erlangen",
@@ -1733,14 +1742,17 @@
       "venue": "Stadthalle - Heinrich-Lades-Halle",
       "program": "Rundfunk-Sinfonieorchester Berlin / Vladimir Jurowski: Sibelius Violin Concerto in D minor, Op. 47",
       "pieces": [
-        "Jean Sibelius: Violin Concerto in D minor, Op. 47"
+        "Silvestrov: Serenade for String Orchestra",
+        "Sibelius: Concerto for Violin and Orchestra in D minor, Op. 47",
+        "Tchaikovsky: Symphony No. 6 in B minor, Op. 74 \"Pathétique\""
       ],
       "location_tag": "germany",
       "source_url": "https://www.juliafischer.com/en/events",
       "instruments": [
         "violin"
       ],
-      "first_seen": "2026-09-06"
+      "first_seen": "2026-09-06",
+      "detail_url": "https://www.rsb-online.de/konzerte/rsb-on-tour-erlangen/"
     },
     {
       "id": "fischer|2027-02-05|berlin",
@@ -1751,14 +1763,17 @@
       "venue": "Konzerthaus Berlin",
       "program": "Rundfunk-Sinfonieorchester Berlin / Vladimir Jurowski: Sibelius Violin Concerto in D minor, Op. 47",
       "pieces": [
-        "Jean Sibelius: Violin Concerto in D minor, Op. 47"
+        "Silvestrov: Serenade for String Orchestra",
+        "Sibelius: Concerto for Violin and Orchestra in D minor, Op. 47",
+        "Tchaikovsky: Symphony No. 6 in B minor, Op. 74 \"Pathétique\""
       ],
       "location_tag": "berlin",
       "source_url": "https://www.juliafischer.com/en/events",
       "instruments": [
         "violin"
       ],
-      "first_seen": "2026-09-06"
+      "first_seen": "2026-09-06",
+      "detail_url": "https://www.rsb-online.de/konzerte/vladimir-jurowski-julia-fischer/"
     },
     {
       "id": "fischer|2027-02-10|vienna",
@@ -1769,14 +1784,17 @@
       "venue": "Wiener Konzerthaus - Großer Saal",
       "program": "Rundfunk-Sinfonieorchester Berlin / Vladimir Jurowski: Sibelius Violin Concerto in D minor, Op. 47",
       "pieces": [
-        "Jean Sibelius: Violin Concerto in D minor, Op. 47"
+        "Silvestrov: Serenade for String Orchestra",
+        "Sibelius: Concerto for Violin and Orchestra in D minor, Op. 47",
+        "Tchaikovsky: Symphony No. 6 in B minor, Op. 74 \"Pathétique\""
       ],
       "location_tag": "europe",
       "source_url": "https://www.juliafischer.com/en/events",
       "instruments": [
         "violin"
       ],
-      "first_seen": "2026-09-06"
+      "first_seen": "2026-09-06",
+      "detail_url": "https://konzerthaus.at/de/programm-und-karten/rundfunk-sinfonieorchester-berlin-julia-fischer-jurowski/63688"
     },
     {
       "id": "fischer|2027-02-11|innsbruck",
@@ -1787,14 +1805,17 @@
       "venue": "Congress Innsbruck, Saal Tirol",
       "program": "Rundfunk-Sinfonieorchester Berlin / Vladimir Jurowski: Sibelius Violin Concerto in D minor, Op. 47",
       "pieces": [
-        "Jean Sibelius: Violin Concerto in D minor, Op. 47"
+        "Silvestrov: Serenade for String Orchestra",
+        "Sibelius: Concerto for Violin and Orchestra in D minor, Op. 47",
+        "Tchaikovsky: Symphony No. 6 in B minor, Op. 74 \"Pathétique\""
       ],
       "location_tag": "europe",
       "source_url": "https://www.juliafischer.com/en/events",
       "instruments": [
         "violin"
       ],
-      "first_seen": "2026-09-06"
+      "first_seen": "2026-09-06",
+      "detail_url": "https://www.meisterkammerkonzerte.at/veranstaltungen/rundfunksinfonieorchester-berlin-vladimir-jurowski-julia-fischer"
     },
     {
       "id": "fischer|2027-02-13|coesfeld",
@@ -1805,14 +1826,17 @@
       "venue": "Konzert Theater Coesfeld",
       "program": "Rundfunk-Sinfonieorchester Berlin / Vladimir Jurowski: Sibelius Violin Concerto in D minor, Op. 47",
       "pieces": [
-        "Jean Sibelius: Violin Concerto in D minor, Op. 47"
+        "Silvestrov: Serenade for String Orchestra",
+        "Sibelius: Concerto for Violin and Orchestra in D minor, Op. 47",
+        "Tchaikovsky: Symphony No. 6 in B minor, Op. 74 \"Pathétique\""
       ],
       "location_tag": "germany",
       "source_url": "https://www.juliafischer.com/en/events",
       "instruments": [
         "violin"
       ],
-      "first_seen": "2026-09-06"
+      "first_seen": "2026-09-06",
+      "detail_url": "https://konzerttheatercoesfeld.de/project/silvestrov-·-sibelius-·-tschaikowsky/"
     },
     {
       "id": "fischer|2027-03-06|dresden",
@@ -1823,14 +1847,17 @@
       "venue": "Dresdner Philharmonie - Kulturpalast, Konzertsaal",
       "program": "Dresdner Philharmonie / Vasily Petrenko: Barber Violin Concerto, Op. 14",
       "pieces": [
-        "Samuel Barber: Violin Concerto, Op. 14"
+        "Prokofiev: Symphony No. 1 in D major \"Classical Symphony\"",
+        "Barber: Violin Concerto, Op. 14",
+        "R. Strauss: Also sprach Zarathustra"
       ],
       "location_tag": "germany",
       "source_url": "https://www.juliafischer.com/en/events",
       "instruments": [
         "violin"
       ],
-      "first_seen": "2026-09-06"
+      "first_seen": "2026-09-06",
+      "detail_url": "https://www.dresdnerphilharmonie.de/de/konzerte-tickets/konzertkalender-dresden/also-sprach-zarathustra_2/"
     },
     {
       "id": "fischer|2027-03-11|celle",
@@ -1850,7 +1877,8 @@
       "instruments": [
         "violin"
       ],
-      "first_seen": "2026-09-06"
+      "first_seen": "2026-09-06",
+      "detail_url": "https://schlosstheater-celle.de/produktion/julia-fischer"
     },
     {
       "id": "fischer|2027-03-14|london",
@@ -1883,7 +1911,8 @@
       "instruments": [
         "violin"
       ],
-      "first_seen": "2026-09-06"
+      "first_seen": "2026-09-06",
+      "detail_url": "https://www.stadsschouwburgendevereeniging.nl/programma/julia-fischer-yulianna-avdeeva-r3g6"
     },
     {
       "id": "fischer|2027-03-16|copenhagen",
@@ -1903,7 +1932,8 @@
       "instruments": [
         "violin"
       ],
-      "first_seen": "2026-09-06"
+      "first_seen": "2026-09-06",
+      "detail_url": "https://www.kb.dk/en/events/pianists-diamond-julia-fischer-de-and-yulianna-avdeeva-ru"
     },
     {
       "id": "fischer|2027-03-17|celle",
@@ -1949,7 +1979,8 @@
       "instruments": [
         "violin"
       ],
-      "first_seen": "2026-09-06"
+      "first_seen": "2026-09-06",
+      "detail_url": "https://www.maisondelaradioetdelamusique.fr/evenement/beethoven-sonate-kreutzer-julia-fischer-yulianna-avdeeva?s=1381465"
     },
     {
       "id": "fischer|2027-04-08|hamburg",
@@ -1960,14 +1991,17 @@
       "venue": "Elbphilharmonie Hamburg - Großer Saal",
       "program": "NDR Elbphilharmonie Orchester / Alan Gilbert: Barber Concerto for Violin and Orchestra, Op. 14",
       "pieces": [
-        "Samuel Barber: Concerto for Violin and Orchestra, Op. 14"
+        "Barber: Second Essay for Orchestra, Op. 17",
+        "Barber: Concerto for Violin and Orchestra, Op. 14",
+        "Beethoven: Symphony No. 6 in F major, Op. 68 \"Pastorale\""
       ],
       "location_tag": "germany",
       "source_url": "https://www.juliafischer.com/en/events",
       "instruments": [
         "violin"
       ],
-      "first_seen": "2026-09-06"
+      "first_seen": "2026-09-06",
+      "detail_url": "https://www.elbphilharmonie.de/de/programm/ndr-elbphilharmonie-orchester-julia-fischer-alan-gilbert/27850"
     },
     {
       "id": "fischer|2027-04-09|kiel",
@@ -1978,14 +2012,17 @@
       "venue": "Opernhaus Kiel",
       "program": "NDR Elbphilharmonie Orchester / Alan Gilbert: Barber Concerto for Violin and Orchestra, Op. 14",
       "pieces": [
-        "Samuel Barber: Concerto for Violin and Orchestra, Op. 14"
+        "Barber: Second Essay for Orchestra, Op. 17",
+        "Barber: Concerto for Violin and Orchestra, Op. 14",
+        "Beethoven: Symphony No. 6 in F major, Op. 68 \"Pastorale\""
       ],
       "location_tag": "germany",
       "source_url": "https://www.juliafischer.com/en/events",
       "instruments": [
         "violin"
       ],
-      "first_seen": "2026-09-06"
+      "first_seen": "2026-09-06",
+      "detail_url": "https://www.ndrticketshop.de/klassik-kultur/2926-alan-gilbert-julia-fischer-in-kiel"
     },
     {
       "id": "fischer|2027-04-11|hamburg",
@@ -1996,14 +2033,17 @@
       "venue": "Elbphilharmonie Hamburg - Großer Saal",
       "program": "NDR Elbphilharmonie Orchester / Alan Gilbert: Barber Concerto for Violin and Orchestra, Op. 14",
       "pieces": [
-        "Samuel Barber: Concerto for Violin and Orchestra, Op. 14"
+        "Barber: Second Essay for Orchestra, Op. 17",
+        "Barber: Concerto for Violin and Orchestra, Op. 14",
+        "Beethoven: Symphony No. 6 in F major, Op. 68 \"Pastorale\""
       ],
       "location_tag": "germany",
       "source_url": "https://www.juliafischer.com/en/events",
       "instruments": [
         "violin"
       ],
-      "first_seen": "2026-09-06"
+      "first_seen": "2026-09-06",
+      "detail_url": "https://www.elbphilharmonie.de/de/programm/ndr-elbphilharmonie-orchester-julia-fischer-alan-gilbert/27849"
     },
     {
       "id": "fischer|2027-04-15|toulouse",
@@ -2014,14 +2054,16 @@
       "venue": "Halle aux Grains, Toulouse",
       "program": "Orchestre Philharmonique de Radio France / Tugan Sokhiev: Mozart Violin Concerto No. 5 in A major, K. 219",
       "pieces": [
-        "Wolfgang Amadeus Mozart: Violin Concerto No. 5 in A major, K. 219"
+        "Mozart: Violin Concerto No. 5 in A major, K. 219",
+        "Shostakovich: Symphony No. 12"
       ],
       "location_tag": "europe",
       "source_url": "https://www.juliafischer.com/en/events",
       "instruments": [
         "violin"
       ],
-      "first_seen": "2026-09-06"
+      "first_seen": "2026-09-06",
+      "detail_url": "https://www.maisondelaradioetdelamusique.fr/evenement/tournee-du-philhar-toulouse?s=1382630"
     },
     {
       "id": "fischer|2027-04-16|paris",
@@ -2032,14 +2074,16 @@
       "venue": "Philharmonie de Paris - Grande Salle, Pierre Boulez",
       "program": "Orchestre Philharmonique de Radio France / Tugan Sokhiev: Mozart Violin Concerto No. 5 in A major, K. 219",
       "pieces": [
-        "Wolfgang Amadeus Mozart: Violin Concerto No. 5 in A major, K. 219"
+        "Mozart: Violin Concerto No. 5 in A major, K. 219",
+        "Shostakovich: Symphony No. 12"
       ],
       "location_tag": "europe",
       "source_url": "https://www.juliafischer.com/en/events",
       "instruments": [
         "violin"
       ],
-      "first_seen": "2026-09-06"
+      "first_seen": "2026-09-06",
+      "detail_url": "https://philharmoniedeparis.fr/en/activite/29245?itemId=145635"
     },
     {
       "id": "fischer|2027-05-18|leipzig",
@@ -2059,7 +2103,8 @@
       "instruments": [
         "violin"
       ],
-      "first_seen": "2026-09-06"
+      "first_seen": "2026-09-06",
+      "detail_url": "https://www.gewandhausorchester.de/veranstaltung/klaviertrio-10143/"
     },
     {
       "id": "fischer|2027-05-20|leipzig",
@@ -2079,7 +2124,8 @@
       "instruments": [
         "violin"
       ],
-      "first_seen": "2026-09-06"
+      "first_seen": "2026-09-06",
+      "detail_url": "https://www.gewandhausorchester.de/veranstaltung/klaviertrio-10145/"
     },
     {
       "id": "fischer|2027-06-02|munich",
