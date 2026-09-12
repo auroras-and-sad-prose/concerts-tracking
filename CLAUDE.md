@@ -208,6 +208,15 @@ it against the composer's *other* works — the ones that share its words:
   where the bigram `"piano concerto"` would not. Prefer the separate tokens,
   and lean on `[composer, "op NN"]` for listings in French, Italian or Spanish:
   the opus survives translation where the work's name doesn't.
+- A catalogue number needs both spacings. These sources write `D 956` and
+  `D956`, `BWV 1004` and `BWV861` — and `"d 957"` is two tokens, so it does not
+  match `D957`. Any pattern anchored on a D, S, L, CD, BWV or KV number carries
+  the fused form alongside the spaced one. (An opus escapes this: every listing
+  seen so far writes `Op.` or `op. ` with a separator, so `"op 61"` is enough.)
+
+Accents and case need no help — both sides are folded before comparison, so
+`["schubert", "serenade"]` already matches "Sérénade" and a pattern spelled
+with the accent is the same pattern written twice.
 
 Matching is deliberately literal, and knows nothing about the repertoire. It
 cannot decide that `"Beethoven Op. 61"` is the violin concerto, because that is

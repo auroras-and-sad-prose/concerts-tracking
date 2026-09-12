@@ -119,20 +119,22 @@
         ["debussy", "arabesques"],
         ["debussy", "arabesken"],
         ["debussy", "l 66"],
-        ["debussy", "cd 74"]
+        ["debussy", "l66"],
+        ["debussy", "cd 74"],
+        ["debussy", "cd74"]
       ]
     },
     {
       "slug": "schubert-standchen",
-      "title": "Schubert — Ständchen (Serenade), D 957 No. 4",
+      "title": "Schubert — Ständchen (Serenade), D 957/4 · Liszt S. 560",
       "patterns": [
-        ["schubert", "standchen"],
+        ["standchen", "d 957"],
+        ["standchen", "d957"],
+        ["standchen", "schwanengesang"],
+        ["standchen", "s 560"],
+        ["standchen", "s560"],
         ["schubert", "serenade"],
         ["schubert", "serenata"],
-        ["liszt", "standchen"],
-        ["standchen", "d 957"],
-        ["standchen", "s 560"],
-        ["standchen", "schwanengesang"],
         ["leise flehen meine lieder"]
       ]
     },
@@ -154,6 +156,7 @@
         ["liszt", "liebestraum"],
         ["liszt", "liebestraume"],
         ["liszt", "s 541"],
+        ["liszt", "s541"],
         ["liszt", "o lieb so lang du lieben kannst"]
       ]
     },
