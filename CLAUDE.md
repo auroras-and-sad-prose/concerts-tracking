@@ -190,6 +190,25 @@ matches `Op. 23`. Include the composer in a pattern unless an opus number
 already makes the work unambiguous — `["ballade", "op 23"]` is safe,
 `["ballade", "no 1"]` would catch Brahms.
 
+**Writing a pattern that doesn't over-match.** An opus number identifies a work
+only within a composer: `seen.json` carries both Beethoven's Op. 61 and
+Saint-Saëns' Violin Concerto No. 3, Op. 61. So before trusting a pattern, read
+it against the composer's *other* works — the ones that share its words:
+
+- A work-type pair is not enough on its own. `["beethoven", "violin",
+  "concerto"]` also matches "Triple Concerto for Violin, Cello and Piano", which
+  is a real row. Add the key or the opus: `["beethoven", "violin", "concerto",
+  "d major"]`.
+- A number is only a discriminator where sources agree on it. Mendelssohn wrote
+  two violin concertos, and listings call the E minor either "No. 1" or "No. 2"
+  depending on whether they count the early D minor — so that favorite is
+  matched on the key and Op. 64, never on a number, and the D minor stays out.
+- Terms are matched as tokens, not as a phrase, so `["piano", "concerto"]` also
+  catches "Concerto for Piano and Orchestra" and "Concerto per pianoforte"
+  where the bigram `"piano concerto"` would not. Prefer the separate tokens,
+  and lean on `[composer, "op NN"]` for listings in French, Italian or Spanish:
+  the opus survives translation where the work's name doesn't.
+
 Matching is deliberately literal, and knows nothing about the repertoire. It
 cannot decide that `"Beethoven Op. 61"` is the violin concerto, because that is
 knowledge from outside the fetched page — exactly what the rest of this file
