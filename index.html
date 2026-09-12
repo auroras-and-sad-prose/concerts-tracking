@@ -382,7 +382,26 @@ const FOLD_TO =
   "iiiiiiiii" + "j" + "k" + "lllll" + "nnnn" + "ooooooooo" + "rrr" +
   "ssss" + "ttt" + "uuuuuuuuuu" + "w" + "yyy" + "zzz";
 const FOLD_EXPAND = { "ß": "ss", "æ": "ae", "œ": "oe", "ĳ": "ij", "þ": "th", "ð": "d" };
-const FOLD_SINGLE = new Map([...FOLD_FROM].map((ch, i) => [ch, [...FOLD_TO][i]]));
+const FOLD_SINGLE = buildFoldTable();
+
+// The table is paired by index, so "equal by construction" holds only while the
+// two strings are the same length. The Go side panics when they aren't; a page
+// that renders concerts should not blank itself over it, so this says so
+// loudly instead and folds the pairs it does have. A console error fails the
+// smoke tests, which is what catches a one-sided edit before it ships — and the
+// fixture those tests read pins every pair individually, so a letter added to
+// the wrong half is caught even where the lengths still agree.
+function buildFoldTable() {
+  const from = [...FOLD_FROM];
+  const to = [...FOLD_TO];
+  if (from.length !== to.length) {
+    console.error(
+      `favorites: fold table has ${from.length} source letters but ${to.length} targets; ` +
+      "accented titles will stop matching until the two strings in index.html line up again");
+  }
+  const pairs = Math.min(from.length, to.length);
+  return new Map(from.slice(0, pairs).map((ch, i) => [ch, to[i]]));
+}
 
 // Reduces a work title to the form patterns are compared in: lowercase,
 // unaccented, punctuation turned into token boundaries.

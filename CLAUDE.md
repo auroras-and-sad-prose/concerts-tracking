@@ -684,9 +684,11 @@ is something waiting.
    ```
 
    `HEAD` is the right base whichever branch step 1 settled, because it is what
-   the previous run left behind: `NEW CONCERT` and `NEW MATCH` then mark exactly
-   what the reader has not been told. Copy those lines into the issue and the PR
-   body rather than restating them from your own reading of the programmes.
+   the previous run left behind: the report's sections then separate what the
+   reader has not been told from what an earlier run already covered. Each line
+   it prints under those sections is a finished issue entry — artist, date,
+   place, the work, the source's own wording for it, and the row's links — so
+   copy the lines rather than rebuilding them from the rows.
 4. **Commit and push.** Message `"concert-watch: <today's date>, +<N> new"` —
    `+0 new` when the run only refined rows or set a status. Push with
    `git push -u origin concert-watch/<date>`.
@@ -718,17 +720,24 @@ If there's at least one NEW concert, open ONE GitHub issue:
   each: `artist — date — city, venue — programme — source_url` (add the
   `detail_url` after it when the row has one).
 
-Anything the favorites report marked leads the issue, above the location
-groups, in a **★ Favorites** section: `artist — date — city, venue —
-<favorite title> — source_url`. A line the report marked `NEW MATCH` belongs
-there too, with `(programme now announced)` after it — the concert was alerted
-on before, but the reason to go was not. Take the titles from the report; a work
-it did not flag is not a favorite, however much it looks like one.
+Anything the favorites report found leads the issue, above the location groups,
+in a **★ Favorites** section. The report has already written those lines —
+`artist — date — city, venue — <favorite title> (matched: "<what the source
+printed>") — source_url — detail_url` — and grouped them under the section each
+belongs to, so this is a copy, not a composition:
 
-A favorite on a row that carries a `status` is not good news, and the report
-prints the status beside it for that reason. It belongs in **Changes** below,
-never under **★ Favorites**: a cancelled concert playing your Ballade is a
-disappointment, not a discovery.
+- *new concerts playing a favorite* and *programmes that now name a favorite*
+  go under **★ Favorites**, exactly as printed. The second group already
+  carries `(programme now announced)`: that concert was alerted on before, but
+  the reason to go was not.
+- *already reported in an earlier run* is a count, not a list, and it is not
+  news. Don't go looking for those rows to re-announce them.
+- *playing a favorite but flagged* goes under **Changes** instead, in the
+  Changes format, and never under **★ Favorites**: a cancelled concert playing
+  your Ballade is a disappointment, not a discovery.
+
+A work the report did not list is not a favorite, however much it looks like
+one.
 
 If any existing row gained a `status` this run, that is news too — a concert
 already alerted on is one the reader may be holding tickets for. Add a

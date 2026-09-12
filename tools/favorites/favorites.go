@@ -165,22 +165,13 @@ func (f File) Hits(pieces []string) []Hit {
 	return hits
 }
 
-// Titles reduces a row's hits to the distinct favorites found, in first-seen
-// order — what a report or an alert wants to name.
-func Titles(hits []Hit) []string {
-	seen := make(map[string]bool, len(hits))
-	var titles []string
-	for _, h := range hits {
-		if !seen[h.Slug] {
-			seen[h.Slug] = true
-			titles = append(titles, h.Title)
-		}
-	}
-	return titles
-}
-
 // Slugs reduces a row's hits to the distinct favorites found, in first-seen
-// order.
+// order. A favorite matched by two works on the same bill is still one
+// favorite when the row is compared against an earlier run.
+//
+// There is deliberately no Titles counterpart: callers that want to name the
+// favorites walk the hits themselves, since they want the matching work's own
+// wording alongside each title rather than a bare list.
 func Slugs(hits []Hit) []string {
 	seen := make(map[string]bool, len(hits))
 	var slugs []string

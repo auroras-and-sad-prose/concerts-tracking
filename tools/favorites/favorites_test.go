@@ -108,9 +108,6 @@ func TestHitsReportsEveryPieceAndFavorite(t *testing.T) {
 	if got := Slugs(hits); !slices.Equal(got, []string{"chopin-ballade-1", "chopin-any"}) {
 		t.Errorf("Slugs = %v", got)
 	}
-	if got := Titles(hits); !slices.Equal(got, []string{"Chopin Ballade No. 1", "Anything by Chopin"}) {
-		t.Errorf("Titles = %v", got)
-	}
 }
 
 func TestTermsMatchOnTokenBoundaries(t *testing.T) {

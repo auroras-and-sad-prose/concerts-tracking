@@ -5,7 +5,11 @@
     "JavaScript mirror inside index.html must produce identical results for",
     "every case below, which is what keeps the page's highlighting and the",
     "run's alerting from disagreeing about what counts as a favorite.",
-    "Add a case here whenever either implementation changes."
+    "Add a case here whenever either implementation changes.",
+    "The last two normalize cases are the whole accent-folding table, one",
+    "entry per pair: editing either half of it in one language and not the",
+    "other fails here rather than silently mis-folding a letter nobody",
+    "thought to write a case for."
   ],
 
   "normalize": [
@@ -29,7 +33,10 @@
     { "in": "Rachmaninoff / Rachmaninov", "out": "rachmaninoff rachmaninov" },
     { "in": "Fauré · Élégie", "out": "faure elegie" },
     { "in": "«»", "out": "" },
-    { "in": "", "out": "" }
+    { "in": "", "out": "" },
+
+    {"in": "àáâãäåāăąçćĉċčďđèéêëēĕėęěĝğġģĥħìíîïĩīĭįıĵķĺļľŀłñńņňòóôõöōŏőøŕŗřśŝşšţťŧùúûüũūŭůűųŵýÿŷźżž", "out": "aaaaaaaaacccccddeeeeeeeeegggghhiiiiiiiiijklllllnnnnooooooooorrrsssstttuuuuuuuuuuwyyyzzz"},
+    {"in": "ßæœĳþð", "out": "ssaeoeijthd"}
   ],
 
   "favorites": [
