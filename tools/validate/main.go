@@ -17,7 +17,11 @@
 //   - id has the canonical "<slug>|<date>|<city>" shape consistent with its row;
 //   - ids are unique;
 //   - every artist is registered in artists.json, under the same slug and name
-//     (see artists.go, which also validates that roster itself).
+//     (see artists.go, which also validates that roster itself);
+//   - favorites.json, the curated list of works worth travelling for, is itself
+//     well-formed (see favorites.go and tools/favorites). Nothing in seen.json
+//     refers to it, so there is no cross-check — with -favorites-report the
+//     command instead prints which upcoming concerts play one of those works.
 //
 // With -base pointing at the previous version of the file, it additionally
 // enforces two rules on entries that already existed:
@@ -41,6 +45,8 @@ import (
 	"regexp"
 	"strings"
 	"time"
+
+	"github.com/auroras-and-sad-prose/concerts-tracking/tools/favorites"
 )
 
 // allowedTags is the closed vocabulary for location_tag. Extend deliberately
@@ -203,7 +209,11 @@ func main() {
 	filePath := flag.String("file", "seen.json", "path to the concerts JSON file to validate")
 	basePath := flag.String("base", "", "optional path to the previous version of the file; enables the append-only check")
 	artistsPath := flag.String("artists", "artists.json", "path to the artist roster; empty disables the roster checks")
+	favoritesPath := flag.String("favorites", "favorites.json", "path to the curated favorite works; empty disables the favorites checks")
+	favoritesReport := flag.Bool("favorites-report", false, "print which upcoming concerts play a favorite work; with -base, mark which of those are news")
 	flag.Parse()
+
+	now := time.Now().UTC()
 
 	f, err := loadJSON[File](*filePath)
 	if err != nil {
@@ -221,7 +231,7 @@ func main() {
 		base = &b
 	}
 
-	problems := Validate(f, base, time.Now().UTC())
+	problems := Validate(f, base, now)
 
 	if *artistsPath != "" {
 		artists, err := loadJSON[Artists](*artistsPath)
@@ -233,6 +243,26 @@ func main() {
 			problems = append(problems, fmt.Sprintf("%s: %s", *artistsPath, p))
 		}
 		problems = append(problems, CheckRoster(f, artists)...)
+	}
+
+	if *favoritesPath != "" {
+		fav, err := loadJSON[favorites.File](*favoritesPath)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "error: cannot read %s: %v\n", *favoritesPath, err)
+			os.Exit(1)
+		}
+		favProblems := favorites.Validate(fav)
+		for _, p := range favProblems {
+			problems = append(problems, fmt.Sprintf("%s: %s", *favoritesPath, p))
+		}
+		// A malformed list would produce a misleading report — a pattern that
+		// matches everything reads exactly like a lucky programme — so the
+		// report is withheld until the list itself is sound.
+		if *favoritesReport && len(favProblems) == 0 {
+			reportFavorites(os.Stdout, f, base, fav, now)
+		}
+	} else if *favoritesReport {
+		fmt.Fprintln(os.Stderr, "note: -favorites-report does nothing while -favorites is empty")
 	}
 
 	if len(problems) > 0 {

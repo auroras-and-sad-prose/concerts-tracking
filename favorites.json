@@ -1,0 +1,180 @@
+{
+  "favorites": [
+    {
+      "slug": "beethoven-piano-concerto-3",
+      "title": "Beethoven — Piano Concerto No. 3 in C minor, Op. 37",
+      "patterns": [
+        ["beethoven", "op 37"],
+        ["beethoven", "piano", "concerto", "no 3"],
+        ["beethoven", "piano", "concerto", "c minor"],
+        ["beethoven", "klavierkonzert", "nr 3"],
+        ["beethoven", "klavierkonzert", "c moll"]
+      ]
+    },
+    {
+      "slug": "rachmaninoff-piano-concerto-2",
+      "title": "Rachmaninoff — Piano Concerto No. 2 in C minor, Op. 18",
+      "patterns": [
+        ["rachmaninov", "op 18"],
+        ["rachmaninoff", "op 18"],
+        ["rachmaninow", "op 18"],
+        ["rachmaninov", "piano", "concerto", "no 2"],
+        ["rachmaninoff", "piano", "concerto", "no 2"],
+        ["rachmaninov", "klavierkonzert", "nr 2"],
+        ["rachmaninoff", "klavierkonzert", "nr 2"],
+        ["rachmaninow", "klavierkonzert", "nr 2"]
+      ]
+    },
+    {
+      "slug": "grieg-piano-concerto",
+      "title": "Grieg — Piano Concerto in A minor, Op. 16",
+      "patterns": [
+        ["grieg", "op 16"],
+        ["grieg", "piano", "concerto"],
+        ["grieg", "klavierkonzert"],
+        ["grieg", "pianoforte", "concerto"]
+      ]
+    },
+    {
+      "slug": "chopin-ballade-1",
+      "title": "Chopin — Ballade No. 1 in G minor, Op. 23",
+      "patterns": [
+        ["chopin", "op 23"],
+        ["chopin", "ballade", "no 1"],
+        ["chopin", "ballade", "nr 1"],
+        ["chopin", "ballade", "n 1"],
+        ["ballade", "op 23"],
+        ["ballade", "no 1", "g minor"],
+        ["ballade", "nr 1", "g moll"]
+      ]
+    },
+    {
+      "slug": "chopin-ballade-3",
+      "title": "Chopin — Ballade No. 3 in A flat major, Op. 47",
+      "patterns": [
+        ["chopin", "op 47"],
+        ["chopin", "ballade", "no 3"],
+        ["chopin", "ballade", "nr 3"],
+        ["chopin", "ballade", "n 3"],
+        ["ballade", "op 47"],
+        ["ballade", "no 3", "a flat major"],
+        ["ballade", "nr 3", "as dur"]
+      ]
+    },
+    {
+      "slug": "mendelssohn-violin-concerto-e-minor",
+      "title": "Mendelssohn — Violin Concerto in E minor, Op. 64",
+      "patterns": [
+        ["mendelssohn", "op 64"],
+        ["mendelssohn", "violin", "concerto", "e minor"],
+        ["mendelssohn", "violinkonzert", "e moll"],
+        ["mendelssohn", "violine", "e moll"],
+        ["mendelssohn", "violon", "mi mineur"],
+        ["mendelssohn", "violino", "mi minore"]
+      ]
+    },
+    {
+      "slug": "beethoven-violin-concerto",
+      "title": "Beethoven — Violin Concerto in D major, Op. 61",
+      "patterns": [
+        ["beethoven", "op 61"],
+        ["beethoven", "violin", "concerto", "d major"],
+        ["beethoven", "violinkonzert"],
+        ["beethoven", "violine", "d dur"],
+        ["beethoven", "violon", "re majeur"],
+        ["beethoven", "violino", "re maggiore"]
+      ]
+    },
+    {
+      "slug": "bruch-violin-concerto-1",
+      "title": "Bruch — Violin Concerto No. 1 in G minor, Op. 26",
+      "patterns": [
+        ["bruch", "op 26"],
+        ["bruch", "violin", "concerto", "no 1"],
+        ["bruch", "violin", "concerto", "g minor"],
+        ["bruch", "violinkonzert", "nr 1"],
+        ["bruch", "violinkonzert", "g moll"]
+      ]
+    },
+    {
+      "slug": "beethoven-sonata-waldstein",
+      "title": "Beethoven — Piano Sonata No. 21 in C major, Op. 53 (Waldstein)",
+      "patterns": [
+        ["waldstein"],
+        ["beethoven", "op 53"],
+        ["beethoven", "sonata", "no 21"],
+        ["beethoven", "sonate", "nr 21"],
+        ["beethoven", "aurora"]
+      ]
+    },
+    {
+      "slug": "debussy-arabesque-1",
+      "title": "Debussy — Arabesque No. 1 in E major (Deux arabesques, L. 66)",
+      "patterns": [
+        ["debussy", "arabesque", "no 1"],
+        ["debussy", "arabesque", "nr 1"],
+        ["debussy", "arabeske", "nr 1"],
+        ["debussy", "premiere arabesque"],
+        ["debussy", "1ere arabesque"],
+        ["debussy", "arabesques"],
+        ["debussy", "arabesken"],
+        ["debussy", "l 66"],
+        ["debussy", "l66"],
+        ["debussy", "cd 74"],
+        ["debussy", "cd74"]
+      ]
+    },
+    {
+      "slug": "schubert-standchen",
+      "title": "Schubert — Ständchen (Serenade), D 957/4 · Liszt S. 560",
+      "patterns": [
+        ["standchen", "d 957"],
+        ["standchen", "d957"],
+        ["standchen", "schwanengesang"],
+        ["standchen", "s 560"],
+        ["standchen", "s560"],
+        ["schubert", "serenade"],
+        ["schubert", "serenata"],
+        ["leise flehen meine lieder"]
+      ]
+    },
+    {
+      "slug": "chopin-piano-concerto-1",
+      "title": "Chopin — Piano Concerto No. 1 in E minor, Op. 11",
+      "patterns": [
+        ["chopin", "op 11"],
+        ["chopin", "piano", "concerto", "no 1"],
+        ["chopin", "piano", "concerto", "e minor"],
+        ["chopin", "klavierkonzert", "nr 1"],
+        ["chopin", "klavierkonzert", "e moll"]
+      ]
+    },
+    {
+      "slug": "liszt-liebestraum-3",
+      "title": "Liszt — Liebestraum No. 3 in A flat major, S. 541",
+      "patterns": [
+        ["liszt", "liebestraum"],
+        ["liszt", "liebestraume"],
+        ["liszt", "s 541"],
+        ["liszt", "s541"],
+        ["liszt", "o lieb so lang du lieben kannst"]
+      ]
+    },
+    {
+      "slug": "tchaikovsky-piano-concerto-1",
+      "title": "Tchaikovsky — Piano Concerto No. 1 in B flat minor, Op. 23",
+      "patterns": [
+        ["tchaikovsky", "op 23"],
+        ["tschaikowsky", "op 23"],
+        ["tschaikowski", "op 23"],
+        ["tchaikovski", "op 23"],
+        ["cajkovskij", "op 23"],
+        ["tchaikovsky", "piano", "concerto", "no 1"],
+        ["tchaikovsky", "piano", "concerto", "b flat minor"],
+        ["tschaikowsky", "klavierkonzert", "nr 1"],
+        ["tschaikowski", "klavierkonzert", "nr 1"],
+        ["tchaikovsky", "klavierkonzert", "nr 1"]
+      ]
+    }
+  ]
+}
