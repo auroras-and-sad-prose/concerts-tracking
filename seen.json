@@ -2139,6 +2139,619 @@
       "location_tag": "germany",
       "source_url": "https://www.juliafischer.com/en/events",
       "first_seen": "2026-09-06"
+    },
+    {
+      "id": "duenas|2027-01-20|salzburg",
+      "artist": "María Dueñas",
+      "date": "2027-01-20",
+      "city": "Salzburg",
+      "country": "Austria",
+      "venue": "Grosses Festspielhaus",
+      "program": "Wiener Symphoniker / Petr Popelka: Barber Violin Concerto",
+      "pieces": [
+        "Barber: Violin Concerto"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.deutschegrammophon.com/en/artists/maria-duenas/on-tour",
+      "detail_url": "https://www.deutschegrammophon.com/en/artists/maria-duenas/on-tour/20-01-2027-grosses-festspielhaus-salzburg-barber-violin-concerto-1159889",
+      "first_seen": "2026-09-11"
+    },
+    {
+      "id": "jansen|2026-10-20|brussels",
+      "artist": "Janine Jansen",
+      "date": "2026-10-20",
+      "city": "Brussels",
+      "country": "Belgium",
+      "venue": "Bozar",
+      "program": "Recital Brussels / Denis Kozhukhin",
+      "pieces": [
+        "Beethoven: Violin Sonata Op 96",
+        "Prokofiev: Cinq mélodies op. 35",
+        "Beethoven: Violin Sonata Op 12/3",
+        "Prokofiev: Violin Sonata No 1 op 80"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.janinejansen.com/performances/page/2/",
+      "detail_url": "https://www.bozar.be/en/calendar/janine-jansen-denis-kozhukhin-3",
+      "first_seen": "2026-09-11"
+    },
+    {
+      "id": "jansen|2026-10-21|alicante",
+      "artist": "Janine Jansen",
+      "date": "2026-10-21",
+      "city": "Alicante",
+      "country": "Spain",
+      "venue": "Sociedad de Conciertos",
+      "program": "Alicante Recital / Denis Kozhukhin",
+      "pieces": [
+        "Beethoven: Sonata for Violin and Piano No 10 op 96",
+        "Prokofiev: Five Melodies op 35",
+        "Beethoven: Sonata for Violin and Piano No 3",
+        "Prokofiev: Sonata for Violin and Piano No 1 op 80"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.janinejansen.com/performances/page/2/",
+      "detail_url": null,
+      "first_seen": "2026-09-11"
+    },
+    {
+      "id": "jansen|2026-11-19|hamburg",
+      "artist": "Janine Jansen",
+      "date": "2026-11-19",
+      "city": "Hamburg",
+      "country": "Germany",
+      "venue": "Elbphilharmonie",
+      "program": "Munich Phil on Tour — Munich Philharmonic Orchestra / Lahav Shani",
+      "pieces": [
+        "Shostakovich: Violin Concerto No 1",
+        "Mussorgsky: Pictures of an Exhibition"
+      ],
+      "location_tag": "germany",
+      "source_url": "https://www.janinejansen.com/performances/page/2/",
+      "detail_url": "https://www.elbphilharmonie.de/de/programm/munchner-philharmoniker-janine-jansen-lahav-shani/27945",
+      "first_seen": "2026-09-11"
+    },
+    {
+      "id": "jansen|2026-11-24|brussels",
+      "artist": "Janine Jansen",
+      "date": "2026-11-24",
+      "city": "Brussels",
+      "country": "Belgium",
+      "venue": "Bozar",
+      "program": "Munich Phil on Tour — Munich Philharmonic Orchestra / Lahav Shani",
+      "pieces": [
+        "Shostakovich: Violin Concerto No 1",
+        "Mussorgsky: Pictures of an Exhibition"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.janinejansen.com/performances/page/3/",
+      "detail_url": "https://www.bozar.be/en/calendar/munchner-philharmoniker-janine-jansen",
+      "first_seen": "2026-09-11"
+    },
+    {
+      "id": "jansen|2026-11-29|london",
+      "artist": "Janine Jansen",
+      "date": "2026-11-29",
+      "city": "London",
+      "country": "United Kingdom",
+      "venue": "Barbican Hall",
+      "program": "London Symphony Orchestra Artist Portrait — London Symphony Orchestra / Sir Antonio Pappano",
+      "pieces": [
+        "Sibelius: The Swan of Tuonela from \"Lemminkäinen Suite\"",
+        "Dubugnon: \"Sonnenring\" for violin and orchestra (world premiere, LSO co-commission)",
+        "Ralph Vaughan Williams: Sinfonia antartica"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.janinejansen.com/performances/page/3/",
+      "detail_url": "https://www.lso.co.uk/whats-on/sibelius-vaughan-williams-and-dubugnon-29-nov-26/",
+      "first_seen": "2026-09-11"
+    },
+    {
+      "id": "jansen|2026-12-03|london",
+      "artist": "Janine Jansen",
+      "date": "2026-12-03",
+      "city": "London",
+      "country": "United Kingdom",
+      "venue": "Barbican Hall",
+      "program": "London Symphony Orchestra Artist Portrait — London Symphony Orchestra / Sir Antonio Pappano",
+      "pieces": [
+        "Sibelius: The Swan of Tuonela from \"Lemminkäinen Suite\"",
+        "Dubugnon: \"Sonnenring\" for violin and orchestra (world premiere, LSO co-commission)",
+        "Ralph Vaughan Williams: Sinfonia antartica"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.janinejansen.com/performances/page/3/",
+      "detail_url": "https://www.lso.co.uk/whats-on/sibelius-vaughan-williams-and-dubugnon-29-nov-26/",
+      "first_seen": "2026-09-11"
+    },
+    {
+      "id": "jansen|2026-12-02|london",
+      "artist": "Janine Jansen",
+      "date": "2026-12-02",
+      "city": "London",
+      "country": "United Kingdom",
+      "venue": "Jerwood Hall St Lukes",
+      "program": "Jansen and Pappano Recital / Sir Antonio Pappano",
+      "pieces": "Programme not announced",
+      "location_tag": "europe",
+      "source_url": "https://www.janinejansen.com/performances/page/3/",
+      "detail_url": "https://www.lso.co.uk/whats-on/janine-jansen-and-sir-antonio-pappano-2-dec-26/",
+      "first_seen": "2026-09-11"
+    },
+    {
+      "id": "jansen|2026-12-10|eindhoven",
+      "artist": "Janine Jansen",
+      "date": "2026-12-10",
+      "city": "Eindhoven",
+      "country": "Netherlands",
+      "venue": "Muziekgebouw",
+      "program": "Eindhoven Recital / Alexandre Kantorow",
+      "pieces": [
+        "Beethoven: Violin Sonata No 3 op 12/3",
+        "Debussy: Violin Sonata in G minor",
+        "Franck: Violin Sonata in A major"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.janinejansen.com/performances/page/3/",
+      "detail_url": "https://mge.nl/en/agenda/janine-jansen-alexandre-kantorow/",
+      "first_seen": "2026-09-11"
+    },
+    {
+      "id": "jansen|2026-12-12|london",
+      "artist": "Janine Jansen",
+      "date": "2026-12-12",
+      "city": "London",
+      "country": "United Kingdom",
+      "venue": "Wigmore Hall",
+      "program": "Wigmore Recital / Alexandre Kantorow",
+      "pieces": [
+        "Beethoven: Violin Sonata No 3 op 12/3",
+        "Debussy: Violin Sonata in G minor",
+        "Franck: Violin Sonata in A major"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.janinejansen.com/performances/page/3/",
+      "detail_url": "https://www.wigmore-hall.org.uk/whats-on/202612121300",
+      "first_seen": "2026-09-11"
+    },
+    {
+      "id": "jansen|2026-12-13|prague",
+      "artist": "Janine Jansen",
+      "date": "2026-12-13",
+      "city": "Prague",
+      "country": "Czech Republic",
+      "venue": "Rudolphinum",
+      "program": "Prague Recital / Alexandre Kantorow",
+      "pieces": [
+        "Beethoven: Violin Sonata No 3 op 12/3",
+        "Debussy: Violin Sonata in G minor",
+        "Franck: Violin Sonata in A major"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.janinejansen.com/performances/page/4/",
+      "detail_url": "https://www.rudolfinum.cz/en/event/35646-janine-jansen-czech-chamber-music-society/",
+      "first_seen": "2026-09-11"
+    },
+    {
+      "id": "jansen|2026-12-16|prague",
+      "artist": "Janine Jansen",
+      "date": "2026-12-16",
+      "city": "Prague",
+      "country": "Czech Republic",
+      "venue": "Rudolphinum",
+      "program": "Czech Philharmonic / Sir Simon Rattle",
+      "pieces": [
+        "Dvořák: Scherzo capriccioso, Op. 66",
+        "Szymanowski: Violin Concerto No. 1, Op. 35",
+        "Adès: Aquifer (Czech premiere)",
+        "Debussy: La Mer, Three symphonic sketches for orchestra"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.janinejansen.com/performances/page/4/",
+      "detail_url": "https://www.rudolfinum.cz/en/event/35524-simon-rattle-czech-philharmonic/",
+      "first_seen": "2026-09-11"
+    },
+    {
+      "id": "jansen|2026-12-17|prague",
+      "artist": "Janine Jansen",
+      "date": "2026-12-17",
+      "city": "Prague",
+      "country": "Czech Republic",
+      "venue": "Rudolphinum",
+      "program": "Czech Philharmonic / Sir Simon Rattle",
+      "pieces": [
+        "Dvořák: Scherzo capriccioso, Op. 66",
+        "Szymanowski: Violin Concerto No. 1, Op. 35",
+        "Adès: Aquifer (Czech premiere)",
+        "Debussy: La Mer, Three symphonic sketches for orchestra"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.janinejansen.com/performances/page/4/",
+      "detail_url": "https://www.rudolfinum.cz/en/event/35524-simon-rattle-czech-philharmonic/",
+      "first_seen": "2026-09-11"
+    },
+    {
+      "id": "jansen|2026-12-18|prague",
+      "artist": "Janine Jansen",
+      "date": "2026-12-18",
+      "city": "Prague",
+      "country": "Czech Republic",
+      "venue": "Rudolphinum",
+      "program": "Czech Philharmonic / Sir Simon Rattle",
+      "pieces": [
+        "Dvořák: Scherzo capriccioso, Op. 66",
+        "Szymanowski: Violin Concerto No. 1, Op. 35",
+        "Adès: Aquifer (Czech premiere)",
+        "Debussy: La Mer, Three symphonic sketches for orchestra"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.janinejansen.com/performances/page/4/",
+      "detail_url": "https://www.rudolfinum.cz/en/event/35524-simon-rattle-czech-philharmonic/",
+      "first_seen": "2026-09-11"
+    },
+    {
+      "id": "jansen|2027-01-20|geneva",
+      "artist": "Janine Jansen",
+      "date": "2027-01-20",
+      "city": "Geneva",
+      "country": "Switzerland",
+      "venue": "Victoria Hall",
+      "program": "Orchestre de la Suisse Romande / Jonathan Nott",
+      "pieces": [
+        "Dubugnon: Violin Concerto \"Sonnenring\" inspired by the paintings of Adolf Wölfi"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.janinejansen.com/performances/page/4/",
+      "detail_url": "https://www.osr.ch/en/concerts-tickets/concerts/filters/date/2027/1/20",
+      "first_seen": "2026-09-11"
+    },
+    {
+      "id": "jansen|2027-01-21|geneva",
+      "artist": "Janine Jansen",
+      "date": "2027-01-21",
+      "city": "Geneva",
+      "country": "Switzerland",
+      "venue": "Victoria Hall",
+      "program": "Orchestre de la Suisse Romande / Jonathan Nott",
+      "pieces": [
+        "Dubugnon: Violin Concerto \"Sonnenring\" inspired by the paintings of Adolf Wölfi"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.janinejansen.com/performances/page/4/",
+      "detail_url": "https://www.osr.ch/en/concerts-tickets/concerts/filters/date/2027/1/20",
+      "first_seen": "2026-09-11"
+    },
+    {
+      "id": "jansen|2027-01-28|stockholm",
+      "artist": "Janine Jansen",
+      "date": "2027-01-28",
+      "city": "Stockholm",
+      "country": "Sweden",
+      "venue": "Konserthuset",
+      "program": "Royal Stockholm Philharmonic / Sakari Oramo",
+      "pieces": [
+        "Beethoven: Violin Concerto"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.janinejansen.com/performances/page/4/",
+      "detail_url": "https://www.konserthuset.se/en/programme/calendar/concert/2027/beethovens-violin-concerto/20270128-1900/",
+      "first_seen": "2026-09-11"
+    },
+    {
+      "id": "jansen|2027-01-30|stockholm",
+      "artist": "Janine Jansen",
+      "date": "2027-01-30",
+      "city": "Stockholm",
+      "country": "Sweden",
+      "venue": "Konserthuset",
+      "program": "Royal Stockholm Philharmonic / Sakari Oramo",
+      "pieces": [
+        "Beethoven: Violin Concerto"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.janinejansen.com/performances/page/4/",
+      "detail_url": "https://www.konserthuset.se/en/programme/calendar/concert/2027/beethovens-violin-concerto/20270128-1900/",
+      "first_seen": "2026-09-11"
+    },
+    {
+      "id": "jansen|2027-02-10|prague",
+      "artist": "Janine Jansen",
+      "date": "2027-02-10",
+      "city": "Prague",
+      "country": "Czechia",
+      "venue": "Rudolphinum",
+      "program": "Czech Philharmonic Orchestra / Jakob Hrusa",
+      "pieces": [
+        "Beethoven: Violin Concerto"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.janinejansen.com/performances/page/4/",
+      "detail_url": "https://www.ceskafilharmonie.cz/en/event/35487-janine-jansen-czech-philharmonic/",
+      "first_seen": "2026-09-11"
+    },
+    {
+      "id": "jansen|2027-02-11|prague",
+      "artist": "Janine Jansen",
+      "date": "2027-02-11",
+      "city": "Prague",
+      "country": "Czechia",
+      "venue": "Rudolphinum",
+      "program": "Czech Philharmonic Orchestra / Jakob Hrusa",
+      "pieces": [
+        "Beethoven: Violin Concerto"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.janinejansen.com/performances/page/4/",
+      "detail_url": "https://www.ceskafilharmonie.cz/en/event/35487-janine-jansen-czech-philharmonic/",
+      "first_seen": "2026-09-11"
+    },
+    {
+      "id": "jansen|2027-02-12|prague",
+      "artist": "Janine Jansen",
+      "date": "2027-02-12",
+      "city": "Prague",
+      "country": "Czechia",
+      "venue": "Rudolphinum",
+      "program": "Czech Philharmonic Orchestra / Jakob Hrusa",
+      "pieces": [
+        "Beethoven: Violin Concerto"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.janinejansen.com/performances/page/4/",
+      "detail_url": "https://www.ceskafilharmonie.cz/en/event/35487-janine-jansen-czech-philharmonic/",
+      "first_seen": "2026-09-11"
+    },
+    {
+      "id": "jansen|2027-02-22|essen",
+      "artist": "Janine Jansen",
+      "date": "2027-02-22",
+      "city": "Essen",
+      "country": "Germany",
+      "venue": "Philharmonie",
+      "program": "Essen Recital / Denis Kozhukhin",
+      "pieces": [
+        "Beethoven: Violin Sonata in G major op 30",
+        "Beethoven: Violin Sonata in F major op 24",
+        "Beethoven: Violin Sonata No 9 op 47"
+      ],
+      "location_tag": "germany",
+      "source_url": "https://www.janinejansen.com/performances/page/4/",
+      "detail_url": "https://www.theater-essen.de/programm/a-z/janine-jansenbeethoven-violinsonaten-161382/",
+      "first_seen": "2026-09-11"
+    },
+    {
+      "id": "jansen|2027-02-25|luzern",
+      "artist": "Janine Jansen",
+      "date": "2027-02-25",
+      "city": "Luzern",
+      "country": "Switzerland",
+      "venue": "Kultur und Kongresszentrum",
+      "program": "Luzern Recital / Denis Kozhukhin",
+      "pieces": [
+        "Beethoven: Violin Sonata in G major op 30",
+        "Beethoven: Violin Sonata in F major op 24",
+        "Beethoven: Violin Sonata No 9 op 47"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.janinejansen.com/performances/page/5/",
+      "detail_url": "https://www.swissclassics.ch/lucerne-chamber-circle/janine-jansen-soiree-beethoven",
+      "first_seen": "2026-09-11"
+    },
+    {
+      "id": "jansen|2027-02-27|stockholm",
+      "artist": "Janine Jansen",
+      "date": "2027-02-27",
+      "city": "Stockholm",
+      "country": "Sweden",
+      "venue": "Konserthuset",
+      "program": "Stockholm Recital / Denis Kozhukhin",
+      "pieces": [
+        "Beethoven: Violin Sonata No 8",
+        "Beethoven: Violin Sonata No 6",
+        "Beethoven: Violin Sonata No 9 A major op 47 \"Kreutzer\""
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.janinejansen.com/performances/page/5/",
+      "detail_url": "https://www.konserthuset.se/en/programme/calendar/concert/2027/beethovens-violin-sonatas-part-iii/20270227-1500/",
+      "first_seen": "2026-09-11"
+    },
+    {
+      "id": "jansen|2027-04-02|amsterdam",
+      "artist": "Janine Jansen",
+      "date": "2027-04-02",
+      "city": "Amsterdam",
+      "country": "Netherlands",
+      "venue": "Concertgebouw",
+      "program": "Royal Concertgebouw Orchestra / Kazuki Yamada",
+      "pieces": [
+        "Beethoven: Violin Concerto",
+        "Takemitsu: Dreamtime",
+        "Roussel: Bacchus et Ariane Suite No 2"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.janinejansen.com/performances/page/5/",
+      "detail_url": "https://www.concertgebouworkest.nl/en/calendar/janine-jansen-and-beethovens-violin-concerto-2027-04-04/",
+      "first_seen": "2026-09-11"
+    },
+    {
+      "id": "jansen|2027-04-04|amsterdam",
+      "artist": "Janine Jansen",
+      "date": "2027-04-04",
+      "city": "Amsterdam",
+      "country": "Netherlands",
+      "venue": "Concertgebouw",
+      "program": "Royal Concertgebouw Orchestra / Kazuki Yamada",
+      "pieces": [
+        "Beethoven: Violin Concerto",
+        "Takemitsu: Dreamtime",
+        "Roussel: Bacchus et Ariane Suite No 2"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.janinejansen.com/performances/page/5/",
+      "detail_url": "https://www.concertgebouworkest.nl/en/calendar/janine-jansen-and-beethovens-violin-concerto-2027-04-04/",
+      "first_seen": "2026-09-11"
+    },
+    {
+      "id": "jansen|2027-04-10|amsterdam",
+      "artist": "Janine Jansen",
+      "date": "2027-04-10",
+      "city": "Amsterdam",
+      "country": "Netherlands",
+      "venue": "Concertgebouw",
+      "program": "Beethoven Festival / Denis Kozhukhin, piano",
+      "pieces": [
+        "Beethoven: Sonata No 1",
+        "Beethoven: Sonata No 2",
+        "Beethoven: Sonata No 4",
+        "Beethoven: Sonata No 6"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.janinejansen.com/performances/page/5/",
+      "detail_url": "https://www.concertgebouw.nl/concerten/43714221-janines-beethoven-alle-vioolsonates-met-denis-kozhukhin-deel-1",
+      "first_seen": "2026-09-11"
+    },
+    {
+      "id": "jansen|2027-04-12|amsterdam",
+      "artist": "Janine Jansen",
+      "date": "2027-04-12",
+      "city": "Amsterdam",
+      "country": "Netherlands",
+      "venue": "Concertgebouw",
+      "program": "Beethoven Festival / Denis Kozhukhin, piano",
+      "pieces": [
+        "Beethoven: Violin Sonata No 8",
+        "Beethoven: Violin Sonata No 5 \"Spring\"",
+        "Beethoven: Violin Sonata No 9 \"Kreutzer\""
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.janinejansen.com/performances/page/5/",
+      "detail_url": "https://www.concertgebouw.nl/concerten/38255296-janines-beethoven-alle-vioolsonates-met-denis-kozhukhin-deel-2",
+      "first_seen": "2026-09-11"
+    },
+    {
+      "id": "jansen|2027-04-13|amsterdam",
+      "artist": "Janine Jansen",
+      "date": "2027-04-13",
+      "city": "Amsterdam",
+      "country": "Netherlands",
+      "venue": "Concertgebouw",
+      "program": "Beethoven Festival / Denis Kozhukhin, piano",
+      "pieces": [
+        "Beethoven: Violin Sonata No 3",
+        "Beethoven: Violin Sonata No 7",
+        "Beethoven: Violin Sonata No 10"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.janinejansen.com/performances/page/5/",
+      "detail_url": "https://www.concertgebouw.nl/concerten/38255297-janines-beethoven-alle-vioolsonates-met-denis-kozhukhin-deel-3",
+      "first_seen": "2026-09-11"
+    },
+    {
+      "id": "jansen|2027-04-22|munich",
+      "artist": "Janine Jansen",
+      "date": "2027-04-22",
+      "city": "Munich",
+      "country": "Germany",
+      "venue": "Herkulessaal",
+      "program": "Symphonieorchester des Bayerischen Rundfunks / Klaus Mäkelä",
+      "pieces": [
+        "Brahms: “Tragic Overture” in D minor, Op. 81",
+        "Britten: Violin Concerto in D minor, Op. 15",
+        "Brahms: Symphony No. 1 in C minor, Op. 68"
+      ],
+      "location_tag": "germany",
+      "source_url": "https://www.janinejansen.com/performances/page/6/",
+      "detail_url": "https://www.brso.de/en/concerts/klaus-maekelae-janine-jansen/",
+      "first_seen": "2026-09-11"
+    },
+    {
+      "id": "jansen|2027-04-23|munich",
+      "artist": "Janine Jansen",
+      "date": "2027-04-23",
+      "city": "Munich",
+      "country": "Germany",
+      "venue": "Herkulessaal",
+      "program": "Symphonieorchester des Bayerischen Rundfunks / Klaus Mäkelä",
+      "pieces": [
+        "Brahms: “Tragic Overture” in D minor, Op. 81",
+        "Britten: Violin Concerto in D minor, Op. 15",
+        "Brahms: Symphony No. 1 in C minor, Op. 68"
+      ],
+      "location_tag": "germany",
+      "source_url": "https://www.janinejansen.com/performances/page/6/",
+      "detail_url": "https://www.brso.de/en/concerts/klaus-maekelae-janine-jansen/",
+      "first_seen": "2026-09-11"
+    },
+    {
+      "id": "jansen|2027-05-13|stockholm",
+      "artist": "Janine Jansen",
+      "date": "2027-05-13",
+      "city": "Stockholm",
+      "country": "Sweden",
+      "venue": "Konserthuset",
+      "program": "Royal Stockholm Philharmonic / Ryan Bancroft",
+      "pieces": [
+        "Mozart: Sinfonia concertante for violin, viola and orchestra",
+        "Zivkovic: New Work (World Premiere of Commissioned Work by the Royal Stockholm Philharmonic Orchestra)",
+        "Janáček: Taras Bulba"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.janinejansen.com/performances/page/6/",
+      "detail_url": "https://www.konserthuset.se/en/programme/calendar/concert/2027/mozart-jana-ek-and-zivkovic/20270513-1900/",
+      "first_seen": "2026-09-11"
+    },
+    {
+      "id": "jansen|2027-05-15|stockholm",
+      "artist": "Janine Jansen",
+      "date": "2027-05-15",
+      "city": "Stockholm",
+      "country": "Sweden",
+      "venue": "Konserthuset",
+      "program": "Royal Stockholm Philharmonic / Ryan Bancroft",
+      "pieces": [
+        "Mozart: Sinfonia concertante for violin, viola and orchestra",
+        "Zivkovic: New Work (World Premiere of Commissioned Work by the Royal Stockholm Philharmonic Orchestra)",
+        "Janáček: Taras Bulba"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.janinejansen.com/performances/page/6/",
+      "detail_url": "https://www.konserthuset.se/en/programme/calendar/concert/2027/mozart-jana-ek-and-zivkovic/20270513-1900/",
+      "first_seen": "2026-09-11"
+    },
+    {
+      "id": "jansen|2027-05-20|london",
+      "artist": "Janine Jansen",
+      "date": "2027-05-20",
+      "city": "London",
+      "country": "United Kingdom",
+      "venue": "Barbican Hall",
+      "program": "London Symphony Orchestra / Nathalie Stutzmann",
+      "pieces": [
+        "Mozart: Violin Concerto No 5",
+        "Bruckner: Symphony No 5"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.janinejansen.com/performances/page/6/",
+      "detail_url": "https://www.lso.co.uk/whats-on/mozart-and-bruckner-20-may-27/",
+      "first_seen": "2026-09-11"
+    },
+    {
+      "id": "duenas|2027-02-06|bamberg",
+      "artist": "María Dueñas",
+      "date": "2027-02-06",
+      "city": "Bamberg",
+      "country": "Germany",
+      "venue": "Konzerthalle Bamberg: Joseph Keilberth Saal",
+      "program": "Bamberg Symphony / Jakub Hrůša: Martinů, Prokofiev, Beethoven",
+      "pieces": [
+        "Martinů: Symphony no. 6, \"Fantaisies symphoniques\" H 343",
+        "Prokofiev: Violin Concerto no. 1 in D major, Op.19",
+        "Beethoven: Symphony no. 8 in F major, Op.93"
+      ],
+      "location_tag": "germany",
+      "source_url": "https://bachtrack.com/performer/maria-duenas",
+      "detail_url": "https://bachtrack.com/concert-event/jakub-hrusa-maria-duenas-bamberg-symphony-konzerthalle-bamberg-joseph-keilberth-saal-5-february-2027/441968",
+      "first_seen": "2026-09-12"
     }
   ]
 }
