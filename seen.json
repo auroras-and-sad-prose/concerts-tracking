@@ -2272,7 +2272,10 @@
       "country": "United Kingdom",
       "venue": "Jerwood Hall St Lukes",
       "program": "Jansen and Pappano Recital / Sir Antonio Pappano",
-      "pieces": "Programme not announced",
+      "pieces": [
+        "Brahms: Violin Sonata No 2",
+        "Beethoven: Violin Sonata No 5"
+      ],
       "location_tag": "europe",
       "source_url": "https://www.janinejansen.com/performances/page/3/",
       "detail_url": "https://www.lso.co.uk/whats-on/janine-jansen-and-sir-antonio-pappano-2-dec-26/",
@@ -2752,6 +2755,25 @@
       "source_url": "https://bachtrack.com/performer/maria-duenas",
       "detail_url": "https://bachtrack.com/concert-event/jakub-hrusa-maria-duenas-bamberg-symphony-konzerthalle-bamberg-joseph-keilberth-saal-5-february-2027/441968",
       "first_seen": "2026-09-12"
+    },
+    {
+      "id": "duenas|2027-01-21|bregenz",
+      "artist": "María Dueñas",
+      "date": "2027-01-21",
+      "city": "Bregenz",
+      "country": "Austria",
+      "venue": "Festspielhaus",
+      "program": "Wiener Symphoniker / Petr Popelka: Barber Violin Concerto",
+      "pieces": [
+        "Barber: Violin Concerto"
+      ],
+      "instruments": [
+        "violin"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.deutschegrammophon.com/en/artists/maria-duenas/on-tour",
+      "detail_url": "https://www.deutschegrammophon.com/en/artists/maria-duenas/on-tour/21-01-2027-festspielhaus-bregenz-barber-violin-concerto-1159890",
+      "first_seen": "2026-09-13"
     }
   ]
 }
