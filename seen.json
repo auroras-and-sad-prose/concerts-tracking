@@ -2774,6 +2774,22 @@
       "source_url": "https://www.deutschegrammophon.com/en/artists/maria-duenas/on-tour",
       "detail_url": "https://www.deutschegrammophon.com/en/artists/maria-duenas/on-tour/21-01-2027-festspielhaus-bregenz-barber-violin-concerto-1159890",
       "first_seen": "2026-09-13"
+    },
+    {
+      "id": "duenas|2027-01-23|las palmas de gran canaria",
+      "artist": "María Dueñas",
+      "date": "2027-01-23",
+      "city": "Las Palmas de Gran Canaria",
+      "country": "Spain",
+      "venue": "Auditorio Alfredo Kraus",
+      "program": "Wiener Symphoniker / Petr Popelka: Barber Violin Concerto",
+      "pieces": [
+        "Barber: Violin Concerto"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.deutschegrammophon.com/en/artists/maria-duenas/on-tour",
+      "detail_url": "https://www.deutschegrammophon.com/en/artists/maria-duenas/on-tour/23-01-2027-auditorio-alfredo-kraus-las-palmasgran-canaria-barber-violin-concerto-1159891",
+      "first_seen": "2026-09-15"
     }
   ]
 }
