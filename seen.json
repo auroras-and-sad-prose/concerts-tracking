@@ -2790,6 +2790,112 @@
       "source_url": "https://www.deutschegrammophon.com/en/artists/maria-duenas/on-tour",
       "detail_url": "https://www.deutschegrammophon.com/en/artists/maria-duenas/on-tour/23-01-2027-auditorio-alfredo-kraus-las-palmasgran-canaria-barber-violin-concerto-1159891",
       "first_seen": "2026-09-15"
+    },
+    {
+      "id": "burkev|2026-11-20|sofia",
+      "artist": "İlyun Bürkev",
+      "date": "2026-11-20",
+      "city": "Sofia",
+      "country": "Bulgaria",
+      "venue": "Turkish Embassy in Sofia",
+      "program": null,
+      "pieces": "Programme not announced",
+      "location_tag": "europe",
+      "source_url": "https://ilyunburkev.com/en/portfolio/concerts/",
+      "detail_url": null,
+      "first_seen": "2026-09-16"
+    },
+    {
+      "id": "burkev|2027-03-17|prague",
+      "artist": "İlyun Bürkev",
+      "date": "2027-03-17",
+      "city": "Prague",
+      "country": "Czech Republic",
+      "venue": null,
+      "program": null,
+      "pieces": "Programme not announced",
+      "location_tag": "europe",
+      "source_url": "https://ilyunburkev.com/en/portfolio/concerts/",
+      "detail_url": null,
+      "first_seen": "2026-09-16"
+    },
+    {
+      "id": "burkev|2027-03-19|geneva",
+      "artist": "İlyun Bürkev",
+      "date": "2027-03-19",
+      "city": "Geneva",
+      "country": "Switzerland",
+      "venue": null,
+      "program": null,
+      "pieces": "Programme not announced",
+      "location_tag": "europe",
+      "source_url": "https://ilyunburkev.com/en/portfolio/concerts/",
+      "detail_url": null,
+      "first_seen": "2026-09-16"
+    },
+    {
+      "id": "burkev|2027-04-21|innsbruck",
+      "artist": "İlyun Bürkev",
+      "date": "2027-04-21",
+      "city": "Innsbruck",
+      "country": "Austria",
+      "venue": null,
+      "program": null,
+      "pieces": [
+        "George Gershwin: Rhapsody in Blue"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://ilyunburkev.com/en/portfolio/concerts/",
+      "detail_url": null,
+      "first_seen": "2026-09-16"
+    },
+    {
+      "id": "burkev|2027-04-23|salzburg",
+      "artist": "İlyun Bürkev",
+      "date": "2027-04-23",
+      "city": "Salzburg",
+      "country": "Austria",
+      "venue": "Festspielhaus Salzburg",
+      "program": null,
+      "pieces": [
+        "George Gershwin: Rhapsody in Blue"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://ilyunburkev.com/en/portfolio/concerts/",
+      "detail_url": null,
+      "first_seen": "2026-09-16"
+    },
+    {
+      "id": "burkev|2027-04-26|linz",
+      "artist": "İlyun Bürkev",
+      "date": "2027-04-26",
+      "city": "Linz",
+      "country": "Austria",
+      "venue": "Brucknerhaus Linz",
+      "program": null,
+      "pieces": [
+        "George Gershwin: Rhapsody in Blue"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://ilyunburkev.com/en/portfolio/concerts/",
+      "detail_url": null,
+      "first_seen": "2026-09-16"
+    },
+    {
+      "id": "duenas|2026-11-28|dresden",
+      "artist": "María Dueñas",
+      "date": "2026-11-28",
+      "city": "Dresden",
+      "country": "Germany",
+      "venue": "Frauenkirche",
+      "program": "Sächsische Staatskapelle Dresden / Joshua Weilerstein: Massenet Méditation from Thaïs",
+      "pieces": [
+        "Massenet: Méditation from Thaïs"
+      ],
+      "location_tag": "germany",
+      "source_url": "https://www.deutschegrammophon.com/en/artists/maria-duenas/on-tour",
+      "detail_url": "https://www.deutschegrammophon.com/en/artists/maria-duenas/on-tour/28-11-2026-frauenkirche-dresden-massenet-meacuteditation-from-thaiumls-1169400",
+      "first_seen": "2026-09-16"
     }
   ]
 }
