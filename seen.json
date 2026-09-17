@@ -2896,6 +2896,130 @@
       "source_url": "https://www.deutschegrammophon.com/en/artists/maria-duenas/on-tour",
       "detail_url": "https://www.deutschegrammophon.com/en/artists/maria-duenas/on-tour/28-11-2026-frauenkirche-dresden-massenet-meacuteditation-from-thaiumls-1169400",
       "first_seen": "2026-09-16"
+    },
+    {
+      "id": "duenas|2027-01-24|santa cruz de tenerife",
+      "artist": "María Dueñas",
+      "date": "2027-01-24",
+      "city": "Santa Cruz de Tenerife",
+      "country": "Spain",
+      "venue": "Auditorio de Tenerife",
+      "program": null,
+      "pieces": [
+        "Barber: Violin Concerto"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://www.deutschegrammophon.com/en/artists/maria-duenas/on-tour",
+      "detail_url": "https://www.deutschegrammophon.com/en/artists/maria-duenas/on-tour/24-01-2027-auditorio-de-tenerife-santa-cruz-de-tenerife-barber-violin-concerto-1159892",
+      "first_seen": "2026-09-17"
+    },
+    {
+      "id": "fischer|2027-04-18|paris",
+      "artist": "Julia Fischer",
+      "date": "2027-04-18",
+      "city": "Paris",
+      "country": "France",
+      "venue": "Maison de la Radio et de la Musique: Auditorium",
+      "program": "Bruch, Quintette à cordes / Julia Fischer",
+      "pieces": [
+        "Octet in B flat major [Bruch]",
+        "String Sextet in B flat major [Dohnányi]",
+        "Octet [Shostakovich]"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://bachtrack.com/search-events/performer=578",
+      "detail_url": "https://bachtrack.com/concert-event/bruch-quintette-a-cordes-julia-fischer-maison-de-la-radio-et-de-la-musique-auditorium-18-april-2027/445205",
+      "first_seen": "2026-09-17"
+    },
+    {
+      "id": "jansen|2027-02-24|vienna",
+      "artist": "Janine Jansen",
+      "date": "2027-02-24",
+      "city": "Vienna",
+      "country": "Austria",
+      "venue": "Musikverein: Großer Saal",
+      "program": "Janine Jansen • Denis Kozhukhin",
+      "pieces": [
+        "Violin Sonata no. 5 in F major \"Fruhling (Spring)\", Op.24 [Beethoven]",
+        "Violin Sonata no. 1 in G major, Op.78 [Brahms]",
+        "Violin Sonata no. 1 in F minor, Op.80 [Prokofiev]"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://bachtrack.com/search-events/performer=47",
+      "detail_url": "https://bachtrack.com/concert-event/janine-jansen-denis-kozhukhin-musikverein-grosser-saal-24-february-2027/443612",
+      "first_seen": "2026-09-17"
+    },
+    {
+      "id": "jansen|2027-06-08|paris",
+      "artist": "Janine Jansen",
+      "date": "2027-06-08",
+      "city": "Paris",
+      "country": "France",
+      "venue": "Philharmonie de Paris: Grande salle Pierre Boulez",
+      "program": "Janine Jansen / Alexandre Kantorow",
+      "pieces": [
+        "Violin Sonata no. 3 in E flat major, Op.12 no.3 [Beethoven]",
+        "Violin Sonata in G minor [Debussy]",
+        "Violin Sonata in A major [Franck]"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://bachtrack.com/search-events/performer=47",
+      "detail_url": "https://bachtrack.com/concert-event/janine-jansen-alexandre-kantorow-philharmonie-de-paris-grande-salle-pierre-boulez-8-june-2027/437858",
+      "first_seen": "2026-09-17"
+    },
+    {
+      "id": "jansen|2027-06-09|monte-carlo",
+      "artist": "Janine Jansen",
+      "date": "2027-06-09",
+      "city": "Monte-Carlo",
+      "country": "Monaco",
+      "venue": "Auditorium Rainier III",
+      "program": "Récital Janine Jansen & Alexandre Kantorow",
+      "pieces": [
+        "Violin Sonata no. 3 in E flat major, Op.12 no.3 [Beethoven]",
+        "Violin Sonata in G minor [Debussy]",
+        "Violin Sonata in A major [Franck]"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://bachtrack.com/search-events/performer=47",
+      "detail_url": "https://bachtrack.com/concert-event/recital-janine-jansen-alexandre-kantorow-auditorium-rainier-iii-9-june-2027/443492",
+      "first_seen": "2026-09-17"
+    },
+    {
+      "id": "jansen|2027-06-16|lucerne",
+      "artist": "Janine Jansen",
+      "date": "2027-06-16",
+      "city": "Lucerne",
+      "country": "Switzerland",
+      "venue": "Culture and Congress Centre: Concert Hall",
+      "program": "Janine Jansen & Timothy Ridout Play Mozart",
+      "pieces": [
+        "Sinfonia Concertante for Violin and Viola in E flat major, K364 (K320d) [Mozart]",
+        "A Village Romeo and Juliet: The Walk to the Paradise Garden [Delius]",
+        "Romeo and Juliet: Suite no. 1, Op.64bis [Prokofiev]"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://bachtrack.com/search-events/performer=47",
+      "detail_url": "https://bachtrack.com/concert-event/janine-jansen-timothy-ridout-play-mozart-lucerne-symphony-orchestra-culture-and-congress-centre-concert-hall-16-june-2027/448144",
+      "first_seen": "2026-09-17"
+    },
+    {
+      "id": "jansen|2027-06-17|lucerne",
+      "artist": "Janine Jansen",
+      "date": "2027-06-17",
+      "city": "Lucerne",
+      "country": "Switzerland",
+      "venue": "Culture and Congress Centre: Concert Hall",
+      "program": "Janine Jansen & Timothy Ridout Play Mozart",
+      "pieces": [
+        "Sinfonia Concertante for Violin and Viola in E flat major, K364 (K320d) [Mozart]",
+        "A Village Romeo and Juliet: The Walk to the Paradise Garden [Delius]",
+        "Romeo and Juliet: Suite no. 1, Op.64bis [Prokofiev]"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://bachtrack.com/search-events/performer=47",
+      "detail_url": "https://bachtrack.com/concert-event/janine-jansen-timothy-ridout-play-mozart-lucerne-symphony-orchestra-culture-and-congress-centre-concert-hall-16-june-2027/448144",
+      "first_seen": "2026-09-17"
     }
   ]
 }
