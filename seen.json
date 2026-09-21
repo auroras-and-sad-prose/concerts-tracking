@@ -1648,6 +1648,7 @@
       ],
       "location_tag": "europe",
       "source_url": "https://www.juliafischer.com/en/events",
+      "detail_url": "https://bachtrack.com/concert-event/julia-fischer-quartet-wigmore-hall-14-january-2027/448848",
       "instruments": [
         "violin"
       ],
@@ -2929,6 +2930,9 @@
       "location_tag": "europe",
       "source_url": "https://bachtrack.com/search-events/performer=578",
       "detail_url": "https://bachtrack.com/concert-event/bruch-quintette-a-cordes-julia-fischer-maison-de-la-radio-et-de-la-musique-auditorium-18-april-2027/445205",
+      "instruments": [
+        "violin"
+      ],
       "first_seen": "2026-09-17"
     },
     {
