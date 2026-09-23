@@ -1648,6 +1648,7 @@
       ],
       "location_tag": "europe",
       "source_url": "https://www.juliafischer.com/en/events",
+      "detail_url": "https://bachtrack.com/concert-event/julia-fischer-quartet-wigmore-hall-14-january-2027/448848",
       "instruments": [
         "violin"
       ],
@@ -2929,6 +2930,9 @@
       "location_tag": "europe",
       "source_url": "https://bachtrack.com/search-events/performer=578",
       "detail_url": "https://bachtrack.com/concert-event/bruch-quintette-a-cordes-julia-fischer-maison-de-la-radio-et-de-la-musique-auditorium-18-april-2027/445205",
+      "instruments": [
+        "violin"
+      ],
       "first_seen": "2026-09-17"
     },
     {
@@ -3020,6 +3024,26 @@
       "source_url": "https://bachtrack.com/search-events/performer=47",
       "detail_url": "https://bachtrack.com/concert-event/janine-jansen-timothy-ridout-play-mozart-lucerne-symphony-orchestra-culture-and-congress-centre-concert-hall-16-june-2027/448144",
       "first_seen": "2026-09-17"
+    },
+    {
+      "id": "scheps|2026-11-27|fellheim",
+      "artist": "Olga Scheps",
+      "date": "2026-11-27",
+      "city": "Fellheim",
+      "country": "Germany",
+      "venue": "Ehemalige Synagoge Fellheim",
+      "program": "Solo Abend",
+      "pieces": [
+        "Mozart: Fantasie d-Moll KV 397",
+        "Mozart: Klaviersonate Nr. 8 a-Moll KV 310",
+        "Mozart: Klaviersonate Nr. 16 C-Dur KV 545",
+        "Chopin: Fantasie f-Moll op. 49",
+        "Chopin: Klaviersonate Nr. 3 h-Moll op. 58"
+      ],
+      "location_tag": "germany",
+      "source_url": "https://www.olgascheps.com/konzerte",
+      "detail_url": "http://www.cultura-kulturveranstaltungen.de/veranstaltungen/",
+      "first_seen": "2026-09-23"
     }
   ]
 }
