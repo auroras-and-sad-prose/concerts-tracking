@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="classic">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -132,7 +132,7 @@
     font-family: var(--serif); font-weight: 700;
     font-size: 1.12rem; letter-spacing: -.005em;
   }
-  .month-heading:first-of-type { margin-top: 1.1rem; }
+  .group:first-child .month-heading { margin-top: 1.1rem; }
 
   .card {
     position: relative;
@@ -269,6 +269,329 @@
     * { transition: none !important; }
     .card:hover { transform: none; }
   }
+
+  /* =====================================================================
+     Themes. "classic" is everything above and stays the default, dark mode
+     included. The six below are light-only designs, picked from the theme
+     control and remembered per browser. Each one is scoped to
+     :root[data-theme="…"], and none of them changes what the page shows —
+     only how it is laid out and set.
+     ===================================================================== */
+
+  /* Pieces of markup only some themes use: hidden until a theme asks. */
+  .month-heading .num, .date-col .reach, .date-col .route, .group-heading .count { display: none; }
+  #viz[hidden] { display: none; }
+
+  /* Clicking a dot on the lanes timeline scrolls to its card and flashes it. */
+  .card.highlight { outline: 3px solid var(--fav); outline-offset: 3px; }
+
+  /* Light base shared by every non-classic theme, so the dark palette above
+     never leaks into one. Each theme then overrides what it needs. */
+  :root:is([data-theme="swiss"], [data-theme="poster"], [data-theme="calendar"], [data-theme="tickets"], [data-theme="lanes"], [data-theme="listings"]) {
+    color-scheme: light;
+    --bg: #f5f7fa; --card-bg: #ffffff; --text: #151b26; --muted: #667085; --faint: #98a1b3;
+    --border: #e4e8ef; --border-strong: #cfd6e2; --accent: #24548c; --accent-soft: #e8eff8;
+    --on-accent: #ffffff; --chip-bg: #eef1f6; --alert: #a3282d; --alert-soft: #fbe9e9;
+    --fav: #8a5a10; --fav-soft: #fbf0d9;
+    --shadow: 0 1px 2px rgba(21, 27, 38, .04); --shadow-hover: 0 8px 24px -16px rgba(21, 27, 38, .45);
+  }
+  :root:is([data-theme="swiss"], [data-theme="poster"], [data-theme="calendar"], [data-theme="tickets"], [data-theme="lanes"], [data-theme="listings"]) .card.favorite,
+  :root:is([data-theme="swiss"], [data-theme="poster"], [data-theme="calendar"], [data-theme="tickets"], [data-theme="lanes"], [data-theme="listings"]) .card.flagged { border-left-width: 1px; }
+
+  /* ---------- 1. Swiss timetable ---------- */
+  :root[data-theme="swiss"] {
+    --sans: "Archivo", "Helvetica Neue", Arial, sans-serif; --serif: var(--sans);
+    --bg: #ffffff; --card-bg: #ffffff; --text: #111111; --muted: #5f5f5f; --faint: #8a8a8a;
+    --border: #d9d9d9; --border-strong: #111111; --accent: #d6001c; --accent-soft: #fde8ea;
+    --chip-bg: #f2f2f2; --fav: #d6001c; --fav-soft: #fde8ea; --alert: #d6001c; --alert-soft: #fde8ea;
+    --shadow: none; --shadow-hover: none;
+  }
+  [data-theme="swiss"] header, [data-theme="swiss"] .controls, [data-theme="swiss"] main, [data-theme="swiss"] footer { max-width: 1180px; }
+  [data-theme="swiss"] header { padding-top: 2rem; }
+  [data-theme="swiss"] .eyebrow { color: var(--text); letter-spacing: .02em; text-transform: none; font-size: .85rem; border-top: 6px solid var(--text); padding-top: .7rem; }
+  [data-theme="swiss"] h1 { font-size: clamp(3.4rem, 11vw, 8.6rem); font-weight: 800; letter-spacing: -.055em; line-height: .86; }
+  [data-theme="swiss"] h1::after { content: "."; color: var(--accent); }
+  [data-theme="swiss"] .subtitle { color: var(--text); font-weight: 700; font-size: 1rem; margin-top: 1rem; }
+  [data-theme="swiss"] .controls-wrap { background: #ffffff; backdrop-filter: none; -webkit-backdrop-filter: none; border-top: 2px solid var(--text); border-bottom: 2px solid var(--text); }
+  [data-theme="swiss"] .controls select, [data-theme="swiss"] .controls input { border-radius: 0; border-color: var(--text); }
+  [data-theme="swiss"] .group { display: grid; grid-template-columns: 150px minmax(0, 1fr); column-gap: 1.5rem; border-top: 2px solid var(--text); padding-top: .6rem; margin-top: 1.6rem; }
+  [data-theme="swiss"] .month-heading, [data-theme="swiss"] .group:first-child .month-heading { margin: 0; display: flex; flex-direction: column; font-size: .8rem; }
+  [data-theme="swiss"] .month-heading .num { display: block; font-size: 4.6rem; font-weight: 800; line-height: .9; letter-spacing: -.04em; color: var(--accent); font-variant-numeric: tabular-nums; }
+  [data-theme="swiss"] .card {
+    display: grid; grid-template-columns: 5.2rem 11rem 13rem minmax(0, 1fr) auto; column-gap: 1.25rem; align-items: start;
+    border: 0; border-bottom: 1px solid var(--border); border-radius: 0; padding: .8rem 0 .9rem; margin: 0;
+  }
+  [data-theme="swiss"] .card:hover { transform: none; background: #fafafa; }
+  [data-theme="swiss"] .date-col { grid-row: 1 / span 3; width: auto; border: 0; background: none; padding: 0; text-align: left; display: flex; gap: .35rem; align-items: baseline; }
+  [data-theme="swiss"] .date-col .mon { display: none; }
+  [data-theme="swiss"] .date-col .day { font-size: 1.6rem; font-weight: 800; }
+  [data-theme="swiss"] .date-col .dow { color: var(--muted); font-size: .85rem; text-transform: none; letter-spacing: 0; }
+  [data-theme="swiss"] .card .body { display: contents; }
+  [data-theme="swiss"] .card .topline { grid-column: 2; grid-row: 1 / span 3; flex-direction: column; align-items: flex-start; }
+  [data-theme="swiss"] .card .artist { font-size: 1rem; font-weight: 700; }
+  [data-theme="swiss"] .card .place { grid-column: 3; grid-row: 1 / span 3; margin: 0; }
+  [data-theme="swiss"] .card .place .city { display: block; font-weight: 700; }
+  [data-theme="swiss"] .card .place .city + .sep { display: none; }
+  [data-theme="swiss"] .card .program, [data-theme="swiss"] .card .repertoire, [data-theme="swiss"] .card .status-line { grid-column: 4; margin-top: 0; }
+  [data-theme="swiss"] .card .repertoire { margin-top: .3rem; }
+  [data-theme="swiss"] .card .repertoire-label { display: none; }
+  [data-theme="swiss"] .card .repertoire-list { display: block; }
+  [data-theme="swiss"] .card .piece { display: block; background: none; color: var(--text); padding: 0; border-radius: 0; font-size: .92rem; font-weight: 400; }
+  [data-theme="swiss"] .card .piece.favorite { background: none; box-shadow: none; color: var(--accent); font-weight: 700; }
+  [data-theme="swiss"] .card .repertoire.note .repertoire-text { font-family: var(--sans); font-style: normal; color: var(--faint); }
+  [data-theme="swiss"] .card .links { grid-column: 5; grid-row: 1 / span 3; align-self: start; }
+  [data-theme="swiss"] .card a.link { color: var(--text); border-radius: 0; padding: 0 0 1px; border-bottom: 2px solid currentColor; margin-bottom: .45rem; }
+  [data-theme="swiss"] .card a.link:hover { background: none; color: var(--accent); }
+  [data-theme="swiss"] .tag { border-radius: 0; }
+  [data-theme="swiss"] .tag.loc-berlin { background: var(--accent); color: #ffffff; }
+  [data-theme="swiss"] .tag.loc-germany { background: var(--text); color: #ffffff; }
+  [data-theme="swiss"] .tag.loc-europe { background: none; color: var(--muted); box-shadow: inset 0 0 0 1px var(--border); }
+  [data-theme="swiss"] .tag.favorite { background: none; color: var(--accent); padding-left: 0; }
+  [data-theme="swiss"] .card.flagged { border-left: 0; }
+  [data-theme="swiss"] .card.flagged:hover { background: #fafafa; }
+  @media (max-width: 760px) {
+    [data-theme="swiss"] .group { grid-template-columns: minmax(0, 1fr); }
+    [data-theme="swiss"] .month-heading { flex-direction: row; align-items: baseline; gap: .6rem; }
+    [data-theme="swiss"] .month-heading .num { font-size: 2.6rem; }
+    [data-theme="swiss"] .card { grid-template-columns: 4.2rem minmax(0, 1fr); flex-wrap: nowrap; }
+    [data-theme="swiss"] .date-col { grid-row: 1 / span 6; flex-direction: column; gap: 0; }
+    [data-theme="swiss"] .card .topline, [data-theme="swiss"] .card .place, [data-theme="swiss"] .card .program,
+    [data-theme="swiss"] .card .repertoire, [data-theme="swiss"] .card .status-line, [data-theme="swiss"] .card .links { grid-column: 2; grid-row: auto; }
+    [data-theme="swiss"] .card .links { flex-direction: row; justify-content: flex-start; gap: 1rem; margin-top: .4rem; }
+  }
+
+  /* ---------- 2. Season poster ---------- */
+  :root[data-theme="poster"] {
+    --serif: "Bodoni Moda", Didot, "Bodoni 72", Georgia, serif; --sans: "Jost", Futura, "Century Gothic", sans-serif;
+    --bg: #fbf8f3; --card-bg: #ffffff; --text: #151515; --muted: #4f4a44; --faint: #6f6962;
+    --border: #e6dfd4; --border-strong: #151515; --accent: #151515; --accent-soft: #ece6dc;
+    --chip-bg: #ece6dc; --fav: #151515; --fav-soft: #151515; --alert: #b3261e; --alert-soft: #fbe3e0;
+  }
+  [data-theme="poster"] header, [data-theme="poster"] .controls, [data-theme="poster"] main, [data-theme="poster"] footer { max-width: 1180px; }
+  [data-theme="poster"] .eyebrow { color: var(--text); letter-spacing: .3em; font-weight: 500; }
+  [data-theme="poster"] h1 { font-size: clamp(3.4rem, 10vw, 8.2rem); font-weight: 500; font-style: italic; line-height: .9; letter-spacing: -.03em; }
+  [data-theme="poster"] .subtitle { font-size: 1.05rem; color: var(--muted); margin-top: 1.4rem; }
+  [data-theme="poster"] .controls select, [data-theme="poster"] .controls input { border-radius: 999px; border-color: var(--border); background-color: transparent; }
+  [data-theme="poster"] .month-heading, [data-theme="poster"] .group:first-child .month-heading { font-style: italic; font-weight: 500; font-size: 2.4rem; margin: 2.8rem 0 1rem; }
+  [data-theme="poster"] .group-body { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 330px), 1fr)); gap: 1.4rem; }
+  [data-theme="poster"] .card {
+    flex-direction: column; gap: .9rem; margin: 0; min-height: 26rem;
+    background: var(--artist-soft); border: 0; border-radius: 4px; padding: 1.8rem 1.7rem 1.5rem; box-shadow: none;
+  }
+  [data-theme="poster"] .card:hover { box-shadow: 0 18px 40px -28px rgba(0, 0, 0, .55); }
+  [data-theme="poster"] .date-col { width: auto; border: 0; background: none; padding: 0; text-align: left; display: flex; align-items: baseline; gap: .6rem; }
+  [data-theme="poster"] .date-col .day { order: -1; font-size: 5rem; font-weight: 500; line-height: .8; }
+  [data-theme="poster"] .date-col .mon, [data-theme="poster"] .date-col .dow { color: var(--text); font-size: .8rem; letter-spacing: .18em; font-weight: 500; }
+  [data-theme="poster"] .card .body { display: flex; flex-direction: column; gap: .7rem; flex: 1; }
+  [data-theme="poster"] .card .topline { flex-direction: column; align-items: flex-start; gap: .5rem; }
+  [data-theme="poster"] .card .artist { font-size: 2.5rem; font-weight: 600; line-height: .98; letter-spacing: -.02em; }
+  [data-theme="poster"] .card .place { font-size: 1.05rem; color: var(--text); margin: 0; }
+  [data-theme="poster"] .card .program { font-family: var(--serif); font-style: italic; font-size: 1rem; color: var(--muted); margin: 0; }
+  [data-theme="poster"] .card .repertoire { margin: 0; }
+  [data-theme="poster"] .card .repertoire-label { display: none; }
+  [data-theme="poster"] .card .repertoire-list { flex-direction: column; gap: .3rem; }
+  [data-theme="poster"] .card .piece { background: none; color: var(--text); padding: 0; font-size: .92rem; font-weight: 400; }
+  [data-theme="poster"] .card .piece.favorite { background: #151515; color: #fbf8f3; padding: .4rem .65rem; border-radius: 3px; box-shadow: none; }
+  [data-theme="poster"] .card .repertoire.note .repertoire-text { font-size: 1.25rem; color: var(--text); }
+  [data-theme="poster"] .card .links { align-self: flex-start; flex-direction: row; gap: 1.2rem; }
+  [data-theme="poster"] .card a.link, [data-theme="poster"] .card a.link.secondary { color: var(--text); padding: 0 0 2px; border-radius: 0; border-bottom: 1px solid currentColor; text-transform: uppercase; letter-spacing: .14em; font-size: .72rem; font-weight: 500; }
+  [data-theme="poster"] .card a.link:hover { background: none; }
+  [data-theme="poster"] .tag { background: none; color: var(--text); box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .35); border-radius: 999px; letter-spacing: .12em; text-transform: uppercase; }
+  [data-theme="poster"] .tag.favorite { background: #151515; color: #fbf8f3; box-shadow: none; }
+  [data-theme="poster"] .tag.status { background: var(--alert); color: #ffffff; box-shadow: none; }
+  [data-theme="poster"] .tag.loc-berlin {
+    position: absolute; top: 1.4rem; right: 1.4rem; width: 5.2rem; height: 5.2rem; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    background: #151515; color: #fbf8f3; box-shadow: none; font-size: .78rem; letter-spacing: .16em; transform: rotate(-12deg);
+  }
+  [data-theme="poster"] .card.flagged { background: color-mix(in srgb, var(--artist-soft) 45%, #ffffff); }
+  @media (max-width: 560px) {
+    [data-theme="poster"] .card { min-height: 0; }
+    [data-theme="poster"] .card .links { width: auto; justify-content: flex-start; }
+  }
+
+  /* ---------- 3. Year at a glance ---------- */
+  :root[data-theme="calendar"] {
+    --sans: "IBM Plex Sans", system-ui, sans-serif; --serif: var(--sans); --mono: "IBM Plex Mono", ui-monospace, monospace;
+    --bg: #f7f7f4; --text: #1b1b1b; --muted: #5c5c5c; --faint: #8a8a8a; --border: #e6e6e1; --border-strong: #cfcfc8;
+    --accent: #1b1b1b; --accent-soft: #fff1c2; --chip-bg: #efefea; --fav: #9a6212; --fav-soft: #fbf0d6;
+  }
+  [data-theme="calendar"] header, [data-theme="calendar"] .controls, [data-theme="calendar"] main, [data-theme="calendar"] footer, [data-theme="calendar"] #viz { max-width: 1180px; }
+  [data-theme="calendar"] .eyebrow { font-family: var(--mono); font-weight: 400; text-transform: lowercase; letter-spacing: 0; color: var(--muted); }
+  [data-theme="calendar"] h1 { font-weight: 600; letter-spacing: -.02em; }
+  [data-theme="calendar"] .card { border: 0; border-radius: 12px; }
+  [data-theme="calendar"] .date-col { font-family: var(--mono); background: none; border: 0; }
+  [data-theme="calendar"] .date-col .day { font-family: var(--mono); font-weight: 400; }
+  [data-theme="calendar"] .card .artist { font-weight: 600; }
+  [data-theme="calendar"] .card .piece { background: var(--chip-bg); color: var(--text); }
+  [data-theme="calendar"] .card .artist::before { content: ""; display: inline-block; width: .6rem; height: .6rem; border-radius: 50%; background: var(--artist); margin-right: .5rem; vertical-align: .15em; }
+
+  #viz { margin: 0 auto; padding: 1.4rem 1.5rem 0; }
+  .cal-top { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .8rem 1.5rem; align-items: center; margin-bottom: 1rem; font-size: .8rem; color: var(--muted); }
+  .cal-legend, .cal-key { display: flex; flex-wrap: wrap; gap: .4rem 1rem; align-items: center; }
+  .cal-legend span, .cal-key span { display: inline-flex; align-items: center; gap: .35rem; }
+  .swatch { display: inline-block; width: .6rem; height: .6rem; border-radius: 50%; background: var(--artist); }
+  .cal-months { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 200px), 1fr)); gap: 1rem; }
+  .cal-month { background: #ffffff; border-radius: 12px; padding: .8rem .8rem .7rem; box-shadow: 0 1px 2px rgba(0, 0, 0, .06); }
+  .cal-month-head { display: flex; justify-content: space-between; align-items: baseline; font-weight: 600; font-size: .9rem; margin-bottom: .4rem; }
+  .cal-month-head small { font-family: var(--mono); font-weight: 400; font-size: .7rem; color: var(--faint); }
+  .cal-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 2px; text-align: center; }
+  .cal-grid .wd { font-family: var(--mono); font-size: .62rem; color: var(--faint); }
+  .cal-day {
+    position: relative; min-height: 2.05rem; border: 0; background: none; border-radius: 6px; padding: .15rem 0 0;
+    font: .7rem/1.2 var(--mono); color: #3a3a3a; display: flex; flex-direction: column; align-items: center;
+  }
+  .cal-day.past { color: #c4c4c4; }
+  button.cal-day { cursor: pointer; }
+  button.cal-day:hover { background: #f1f1ec; }
+  .cal-day.sel { background: var(--accent-soft); }
+  .cal-day.berlin { box-shadow: inset 0 0 0 2px #111111; font-weight: 700; }
+  .cal-day .dots { display: flex; gap: 2px; margin-top: 3px; }
+  .cal-day .dots i { width: 6px; height: 6px; border-radius: 50%; background: var(--artist); }
+  .cal-day .star { position: absolute; top: -4px; right: 0; font-size: .62rem; color: var(--fav); }
+  .cal-selection { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem 1rem; margin-top: 1rem; font-size: .95rem; }
+  .cal-selection strong { font-weight: 600; }
+  .cal-selection button, .lanes-reset { font: inherit; font-size: .8rem; border: 1px solid var(--border-strong); background: #ffffff; border-radius: 8px; padding: .3rem .7rem; cursor: pointer; }
+
+  /* ---------- 4. Ticket stubs ---------- */
+  :root[data-theme="tickets"] {
+    --serif: "Oswald", Impact, "Arial Narrow", sans-serif; --sans: "IBM Plex Mono", ui-monospace, "Courier New", monospace;
+    --bg: #ece7de; --card-bg: #fffdf8; --text: #1c1c1c; --muted: #555555; --faint: #7d7d7d;
+    --border: #d9d1c4; --border-strong: #1c1c1c; --accent: #1c1c1c; --accent-soft: #e2dbcf;
+    --chip-bg: #e7e1d6; --fav: #8f5a0e; --fav-soft: #f6e6c4;
+  }
+  [data-theme="tickets"] header, [data-theme="tickets"] .controls, [data-theme="tickets"] main, [data-theme="tickets"] footer { max-width: 1180px; }
+  [data-theme="tickets"] .eyebrow { color: var(--text); letter-spacing: .2em; font-weight: 400; }
+  [data-theme="tickets"] .eyebrow::after { content: " · departing Berlin"; }
+  [data-theme="tickets"] h1 { font-weight: 600; text-transform: uppercase; font-size: clamp(2.8rem, 8vw, 6rem); line-height: .95; letter-spacing: -.005em; }
+  [data-theme="tickets"] .controls select, [data-theme="tickets"] .controls input { border-radius: 0; border: 2px solid var(--text); background-color: transparent; }
+  [data-theme="tickets"] .month-heading, [data-theme="tickets"] .group:first-child .month-heading { text-transform: uppercase; letter-spacing: .06em; font-weight: 500; font-size: 1.6rem; }
+  [data-theme="tickets"] .group-body { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 480px), 1fr)); gap: 1.3rem; }
+  [data-theme="tickets"] .card {
+    --stub: #27365f; flex-wrap: nowrap; align-items: stretch; gap: 0; margin: 0; padding: 0; min-height: 14.5rem;
+    border: 0; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 0 rgba(0, 0, 0, .08);
+  }
+  [data-theme="tickets"] .card.loc-berlin { --stub: #c8102e; }
+  [data-theme="tickets"] .card.loc-germany { --stub: #1e6b52; }
+  [data-theme="tickets"] .card.flagged { --stub: #8a8a8a; }
+  [data-theme="tickets"] .date-col {
+    width: 11.5rem; flex-shrink: 0; border: 0; border-radius: 0; border-right: 3px dashed var(--bg);
+    background: var(--stub); color: #ffffff; padding: 1.1rem 1rem; text-align: left; display: flex; flex-direction: column; gap: .1rem;
+  }
+  [data-theme="tickets"] .date-col .reach { display: block; order: 0; overflow-wrap: anywhere; font-size: .64rem; letter-spacing: .14em; text-transform: uppercase; opacity: .9; margin-bottom: auto; }
+  [data-theme="tickets"] .date-col .day { order: 1; font-family: var(--serif); color: #ffffff; font-size: 3.6rem; font-weight: 600; line-height: .95; margin-top: .6rem; }
+  [data-theme="tickets"] .date-col .mon { order: 2; color: #ffffff; font-size: .85rem; letter-spacing: .14em; }
+  [data-theme="tickets"] .date-col .dow { order: 3; color: rgba(255, 255, 255, .85); font-size: .78rem; letter-spacing: .06em; }
+  [data-theme="tickets"] .date-col .route { display: block; order: 4; font-size: .72rem; margin-top: auto; padding-top: .8rem; text-transform: uppercase; }
+  [data-theme="tickets"] .card .body { padding: 1.1rem 1.25rem 2.8rem; position: relative; }
+  [data-theme="tickets"] .card .artist { font-weight: 500; font-size: 1.75rem; text-transform: uppercase; line-height: 1; }
+  [data-theme="tickets"] .tag.loc-berlin, [data-theme="tickets"] .tag.loc-germany, [data-theme="tickets"] .tag.loc-europe { display: none; }
+  [data-theme="tickets"] .tag { border-radius: 0; }
+  [data-theme="tickets"] .tag.favorite { background: none; color: var(--fav); box-shadow: inset 0 0 0 2px var(--fav); padding: .25rem .5rem; transform: rotate(6deg); letter-spacing: .12em; text-transform: uppercase; }
+  [data-theme="tickets"] .card .place { font-size: .8rem; margin-top: .45rem; }
+  [data-theme="tickets"] .card .program { font-size: .76rem; }
+  [data-theme="tickets"] .card .repertoire { border-top: 1px dashed var(--border); padding-top: .5rem; }
+  [data-theme="tickets"] .card .repertoire-label { display: none; }
+  [data-theme="tickets"] .card .repertoire-list { flex-direction: column; gap: .15rem; }
+  [data-theme="tickets"] .card .piece { background: none; color: var(--text); padding: 0; border-radius: 0; font-size: .76rem; font-weight: 400; }
+  [data-theme="tickets"] .card .piece::before { content: "· "; }
+  [data-theme="tickets"] .card .piece.favorite { background: none; box-shadow: none; color: var(--fav); font-weight: 700; }
+  [data-theme="tickets"] .card .piece.favorite::before { content: "★ "; margin: 0; }
+  [data-theme="tickets"] .card .repertoire.note .repertoire-text { font-family: var(--sans); font-style: normal; font-size: .76rem; }
+  [data-theme="tickets"] .card .links { position: absolute; right: 1rem; bottom: .7rem; flex-direction: row; gap: .8rem; width: auto; margin: 0; }
+  [data-theme="tickets"] .card a.link { color: var(--text); padding: 0; border-radius: 0; text-decoration: underline; text-transform: uppercase; letter-spacing: .08em; font-size: .7rem; }
+  [data-theme="tickets"] .card a.link:hover { background: none; }
+  @media (max-width: 560px) {
+    [data-theme="tickets"] .date-col { width: 7.5rem; padding: .9rem .75rem; }
+    [data-theme="tickets"] .date-col .day { font-size: 2.8rem; }
+    [data-theme="tickets"] .date-col .reach { letter-spacing: .04em; font-size: .6rem; }
+  }
+
+  /* ---------- 5. Artist lanes ---------- */
+  :root[data-theme="lanes"] {
+    --sans: "Sora", system-ui, sans-serif; --serif: var(--sans);
+    --bg: #ffffff; --text: #161616; --muted: #5e5e5e; --faint: #8a8a8a; --border: #ececec; --border-strong: #d4d4d4;
+    --accent: #161616; --accent-soft: #f1f1f1; --chip-bg: #f3f3f3; --lane-today: #e4572e;
+  }
+  [data-theme="lanes"] header, [data-theme="lanes"] .controls, [data-theme="lanes"] main, [data-theme="lanes"] footer, [data-theme="lanes"] #viz { max-width: 1180px; }
+  [data-theme="lanes"] h1 { font-weight: 600; letter-spacing: -.03em; }
+  [data-theme="lanes"] .eyebrow { color: var(--muted); }
+  [data-theme="lanes"] .controls-wrap { background: #ffffff; }
+  [data-theme="lanes"] .controls select, [data-theme="lanes"] .controls input { border-radius: 10px; }
+  [data-theme="lanes"] .card { border-radius: 14px; }
+  [data-theme="lanes"] .date-col { background: none; }
+  [data-theme="lanes"] .card .artist { font-weight: 600; }
+  [data-theme="lanes"] .card .artist::before { content: ""; display: inline-block; width: .6rem; height: .6rem; border-radius: 50%; background: var(--artist); margin-right: .5rem; vertical-align: .15em; }
+  [data-theme="lanes"] .card .piece { background: var(--chip-bg); color: var(--text); }
+
+  .lanes-key { display: flex; flex-wrap: wrap; gap: .5rem 1.2rem; font-size: .78rem; color: var(--muted); margin-bottom: .6rem; align-items: center; }
+  .lanes-key span { display: inline-flex; align-items: center; gap: .4rem; }
+  .lanes { display: grid; grid-template-columns: 11rem minmax(0, 1fr); }
+  .lanes .axis { position: relative; height: 1.4rem; grid-column: 2; }
+  .lanes .tick { position: absolute; top: 0; bottom: 0; border-left: 1px solid #eeeeee; padding-left: .3rem; font-size: .7rem; color: var(--faint); white-space: nowrap; pointer-events: none; }
+  .lane-name { display: flex; flex-direction: column; justify-content: center; border-top: 1px solid var(--border); height: 4rem; padding-right: .8rem; }
+  .lane-name b { font-weight: 600; font-size: .9rem; }
+  .lane-name small { font-size: .72rem; color: var(--faint); }
+  .lane-track { position: relative; border-top: 1px solid var(--border); height: 4rem; overflow: hidden; }
+  .lane-track.no-dates::after { content: ""; position: absolute; left: 0; right: 0; top: 50%; border-top: 1px dashed #dddddd; }
+  .lane-track .gl { position: absolute; top: 0; bottom: 0; border-left: 1px solid #f3f3f3; }
+  .lane-today { position: absolute; top: 0; bottom: 0; border-left: 2px solid var(--lane-today); }
+  .lane-dot {
+    position: absolute; top: 50%; width: 11px; height: 11px; margin: -5.5px 0 0 -5.5px; padding: 0; border: 0; border-radius: 50%;
+    background: var(--artist); opacity: .6; cursor: pointer;
+  }
+  .lane-dot:hover, .lane-dot:focus-visible { opacity: 1; transform: scale(1.35); }
+  .lane-dot.fav { opacity: 1; box-shadow: 0 0 0 3px #f6e0a8; }
+  .lane-dot.berlin { width: 16px; height: 16px; margin: -8px 0 0 -8px; opacity: 1; border: 2px solid #111111; }
+  .lane-dot.flagged { opacity: .35; background: repeating-linear-gradient(45deg, var(--artist) 0 2px, #ffffff 2px 4px); }
+  .lane-label { position: absolute; top: .15rem; transform: translateX(-50%); font-size: .66rem; font-weight: 600; pointer-events: none; }
+  .lanes-note { font-size: .78rem; color: var(--faint); margin-top: .5rem; }
+  @media (max-width: 560px) {
+    .lanes { grid-template-columns: 5.5rem minmax(0, 1fr); }
+    .lane-name b { font-size: .75rem; }
+    .lanes .tick { font-size: .56rem; padding-left: .15rem; }
+  }
+
+  /* ---------- 6. Magazine listings ---------- */
+  :root[data-theme="listings"] {
+    --serif: "Newsreader", Georgia, "Times New Roman", serif; --sans: "Libre Franklin", "Franklin Gothic", Arial, sans-serif;
+    --bg: #fcfbf8; --card-bg: #fcfbf8; --text: #1a1a1a; --muted: #555555; --faint: #7a7a7a;
+    --border: #dddddd; --border-strong: #1a1a1a; --accent: #1a1a1a; --accent-soft: #eeeae2; --chip-bg: #eeeae2;
+    --fav: #8f5c00; --fav-soft: #fbf0d2;
+  }
+  [data-theme="listings"] header, [data-theme="listings"] .controls, [data-theme="listings"] main, [data-theme="listings"] footer { max-width: 1180px; }
+  [data-theme="listings"] header { text-align: center; border-bottom: 1px solid var(--text); padding-bottom: 1.4rem; }
+  [data-theme="listings"] .eyebrow { color: var(--text); letter-spacing: .24em; }
+  [data-theme="listings"] h1 { font-weight: 400; font-size: clamp(2.8rem, 8vw, 6.4rem); letter-spacing: -.02em; line-height: 1; }
+  [data-theme="listings"] .subtitle { font-family: var(--serif); font-style: italic; font-size: 1.15rem; }
+  [data-theme="listings"] .controls-wrap { background: var(--bg); border-bottom: 1px solid var(--border); }
+  [data-theme="listings"] .controls { justify-content: center; }
+  [data-theme="listings"] .controls select, [data-theme="listings"] .controls input { border: 0; border-bottom: 1px solid var(--border-strong); border-radius: 0; background-color: transparent; }
+  [data-theme="listings"] .group-heading {
+    display: flex; align-items: baseline; gap: .9rem; margin: 2.6rem 0 1.1rem; border-top: 3px double var(--text); padding-top: .7rem;
+    font-family: var(--serif); font-style: italic; font-weight: 500; font-size: 2.1rem; letter-spacing: 0;
+  }
+  [data-theme="listings"] .group-heading .count { display: inline; font-family: var(--sans); font-style: normal; font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: var(--faint); }
+  [data-theme="listings"] .group-body { column-count: 3; column-gap: 2.5rem; column-rule: 1px solid var(--border); }
+  [data-theme="listings"] .card.listing {
+    display: block; break-inside: avoid; margin: 0 0 1.1rem; padding: 0; border: 0; border-radius: 0; background: none; box-shadow: none;
+    font-family: var(--serif); font-size: 1.04rem; line-height: 1.5;
+  }
+  [data-theme="listings"] .card.listing:hover { transform: none; box-shadow: none; }
+  [data-theme="listings"] .listing p { margin: 0; }
+  [data-theme="listings"] .listing .artist { font-family: var(--sans); font-size: .78rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
+  [data-theme="listings"] .listing .lead-star { color: var(--fav); }
+  [data-theme="listings"] .listing .piece { display: inline; background: none; color: inherit; padding: 0; border-radius: 0; font-style: italic; font-size: inherit; font-weight: 400; line-height: inherit; }
+  [data-theme="listings"] .listing .piece.favorite { color: var(--fav); background: var(--fav-soft); box-shadow: none; font-weight: 500; }
+  [data-theme="listings"] .listing .piece.favorite::before { margin-right: .15rem; }
+  [data-theme="listings"] .listing .note { font-style: italic; color: var(--faint); }
+  [data-theme="listings"] .listing .when { font-family: var(--sans); font-size: .78rem; font-weight: 600; white-space: nowrap; }
+  [data-theme="listings"] .listing a.link { font-family: var(--sans); font-size: .72rem; color: var(--text); padding: 0 0 0 .3rem; white-space: nowrap; }
+  [data-theme="listings"] .listing a.link:hover { background: none; }
+  [data-theme="listings"] .listing .tag { vertical-align: .1em; }
+  [data-theme="listings"] .card.listing.flagged { border-left: 0; }
+  @media (max-width: 900px) { [data-theme="listings"] .group-body { column-count: 2; } }
+  @media (max-width: 560px) { [data-theme="listings"] .group-body { column-count: 1; } }
 </style>
 </head>
 <body>
@@ -285,8 +608,11 @@
     <select id="favoriteFilter" hidden aria-label="Filter by favorite work"><option value="">All programmes</option></select>
     <select id="countryFilter" aria-label="Filter by country"><option value="">All countries</option></select>
     <input type="search" id="searchBox" placeholder="Search city, venue, programme…" aria-label="Search concerts">
+    <select id="themePicker" aria-label="Page theme"></select>
   </div>
 </div>
+
+<section id="viz" hidden></section>
 
 <main id="main">
   <div class="loading">Loading concerts…</div>
@@ -563,6 +889,264 @@ function locationTagHTML(tag) {
   return `<span class="tag ${cls}">${escapeHTML(tag)}</span>`;
 }
 
+// ---------- Themes ----------
+//
+// Seven looks for the same data. "classic" is the page as it always was and
+// stays the default; the others are light-only designs that restyle the same
+// markup through :root[data-theme="…"] rules, and two of them add an overview
+// above the list (a year calendar, a timeline per artist). None of them
+// changes what is shown: same rows, same filters, same favorite matching.
+// The choice is remembered per browser and can be linked with ?theme=<id>.
+const THEMES = [
+  { id: "classic", label: "Classic" },
+  { id: "swiss", label: "Swiss timetable", fonts: "family=Archivo:wght@400;700;800" },
+  { id: "poster", label: "Season poster", fonts: "family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..700&family=Jost:wght@400;500;600" },
+  { id: "calendar", label: "Year at a glance", fonts: "family=IBM+Plex+Mono&family=IBM+Plex+Sans:wght@400;600", view: "calendar" },
+  { id: "tickets", label: "Ticket stubs", fonts: "family=IBM+Plex+Mono:wght@400;700&family=Oswald:wght@500;600" },
+  { id: "lanes", label: "Artist lanes", fonts: "family=Sora:wght@400;600", view: "lanes" },
+  { id: "listings", label: "Magazine listings", fonts: "family=Libre+Franklin:wght@400;600&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..600", groupBy: "place" },
+];
+const THEME_KEY = "concert-watch-theme";
+let theme = THEMES[0];
+
+function themeById(id) {
+  return THEMES.find(t => t.id === id) || null;
+}
+
+// Storage can be missing or throw (private windows, blocked site data); the
+// page then simply starts on the default every time.
+function savedThemeId() {
+  try {
+    const fromURL = new URLSearchParams(window.location.search).get("theme");
+    if (fromURL && themeById(fromURL)) return fromURL;
+    return window.localStorage.getItem(THEME_KEY);
+  } catch {
+    return null;
+  }
+}
+
+// Each theme's webfonts are fetched the first time it is picked, so the
+// default page loads exactly what it always did.
+const loadedFonts = new Set();
+function loadThemeFonts(t) {
+  if (!t.fonts || loadedFonts.has(t.id)) return;
+  loadedFonts.add(t.id);
+  const link = document.createElement("link");
+  link.rel = "stylesheet";
+  link.href = `https://fonts.googleapis.com/css2?${t.fonts}&display=swap`;
+  document.head.appendChild(link);
+}
+
+function applyTheme(id, { save = false } = {}) {
+  theme = themeById(id) || THEMES[0];
+  document.documentElement.dataset.theme = theme.id;
+  document.getElementById("themePicker").value = theme.id;
+  loadThemeFonts(theme);
+  calendarSelection = null;
+  if (save) {
+    try { window.localStorage.setItem(THEME_KEY, theme.id); } catch { /* not remembered, still applied */ }
+  }
+}
+
+function populateThemePicker() {
+  const sel = document.getElementById("themePicker");
+  for (const t of THEMES) {
+    const opt = document.createElement("option");
+    opt.value = t.id;
+    opt.textContent = `Theme: ${t.label}`;
+    sel.appendChild(opt);
+  }
+}
+
+// One colour per artist, in roster order, for the themes that tell artists
+// apart by colour (poster backgrounds, calendar and timeline dots). The strong
+// shades also differ in lightness, not just hue.
+const ARTIST_STRONG = ["#7e22ce", "#0f766e", "#a16207", "#be185d", "#1d4ed8", "#c2410c", "#334155"];
+const ARTIST_SOFT = ["#cbe2c4", "#f1da8e", "#e2cdeb", "#f7c6d9", "#f5c7b4", "#c7d7ef", "#d5dce4"];
+let artistOrder = [];
+
+function artistIndex(name) {
+  let i = artistOrder.indexOf(name);
+  if (i === -1) { artistOrder.push(name); i = artistOrder.length - 1; }
+  return i;
+}
+
+function artistStyle(name) {
+  const i = artistIndex(name);
+  return `--artist:${ARTIST_STRONG[i % ARTIST_STRONG.length]};--artist-soft:${ARTIST_SOFT[i % ARTIST_SOFT.length]}`;
+}
+
+// The ticket stub's reach label, from the same closed location_tag vocabulary.
+const REACH = { berlin: "In town", germany: "Deutschlandticket", europe: "Abroad" };
+
+// ---------- Year-at-a-glance calendar ----------
+
+// {from, to} ISO dates the list is narrowed to, or null. Only the calendar
+// theme sets it, and switching theme clears it.
+let calendarSelection = null;
+
+function isoOf(d) {
+  return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
+}
+
+function upcomingSpan(today) {
+  const dates = allConcerts.map(c => c.date).filter(d => d >= today).sort();
+  const first = new Date(today + "T00:00:00");
+  const last = new Date((dates[dates.length - 1] || today) + "T00:00:00");
+  return { first, last };
+}
+
+function renderCalendar(list, today) {
+  const byDate = new Map();
+  for (const c of list) {
+    if (!byDate.has(c.date)) byDate.set(c.date, []);
+    byDate.get(c.date).push(c);
+  }
+  const { first, last } = upcomingSpan(today);
+  const sel = calendarSelection;
+  let months = "";
+  for (let m = new Date(first.getFullYear(), first.getMonth(), 1); m <= last; m = new Date(m.getFullYear(), m.getMonth() + 1, 1)) {
+    const next = new Date(m.getFullYear(), m.getMonth() + 1, 1);
+    let cells = ["M","T","W","T","F","S","S"].map(w => `<span class="wd">${w}</span>`).join("");
+    cells += '<span></span>'.repeat((m.getDay() + 6) % 7);
+    let count = 0;
+    for (let d = new Date(m); d < next; d.setDate(d.getDate() + 1)) {
+      const iso = isoOf(d);
+      const rows = byDate.get(iso) || [];
+      count += rows.length;
+      const cls = ["cal-day",
+        iso < today ? "past" : "",
+        sel && iso >= sel.from && iso <= sel.to ? "sel" : "",
+        rows.some(c => c.location_tag === "berlin") ? "berlin" : ""].filter(Boolean).join(" ");
+      if (!rows.length) { cells += `<span class="${cls}">${d.getDate()}</span>`; continue; }
+      const dots = rows.slice(0, 3).map(c => `<i style="${artistStyle(c.artist)}"></i>`).join("");
+      const star = rows.some(c => hitsOf(c).length) ? '<span class="star">★</span>' : "";
+      const label = `${d.getDate()} ${MONTH[d.getMonth()]}: ` + rows.map(c => `${c.artist} in ${c.city}`).join("; ");
+      cells += `<button type="button" class="${cls}" data-day="${iso}" title="${escapeHTML(label)}" aria-label="${escapeHTML(label)}">${d.getDate()}<span class="dots">${dots}</span>${star}</button>`;
+    }
+    months += `<div class="cal-month"><div class="cal-month-head">${MONTH[m.getMonth()]} ${m.getFullYear()}<small>${count}</small></div><div class="cal-grid">${cells}</div></div>`;
+  }
+  const artists = [...new Set(list.map(c => c.artist))].sort((a, b) => artistIndex(a) - artistIndex(b));
+  const legend = artists.map(a => `<span><i class="swatch" style="${artistStyle(a)}"></i>${escapeHTML(a)}</span>`).join("");
+  const selection = sel
+    ? `<div class="cal-selection"><strong>${escapeHTML(rangeLabel(sel))}</strong><button type="button" data-cal-clear>Show all dates</button></div>`
+    : `<div class="cal-selection">Pick a day to list only that day; shift-click another to take in the days between.</div>`;
+  return `<div class="cal-top"><div class="cal-legend">${legend}</div>` +
+    `<div class="cal-key"><span><i class="swatch" style="background:none;box-shadow:inset 0 0 0 2px #111;border-radius:3px"></i>Berlin</span><span><span style="color:var(--fav)">★</span>plays a favorite</span></div></div>` +
+    `<div class="cal-months">${months}</div>${selection}`;
+}
+
+function rangeLabel(sel) {
+  const f = new Date(sel.from + "T00:00:00"), t = new Date(sel.to + "T00:00:00");
+  const one = d => `${DOW[d.getDay()]} ${d.getDate()} ${MONTH[d.getMonth()]}`;
+  return sel.from === sel.to ? one(f) : `${one(f)} – ${one(t)}`;
+}
+
+function onCalendarClick(e) {
+  if (e.target.closest("[data-cal-clear]")) { calendarSelection = null; render(); return; }
+  const day = e.target.closest("[data-day]");
+  if (!day) return;
+  const iso = day.dataset.day;
+  const sel = calendarSelection;
+  if (e.shiftKey && sel) {
+    calendarSelection = { from: iso < sel.from ? iso : sel.from, to: iso > sel.to ? iso : sel.to };
+  } else if (sel && sel.from === iso && sel.to === iso) {
+    calendarSelection = null;
+  } else {
+    calendarSelection = { from: iso, to: iso };
+  }
+  render();
+}
+
+// ---------- Artist lanes timeline ----------
+
+function renderLanes(list, today) {
+  const { last } = upcomingSpan(today);
+  const start = new Date(new Date(today + "T00:00:00").getFullYear(), new Date(today + "T00:00:00").getMonth(), 1);
+  const end = new Date(last.getFullYear(), last.getMonth() + 1, 1);
+  const span = end - start;
+  const pct = iso => ((new Date(iso + "T00:00:00") - start) / span * 100).toFixed(3) + "%";
+  let ticks = "", grid = "";
+  for (let m = new Date(start); m < end; m = new Date(m.getFullYear(), m.getMonth() + 1, 1)) {
+    const x = pct(isoOf(m));
+    const label = MONTH_ABBR[m.getMonth()] + (m.getMonth() === 0 || +m === +start ? " ’" + String(m.getFullYear()).slice(2) : "");
+    ticks += `<span class="tick" style="left:${x}">${label}</span>`;
+    grid += `<i class="gl" style="left:${x}"></i>`;
+  }
+  const names = [...artistOrder];
+  for (const c of list) if (!names.includes(c.artist)) names.push(c.artist);
+  let lanes = "";
+  for (const name of names) {
+    const rows = list.filter(c => c.artist === name);
+    const total = allConcerts.filter(c => c.artist === name && c.date >= today).length;
+    const note = total === 0 ? "no upcoming dates" : rows.length === total ? `${total} date${total === 1 ? "" : "s"}` : `${rows.length} of ${total} shown`;
+    const dots = rows.map(c => {
+      const d = new Date(c.date + "T00:00:00");
+      const label = `${c.artist} — ${DOW[d.getDay()]} ${d.getDate()} ${MONTH_ABBR[d.getMonth()]} ${d.getFullYear()} — ${c.city}` + (c.status ? ` (${statusLabel(c.status)})` : "");
+      const cls = ["lane-dot", c.location_tag === "berlin" ? "berlin" : "", hitsOf(c).length ? "fav" : "", c.status ? "flagged" : ""].filter(Boolean).join(" ");
+      return `<button type="button" class="${cls}" style="left:${pct(c.date)};${artistStyle(name)}" data-goto="${escapeHTML(c.id)}" title="${escapeHTML(label)}" aria-label="${escapeHTML(label)}"></button>`;
+    }).join("");
+    const berlinLabels = [...new Set(rows.filter(c => c.location_tag === "berlin").map(c => c.date.slice(0, 7)))]
+      .map(ym => rows.find(c => c.location_tag === "berlin" && c.date.startsWith(ym)))
+      .map(c => `<span class="lane-label" style="left:${pct(c.date)}">Berlin</span>`).join("");
+    lanes += `<div class="lane-name"><b>${escapeHTML(name)}</b><small>${note}</small></div>` +
+      `<div class="lane-track${rows.length ? "" : " no-dates"}">${grid}<span class="lane-today" style="left:${pct(today)}"></span>${berlinLabels}${dots}</div>`;
+  }
+  return `<div class="lanes-key"><span><i class="swatch" style="background:#999;width:.7rem;height:.7rem;box-shadow:0 0 0 2px #111"></i>Berlin</span>` +
+    `<span><i class="swatch" style="background:#999;box-shadow:0 0 0 3px #f6e0a8"></i>plays a favorite</span>` +
+    `<span><i style="display:inline-block;width:2px;height:.9rem;background:var(--lane-today)"></i>today</span></div>` +
+    `<div class="lanes"><div class="axis">${ticks}</div>${lanes}</div>` +
+    `<div class="lanes-note">Each dot is one concert. Click it to jump to its card.</div>`;
+}
+
+function onLanesClick(e) {
+  const dot = e.target.closest("[data-goto]");
+  if (!dot) return;
+  const card = [...document.querySelectorAll(".card")].find(el => el.dataset.id === dot.dataset.goto);
+  if (!card) return;
+  card.scrollIntoView({ behavior: "smooth", block: "center" });
+  card.classList.add("highlight");
+  setTimeout(() => card.classList.remove("highlight"), 1800);
+}
+
+function onVizClick(e) {
+  if (theme.view === "calendar") onCalendarClick(e);
+  else if (theme.view === "lanes") onLanesClick(e);
+}
+
+// ---------- Grouping ----------
+
+// By month for every theme but the listings, which group by how far away the
+// concert is — the order a reader in Berlin decides in.
+const PLACE_GROUPS = [
+  { tag: "berlin", title: "In Berlin" },
+  { tag: "germany", title: "Around Germany" },
+  { tag: "europe", title: "Elsewhere in Europe" },
+];
+
+function groupsOf(list) {
+  if (theme.groupBy === "place") {
+    return PLACE_GROUPS
+      .map(g => ({ heading: `<h2 class="group-heading place-heading">${g.title}<span class="count">${countLabel(list.filter(c => c.location_tag === g.tag).length)}</span></h2>`, rows: list.filter(c => c.location_tag === g.tag) }))
+      .concat([{ heading: '<h2 class="group-heading place-heading">Elsewhere</h2>', rows: list.filter(c => !PLACE_GROUPS.some(g => g.tag === c.location_tag)) }])
+      .filter(g => g.rows.length);
+  }
+  const groups = [];
+  for (const c of list) {
+    const d = new Date(c.date + "T00:00:00");
+    const key = `${MONTH[d.getMonth()]} ${d.getFullYear()}`;
+    if (!groups.length || groups[groups.length - 1].key !== key) {
+      groups.push({ key, rows: [], heading: `<h2 class="group-heading month-heading"><span class="num">${String(d.getMonth() + 1).padStart(2, "0")}</span><span class="name">${key}</span></h2>` });
+    }
+    groups[groups.length - 1].rows.push(c);
+  }
+  return groups;
+}
+
+function countLabel(n) {
+  return `${n} concert${n === 1 ? "" : "s"}`;
+}
+
 function render() {
   const artist = document.getElementById("artistFilter").value;
   const instrument = document.getElementById("instrumentFilter").value;
@@ -590,6 +1174,18 @@ function render() {
   }
   list.sort((a, b) => a.date.localeCompare(b.date));
 
+  // The overview draws every concert the filters let through; a day picked on
+  // the calendar then narrows the list under it.
+  const viz = document.getElementById("viz");
+  if (theme.view === "calendar") viz.innerHTML = renderCalendar(list, today);
+  else if (theme.view === "lanes") viz.innerHTML = renderLanes(list, today);
+  else viz.innerHTML = "";
+  viz.hidden = !theme.view;
+  if (theme.view === "calendar" && calendarSelection) {
+    const { from, to } = calendarSelection;
+    list = list.filter(c => c.date >= from && c.date <= to);
+  }
+
   const main = document.getElementById("main");
   const withFavorite = list.filter(c => hitsOf(c).length > 0).length;
   document.getElementById("subtitle").textContent =
@@ -601,52 +1197,95 @@ function render() {
     return;
   }
 
-  let html = "";
-  let lastMonthKey = "";
-  for (const c of list) {
-    const d = new Date(c.date + "T00:00:00");
-    const monthKey = `${MONTH[d.getMonth()]} ${d.getFullYear()}`;
-    if (monthKey !== lastMonthKey) {
-      html += `<div class="month-heading">${monthKey}</div>`;
-      lastMonthKey = monthKey;
-    }
-    // City leads and is emphasised — it is what you scan for — with venue and
-    // country trailing it.
-    const whereHTML = [
-      c.city ? `<span class="city">${escapeHTML(c.city)}</span>` : "",
-      ...[c.venue, c.country].filter(Boolean).map(escapeHTML)
-    ].filter(Boolean).join(" · ");
-    const safeUrl = isSafeUrl(c.source_url) ? c.source_url : null;
-    // The detail page is where a programme missing from the calendar came
-    // from, so it is worth offering alongside the source — but only when it
-    // is somewhere else than the source itself.
-    const detailUrl = isSafeUrl(c.detail_url) && c.detail_url !== c.source_url ? c.detail_url : null;
-    // The concert's own page leads: a reader deciding whether to go wants the
-    // hall's page, not the calendar it was spotted on. The calendar stays
-    // reachable underneath as the row's provenance.
-    const linksHTML = [
-      detailUrl ? `<a class="link" href="${escapeHTML(detailUrl)}" target="_blank" rel="noopener">Details ↗</a>` : "",
-      safeUrl ? `<a class="link${detailUrl ? " secondary" : ""}" href="${escapeHTML(safeUrl)}" target="_blank" rel="noopener">Source ↗</a>` : ""
-    ].filter(Boolean).join("");
-    const hits = hitsOf(c);
-    html += `
-      <div class="card${hits.length ? " favorite" : ""}${c.status ? " flagged" : ""}">
+  const card = theme.groupBy === "place" ? listingHTML : cardHTML;
+  main.innerHTML = groupsOf(list)
+    .map(g => `<section class="group">${g.heading}<div class="group-body">${g.rows.map(card).join("")}</div></section>`)
+    .join("");
+}
+
+// The concert's own page leads: a reader deciding whether to go wants the
+// hall's page, not the calendar it was spotted on. The calendar stays
+// reachable as the row's provenance.
+function linksOf(c) {
+  const safeUrl = isSafeUrl(c.source_url) ? c.source_url : null;
+  // The detail page is where a programme missing from the calendar came
+  // from, so it is worth offering alongside the source — but only when it
+  // is somewhere else than the source itself.
+  const detailUrl = isSafeUrl(c.detail_url) && c.detail_url !== c.source_url ? c.detail_url : null;
+  return [
+    detailUrl ? `<a class="link" href="${escapeHTML(detailUrl)}" target="_blank" rel="noopener">Details ↗</a>` : "",
+    safeUrl ? `<a class="link${detailUrl ? " secondary" : ""}" href="${escapeHTML(safeUrl)}" target="_blank" rel="noopener">Source ↗</a>` : ""
+  ].filter(Boolean).join("");
+}
+
+function cardClasses(c, extra = "") {
+  return ["card", extra, `loc-${c.location_tag || "none"}`, hitsOf(c).length ? "favorite" : "", c.status ? "flagged" : ""]
+    .filter(Boolean).join(" ");
+}
+
+// One card, shared by every theme but the listings. A few parts — the ticket
+// stub's reach and route, the Swiss month numeral — are always present and
+// only shown by the theme that uses them.
+function cardHTML(c) {
+  const d = new Date(c.date + "T00:00:00");
+  // City leads and is emphasised — it is what you scan for — with venue and
+  // country trailing it.
+  const whereHTML = [
+    c.city ? `<span class="city">${escapeHTML(c.city)}</span>` : "",
+    ...[c.venue, c.country].filter(Boolean).map(escapeHTML)
+  ].filter(Boolean).join('<span class="sep"> · </span>');
+  const linksHTML = linksOf(c);
+  const route = c.location_tag === "berlin" ? "Berlin" : `Berlin → ${c.city || ""}`;
+  return `
+      <article class="${cardClasses(c)}" data-id="${escapeHTML(c.id || "")}" style="${artistStyle(c.artist)}">
         <div class="date-col">
+          <div class="reach">${escapeHTML(REACH[c.location_tag] || "")}</div>
           <div class="mon">${MONTH_ABBR[d.getMonth()]}</div>
           <div class="day">${d.getDate()}</div>
           <div class="dow">${DOW[d.getDay()]}</div>
+          <div class="route">${escapeHTML(route)}</div>
         </div>
         <div class="body">
           <div class="topline"><span class="artist">${escapeHTML(c.artist)}</span>${statusTagHTML(c)}${favoriteTagHTML(c)}${locationTagHTML(c.location_tag)}${instrumentTagsHTML(c)}</div>
           <div class="place">${whereHTML}</div>
           ${statusLineHTML(c)}
           ${c.program ? `<div class="program">${escapeHTML(c.program)}</div>` : ""}
-          ${piecesHTML(c.pieces, hits)}
+          ${piecesHTML(c.pieces, hitsOf(c))}
         </div>
         ${linksHTML ? `<div class="links">${linksHTML}</div>` : ""}
-      </div>`;
+      </article>`;
+}
+
+// The listings theme sets each concert as a paragraph, the way an arts page
+// prints its listings. Every phrase in it is a field copied as stored: it
+// never says who plays what, because a billing names the soloist and the
+// programme names the works without saying the soloist is in all of them.
+function listingHTML(c) {
+  const d = new Date(c.date + "T00:00:00");
+  const hits = hitsOf(c);
+  let works = "";
+  if (Array.isArray(c.pieces)) {
+    const starred = new Map();
+    for (const h of hits) {
+      if (!starred.has(h.pieceIndex)) starred.set(h.pieceIndex, []);
+      starred.get(h.pieceIndex).push(h.title);
+    }
+    works = c.pieces.map((p, i) => {
+      if (typeof p !== "string" || !p.trim()) return "";
+      const titles = starred.get(i);
+      if (!titles) return `<span class="piece">${escapeHTML(p)}</span>`;
+      const tip = `On your favorites list: ${titles.join("; ")}`;
+      return `<span class="piece favorite" title="${escapeHTML(tip)}">${escapeHTML(p)}</span>`;
+    }).filter(Boolean).join("; ");
+  } else if (typeof c.pieces === "string" && c.pieces.trim()) {
+    works = `<span class="note">${escapeHTML(c.pieces)}</span>`;
   }
-  main.innerHTML = html;
+  const where = [c.venue, c.city].filter(Boolean).map(escapeHTML).join(", ");
+  return `
+      <article class="${cardClasses(c, "listing")}" data-id="${escapeHTML(c.id || "")}">
+        <p>${hits.length ? '<span class="lead-star">★ </span>' : ""}<strong class="artist">${escapeHTML(c.artist)}</strong>${statusTagHTML(c) ? " " + statusTagHTML(c) : ""}${c.program ? ` — ${escapeHTML(c.program)}.` : ""} ${works ? works + "." : ""} ${where}${where ? "." : ""} <span class="when">${DOW[d.getDay()]} ${d.getDate()} ${MONTH_ABBR[d.getMonth()]}</span>${linksOf(c)}</p>
+        ${statusLineHTML(c)}
+      </article>`;
 }
 
 // `pieces` is an array of work titles when the repertoire is known, or a
@@ -729,6 +1368,7 @@ async function init() {
     allConcerts = data.concerts || [];
     const [artists, favoritesFile] = await Promise.all([roster, starred]);
     loadRoster((artists && artists.artists) || []);
+    artistOrder = ((artists && artists.artists) || []).map(a => a.name).filter(n => typeof n === "string");
     favorites = parseFavorites((favoritesFile && favoritesFile.favorites) || []);
     indexFavorites(allConcerts);
     populateFilters(allConcerts);
@@ -747,7 +1387,14 @@ document.getElementById("instrumentFilter").addEventListener("change", render);
 document.getElementById("favoriteFilter").addEventListener("change", render);
 document.getElementById("countryFilter").addEventListener("change", render);
 document.getElementById("searchBox").addEventListener("input", render);
+document.getElementById("themePicker").addEventListener("change", e => {
+  applyTheme(e.target.value, { save: true });
+  render();
+});
+document.getElementById("viz").addEventListener("click", onVizClick);
 
+populateThemePicker();
+applyTheme(savedThemeId());
 init();
 </script>
 </body>
