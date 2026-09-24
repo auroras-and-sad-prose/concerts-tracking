@@ -1281,9 +1281,10 @@ function listingHTML(c) {
     works = `<span class="note">${escapeHTML(c.pieces)}</span>`;
   }
   const where = [c.venue, c.city].filter(Boolean).map(escapeHTML).join(", ");
+  const status = statusTagHTML(c);
   return `
       <article class="${cardClasses(c, "listing")}" data-id="${escapeHTML(c.id || "")}">
-        <p>${hits.length ? '<span class="lead-star">★ </span>' : ""}<strong class="artist">${escapeHTML(c.artist)}</strong>${statusTagHTML(c) ? " " + statusTagHTML(c) : ""}${c.program ? ` — ${escapeHTML(c.program)}.` : ""} ${works ? works + "." : ""} ${where}${where ? "." : ""} <span class="when">${DOW[d.getDay()]} ${d.getDate()} ${MONTH_ABBR[d.getMonth()]}</span>${linksOf(c)}</p>
+        <p>${hits.length ? '<span class="lead-star">★ </span>' : ""}<strong class="artist">${escapeHTML(c.artist)}</strong>${status ? " " + status : ""}${c.program ? ` — ${escapeHTML(c.program)}.` : ""} ${works ? works + "." : ""} ${where}${where ? "." : ""} <span class="when">${DOW[d.getDay()]} ${d.getDate()} ${MONTH_ABBR[d.getMonth()]}</span>${linksOf(c)}</p>
         ${statusLineHTML(c)}
       </article>`;
 }
