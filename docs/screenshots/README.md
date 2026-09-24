@@ -14,6 +14,7 @@ without checking the branch out.
 | `pieces-programme-{light,dark,search}.png` | The `Programme` label and work chips, and the search box matching on a composer. |
 | `favorites-{light,dark}.png` | The favorites filter set to *Any favorite*, with the gold star on the matched work and on the card carrying it. |
 | `favorites-in-context.png` | Unfiltered, so a starred card sits next to an unstarred one and a flagged one — gold edge against red. |
+| `themes-{classic,swiss,poster,calendar,tickets,lanes,listings}.png` | The theme picker: one shot per theme, light scheme, real `seen.json`. `classic` is the default and the only theme with a dark variant. |
 
 To take a new set, serve the repo root over HTTP (the page fetches `seen.json`,
 `artists.json` and `favorites.json` relative to itself, so `file://` won't do —

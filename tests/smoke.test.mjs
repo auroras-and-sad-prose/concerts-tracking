@@ -166,7 +166,8 @@ after(async () => {
 
 // Opens index.html and returns the page plus everything it complained about.
 // `data` swaps in fixture JSON; omit it to exercise the checked-in dataset.
-async function open(data = null) {
+// `query` is appended to the page URL, e.g. "?theme=calendar".
+async function open(data = null, query = "") {
   const page = await browser.newPage();
   const errors = [];
   page.on("console", msg => msg.type() === "error" && errors.push(msg.text()));
@@ -186,7 +187,7 @@ async function open(data = null) {
       route.fulfill({ json: data.favorites ?? FIXTURE_FAVORITES }));
   }
 
-  await page.goto(origin, { waitUntil: "networkidle" });
+  await page.goto(origin + "/" + query, { waitUntil: "networkidle" });
   return { page, errors };
 }
 
@@ -338,6 +339,57 @@ describe("the concert page", () => {
       return pieces.map(piece => favoriteHitsIn([piece], parsed).map(h => h.slug));
     }, { favorites: cases.favorites, pieces: cases.match.map(c => c.piece) });
     assert.deepEqual(matched, cases.match.map(c => c.slugs));
+
+    assert.deepEqual(errors, []);
+    await page.close();
+  });
+
+  // Every theme restyles the same markup, so each must still show every row
+  // along with what marks one out: the status of a called-off concert and the
+  // starred work.
+  test("renders the same concerts in every theme", async () => {
+    const { page, errors } = await open({});
+
+    assert.equal(await page.locator("html").getAttribute("data-theme"), "classic");
+    const themes = await page.locator("#themePicker option").evaluateAll(opts => opts.map(o => o.value));
+    assert.equal(themes.length, 7);
+    assert.equal(themes[0], "classic");
+
+    for (const theme of themes) {
+      await page.selectOption("#themePicker", theme);
+      assert.equal(await page.locator("html").getAttribute("data-theme"), theme);
+      assert.equal(await page.locator(".card").count(), 3, theme);
+      assert.equal(await page.locator(".card.flagged .tag.status").count(), 1, theme);
+      assert.equal(await page.locator(".piece.favorite").count(), 1, theme);
+      assert.equal(await page.locator("#subtitle").innerText(), "3 upcoming concerts · 1 with a favorite", theme);
+    }
+
+    assert.deepEqual(errors, []);
+    await page.close();
+  });
+
+  test("narrows the list to a day picked on the calendar", async () => {
+    const { page, errors } = await open({}, "?theme=calendar");
+
+    assert.equal(await page.locator("#viz").isHidden(), false);
+    await page.click(`[data-day="${SOON}"]`);
+    assert.equal(await page.locator(".card").count(), 1);
+    assert.match(await page.locator(".card").innerText(), /Philharmonie/);
+
+    await page.click("[data-cal-clear]");
+    assert.equal(await page.locator(".card").count(), 3);
+
+    assert.deepEqual(errors, []);
+    await page.close();
+  });
+
+  test("draws one lane per rostered artist and one dot per concert", async () => {
+    const { page, errors } = await open({}, "?theme=lanes");
+
+    assert.equal(await page.locator(".lane-track").count(), FIXTURE_ARTISTS.artists.length);
+    assert.equal(await page.locator(".lane-dot").count(), 3);
+    await page.selectOption("#artistFilter", "Olga Scheps");
+    assert.equal(await page.locator(".lane-dot").count(), 1);
 
     assert.deepEqual(errors, []);
     await page.close();
