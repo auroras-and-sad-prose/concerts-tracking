@@ -95,12 +95,17 @@ const FIXTURE_FAVORITES = {
 const FIXTURE_TRAVEL = {
   cities: [
     {
-      city: "Kempen", query: "Kempen, Germany", minutes: 328, route: "Train via Wolfsburg",
-      carriers: ["Deutsche Bahn Intercity (DB IC)", "Deutsche Bahn Regio (DB Regional)"], checked: PAST,
+      city: "Kempen",
+      station: { name: "Kempen (Niederrhein)", eva: "8000409" },
+      train: {
+        query: "Kempen, Germany", minutes: 328, route: "Train via Wolfsburg",
+        carriers: ["Deutsche Bahn Intercity (DB IC)", "Deutsche Bahn Regio (DB Regional)"], checked: PAST,
+      },
     },
     {
-      city: "Berlin", query: "Berlin, Germany", minutes: 10, route: "Train",
-      carriers: ["S-Bahn Berlin"], checked: PAST,
+      city: "Berlin",
+      station: { name: "Berlin Hbf", eva: "8011160" },
+      train: { query: "Berlin, Germany", minutes: 10, route: "Train", carriers: ["S-Bahn Berlin"], checked: PAST },
     },
   ],
 };
@@ -356,8 +361,11 @@ describe("the concert page", () => {
   test("marks a fastest route that is regional only", async () => {
     const travel = {
       cities: [{
-        city: "Kempen", query: "Kempen, Germany", minutes: 150, route: "Train",
-        carriers: ["Deutsche Bahn Regio (DB Regional)", "RheinRuhrBahn"], checked: PAST,
+        city: "Kempen",
+        train: {
+          query: "Kempen, Germany", minutes: 150, route: "Train",
+          carriers: ["Deutsche Bahn Regio (DB Regional)", "RheinRuhrBahn"], checked: PAST,
+        },
       }],
     };
     const { page, errors } = await open({ travel });
@@ -369,21 +377,36 @@ describe("the concert page", () => {
     await page.close();
   });
 
-  // The link needs no travel.json entry, so it appears on every German card
-  // from the start — and never on a Berlin or foreign one.
-  test("links every German card to a Deutschlandticket search for the concert day", async () => {
-    const { page, errors } = await open({ travel: { cities: [] } });
+  // bahn.de needs the destination's station number, so the link comes from
+  // the entry's station — never on a Berlin or foreign card, and only there.
+  test("links a German card with a station to a Deutschlandticket search for the concert day", async () => {
+    const { page, errors } = await open({});
 
     const links = page.locator("a.dticket-link");
     assert.equal(await links.count(), 1);
-    assert.equal(await page.locator(".travel .time").count(), 0);
     const href = await links.getAttribute("href");
-    assert.ok(href.startsWith("https://www.bahn.de/buchung/fahrplan/suche#"), href);
+    assert.ok(href.startsWith("https://int.bahn.de/en/buchung/fahrplan/suche#"), href);
     const params = new URLSearchParams(href.split("#")[1]);
-    assert.equal(params.get("zo"), "Kempen");
+    assert.equal(params.get("zo"), "Kempen (Niederrhein)");
+    assert.equal(params.get("zoei"), "8000409");
+    assert.equal(params.get("zoid"), "A=1@O=Kempen (Niederrhein)@L=8000409@");
     assert.equal(params.get("hd"), `${LATER}T18:00:00`);
     assert.equal(params.get("dltv"), "true");
+    // bahn.de drops the date and product list when these are escaped.
+    assert.match(href, /&hd=\d{4}-\d\d-\d\dT18:00:00&/);
+    assert.match(href, /&vm=03,04,05,06,07,08,09&/);
     assert.doesNotMatch(href, /\+/);
+
+    assert.deepEqual(errors, []);
+    await page.close();
+  });
+
+  test("gives a German city without a station its time but no link", async () => {
+    const travel = { cities: [{ ...FIXTURE_TRAVEL.cities[0], station: undefined }] };
+    const { page, errors } = await open({ travel });
+
+    assert.equal(await page.locator(".travel .time").count(), 1);
+    assert.equal(await page.locator("a.dticket-link").count(), 0);
 
     assert.deepEqual(errors, []);
     await page.close();
@@ -553,8 +576,7 @@ describe("the concert page", () => {
 
     assert.equal(await page.locator(".card").count(), 3);
     assert.equal(await page.locator(".travel .time").count(), 0);
-    // The bahn.de link needs no data, so it survives a missing file.
-    assert.equal(await page.locator("a.dticket-link").count(), 1);
+    assert.equal(await page.locator("a.dticket-link").count(), 0);
     assert.deepEqual(crashes, []);
     await page.close();
   });

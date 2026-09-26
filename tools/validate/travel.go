@@ -1,23 +1,27 @@
-// travel.json holds, for each German city a concert is in, roughly how long
-// the quickest train from Berlin takes to get there. The page prints it on
-// those cards; nothing in seen.json refers to it.
+// travel.json holds, for each German city a concert is in, what the page needs
+// to help the reader get there from Berlin: roughly how long the quickest
+// train takes, and the city's railway station, from which the page builds a
+// bahn.de search for Deutschlandticket connections. Nothing in seen.json
+// refers to it.
 //
 // Unlike artists.json and favorites.json this file IS written by the
-// concert-watch routine: when a concert turns up in a German city the file
-// doesn't cover yet, the run asks the Rome2Rio connector for routes from
-// Berlin Hbf and copies the quickest train route's name and duration in (see
-// "Train times from Berlin" in CLAUDE.md). A duration is a figure a tool
-// returned, never one estimated from a map or from memory, so an entry
-// records what was asked and what came back — enough for a person to repeat
-// the query and check it.
+// concert-watch routine (see "Train times from Berlin" in CLAUDE.md), and each
+// half of an entry is copied from one named source, never estimated:
 //
-// Each entry also carries the route's operators, from which the page decides
-// whether the route is regional only and so covered by a Deutschlandticket.
+//   - train: the quickest train route the Rome2Rio connector returned from
+//     Berlin Hbf — its name, duration and operators — with the query that was
+//     sent and the day, so a person can repeat it. The page reads the
+//     operators to say whether the route is regional only, and so covered by a
+//     Deutschlandticket; that verdict is derived there, never stored here.
+//   - station: the city's station name and DB station number, found with
+//     -find-station in tools/stations/de.csv. CI checks the pair against that
+//     same file, so a number recalled rather than looked up fails the build.
 //
-// What can be checked here is the shape of an entry, that the route it
-// records is a train route rather than the drive or the flight Rome2Rio lists
-// beside it, and that it is for a city the dataset actually has a German
-// concert in — so a misspelt city, which the page could never match to a
+// Either half may be missing — the connector may be unavailable to a run, or
+// a village may have no station — but not both. What else can be checked is
+// that the route is a train route rather than the drive or the flight Rome2Rio
+// lists beside it, and that the entry is for a city the dataset actually has a
+// German concert in, so a misspelt city, which the page could never match to a
 // card, fails the build instead of sitting unused.
 package main
 
@@ -25,6 +29,8 @@ import (
 	"fmt"
 	"slices"
 	"strings"
+
+	"github.com/auroras-and-sad-prose/concerts-tracking/tools/stations"
 )
 
 // maxTravelMinutes bounds a plausible duration. Nothing in Germany is a day's
@@ -36,7 +42,13 @@ const maxTravelMinutes = 24 * 60
 type TravelTime struct {
 	// City is the concert's city exactly as seen.json spells it; the page
 	// joins on it.
-	City string `json:"city"`
+	City    string            `json:"city"`
+	Station *stations.Station `json:"station"`
+	Train   *TrainRoute       `json:"train"`
+}
+
+// TrainRoute is what Rome2Rio returned for the quickest train route.
+type TrainRoute struct {
 	// Query is the destination sent to Rome2Rio, which may be fuller than
 	// City ("Frankfurt am Main, Germany" for "Frankfurt").
 	Query string `json:"query"`
@@ -46,9 +58,7 @@ type TravelTime struct {
 	// "Train", "Train via Wolfsburg", "Train, bus".
 	Route string `json:"route"`
 	// Carriers are the operators Rome2Rio listed for Route, copied as
-	// returned. The page reads them to say whether the route is regional
-	// only, and so covered by a Deutschlandticket; that verdict is derived
-	// there, never stored here.
+	// returned.
 	Carriers []string `json:"carriers"`
 	// Checked is the day the query was run.
 	Checked string `json:"checked"`
@@ -59,9 +69,10 @@ type Travel struct {
 	Cities []TravelTime `json:"cities"`
 }
 
-// ValidateTravel checks travel.json in isolation and against seen.json. An
-// empty list is fine: it is the state before any run has filled it in.
-func ValidateTravel(t Travel, f File) []string {
+// ValidateTravel checks travel.json in isolation and against seen.json and,
+// when list is non-nil, against the station list. An empty file is fine: it
+// is the state before any run has filled it in.
+func ValidateTravel(t Travel, f File, list *stations.List) []string {
 	var problems []string
 
 	germanCities := map[string]bool{}
@@ -76,17 +87,8 @@ func ValidateTravel(t Travel, f File) []string {
 		label := e.City
 		if strings.TrimSpace(label) == "" {
 			label = fmt.Sprintf("cities[%d]", i)
-		}
-
-		for _, req := range []struct{ name, val string }{
-			{"city", e.City}, {"query", e.Query}, {"route", e.Route}, {"checked", e.Checked},
-		} {
-			if strings.TrimSpace(req.val) == "" {
-				problems = append(problems, fmt.Sprintf("%s: field %q is required but empty", label, req.name))
-			}
-		}
-
-		if e.City != "" {
+			problems = append(problems, fmt.Sprintf("%s: field %q is required but empty", label, "city"))
+		} else {
 			if prev, dup := cities[e.City]; dup {
 				problems = append(problems, fmt.Sprintf("%s: duplicate city (also cities[%d])", label, prev))
 			} else {
@@ -98,38 +100,78 @@ func ValidateTravel(t Travel, f File) []string {
 			}
 		}
 
-		if e.Minutes < 1 || e.Minutes > maxTravelMinutes {
+		if e.Station == nil && e.Train == nil {
 			problems = append(problems, fmt.Sprintf(
-				"%s: minutes %d is outside 1..%d", label, e.Minutes, maxTravelMinutes))
+				"%s: has neither a station nor a train route; leave the city out until a run finds one", label))
 		}
-
-		// Rome2Rio names every option by its first mode — "Drive", "Fly to
-		// …", "Bus", "Night train", "Train via …" — so a route that doesn't
-		// open with "Train" is one of the others, copied from the wrong line.
-		if e.Route != "" && !strings.HasPrefix(e.Route, "Train") {
-			problems = append(problems, fmt.Sprintf(
-				"%s: route %q is not a train route (Rome2Rio names those \"Train …\")", label, e.Route))
-		}
-
-		// Every train route Rome2Rio returns names who runs it, so an empty
-		// list means the field was dropped, not that nobody does.
-		if len(e.Carriers) == 0 {
-			problems = append(problems, fmt.Sprintf(
-				"%s: field %q is required (the operators Rome2Rio listed for the route)", label, "carriers"))
-		}
-		for j, name := range e.Carriers {
-			switch {
-			case strings.TrimSpace(name) == "":
-				problems = append(problems, fmt.Sprintf("%s: carriers[%d] is empty", label, j))
-			case slices.Contains(e.Carriers[:j], name):
-				problems = append(problems, fmt.Sprintf("%s: carriers lists %q twice", label, name))
+		if e.Station != nil {
+			for _, m := range checkStation(*e.Station, list) {
+				problems = append(problems, fmt.Sprintf("%s: station: %s", label, m))
 			}
 		}
-
-		if e.Checked != "" && !validDate(e.Checked) {
-			problems = append(problems, fmt.Sprintf("%s: checked %q is not a valid YYYY-MM-DD date", label, e.Checked))
+		if e.Train != nil {
+			for _, m := range checkTrain(*e.Train) {
+				problems = append(problems, fmt.Sprintf("%s: train: %s", label, m))
+			}
 		}
 	}
 
+	return problems
+}
+
+func checkStation(s stations.Station, list *stations.List) []string {
+	var problems []string
+	if strings.TrimSpace(s.Name) == "" {
+		problems = append(problems, `field "name" is required but empty`)
+	}
+	if !stations.ValidEVA(s.EVA) {
+		problems = append(problems, fmt.Sprintf("eva %q is not a 6- or 7-digit DB station number", s.EVA))
+	}
+	if len(problems) == 0 && list != nil && !list.Has(s) {
+		problems = append(problems, fmt.Sprintf(
+			"%q with number %s is not in tools/stations/de.csv; copy both from -find-station", s.Name, s.EVA))
+	}
+	return problems
+}
+
+func checkTrain(r TrainRoute) []string {
+	var problems []string
+	for _, req := range []struct{ name, val string }{
+		{"query", r.Query}, {"route", r.Route}, {"checked", r.Checked},
+	} {
+		if strings.TrimSpace(req.val) == "" {
+			problems = append(problems, fmt.Sprintf("field %q is required but empty", req.name))
+		}
+	}
+
+	if r.Minutes < 1 || r.Minutes > maxTravelMinutes {
+		problems = append(problems, fmt.Sprintf("minutes %d is outside 1..%d", r.Minutes, maxTravelMinutes))
+	}
+
+	// Rome2Rio names every option by its first mode — "Drive", "Fly to …",
+	// "Bus", "Night train", "Train via …" — so a route that doesn't open with
+	// "Train" is one of the others, copied from the wrong line.
+	if r.Route != "" && !strings.HasPrefix(r.Route, "Train") {
+		problems = append(problems, fmt.Sprintf(
+			"route %q is not a train route (Rome2Rio names those \"Train …\")", r.Route))
+	}
+
+	// Every train route Rome2Rio returns names who runs it, so an empty list
+	// means the field was dropped, not that nobody does.
+	if len(r.Carriers) == 0 {
+		problems = append(problems, `field "carriers" is required (the operators Rome2Rio listed for the route)`)
+	}
+	for j, name := range r.Carriers {
+		switch {
+		case strings.TrimSpace(name) == "":
+			problems = append(problems, fmt.Sprintf("carriers[%d] is empty", j))
+		case slices.Contains(r.Carriers[:j], name):
+			problems = append(problems, fmt.Sprintf("carriers lists %q twice", name))
+		}
+	}
+
+	if r.Checked != "" && !validDate(r.Checked) {
+		problems = append(problems, fmt.Sprintf("checked %q is not a valid YYYY-MM-DD date", r.Checked))
+	}
 	return problems
 }

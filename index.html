@@ -690,18 +690,29 @@ function instrumentTagsHTML(concert) {
 
 // ---------- Train times from Berlin ----------
 //
-// travel.json holds, per German city, the quickest train route Rome2Rio listed
-// from Berlin Hbf, filled in by the concert-watch routine the first time a
-// concert turns up there. Like the roster it is joined in by city name; a city
-// it doesn't cover yet simply shows no time.
+// travel.json holds, per German city, what the concert-watch routine found
+// for getting there from Berlin: `train`, the quickest train route Rome2Rio
+// listed from Berlin Hbf, and `station`, the city's station name and DB number
+// from tools/stations/de.csv. Either may be missing. Like the roster it is
+// joined in by city name; a city it doesn't cover yet simply shows nothing.
 let travelByCity = new Map();
+
+function validTrain(t) {
+  return Boolean(t) && Number.isInteger(t.minutes) && t.minutes > 0;
+}
+
+function validStation(s) {
+  return Boolean(s) && typeof s.name === "string" && s.name.trim() !== "" &&
+    typeof s.eva === "string" && /^[0-9]{6,7}$/.test(s.eva);
+}
 
 function loadTravel(cities) {
   travelByCity = new Map();
-  for (const t of cities) {
-    if (t && typeof t.city === "string" && Number.isInteger(t.minutes) && t.minutes > 0) {
-      travelByCity.set(t.city, t);
-    }
+  for (const e of cities) {
+    if (!e || typeof e.city !== "string") continue;
+    const train = validTrain(e.train) ? e.train : null;
+    const station = validStation(e.station) ? e.station : null;
+    if (train || station) travelByCity.set(e.city, { train, station });
   }
 }
 
@@ -736,61 +747,66 @@ const REGIONAL_CARRIERS = [
 
 // Whether every operator on the route is a regional one. A route with no
 // carriers listed says nothing either way, so it gets no badge.
-function coveredByDeutschlandticket(t) {
-  const carriers = Array.isArray(t.carriers) ? t.carriers.filter(c => typeof c === "string" && c.trim()) : [];
+function coveredByDeutschlandticket(train) {
+  const carriers = Array.isArray(train.carriers) ? train.carriers.filter(c => typeof c === "string" && c.trim()) : [];
   return carriers.length > 0 && carriers.every(c => {
     const padded = " " + normalizeTitle(c) + " ";
     return REGIONAL_CARRIERS.some(name => padded.includes(" " + name + " "));
   });
 }
 
-// A bahn.de search from Berlin Hbf to the concert's city, arriving by 18:00 on
-// the concert day, limited to local transport. It needs no data, so every
-// German card has one from the start. The parameters follow bahn.de's own
-// search links as they stood when this was written — vm drops the ICE/IC/EC
-// and other long-distance products, dltv asks for Deutschlandticket
-// connections only — and could not be checked from CI, since bahn.de blocks
-// automated requests. If bahn.de ignores one, the link still opens a Berlin →
-// city search for the right day.
-function dticketSearchURL(concert) {
-  const params = new URLSearchParams({
-    sts: "true", so: "Berlin Hbf", zo: concert.city, kl: "2", r: "13:16:KLASSENLOS:1",
-    soid: "A=1@O=Berlin Hbf@L=8011160@", soei: "8011160",
-    hd: `${concert.date}T18:00:00`, hza: "A", ar: "false", s: "true", d: "false",
-    vm: "03,04,05,06,07,08,09", fm: "false", bp: "false", dlt: "true", dltv: "true",
-  });
-  // bahn.de reads these from the fragment and expects spaces as %20.
-  return "https://www.bahn.de/buchung/fahrplan/suche#" + params.toString().replace(/\+/g, "%20");
+// A bahn.de search from Berlin Hbf to the city's station, arriving by 18:00 on
+// the concert day, with Deutschlandticket connections only. bahn.de ignores a
+// destination given by name alone — it resets the whole search, date and all
+// — so this needs the station's DB number, and a city without one gets no
+// link. The parameters mirror a search made on int.bahn.de and shared from
+// there; a person confirmed on 2026-09-27 that this trimmed form opens on the
+// right day with regional trains only. bahn.de blocks automated requests, so
+// no test can check that it still does: vm leaves out the ICE/IC/EC and other
+// long-distance products, dltv asks for Deutschlandticket connections, and
+// sot/zot mark both ends as stations.
+function dticketSearchURL(concert, station) {
+  const params = [
+    ["sts", "true"], ["so", "Berlin Hbf"], ["zo", station.name], ["kl", "2"], ["r", "13:16:KLASSENLOS:1"],
+    ["soid", "A=1@O=Berlin Hbf@L=8011160@"], ["zoid", `A=1@O=${station.name}@L=${station.eva}@`],
+    ["sot", "ST"], ["zot", "ST"], ["soei", "8011160"], ["zoei", station.eva],
+    ["hd", `${concert.date}T18:00:00`], ["hza", "A"], ["hz", "[]"], ["ar", "false"], ["s", "false"], ["d", "false"],
+    ["vm", "03,04,05,06,07,08,09"], ["fm", "false"], ["bp", "false"], ["dlt", "true"], ["nfv", "false"], ["dltv", "true"],
+  ];
+  // bahn.de's own links keep ":" and "," literal (the date and product list
+  // stop working when they are escaped) and escape everything else.
+  const enc = v => encodeURIComponent(v).replace(/%3A/g, ":").replace(/%2C/g, ",");
+  return "https://int.bahn.de/en/buchung/fahrplan/suche#" + params.map(([k, v]) => `${k}=${enc(v)}`).join("&");
 }
 
 // Beside a ✓ badge the word "Deutschlandticket" is already on the line, so the
 // link just says where it goes.
-function dticketLinkHTML(concert, covered = false) {
-  const title = `bahn.de: Deutschlandticket connections from Berlin Hbf to ${concert.city}, arriving by 18:00 on the concert day`;
+function dticketLinkHTML(concert, station, covered = false) {
+  const title = `bahn.de: Deutschlandticket connections from Berlin Hbf to ${station.name}, arriving by 18:00 on the concert day`;
   const label = covered ? "timetable ↗" : "Deutschlandticket route ↗";
-  return `<a class="dticket-link" href="${escapeHTML(dticketSearchURL(concert))}" target="_blank" rel="noopener" title="${escapeHTML(title)}">${label}</a>`;
+  return `<a class="dticket-link" href="${escapeHTML(dticketSearchURL(concert, station))}" target="_blank" rel="noopener" title="${escapeHTML(title)}">${label}</a>`;
 }
 
-function travelTitle(t) {
+function travelTitle(train) {
   return `Quickest train route Rome2Rio listed from Berlin Hbf` +
-    (t.checked ? ` on ${t.checked}` : "") +
-    `: ${t.route || "train"}, ${t.minutes} min. Approximate — check the timetable before booking.`;
+    (train.checked ? ` on ${train.checked}` : "") +
+    `: ${train.route || "train"}, ${train.minutes} min. Approximate — check the timetable before booking.`;
 }
 
-// The time and badge need a travel.json entry; the bahn.de link does not, so
-// a German city the routine hasn't reached yet still gets the link.
+// Whatever the city's entry has: the time and badge come from `train`, the
+// bahn.de link from `station`.
 function travelParts(concert) {
-  if (concert.location_tag !== "germany" || !concert.city) return [];
-  const t = travelOf(concert);
-  const covered = Boolean(t) && coveredByDeutschlandticket(t);
+  const e = travelOf(concert);
+  if (!e) return [];
+  const covered = Boolean(e.train) && coveredByDeutschlandticket(e.train);
   const parts = [];
-  if (t) {
-    parts.push(`<span class="time" title="${escapeHTML(travelTitle(t))}">≈ ${escapeHTML(formatDuration(t.minutes))} by train from Berlin</span>`);
+  if (e.train) {
+    parts.push(`<span class="time" title="${escapeHTML(travelTitle(e.train))}">≈ ${escapeHTML(formatDuration(e.train.minutes))} by train from Berlin</span>`);
   }
   if (covered) {
     parts.push(`<span class="dticket" title="Every operator on this route is a regional one, so a Deutschlandticket covers it">✓ Deutschlandticket</span>`);
   }
-  parts.push(dticketLinkHTML(concert, covered));
+  if (e.station) parts.push(dticketLinkHTML(concert, e.station, covered));
   return parts;
 }
 

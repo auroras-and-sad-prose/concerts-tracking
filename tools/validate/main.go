@@ -22,9 +22,11 @@
 //     well-formed (see favorites.go and tools/favorites). Nothing in seen.json
 //     refers to it, so there is no cross-check — with -favorites-report the
 //     command instead prints which upcoming concerts play one of those works;
-//   - travel.json, the train times from Berlin the page shows on German
-//     cards, is well-formed, records train routes only, and names only cities
-//     a German concert in seen.json is in (see travel.go).
+//   - travel.json, the train times and stations the page shows on German
+//     cards, is well-formed, records train routes only, names only stations
+//     listed in tools/stations/de.csv, and names only cities a German concert
+//     in seen.json is in (see travel.go). With -find-station the command
+//     instead looks a place up in that station list.
 //
 // With -base pointing at the previous version of the file, it additionally
 // enforces two rules on entries that already existed:
@@ -43,6 +45,7 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"io"
 	"net/url"
 	"os"
 	"regexp"
@@ -50,6 +53,7 @@ import (
 	"time"
 
 	"github.com/auroras-and-sad-prose/concerts-tracking/tools/favorites"
+	"github.com/auroras-and-sad-prose/concerts-tracking/tools/stations"
 )
 
 // allowedTags is the closed vocabulary for location_tag. Extend deliberately
@@ -214,10 +218,30 @@ func main() {
 	artistsPath := flag.String("artists", "artists.json", "path to the artist roster; empty disables the roster checks")
 	favoritesPath := flag.String("favorites", "favorites.json", "path to the curated favorite works; empty disables the favorites checks")
 	travelPath := flag.String("travel", "travel.json", "path to the train times from Berlin; empty disables the travel checks")
+	stationsPath := flag.String("stations", "tools/stations/de.csv", "path to the German station list travel.json stations are checked against; empty skips that check")
+	findStation := flag.String("find-station", "", "look up a German place name in the station list, print the station to copy into travel.json, and exit")
 	favoritesReport := flag.Bool("favorites-report", false, "print which upcoming concerts play a favorite work; with -base, mark which of those are news")
 	flag.Parse()
 
 	now := time.Now().UTC()
+
+	var stationList *stations.List
+	if *stationsPath != "" {
+		l, err := stations.Load(*stationsPath)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "error: cannot read %s: %v\n", *stationsPath, err)
+			os.Exit(1)
+		}
+		stationList = l
+	}
+	if *findStation != "" {
+		if stationList == nil {
+			fmt.Fprintln(os.Stderr, "error: -find-station needs -stations")
+			os.Exit(1)
+		}
+		printStation(os.Stdout, *findStation, stationList.Find(*findStation))
+		return
+	}
 
 	f, err := loadJSON[File](*filePath)
 	if err != nil {
@@ -275,7 +299,7 @@ func main() {
 			fmt.Fprintf(os.Stderr, "error: cannot read %s: %v\n", *travelPath, err)
 			os.Exit(1)
 		}
-		for _, p := range ValidateTravel(travel, f) {
+		for _, p := range ValidateTravel(travel, f, stationList) {
 			problems = append(problems, fmt.Sprintf("%s: %s", *travelPath, p))
 		}
 	}
@@ -288,6 +312,24 @@ func main() {
 		os.Exit(1)
 	}
 	fmt.Printf("%s: OK (%d concerts)\n", *filePath, len(f.Concerts))
+}
+
+// printStation writes -find-station's answer: the station as the JSON object
+// travel.json takes, ready to copy, or why there is none to copy.
+func printStation(w io.Writer, query string, r stations.Result) {
+	switch {
+	case r.Station != nil:
+		b, _ := json.Marshal(r.Station)
+		fmt.Fprintf(w, "%s (%s): %s\n", query, r.Rule, b)
+	case len(r.Candidates) > 0:
+		fmt.Fprintf(w, "%s: ambiguous — %d stations match by %s; retry with a fuller name or leave the city without a station:\n",
+			query, len(r.Candidates), r.Rule)
+		for _, c := range r.Candidates {
+			fmt.Fprintf(w, "  %s;%s\n", c.Name, c.EVA)
+		}
+	default:
+		fmt.Fprintf(w, "%s: no station found; leave the city without a station\n", query)
+	}
 }
 
 // loadJSON decodes one of the repo's data files, rejecting any unknown fields
