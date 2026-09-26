@@ -3,9 +3,9 @@ name: smoke-page
 on:
   push:
     branches: [main]
-    paths: ["index.html", "seen.json", "artists.json", "favorites.json", "tests/**", "tools/favorites/testdata/**"]
+    paths: ["index.html", "seen.json", "artists.json", "favorites.json", "travel.json", "tests/**", "tools/favorites/testdata/**"]
   pull_request:
-    paths: ["index.html", "seen.json", "artists.json", "favorites.json", "tests/**", "tools/favorites/testdata/**"]
+    paths: ["index.html", "seen.json", "artists.json", "favorites.json", "travel.json", "tests/**", "tools/favorites/testdata/**"]
 
 jobs:
   smoke:

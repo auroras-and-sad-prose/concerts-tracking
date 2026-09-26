@@ -21,7 +21,10 @@
 //   - favorites.json, the curated list of works worth travelling for, is itself
 //     well-formed (see favorites.go and tools/favorites). Nothing in seen.json
 //     refers to it, so there is no cross-check — with -favorites-report the
-//     command instead prints which upcoming concerts play one of those works.
+//     command instead prints which upcoming concerts play one of those works;
+//   - travel.json, the train times from Berlin the page shows on German
+//     cards, is well-formed, records train routes only, and names only cities
+//     a German concert in seen.json is in (see travel.go).
 //
 // With -base pointing at the previous version of the file, it additionally
 // enforces two rules on entries that already existed:
@@ -210,6 +213,7 @@ func main() {
 	basePath := flag.String("base", "", "optional path to the previous version of the file; enables the append-only check")
 	artistsPath := flag.String("artists", "artists.json", "path to the artist roster; empty disables the roster checks")
 	favoritesPath := flag.String("favorites", "favorites.json", "path to the curated favorite works; empty disables the favorites checks")
+	travelPath := flag.String("travel", "travel.json", "path to the train times from Berlin; empty disables the travel checks")
 	favoritesReport := flag.Bool("favorites-report", false, "print which upcoming concerts play a favorite work; with -base, mark which of those are news")
 	flag.Parse()
 
@@ -263,6 +267,17 @@ func main() {
 		}
 	} else if *favoritesReport {
 		fmt.Fprintln(os.Stderr, "note: -favorites-report does nothing while -favorites is empty")
+	}
+
+	if *travelPath != "" {
+		travel, err := loadJSON[Travel](*travelPath)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "error: cannot read %s: %v\n", *travelPath, err)
+			os.Exit(1)
+		}
+		for _, p := range ValidateTravel(travel, f) {
+			problems = append(problems, fmt.Sprintf("%s: %s", *travelPath, p))
+		}
 	}
 
 	if len(problems) > 0 {

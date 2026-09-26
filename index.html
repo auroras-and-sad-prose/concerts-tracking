@@ -170,6 +170,9 @@
   }
   .card .place { font-size: .86rem; color: var(--muted); margin-top: .2rem; }
   .card .place .city { color: var(--text); font-weight: 600; }
+  /* On its own line under the place, since it answers the next question after
+     "where": how long it takes to get there. */
+  .card .place .travel { display: block; font-size: .8rem; color: var(--faint); margin-top: .1rem; }
   .card .program { font-size: .82rem; color: var(--muted); margin-top: .4rem; line-height: 1.45; max-width: 62ch; }
 
   .card .repertoire { margin-top: .55rem; }
@@ -585,6 +588,7 @@
   [data-theme="listings"] .listing .piece.favorite { color: var(--fav); background: var(--fav-soft); box-shadow: none; font-weight: 500; }
   [data-theme="listings"] .listing .piece.favorite::before { margin-right: .15rem; }
   [data-theme="listings"] .listing .note { font-style: italic; color: var(--faint); }
+  [data-theme="listings"] .listing .trip { font-family: var(--sans); font-size: .78rem; color: var(--muted); }
   [data-theme="listings"] .listing .when { font-family: var(--sans); font-size: .78rem; font-weight: 600; white-space: nowrap; }
   [data-theme="listings"] .listing a.link { font-family: var(--sans); font-size: .72rem; color: var(--text); padding: 0 0 0 .3rem; white-space: nowrap; }
   [data-theme="listings"] .listing a.link:hover { background: none; }
@@ -677,6 +681,51 @@ function instrumentTagsHTML(concert) {
   return statedInstrumentsOf(concert)
     .map(i => `<span class="tag instrument">${escapeHTML(i)}</span>`)
     .join("");
+}
+
+// ---------- Train times from Berlin ----------
+//
+// travel.json holds, per German city, the quickest train route Rome2Rio listed
+// from Berlin Hbf, filled in by the concert-watch routine the first time a
+// concert turns up there. Like the roster it is joined in by city name; a city
+// it doesn't cover yet simply shows no time.
+let travelByCity = new Map();
+
+function loadTravel(cities) {
+  travelByCity = new Map();
+  for (const t of cities) {
+    if (t && typeof t.city === "string" && Number.isInteger(t.minutes) && t.minutes > 0) {
+      travelByCity.set(t.city, t);
+    }
+  }
+}
+
+// Only for concerts elsewhere in Germany: a Berlin date needs no train, and
+// abroad is out of scope.
+function travelOf(concert) {
+  return concert.location_tag === "germany" ? travelByCity.get(concert.city) || null : null;
+}
+
+// Rounded to five minutes and marked approximate: it is one route's typical
+// duration, not a timetable, and minute precision would claim otherwise.
+function formatDuration(minutes) {
+  const m = Math.max(5, Math.round(minutes / 5) * 5);
+  const h = Math.floor(m / 60);
+  const rest = m % 60;
+  if (h === 0) return `${rest} min`;
+  return rest === 0 ? `${h}h` : `${h}h ${String(rest).padStart(2, "0")}m`;
+}
+
+function travelTitle(t) {
+  return `Quickest train route Rome2Rio listed from Berlin Hbf` +
+    (t.checked ? ` on ${t.checked}` : "") +
+    `: ${t.route || "train"}, ${t.minutes} min. Approximate — check the timetable before booking.`;
+}
+
+function travelHTML(concert) {
+  const t = travelOf(concert);
+  if (!t) return "";
+  return `<span class="travel" title="${escapeHTML(travelTitle(t))}">≈ ${escapeHTML(formatDuration(t.minutes))} by train from Berlin</span>`;
 }
 
 // ---------- Favorite works ----------
@@ -1247,7 +1296,7 @@ function cardHTML(c) {
         </div>
         <div class="body">
           <div class="topline"><span class="artist">${escapeHTML(c.artist)}</span>${statusTagHTML(c)}${favoriteTagHTML(c)}${locationTagHTML(c.location_tag)}${instrumentTagsHTML(c)}</div>
-          <div class="place">${whereHTML}</div>
+          <div class="place">${whereHTML}${travelHTML(c)}</div>
           ${statusLineHTML(c)}
           ${c.program ? `<div class="program">${escapeHTML(c.program)}</div>` : ""}
           ${piecesHTML(c.pieces, hitsOf(c))}
@@ -1281,10 +1330,14 @@ function listingHTML(c) {
     works = `<span class="note">${escapeHTML(c.pieces)}</span>`;
   }
   const where = [c.venue, c.city].filter(Boolean).map(escapeHTML).join(", ");
+  const travel = travelOf(c);
+  const trip = travel
+    ? ` <span class="trip" title="${escapeHTML(travelTitle(travel))}">≈ ${escapeHTML(formatDuration(travel.minutes))} from Berlin by train.</span>`
+    : "";
   const status = statusTagHTML(c);
   return `
       <article class="${cardClasses(c, "listing")}" data-id="${escapeHTML(c.id || "")}">
-        <p>${hits.length ? '<span class="lead-star">★ </span>' : ""}<strong class="artist">${escapeHTML(c.artist)}</strong>${status ? " " + status : ""}${c.program ? ` — ${escapeHTML(c.program)}.` : ""} ${works ? works + "." : ""} ${where}${where ? "." : ""} <span class="when">${DOW[d.getDay()]} ${d.getDate()} ${MONTH_ABBR[d.getMonth()]}</span>${linksOf(c)}</p>
+        <p>${hits.length ? '<span class="lead-star">★ </span>' : ""}<strong class="artist">${escapeHTML(c.artist)}</strong>${status ? " " + status : ""}${c.program ? ` — ${escapeHTML(c.program)}.` : ""} ${works ? works + "." : ""} ${where}${where ? "." : ""}${trip} <span class="when">${DOW[d.getDay()]} ${d.getDate()} ${MONTH_ABBR[d.getMonth()]}</span>${linksOf(c)}</p>
         ${statusLineHTML(c)}
       </article>`;
 }
@@ -1354,8 +1407,8 @@ async function fetchJSON(path) {
 }
 
 async function init() {
-  // Both of these are supporting data: if either can't be loaded, the concert
-  // list still renders and only its own control drops out.
+  // These are supporting data: if any can't be loaded, the concert list still
+  // renders and only its own control or line drops out.
   const roster = fetchJSON("artists.json").catch(e => {
     console.error(e);
     return null;
@@ -1364,10 +1417,15 @@ async function init() {
     console.error(e);
     return null;
   });
+  const trains = fetchJSON("travel.json").catch(e => {
+    console.error(e);
+    return null;
+  });
   try {
     const data = await fetchJSON("seen.json");
     allConcerts = data.concerts || [];
-    const [artists, favoritesFile] = await Promise.all([roster, starred]);
+    const [artists, favoritesFile, travelFile] = await Promise.all([roster, starred, trains]);
+    loadTravel((travelFile && Array.isArray(travelFile.cities) && travelFile.cities) || []);
     loadRoster((artists && artists.artists) || []);
     artistOrder = ((artists && artists.artists) || []).map(a => a.name).filter(n => typeof n === "string");
     favorites = parseFavorites((favoritesFile && favoritesFile.favorites) || []);
