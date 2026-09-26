@@ -225,21 +225,12 @@ func main() {
 
 	now := time.Now().UTC()
 
-	var stationList *stations.List
-	if *stationsPath != "" {
-		l, err := stations.Load(*stationsPath)
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "error: cannot read %s: %v\n", *stationsPath, err)
-			os.Exit(1)
-		}
-		stationList = l
-	}
 	if *findStation != "" {
-		if stationList == nil {
+		if *stationsPath == "" {
 			fmt.Fprintln(os.Stderr, "error: -find-station needs -stations")
 			os.Exit(1)
 		}
-		printStation(os.Stdout, *findStation, stationList.Find(*findStation))
+		printStation(os.Stdout, *findStation, mustLoadStations(*stationsPath).Find(*findStation))
 		return
 	}
 
@@ -299,6 +290,11 @@ func main() {
 			fmt.Fprintf(os.Stderr, "error: cannot read %s: %v\n", *travelPath, err)
 			os.Exit(1)
 		}
+		// Read only here, so -travel "" needs no station list either.
+		var stationList *stations.List
+		if *stationsPath != "" {
+			stationList = mustLoadStations(*stationsPath)
+		}
 		for _, p := range ValidateTravel(travel, f, stationList) {
 			problems = append(problems, fmt.Sprintf("%s: %s", *travelPath, p))
 		}
@@ -312,6 +308,17 @@ func main() {
 		os.Exit(1)
 	}
 	fmt.Printf("%s: OK (%d concerts)\n", *filePath, len(f.Concerts))
+}
+
+// mustLoadStations reads the station list or exits: a list that is named but
+// unreadable is a broken checkout, not a reason to skip the check.
+func mustLoadStations(path string) *stations.List {
+	l, err := stations.Load(path)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "error: cannot read %s: %v\n", path, err)
+		os.Exit(1)
+	}
+	return l
 }
 
 // printStation writes -find-station's answer: the station as the JSON object

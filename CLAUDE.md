@@ -86,9 +86,12 @@ per-row check to fail. Whether a concert plays a favorite is derived from the
 row's `pieces` and the curated list whenever it is needed, never written into
 the row.
 
-It checks `travel.json` too. Every entry needs a `city` that a `germany` row
-in `seen.json` spells exactly that way, so a misspelt city, which the page
-could never match, fails the build. It also needs a `station`, a `train` or
+It checks `travel.json` too. Every entry needs a `city` that some row in
+`seen.json` spells exactly that way, so a misspelt city, which the page could
+never match, fails the build. (Any row, not just a `germany` one: a row's
+`location_tag` may be refined later, while its `city` is frozen and entries
+are never removed, so tying the check to the tag could turn a retag into a
+red build.) It also needs a `station`, a `train` or
 both:
 - a `station` must be a name-and-number pair listed in `tools/stations/de.csv`,
   so a station number recalled rather than looked up fails;
@@ -297,7 +300,7 @@ city rather than on each row:
 ```
 
 - `city` is the concert's `city` exactly as `seen.json` spells it; the page
-  joins on it, and CI rejects a city no `germany` row has.
+  joins on it, and CI rejects a city no row has.
 - `station` is the city's railway station, as the name and DB station number
   (its EVA number) listed in `tools/stations/de.csv`, found with
   `-find-station`. It is left out when there is no clear answer; step 6a says

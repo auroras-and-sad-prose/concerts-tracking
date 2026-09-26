@@ -132,13 +132,16 @@ func TestTravelDuplicateCity(t *testing.T) {
 	}
 }
 
-// The page only shows a time on German cards, so an entry for a city whose
-// concerts are all in Berlin or abroad would never be shown.
-func TestTravelCityMustBeGerman(t *testing.T) {
-	c := valid()
-	c.LocationTag = "europe"
-	if p := ValidateTravel(Travel{Cities: []TravelTime{travelEntry()}}, File{Concerts: []Concert{c}}, stationList(t)); len(p) == 0 {
-		t.Fatal("expected a problem for a city with no concert tagged germany")
+// location_tag is refinable and travel.json entries are never removed, so an
+// entry must stay valid after its city's only row is retagged away from
+// germany; it just stops being shown.
+func TestTravelCitySurvivesRetag(t *testing.T) {
+	for _, tag := range []string{"berlin", "europe"} {
+		c := valid()
+		c.LocationTag = tag
+		if p := ValidateTravel(Travel{Cities: []TravelTime{travelEntry()}}, File{Concerts: []Concert{c}}, stationList(t)); len(p) != 0 {
+			t.Fatalf("entry should survive a retag to %s, got %v", tag, p)
+		}
 	}
 }
 

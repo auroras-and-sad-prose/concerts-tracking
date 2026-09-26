@@ -20,8 +20,8 @@
 // Either half may be missing — the connector may be unavailable to a run, or
 // a village may have no station — but not both. What else can be checked is
 // that the route is a train route rather than the drive or the flight Rome2Rio
-// lists beside it, and that the entry is for a city the dataset actually has a
-// German concert in, so a misspelt city, which the page could never match to a
+// lists beside it, and that the entry is for a city some concert in the
+// dataset is in, so a misspelt city, which the page could never match to a
 // card, fails the build instead of sitting unused.
 package main
 
@@ -75,11 +75,15 @@ type Travel struct {
 func ValidateTravel(t Travel, f File, list *stations.List) []string {
 	var problems []string
 
-	germanCities := map[string]bool{}
+	// Any row's city, whatever its location_tag. A row's city is frozen and
+	// rows are never deleted, so an entry that once passed can't start
+	// failing; location_tag, by contrast, is refinable, and tying the check
+	// to it would turn a later retag (Potsdam moved to berlin) into a red
+	// build on an entry the routine may never remove. An entry for a city
+	// with no germany row left is simply not shown.
+	knownCities := map[string]bool{}
 	for _, c := range f.Concerts {
-		if c.LocationTag == "germany" {
-			germanCities[c.City] = true
-		}
+		knownCities[c.City] = true
 	}
 
 	cities := make(map[string]int, len(t.Cities))
@@ -94,9 +98,9 @@ func ValidateTravel(t Travel, f File, list *stations.List) []string {
 			} else {
 				cities[e.City] = i
 			}
-			if !germanCities[e.City] {
+			if !knownCities[e.City] {
 				problems = append(problems, fmt.Sprintf(
-					"%s: no concert tagged germany in seen.json has this city; the name must match a row's city exactly", label))
+					"%s: no concert in seen.json has this city; the name must match a row's city exactly", label))
 			}
 		}
 
