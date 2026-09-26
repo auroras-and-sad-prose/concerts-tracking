@@ -88,8 +88,9 @@ the row.
 It checks `travel.json` too: every entry has its fields, a duration of 1 to
 1440 minutes, a real `checked` date, a `route` Rome2Rio names as a train route
 (it starts with `Train`, so a `Drive`, `Fly …` or `Night train` line copied by
-mistake fails), and a `city` that a `germany` row in `seen.json` spells exactly
-that way — so a misspelt city, which the page could never match, fails the build.
+mistake fails), a non-empty `carriers` list with no blank or repeated name, and
+a `city` that a `germany` row in `seen.json` spells exactly that way — so a
+misspelt city, which the page could never match, fails the build.
 
 Run locally before committing (the validator reads `artists.json`,
 `favorites.json` and `travel.json` from the working directory too;
@@ -274,6 +275,7 @@ not on each row:
       "query": "Braunschweig, Germany",
       "minutes": 98,
       "route": "Train via Wolfsburg, Hauptbahnhof",
+      "carriers": ["Deutsche Bahn Intercity (DB IC)", "enno"],
       "checked": "2026-09-26"
     }
   ]
@@ -284,8 +286,9 @@ not on each row:
   joins on it, and CI rejects a city no `germany` row has.
 - `query` is the destination string sent to Rome2Rio, which may be fuller than
   `city` when the name alone is ambiguous (`"Frankfurt am Main, Germany"`).
-- `minutes` and `route` are the duration and the route name of the quickest
-  *train* route Rome2Rio returned, copied as returned.
+- `minutes`, `route` and `carriers` are the duration, the route name and the
+  list of operators of the quickest *train* route Rome2Rio returned, copied as
+  returned.
 - `checked` is the day the query ran.
 
 Berlin cards show no time, and neither do concerts abroad. A German city with
@@ -293,6 +296,26 @@ no entry yet simply shows nothing, which is the state until a run fills it in.
 The page rounds to five minutes and calls the result approximate, since what
 Rome2Rio returns is a typical duration for a route, not a timetable. The
 tooltip names the route and the date it was checked.
+
+**Deutschlandticket.** Most of these routes are ICE or IC, which the ticket
+doesn't cover, and Rome2Rio lists only its top four routes, so a slower
+regional-only route almost never comes back and there is no regional time to
+store. Two things stand in for one:
+
+- A **✓ Deutschlandticket** badge when every one of the fastest route's
+  `carriers` is on the page's list of regional operators (`REGIONAL_CARRIERS`
+  in `index.html`), which in practice means cities where regional trains are
+  the fastest, such as Rostock. It is worked out when the page loads, never
+  stored, like a favorite. The list names what is known to be regional, so an
+  operator nobody has added yet costs a route its badge and never makes an
+  ICE look covered. Extending it is a reviewed change to `index.html`, not
+  something a run does.
+- A **Deutschlandticket route ↗** link on every German card, whether or not
+  the city has an entry yet: a bahn.de search from Berlin Hbf, arriving by
+  18:00 on the concert day, with its local-transport and Deutschlandticket-only
+  filters set. It needs no data. bahn.de blocks automated requests, so CI
+  can't check that bahn.de still honours the filters; a person checks by
+  clicking.
 
 **Unlike the roster and the favorites, the routine writes this file** — step 6a
 says how. It adds entries and refreshes stale ones; it never removes one. A
@@ -754,10 +777,17 @@ one:
 2. From `available_routes`, keep only the routes whose `name` starts with
    `Train`. That excludes `Drive`, `Fly …`, `Bus`, `Rideshare` and `Night
    train`. Take the one with the smallest `duration`.
-3. Write `{city, query, minutes, route, checked}` in the order the file already
-   uses: `city` exactly as the row spells it, `query` exactly as sent,
-   `minutes` = that route's `duration`, `route` = its `name` copied verbatim,
+3. Write `{city, query, minutes, route, carriers, checked}` in the order the
+   file already uses: `city` exactly as the row spells it, `query` exactly as
+   sent, `minutes` = that route's `duration`, `route` = its `name` copied
+   verbatim, `carriers` = its `carriers` list copied verbatim and in order,
    and `checked` = today. A refreshed entry is updated in place.
+
+Don't decide for yourself whether a route is covered by the Deutschlandticket,
+and don't edit the page's list of regional operators. The page derives the
+badge from `carriers`. If a route plainly made up of regional trains lists an
+operator you think is missing from that list, name it in step 8 so a person
+can add it.
 
 Nothing else may supply a number. If the connector isn't available to the run,
 its call fails, or it returns no train route, write no entry and name the city
@@ -919,7 +949,8 @@ matched.
 Then one line for step 6a: how many `travel.json` entries were added and how
 many refreshed, and every German city on an upcoming row still without one,
 with the reason: the connector wasn't available, the call failed, no train
-route came back, or the city name was ambiguous. A run that finds the connector
+route came back, or the city name was ambiguous. Also name any regional
+operator you think the page's `REGIONAL_CARRIERS` list is missing (step 6a). A run that finds the connector
 missing says so plainly, since that silently leaves every new German city
 without a time.
 

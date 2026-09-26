@@ -94,8 +94,14 @@ const FIXTURE_FAVORITES = {
 // 328 minutes is shown rounded to five: "5h 30m".
 const FIXTURE_TRAVEL = {
   cities: [
-    { city: "Kempen", query: "Kempen, Germany", minutes: 328, route: "Train via Wolfsburg", checked: PAST },
-    { city: "Berlin", query: "Berlin, Germany", minutes: 10, route: "Train", checked: PAST },
+    {
+      city: "Kempen", query: "Kempen, Germany", minutes: 328, route: "Train via Wolfsburg",
+      carriers: ["Deutsche Bahn Intercity (DB IC)", "Deutsche Bahn Regio (DB Regional)"], checked: PAST,
+    },
+    {
+      city: "Berlin", query: "Berlin, Germany", minutes: 10, route: "Train",
+      carriers: ["S-Bahn Berlin"], checked: PAST,
+    },
   ],
 };
 
@@ -334,12 +340,50 @@ describe("the concert page", () => {
   test("shows the train time from Berlin on German cards only", async () => {
     const { page, errors } = await open({});
 
-    const travel = page.locator(".travel");
-    assert.equal(await travel.count(), 1);
-    assert.equal(await travel.innerText(), "≈ 5h 30m by train from Berlin");
-    assert.match(await travel.getAttribute("title"), /Train via Wolfsburg, 328 min/);
+    const time = page.locator(".travel .time");
+    assert.equal(await time.count(), 1);
+    assert.equal(await time.innerText(), "≈ 5h 30m by train from Berlin");
+    assert.match(await time.getAttribute("title"), /Train via Wolfsburg, 328 min/);
     const kempen = page.locator(".card", { hasText: "Kempen" });
-    assert.equal(await kempen.locator(".travel").count(), 1);
+    assert.equal(await kempen.locator(".travel .time").count(), 1);
+    // One of its two operators runs ICE/IC, so the route earns no badge.
+    assert.equal(await page.locator(".travel .dticket").count(), 0);
+
+    assert.deepEqual(errors, []);
+    await page.close();
+  });
+
+  test("marks a fastest route that is regional only", async () => {
+    const travel = {
+      cities: [{
+        city: "Kempen", query: "Kempen, Germany", minutes: 150, route: "Train",
+        carriers: ["Deutsche Bahn Regio (DB Regional)", "RheinRuhrBahn"], checked: PAST,
+      }],
+    };
+    const { page, errors } = await open({ travel });
+
+    assert.equal(await page.locator(".travel .dticket").count(), 1);
+    assert.match(await page.locator(".card", { hasText: "Kempen" }).innerText(), /✓ Deutschlandticket/);
+
+    assert.deepEqual(errors, []);
+    await page.close();
+  });
+
+  // The link needs no travel.json entry, so it appears on every German card
+  // from the start — and never on a Berlin or foreign one.
+  test("links every German card to a Deutschlandticket search for the concert day", async () => {
+    const { page, errors } = await open({ travel: { cities: [] } });
+
+    const links = page.locator("a.dticket-link");
+    assert.equal(await links.count(), 1);
+    assert.equal(await page.locator(".travel .time").count(), 0);
+    const href = await links.getAttribute("href");
+    assert.ok(href.startsWith("https://www.bahn.de/buchung/fahrplan/suche#"), href);
+    const params = new URLSearchParams(href.split("#")[1]);
+    assert.equal(params.get("zo"), "Kempen");
+    assert.equal(params.get("hd"), `${LATER}T18:00:00`);
+    assert.equal(params.get("dltv"), "true");
+    assert.doesNotMatch(href, /\+/);
 
     assert.deepEqual(errors, []);
     await page.close();
@@ -508,7 +552,9 @@ describe("the concert page", () => {
     await page.goto(origin, { waitUntil: "networkidle" });
 
     assert.equal(await page.locator(".card").count(), 3);
-    assert.equal(await page.locator(".travel").count(), 0);
+    assert.equal(await page.locator(".travel .time").count(), 0);
+    // The bahn.de link needs no data, so it survives a missing file.
+    assert.equal(await page.locator("a.dticket-link").count(), 1);
     assert.deepEqual(crashes, []);
     await page.close();
   });

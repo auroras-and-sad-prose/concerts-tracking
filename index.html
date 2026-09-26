@@ -173,6 +173,9 @@
   /* On its own line under the place, since it answers the next question after
      "where": how long it takes to get there. */
   .card .place .travel { display: block; font-size: .8rem; color: var(--faint); margin-top: .1rem; }
+  .card .place .travel .dticket { color: var(--accent); font-weight: 600; white-space: nowrap; }
+  .card .place .travel a { color: var(--accent); text-decoration: none; white-space: nowrap; }
+  .card .place .travel a:hover { text-decoration: underline; }
   .card .program { font-size: .82rem; color: var(--muted); margin-top: .4rem; line-height: 1.45; max-width: 62ch; }
 
   .card .repertoire { margin-top: .55rem; }
@@ -589,6 +592,8 @@
   [data-theme="listings"] .listing .piece.favorite::before { margin-right: .15rem; }
   [data-theme="listings"] .listing .note { font-style: italic; color: var(--faint); }
   [data-theme="listings"] .listing .trip { font-family: var(--sans); font-size: .78rem; color: var(--muted); }
+  [data-theme="listings"] .listing .trip a { color: var(--text); white-space: nowrap; }
+  [data-theme="listings"] .listing .trip .dticket { color: var(--text); font-weight: 600; }
   [data-theme="listings"] .listing .when { font-family: var(--sans); font-size: .78rem; font-weight: 600; white-space: nowrap; }
   [data-theme="listings"] .listing a.link { font-family: var(--sans); font-size: .72rem; color: var(--text); padding: 0 0 0 .3rem; white-space: nowrap; }
   [data-theme="listings"] .listing a.link:hover { background: none; }
@@ -716,16 +721,82 @@ function formatDuration(minutes) {
   return rest === 0 ? `${h}h` : `${h}h ${String(rest).padStart(2, "0")}m`;
 }
 
+// Operators whose trains a Deutschlandticket covers, as Rome2Rio names them,
+// matched as whole words after the same folding favorites use. It is a list of
+// what is known to be regional rather than of what is known not to be, so the
+// failure runs the safe way: an operator nobody has added yet costs a route its
+// badge, and never makes an ICE look covered. Rome2Rio files ICE and IC alike
+// under "Deutsche Bahn Intercity (DB IC)", which matches nothing here. A few IC
+// lines do accept the ticket in some states; the badge ignores that too.
+const REGIONAL_CARRIERS = [
+  "db regio", "db regional", "s bahn", "odeg", "ostdeutsche eisenbahn", "enno", "metronom", "erixx",
+  "rheinruhrbahn", "eurobahn", "nordwestbahn", "vlexx", "agilis", "erfurter bahn",
+  "mitteldeutsche regiobahn", "hanseatische eisenbahn", "niederbarnimer eisenbahn", "landerbahn",
+];
+
+// Whether every operator on the route is a regional one. A route with no
+// carriers listed says nothing either way, so it gets no badge.
+function coveredByDeutschlandticket(t) {
+  const carriers = Array.isArray(t.carriers) ? t.carriers.filter(c => typeof c === "string" && c.trim()) : [];
+  return carriers.length > 0 && carriers.every(c => {
+    const padded = " " + normalizeTitle(c) + " ";
+    return REGIONAL_CARRIERS.some(name => padded.includes(" " + name + " "));
+  });
+}
+
+// A bahn.de search from Berlin Hbf to the concert's city, arriving by 18:00 on
+// the concert day, limited to local transport. It needs no data, so every
+// German card has one from the start. The parameters follow bahn.de's own
+// search links as they stood when this was written — vm drops the ICE/IC/EC
+// and other long-distance products, dltv asks for Deutschlandticket
+// connections only — and could not be checked from CI, since bahn.de blocks
+// automated requests. If bahn.de ignores one, the link still opens a Berlin →
+// city search for the right day.
+function dticketSearchURL(concert) {
+  const params = new URLSearchParams({
+    sts: "true", so: "Berlin Hbf", zo: concert.city, kl: "2", r: "13:16:KLASSENLOS:1",
+    soid: "A=1@O=Berlin Hbf@L=8011160@", soei: "8011160",
+    hd: `${concert.date}T18:00:00`, hza: "A", ar: "false", s: "true", d: "false",
+    vm: "03,04,05,06,07,08,09", fm: "false", bp: "false", dlt: "true", dltv: "true",
+  });
+  // bahn.de reads these from the fragment and expects spaces as %20.
+  return "https://www.bahn.de/buchung/fahrplan/suche#" + params.toString().replace(/\+/g, "%20");
+}
+
+// Beside a ✓ badge the word "Deutschlandticket" is already on the line, so the
+// link just says where it goes.
+function dticketLinkHTML(concert, covered = false) {
+  const title = `bahn.de: Deutschlandticket connections from Berlin Hbf to ${concert.city}, arriving by 18:00 on the concert day`;
+  const label = covered ? "timetable ↗" : "Deutschlandticket route ↗";
+  return `<a class="dticket-link" href="${escapeHTML(dticketSearchURL(concert))}" target="_blank" rel="noopener" title="${escapeHTML(title)}">${label}</a>`;
+}
+
 function travelTitle(t) {
   return `Quickest train route Rome2Rio listed from Berlin Hbf` +
     (t.checked ? ` on ${t.checked}` : "") +
     `: ${t.route || "train"}, ${t.minutes} min. Approximate — check the timetable before booking.`;
 }
 
-function travelHTML(concert) {
+// The time and badge need a travel.json entry; the bahn.de link does not, so
+// a German city the routine hasn't reached yet still gets the link.
+function travelParts(concert) {
+  if (concert.location_tag !== "germany" || !concert.city) return [];
   const t = travelOf(concert);
-  if (!t) return "";
-  return `<span class="travel" title="${escapeHTML(travelTitle(t))}">≈ ${escapeHTML(formatDuration(t.minutes))} by train from Berlin</span>`;
+  const covered = Boolean(t) && coveredByDeutschlandticket(t);
+  const parts = [];
+  if (t) {
+    parts.push(`<span class="time" title="${escapeHTML(travelTitle(t))}">≈ ${escapeHTML(formatDuration(t.minutes))} by train from Berlin</span>`);
+  }
+  if (covered) {
+    parts.push(`<span class="dticket" title="Every operator on this route is a regional one, so a Deutschlandticket covers it">✓ Deutschlandticket</span>`);
+  }
+  parts.push(dticketLinkHTML(concert, covered));
+  return parts;
+}
+
+function travelHTML(concert) {
+  const parts = travelParts(concert);
+  return parts.length ? `<span class="travel">${parts.join(" · ")}</span>` : "";
 }
 
 // ---------- Favorite works ----------
@@ -1330,10 +1401,8 @@ function listingHTML(c) {
     works = `<span class="note">${escapeHTML(c.pieces)}</span>`;
   }
   const where = [c.venue, c.city].filter(Boolean).map(escapeHTML).join(", ");
-  const travel = travelOf(c);
-  const trip = travel
-    ? ` <span class="trip" title="${escapeHTML(travelTitle(travel))}">≈ ${escapeHTML(formatDuration(travel.minutes))} from Berlin by train.</span>`
-    : "";
+  const tripParts = travelParts(c);
+  const trip = tripParts.length ? ` <span class="trip travel">${tripParts.join(" · ")}.</span>` : "";
   const status = statusTagHTML(c);
   return `
       <article class="${cardClasses(c, "listing")}" data-id="${escapeHTML(c.id || "")}">

@@ -9,11 +9,12 @@ import (
 // travelEntry is a correct entry for valid()'s city; tests mutate a copy.
 func travelEntry() TravelTime {
 	return TravelTime{
-		City:    "Altenkrempe",
-		Query:   "Altenkrempe, Germany",
-		Minutes: 190,
-		Route:   "Train, bus",
-		Checked: "2026-09-26",
+		City:     "Altenkrempe",
+		Query:    "Altenkrempe, Germany",
+		Minutes:  190,
+		Route:    "Train, bus",
+		Carriers: []string{"Deutsche Bahn Regio (DB Regional)", "Autokraft"},
+		Checked:  "2026-09-26",
 	}
 }
 
@@ -56,6 +57,10 @@ func TestTravelFieldChecks(t *testing.T) {
 		{"night train", func(e *TravelTime) { e.Route = "Night train" }},
 		{"bus", func(e *TravelTime) { e.Route = "Bus" }},
 		{"city with no German concert", func(e *TravelTime) { e.City = "Altenkremp" }},
+		{"no carriers", func(e *TravelTime) { e.Carriers = nil }},
+		{"empty carriers", func(e *TravelTime) { e.Carriers = []string{} }},
+		{"blank carrier", func(e *TravelTime) { e.Carriers = []string{"Deutsche Bahn Regio (DB Regional)", " "} }},
+		{"repeated carrier", func(e *TravelTime) { e.Carriers = []string{"enno", "enno"} }},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -99,7 +104,7 @@ func TestTravelCityMustBeGerman(t *testing.T) {
 
 func TestTravelRejectsUnknownFields(t *testing.T) {
 	path := filepath.Join(t.TempDir(), "travel.json")
-	content := `{"cities":[{"city":"Altenkrempe","query":"Altenkrempe, Germany","minutes":190,"route":"Train","checked":"2026-09-26","via":"Lübeck"}]}`
+	content := `{"cities":[{"city":"Altenkrempe","query":"Altenkrempe, Germany","minutes":190,"route":"Train","carriers":["enno"],"checked":"2026-09-26","via":"Lübeck"}]}`
 	if err := os.WriteFile(path, []byte(content), 0o600); err != nil {
 		t.Fatalf("write temp file: %v", err)
 	}

@@ -11,6 +11,9 @@
 // records what was asked and what came back — enough for a person to repeat
 // the query and check it.
 //
+// Each entry also carries the route's operators, from which the page decides
+// whether the route is regional only and so covered by a Deutschlandticket.
+//
 // What can be checked here is the shape of an entry, that the route it
 // records is a train route rather than the drive or the flight Rome2Rio lists
 // beside it, and that it is for a city the dataset actually has a German
@@ -20,6 +23,7 @@ package main
 
 import (
 	"fmt"
+	"slices"
 	"strings"
 )
 
@@ -41,6 +45,11 @@ type TravelTime struct {
 	// Route is Rome2Rio's own name for the route, copied as returned:
 	// "Train", "Train via Wolfsburg", "Train, bus".
 	Route string `json:"route"`
+	// Carriers are the operators Rome2Rio listed for Route, copied as
+	// returned. The page reads them to say whether the route is regional
+	// only, and so covered by a Deutschlandticket; that verdict is derived
+	// there, never stored here.
+	Carriers []string `json:"carriers"`
 	// Checked is the day the query was run.
 	Checked string `json:"checked"`
 }
@@ -100,6 +109,21 @@ func ValidateTravel(t Travel, f File) []string {
 		if e.Route != "" && !strings.HasPrefix(e.Route, "Train") {
 			problems = append(problems, fmt.Sprintf(
 				"%s: route %q is not a train route (Rome2Rio names those \"Train …\")", label, e.Route))
+		}
+
+		// Every train route Rome2Rio returns names who runs it, so an empty
+		// list means the field was dropped, not that nobody does.
+		if len(e.Carriers) == 0 {
+			problems = append(problems, fmt.Sprintf(
+				"%s: field %q is required (the operators Rome2Rio listed for the route)", label, "carriers"))
+		}
+		for j, name := range e.Carriers {
+			switch {
+			case strings.TrimSpace(name) == "":
+				problems = append(problems, fmt.Sprintf("%s: carriers[%d] is empty", label, j))
+			case slices.Contains(e.Carriers[:j], name):
+				problems = append(problems, fmt.Sprintf("%s: carriers lists %q twice", label, name))
+			}
 		}
 
 		if e.Checked != "" && !validDate(e.Checked) {
