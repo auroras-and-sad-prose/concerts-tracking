@@ -89,6 +89,27 @@ const FIXTURE_FAVORITES = {
   ],
 };
 
+// Kempen has a German concert in the fixture; Berlin is there too, to show a
+// Berlin card never gets a train time even when the file has one for it.
+// 328 minutes is shown rounded to five: "5h 30m".
+const FIXTURE_TRAVEL = {
+  cities: [
+    {
+      city: "Kempen",
+      station: { name: "Kempen (Niederrhein)", eva: "8000409" },
+      train: {
+        query: "Kempen, Germany", minutes: 328, route: "Train via Wolfsburg",
+        carriers: ["Deutsche Bahn Intercity (DB IC)", "Deutsche Bahn Regio (DB Regional)"], checked: PAST,
+      },
+    },
+    {
+      city: "Berlin",
+      station: { name: "Berlin Hbf", eva: "8011160" },
+      train: { query: "Berlin, Germany", minutes: 10, route: "Train", carriers: ["S-Bahn Berlin"], checked: PAST },
+    },
+  ],
+};
+
 const FIXTURE_CONCERTS = {
   concerts: [
     {
@@ -185,6 +206,8 @@ async function open(data = null, query = "") {
       route.fulfill({ json: data.artists ?? FIXTURE_ARTISTS }));
     await page.route("**/favorites.json", route =>
       route.fulfill({ json: data.favorites ?? FIXTURE_FAVORITES }));
+    await page.route("**/travel.json", route =>
+      route.fulfill({ json: data.travel ?? FIXTURE_TRAVEL }));
   }
 
   await page.goto(origin + "/" + query, { waitUntil: "networkidle" });
@@ -319,6 +342,76 @@ describe("the concert page", () => {
     await page.close();
   });
 
+  test("shows the train time from Berlin on German cards only", async () => {
+    const { page, errors } = await open({});
+
+    const time = page.locator(".travel .time");
+    assert.equal(await time.count(), 1);
+    assert.equal(await time.innerText(), "≈ 5h 30m by train from Berlin");
+    assert.match(await time.getAttribute("title"), /Train via Wolfsburg, 328 min/);
+    const kempen = page.locator(".card", { hasText: "Kempen" });
+    assert.equal(await kempen.locator(".travel .time").count(), 1);
+    // One of its two operators runs ICE/IC, so the route earns no badge.
+    assert.equal(await page.locator(".travel .dticket").count(), 0);
+
+    assert.deepEqual(errors, []);
+    await page.close();
+  });
+
+  test("marks a fastest route that is regional only", async () => {
+    const travel = {
+      cities: [{
+        city: "Kempen",
+        train: {
+          query: "Kempen, Germany", minutes: 150, route: "Train",
+          carriers: ["Deutsche Bahn Regio (DB Regional)", "RheinRuhrBahn"], checked: PAST,
+        },
+      }],
+    };
+    const { page, errors } = await open({ travel });
+
+    assert.equal(await page.locator(".travel .dticket").count(), 1);
+    assert.match(await page.locator(".card", { hasText: "Kempen" }).innerText(), /✓ Deutschlandticket/);
+
+    assert.deepEqual(errors, []);
+    await page.close();
+  });
+
+  // bahn.de needs the destination's station number, so the link comes from
+  // the entry's station — never on a Berlin or foreign card, and only there.
+  test("links a German card with a station to a Deutschlandticket search for the concert day", async () => {
+    const { page, errors } = await open({});
+
+    const links = page.locator("a.dticket-link");
+    assert.equal(await links.count(), 1);
+    const href = await links.getAttribute("href");
+    assert.ok(href.startsWith("https://int.bahn.de/en/buchung/fahrplan/suche#"), href);
+    const params = new URLSearchParams(href.split("#")[1]);
+    assert.equal(params.get("zo"), "Kempen (Niederrhein)");
+    assert.equal(params.get("zoei"), "8000409");
+    assert.equal(params.get("zoid"), "A=1@O=Kempen (Niederrhein)@L=8000409@");
+    assert.equal(params.get("hd"), `${LATER}T18:00:00`);
+    assert.equal(params.get("dltv"), "true");
+    // bahn.de drops the date and product list when these are escaped.
+    assert.match(href, /&hd=\d{4}-\d\d-\d\dT18:00:00&/);
+    assert.match(href, /&vm=03,04,05,06,07,08,09&/);
+    assert.doesNotMatch(href, /\+/);
+
+    assert.deepEqual(errors, []);
+    await page.close();
+  });
+
+  test("gives a German city without a station its time but no link", async () => {
+    const travel = { cities: [{ ...FIXTURE_TRAVEL.cities[0], station: undefined }] };
+    const { page, errors } = await open({ travel });
+
+    assert.equal(await page.locator(".travel .time").count(), 1);
+    assert.equal(await page.locator("a.dticket-link").count(), 0);
+
+    assert.deepEqual(errors, []);
+    await page.close();
+  });
+
   // The page highlights favorites and the concert-watch routine alerts on
   // them, from two implementations of one rule (index.html and
   // tools/favorites). This is the fixture that keeps them from drifting: if it
@@ -362,6 +455,7 @@ describe("the concert page", () => {
       assert.equal(await page.locator(".card.flagged .tag.status").count(), 1, theme);
       assert.equal(await page.locator(".piece.favorite").count(), 1, theme);
       assert.equal(await page.locator("#subtitle").innerText(), "3 upcoming concerts · 1 with a favorite", theme);
+      assert.match(await page.locator("#main").innerText(), /5h 30m/, theme);
     }
 
     assert.deepEqual(errors, []);
@@ -463,6 +557,26 @@ describe("the concert page", () => {
     assert.equal(await page.locator(".card.favorite").count(), 0);
     assert.equal(await page.locator("#favoriteFilter").isHidden(), true);
     assert.equal(await page.locator("#subtitle").innerText(), "3 upcoming concerts");
+    assert.deepEqual(crashes, []);
+    await page.close();
+  });
+
+  test("still lists concerts when the train times are missing", async () => {
+    const page = await browser.newPage();
+    const crashes = [];
+    page.on("pageerror", err => crashes.push(String(err)));
+    await page.route("https://fonts.*/**", route =>
+      route.fulfill({ status: 200, contentType: "text/css", body: "" }));
+    await page.route("**/seen.json", route => route.fulfill({ json: FIXTURE_CONCERTS }));
+    await page.route("**/artists.json", route => route.fulfill({ json: FIXTURE_ARTISTS }));
+    await page.route("**/favorites.json", route => route.fulfill({ json: FIXTURE_FAVORITES }));
+    await page.route("**/travel.json", route => route.fulfill({ status: 404, body: "" }));
+
+    await page.goto(origin, { waitUntil: "networkidle" });
+
+    assert.equal(await page.locator(".card").count(), 3);
+    assert.equal(await page.locator(".travel .time").count(), 0);
+    assert.equal(await page.locator("a.dticket-link").count(), 0);
     assert.deepEqual(crashes, []);
     await page.close();
   });
