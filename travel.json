@@ -1,3 +1,300 @@
 {
-  "cities": []
+  "cities": [
+    {
+      "city": "Bad Wörishofen",
+      "station": { "name": "Bad Wörishofen", "eva": "8000768" },
+      "train": {
+        "query": "Bad Wörishofen, Germany",
+        "minutes": 396,
+        "route": "Train via Nuremberg",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)", "Deutsche Bahn Regio (DB Regional)"],
+        "checked": "2026-09-26"
+      }
+    },
+    {
+      "city": "Baden-Baden",
+      "station": { "name": "Baden-Baden", "eva": "8000774" },
+      "train": {
+        "query": "Baden-Baden, Germany",
+        "minutes": 375,
+        "route": "Train",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)"],
+        "checked": "2026-09-26"
+      }
+    },
+    {
+      "city": "Bamberg",
+      "station": { "name": "Bamberg", "eva": "8000025" },
+      "train": {
+        "query": "Bamberg, Germany",
+        "minutes": 166,
+        "route": "Train",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)"],
+        "checked": "2026-09-26"
+      }
+    },
+    {
+      "city": "Braunschweig",
+      "station": { "name": "Braunschweig Hbf", "eva": "8000049" },
+      "train": {
+        "query": "Braunschweig, Germany",
+        "minutes": 98,
+        "route": "Train via Wolfsburg, Hauptbahnhof",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)", "enno"],
+        "checked": "2026-09-26"
+      }
+    },
+    {
+      "city": "Celle",
+      "station": { "name": "Celle", "eva": "8000064" },
+      "train": {
+        "query": "Celle, Germany",
+        "minutes": 132,
+        "route": "Train",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)"],
+        "checked": "2026-09-26"
+      }
+    },
+    {
+      "city": "Coesfeld",
+      "station": { "name": "Coesfeld (Westf)", "eva": "8000066" },
+      "train": {
+        "query": "Coesfeld, Germany",
+        "minutes": 277,
+        "route": "Train",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)", "Deutsche Bahn Regio (DB Regional)"],
+        "checked": "2026-09-26"
+      }
+    },
+    {
+      "city": "Cologne",
+      "station": { "name": "Köln Hbf", "eva": "8000207" },
+      "train": {
+        "query": "Cologne, Germany",
+        "minutes": 275,
+        "route": "Train",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)"],
+        "checked": "2026-09-26"
+      }
+    },
+    {
+      "city": "Diez",
+      "station": { "name": "Diez", "eva": "8001457" },
+      "train": {
+        "query": "Diez, Germany",
+        "minutes": 381,
+        "route": "Train",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)", "Deutsche Bahn Regio (DB Regional)"],
+        "checked": "2026-09-26"
+      }
+    },
+    {
+      "city": "Dortmund",
+      "station": { "name": "Dortmund Hbf", "eva": "8000080" },
+      "train": {
+        "query": "Dortmund, Germany",
+        "minutes": 230,
+        "route": "Train via Wolfsburg",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)"],
+        "checked": "2026-09-26"
+      }
+    },
+    {
+      "city": "Dresden",
+      "station": { "name": "Dresden Hbf", "eva": "8010085" },
+      "train": {
+        "query": "Dresden, Germany",
+        "minutes": 92,
+        "route": "Train",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)"],
+        "checked": "2026-09-26"
+      }
+    },
+    {
+      "city": "Düsseldorf",
+      "station": { "name": "Düsseldorf Hbf", "eva": "8000085" },
+      "train": {
+        "query": "Düsseldorf, Germany",
+        "minutes": 293,
+        "route": "Train via Wolfsburg",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)"],
+        "checked": "2026-09-26"
+      }
+    },
+    {
+      "city": "Erlangen",
+      "station": { "name": "Erlangen", "eva": "8001844" },
+      "train": {
+        "query": "Erlangen, Germany",
+        "minutes": 187,
+        "route": "Train",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)"],
+        "checked": "2026-09-26"
+      }
+    },
+    {
+      "city": "Essen",
+      "station": { "name": "Essen Hbf", "eva": "8000098" },
+      "train": {
+        "query": "Essen, Germany",
+        "minutes": 278,
+        "route": "Train via Wolfsburg",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)"],
+        "checked": "2026-09-26"
+      }
+    },
+    {
+      "city": "Fellheim",
+      "train": {
+        "query": "Fellheim, Germany",
+        "minutes": 453,
+        "route": "Train via Nuremberg",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)", "Deutsche Bahn Regio (DB Regional)", "Arverio Bayern GmbH"],
+        "checked": "2026-09-26"
+      }
+    },
+    {
+      "city": "Hamburg",
+      "station": { "name": "Hamburg Hbf", "eva": "8002549" },
+      "train": {
+        "query": "Hamburg, Germany",
+        "minutes": 107,
+        "route": "Train",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)"],
+        "checked": "2026-09-26"
+      }
+    },
+    {
+      "city": "Heidelberg",
+      "station": { "name": "Heidelberg Hbf", "eva": "8000156" },
+      "train": {
+        "query": "Heidelberg, Germany",
+        "minutes": 286,
+        "route": "Train",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)"],
+        "checked": "2026-09-26"
+      }
+    },
+    {
+      "city": "Kiel",
+      "station": { "name": "Kiel Hbf", "eva": "8000199" },
+      "train": {
+        "query": "Kiel, Germany",
+        "minutes": 183,
+        "route": "Train",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)"],
+        "checked": "2026-09-26"
+      }
+    },
+    {
+      "city": "Kronberg",
+      "station": { "name": "Kronberg (Taunus)", "eva": "8003447" },
+      "train": {
+        "query": "Kronberg, Germany",
+        "minutes": 281,
+        "route": "Train",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)"],
+        "checked": "2026-09-26"
+      }
+    },
+    {
+      "city": "Künzelsau",
+      "station": { "name": "Künzelsau Bf", "eva": "8087022" },
+      "train": {
+        "query": "Künzelsau, Germany",
+        "minutes": 388,
+        "route": "Train",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)", "Arverio Baden-Württemberg GmbH"],
+        "checked": "2026-09-26"
+      }
+    },
+    {
+      "city": "Leipzig",
+      "station": { "name": "Leipzig Hbf", "eva": "8010205" },
+      "train": {
+        "query": "Leipzig, Germany",
+        "minutes": 77,
+        "route": "Train",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)"],
+        "checked": "2026-09-26"
+      }
+    },
+    {
+      "city": "Mannheim",
+      "station": { "name": "Mannheim Hbf", "eva": "8000244" },
+      "train": {
+        "query": "Mannheim, Germany",
+        "minutes": 286,
+        "route": "Train",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)"],
+        "checked": "2026-09-26"
+      }
+    },
+    {
+      "city": "Marburg",
+      "station": { "name": "Marburg (Lahn)", "eva": "8000337" },
+      "train": {
+        "query": "Marburg, Germany",
+        "minutes": 267,
+        "route": "Train",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)", "Deutsche Bahn Regio (DB Regional)"],
+        "checked": "2026-09-26"
+      }
+    },
+    {
+      "city": "Munich",
+      "station": { "name": "München Hbf", "eva": "8000261" },
+      "train": {
+        "query": "Munich, Germany",
+        "minutes": 247,
+        "route": "Train",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)"],
+        "checked": "2026-09-26"
+      }
+    },
+    {
+      "city": "Regensburg",
+      "station": { "name": "Regensburg Hbf", "eva": "8000309" },
+      "train": {
+        "query": "Regensburg, Germany",
+        "minutes": 247,
+        "route": "Train",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)", "agilis"],
+        "checked": "2026-09-26"
+      }
+    },
+    {
+      "city": "Rosenheim",
+      "station": { "name": "Rosenheim", "eva": "8000320" },
+      "train": {
+        "query": "Rosenheim, Germany",
+        "minutes": 315,
+        "route": "Train via Nuremberg",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)", "Transdev GmbH"],
+        "checked": "2026-09-26"
+      }
+    },
+    {
+      "city": "Rostock",
+      "station": { "name": "Rostock Hbf", "eva": "8010304" },
+      "train": {
+        "query": "Rostock, Germany",
+        "minutes": 157,
+        "route": "Train",
+        "carriers": ["Deutsche Bahn Regio (DB Regional)"],
+        "checked": "2026-09-26"
+      }
+    },
+    {
+      "city": "Stuttgart",
+      "station": { "name": "Stuttgart Hbf", "eva": "8000096" },
+      "train": {
+        "query": "Stuttgart, Germany",
+        "minutes": 344,
+        "route": "Train",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)"],
+        "checked": "2026-09-26"
+      }
+    }
+  ]
 }
