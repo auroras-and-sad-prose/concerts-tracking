@@ -57,7 +57,10 @@ type favoriteLine struct {
 // filled in and turns out to contain a favorite. Both are computed against the
 // current list, so this reports news about concerts, not about the list — after
 // starring a new work, run it without -base to see every concert it catches.
-func reportFavorites(w io.Writer, f File, base *File, fav favorites.File, now time.Time) {
+//
+// Concerts by an artist in untracked (by name) are left out, as the page
+// leaves them out: nobody is travelling for them any more.
+func reportFavorites(w io.Writer, f File, base *File, fav favorites.File, untracked map[string]bool, now time.Time) {
 	if len(fav.Favorites) == 0 {
 		fmt.Fprintln(w, "favorites: the list is empty; nothing to match")
 		return
@@ -81,7 +84,7 @@ func reportFavorites(w io.Writer, f File, base *File, fav favorites.File, now ti
 	var lines []favoriteLine
 	upcoming, concerts := 0, 0
 	for _, c := range f.Concerts {
-		if c.Date < today {
+		if c.Date < today || untracked[c.Artist] {
 			continue
 		}
 		upcoming++

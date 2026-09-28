@@ -17,7 +17,9 @@
 //   - id has the canonical "<slug>|<date>|<city>" shape consistent with its row;
 //   - ids are unique;
 //   - every artist is registered in artists.json, under the same slug and name
-//     (see artists.go, which also validates that roster itself);
+//     (see artists.go, which also validates that roster itself), and with
+//     -base, no row is added for an artist the roster marks as no longer
+//     tracked;
 //   - favorites.json, the curated list of works worth travelling for, is itself
 //     well-formed (see favorites.go and tools/favorites). Nothing in seen.json
 //     refers to it, so there is no cross-check — with -favorites-report the
@@ -69,13 +71,15 @@ var allowedTags = map[string]bool{
 // untrusted (possibly fabricated) source. It holds exactly the sources
 // CLAUDE.md sends the routine to sweep — the artist sites, Bachtrack, and the
 // label tour pages listed under "Tertiary source" — so adding a source there
-// means adding its domain here too, or rows citing it fail validation.
+// means adding its domain here too, or rows citing it fail validation. A
+// domain stays after its artist stops being tracked, because their old rows
+// are never deleted and still cite it.
 var allowedHosts = map[string]bool{
 	"ilyunburkev.com":        true,
 	"olgascheps.com":         true,
 	"mariaduenasviolin.com":  true,
 	"mayaoganyan.com":        true,
-	"janinejansen.com":       true,
+	"janinejansen.com":       true, // no longer tracked; kept for her existing rows
 	"juliafischer.com":       true,
 	"itzhakperlman.com":      true,
 	"bachtrack.com":          true,
@@ -252,6 +256,10 @@ func main() {
 
 	problems := Validate(f, base, now)
 
+	// Artists the roster marks as no longer tracked; the favorites report
+	// leaves their concerts out, as the page does.
+	var untracked map[string]bool
+
 	if *artistsPath != "" {
 		artists, err := loadJSON[Artists](*artistsPath)
 		if err != nil {
@@ -262,6 +270,10 @@ func main() {
 			problems = append(problems, fmt.Sprintf("%s: %s", *artistsPath, p))
 		}
 		problems = append(problems, CheckRoster(f, artists)...)
+		if base != nil {
+			problems = append(problems, CheckUntracked(*base, f, artists)...)
+		}
+		untracked = UntrackedNames(artists)
 	}
 
 	if *favoritesPath != "" {
@@ -278,7 +290,7 @@ func main() {
 		// matches everything reads exactly like a lucky programme — so the
 		// report is withheld until the list itself is sound.
 		if *favoritesReport && len(favProblems) == 0 {
-			reportFavorites(os.Stdout, f, base, fav, now)
+			reportFavorites(os.Stdout, f, base, fav, untracked, now)
 		}
 	} else if *favoritesReport {
 		fmt.Fprintln(os.Stderr, "note: -favorites-report does nothing while -favorites is empty")

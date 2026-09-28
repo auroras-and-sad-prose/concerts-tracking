@@ -36,6 +36,7 @@ func TestRosterFieldChecks(t *testing.T) {
 		{"repeated instrument", func(a *Artists) { a.Artists[0].Instruments = []string{"piano", "piano"} }},
 		{"duplicate slug", func(a *Artists) { a.Artists[1].Slug = "scheps" }},
 		{"duplicate name", func(a *Artists) { a.Artists[1].Name = "Olga Scheps" }},
+		{"tracked written as true", func(a *Artists) { a.Artists[0].Tracked = boolptr(true) }},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -139,5 +140,50 @@ func TestMalformedIDSkippedByRosterCheck(t *testing.T) {
 	c.ID = "scheps-altenkrempe"
 	if p := CheckRoster(File{Concerts: []Concert{c}}, roster()); len(p) != 0 {
 		t.Fatalf("expected malformed ids to be left to Validate, got %v", p)
+	}
+}
+
+func boolptr(b bool) *bool { return &b }
+
+func TestUntrackedArtistIsValidRoster(t *testing.T) {
+	a := roster()
+	a.Artists[0].Tracked = boolptr(false)
+	if p := ValidateArtists(a); len(p) != 0 {
+		t.Fatalf("expected no problems, got %v", p)
+	}
+	// Their existing rows still need the entry, and still match it.
+	if p := CheckRoster(File{Concerts: []Concert{valid()}}, a); len(p) != 0 {
+		t.Fatalf("expected no problems, got %v", p)
+	}
+}
+
+// An untracked artist keeps the rows already recorded, refinements and all,
+// but a run may not add a new one.
+func TestUntrackedArtistGetsNoNewRows(t *testing.T) {
+	a := roster()
+	a.Artists[0].Tracked = boolptr(false) // scheps
+
+	old := valid()
+	refined := valid()
+	refined.Program = strptr("Recital")
+	base := File{Concerts: []Concert{old}}
+
+	if p := CheckUntracked(base, File{Concerts: []Concert{refined}}, a); len(p) != 0 {
+		t.Fatalf("expected an existing row to pass, got %v", p)
+	}
+
+	added := valid()
+	added.ID = "scheps|2026-10-01|altenkrempe"
+	added.Date = "2026-10-01"
+	if p := CheckUntracked(base, File{Concerts: []Concert{old, added}}, a); len(p) != 1 {
+		t.Fatalf("expected one problem for the new row, got %v", p)
+	}
+
+	// A tracked artist's new row is none of this check's business.
+	other := valid()
+	other.ID = "fischer|2026-10-01|altenkrempe"
+	other.Artist = "Julia Fischer"
+	if p := CheckUntracked(base, File{Concerts: []Concert{old, other}}, a); len(p) != 0 {
+		t.Fatalf("expected a tracked artist's new row to pass, got %v", p)
 	}
 }
