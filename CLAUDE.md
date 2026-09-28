@@ -567,7 +567,8 @@ don't guess its contents, and don't abort the whole run over one failed source.
   Deutschlandticket, even if slow)
 - `"europe"` — outside Germany but in Europe
 
-Ignore events outside Europe.
+Ignore events outside Europe. Turkey counts as Europe, all of it — Istanbul
+and Anatolian cities such as Ankara or Izmir alike — so tag it `"europe"`.
 
 **Step 4 — Deduplicate against memory.** Build a stable id per concert:
 `id = "<artist-slug>|<ISO-date>|<city-lowercased>"` (e.g.
