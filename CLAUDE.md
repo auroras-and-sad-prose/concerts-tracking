@@ -54,6 +54,8 @@ entry:
 - duplicates another entry's `id`;
 - names an artist absent from `artists.json`, or whose `artist` string disagrees
   with the name registered there for that id slug;
+- is new (absent from the base) and belongs to an artist `artists.json` marks
+  `"tracked": false`;
 - has an `instruments` that is an empty array, repeats a value, contains
   anything outside the allowed set (`piano`, `violin`), or names an instrument
   the artist isn't recorded as playing in `artists.json`.
@@ -164,6 +166,15 @@ unstated Fischer date appears under both Piano and Violin rather than claiming
 one. A later run may narrow it once a source settles the question (rule 6) —
 either by billing the instrument outright or by printing it in a work title,
 which rule 7 admits as the one permitted inference.
+
+**Dropping an artist** is done by marking the entry `"tracked": false`, never
+by deleting it: rows are never removed from `seen.json`, so the artist's old
+rows still need an entry to validate against (and their site stays on the
+`source_url` allowlist for the same reason). The page hides every row of an
+untracked artist, the favorites report skips them, and CI rejects any row
+added for them after the flag is set. The field is either absent or `false`;
+writing `true` fails the build. Also take the artist out of the routine's
+starting points below.
 
 **The concert-watch routine never writes this file.** Adding an artist,
 correcting an instrument, or extending the instrument vocabulary is a reviewed
@@ -437,7 +448,7 @@ Two rules make this safe to automate:
 ## Operating procedure for the concert-watch routine
 
 You are a scheduled concert-monitoring agent. Your job: detect NEW upcoming
-concerts by seven classical musicians and alert about them, using this repo as
+concerts by six classical musicians and alert about them, using this repo as
 memory so the same concert is never alerted on twice. You run inside a fresh
 clone of this private repo with read/write access to repo contents, to Pull
 Requests and to Issues. All state lives in `seen.json` at the repo root.
@@ -459,27 +470,31 @@ following links out of it is how detail — and sometimes a concert — is found
 2. María Dueñas — https://www.mariaduenasviolin.com/en/calendar
 3. İlyun Bürkev — https://ilyunburkev.com/en/portfolio/concerts/
 4. Maya Oganyan — https://www.mayaoganyan.com/calendar
-5. Janine Jansen — https://www.janinejansen.com/performances/
-6. Julia Fischer — https://www.juliafischer.com/en/events
-7. Itzhak Perlman — no primary source. His official site is not a working
+5. Julia Fischer — https://www.juliafischer.com/en/events
+6. Itzhak Perlman — no primary source. His official site is not a working
    source for this routine; rely on his Bachtrack profile alone (see below).
    Do not attempt to fetch itzhakperlman.com.
 
-These six pages list upcoming concerts directly (Perlman has no primary
+These five pages list upcoming concerts directly (Perlman has no primary
 source — see above). Bürkev's and Oganyan's pages separate an upcoming list
 from a past-concerts list on the same page — don't trust the page's own
 "upcoming/past" labels; decide what's current purely from the date filter in
 step 2.
 
-**Secondary source — Bachtrack, for all seven artists (Perlman's only source):**
+**Secondary source — Bachtrack, for all six artists (Perlman's only source):**
 
 1. Olga Scheps — https://bachtrack.com/performer/olga-scheps
 2. María Dueñas — https://bachtrack.com/performer/maria-duenas
 3. İlyun Bürkev — https://bachtrack.com/performer/ilyun-burkev
 4. Maya Oganyan — https://bachtrack.com/performer/maya-oganyan
-5. Janine Jansen — https://bachtrack.com/performer/janine-jansen
-6. Julia Fischer — https://bachtrack.com/performer/julia-fischer
-7. Itzhak Perlman — https://bachtrack.com/performer/itzhak-perlman
+5. Julia Fischer — https://bachtrack.com/performer/julia-fischer
+6. Itzhak Perlman — https://bachtrack.com/performer/itzhak-perlman
+
+Janine Jansen is no longer tracked: `artists.json` marks her `"tracked":
+false` (see "The artist roster"). Don't fetch her calendar or her Bachtrack
+profile, don't add rows for her — CI rejects one — and don't drill or refine
+her existing rows. If a page you are reading for someone else happens to bill
+her, that is not a discovery.
 
 Each profile has a "Live Events" section listing upcoming concerts (ignore
 "Latest reviews"/"Latest articles" — past content). Bachtrack sometimes lists
@@ -972,7 +987,7 @@ everything together.
 
 If there are zero new concerts, no status changed, no favorite turned up on an
 existing row and no conflict was found, do NOT open an issue — print a one-line
-summary instead (e.g. "No new concerts. Checked 7 artists, all sources OK.").
+summary instead (e.g. "No new concerts. Checked 6 artists, all sources OK.").
 A quiet run leaves no branch behind, opens no PR, and sends no notification:
 with nothing to say, saying it loudly is how a daily routine trains its reader
 to ignore it.

@@ -23,7 +23,8 @@
     {
       "slug": "jansen",
       "name": "Janine Jansen",
-      "instruments": ["violin"]
+      "instruments": ["violin"],
+      "tracked": false
     },
     {
       "slug": "fischer",

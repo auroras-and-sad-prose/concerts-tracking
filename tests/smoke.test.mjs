@@ -489,6 +489,22 @@ describe("the concert page", () => {
     await page.close();
   });
 
+  test("leaves out every concert by an artist the roster no longer tracks", async () => {
+    const artists = {
+      artists: FIXTURE_ARTISTS.artists.map(a => a.slug === "scheps" ? { ...a, tracked: false } : a),
+    };
+    const { page, errors } = await open({ artists }, "?theme=lanes");
+
+    assert.equal(await page.locator(".card").count(), 2);
+    assert.doesNotMatch(await page.locator("#main").innerText(), /Olga Scheps|Kempen/);
+    assert.deepEqual(
+      await page.locator("#artistFilter option").allInnerTexts(), ["All artists", "Julia Fischer"]);
+    assert.equal(await page.locator(".lane-track").count(), 1);
+
+    assert.deepEqual(errors, []);
+    await page.close();
+  });
+
   test("searches, and says so when nothing matches", async () => {
     const { page, errors } = await open({});
 

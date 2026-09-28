@@ -45,10 +45,22 @@ func checkInstrumentValues(list []string) []string {
 
 // Artist is one entry in artists.json. slug is the identity key, and matches
 // the first segment of a concert id ("scheps|2026-09-12|altenkrempe").
+//
+// Tracked is absent for every artist the routine follows. An artist it has
+// stopped following is written "tracked": false rather than removed: rows are
+// never deleted from seen.json, so their existing rows still need a roster
+// entry to validate against. The page hides those rows, and CheckUntracked
+// keeps new ones from being added.
 type Artist struct {
 	Slug        string   `json:"slug"`
 	Name        string   `json:"name"`
 	Instruments []string `json:"instruments"`
+	Tracked     *bool    `json:"tracked,omitempty"`
+}
+
+// IsTracked reports whether the routine still follows this artist.
+func (a Artist) IsTracked() bool {
+	return a.Tracked == nil || *a.Tracked
 }
 
 // Artists is the top-level shape of artists.json.
@@ -96,6 +108,11 @@ func ValidateArtists(a Artists) []string {
 		}
 		for _, m := range checkInstrumentValues(ar.Instruments) {
 			problems = append(problems, fmt.Sprintf("%s: %s", label, m))
+		}
+
+		// One spelling for one state: a tracked artist simply has no field.
+		if ar.Tracked != nil && *ar.Tracked {
+			problems = append(problems, fmt.Sprintf("%s: %q is only ever written as false; leave it out for a tracked artist", label, "tracked"))
 		}
 	}
 
@@ -153,4 +170,48 @@ func CheckRoster(f File, a Artists) []string {
 	}
 
 	return problems
+}
+
+// CheckUntracked rejects a row added for an artist the roster marks
+// "tracked": false. Their old rows stay, since nothing is ever deleted, but a
+// row that wasn't in base is one the routine should never have written: it
+// has been told to stop sweeping that artist, and the page would hide the row
+// anyway. Rows already in base are untouched, refinements included.
+func CheckUntracked(base, head File, a Artists) []string {
+	untracked := map[string]bool{}
+	for _, ar := range a.Artists {
+		if !ar.IsTracked() {
+			untracked[ar.Slug] = true
+		}
+	}
+	if len(untracked) == 0 {
+		return nil
+	}
+
+	existing := make(map[string]bool, len(base.Concerts))
+	for _, c := range base.Concerts {
+		existing[c.ID] = true
+	}
+
+	var problems []string
+	for _, c := range head.Concerts {
+		slug, _, _ := strings.Cut(c.ID, "|")
+		if untracked[slug] && !existing[c.ID] {
+			problems = append(problems, fmt.Sprintf(
+				"%s: new row for %s, whom artists.json marks as no longer tracked", c.ID, c.Artist))
+		}
+	}
+	return problems
+}
+
+// UntrackedNames is the set of artist names the roster marks as no longer
+// tracked, keyed the way seen.json rows name them.
+func UntrackedNames(a Artists) map[string]bool {
+	names := map[string]bool{}
+	for _, ar := range a.Artists {
+		if !ar.IsTracked() {
+			names[ar.Name] = true
+		}
+	}
+	return names
 }

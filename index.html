@@ -642,6 +642,10 @@ let allConcerts = [];
 // name, which CI guarantees matches the roster exactly.
 let instrumentsByName = new Map();
 
+// Artists the roster marks "tracked": false. Their rows stay in seen.json,
+// which never deletes anything, but the page leaves them out entirely.
+let untrackedNames = new Set();
+
 function todayISO() {
   const d = new Date();
   return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
@@ -649,7 +653,9 @@ function todayISO() {
 
 function loadRoster(artists) {
   instrumentsByName = new Map();
+  untrackedNames = new Set();
   for (const a of artists) {
+    if (a.name && a.tracked === false) untrackedNames.add(a.name);
     if (a.name && Array.isArray(a.instruments)) {
       instrumentsByName.set(a.name, a.instruments.filter(i => typeof i === "string" && i.trim()));
     }
@@ -1209,7 +1215,7 @@ function renderLanes(list, today) {
     ticks += `<span class="tick" style="left:${x}">${label}</span>`;
     grid += `<i class="gl" style="left:${x}"></i>`;
   }
-  const names = [...artistOrder];
+  const names = artistOrder.filter(n => !untrackedNames.has(n));
   for (const c of list) if (!names.includes(c.artist)) names.push(c.artist);
   let lanes = "";
   for (const name of names) {
@@ -1512,6 +1518,9 @@ async function init() {
     const [artists, favoritesFile, travelFile] = await Promise.all([roster, starred, trains]);
     loadTravel((travelFile && Array.isArray(travelFile.cities) && travelFile.cities) || []);
     loadRoster((artists && artists.artists) || []);
+    allConcerts = allConcerts.filter(c => !untrackedNames.has(c.artist));
+    // The whole roster, untracked artists included, so that dropping one
+    // doesn't shift everyone else's colour.
     artistOrder = ((artists && artists.artists) || []).map(a => a.name).filter(n => typeof n === "string");
     favorites = parseFavorites((favoritesFile && favoritesFile.favorites) || []);
     indexFavorites(allConcerts);
