@@ -3044,6 +3044,130 @@
       "source_url": "https://www.olgascheps.com/konzerte",
       "detail_url": "http://www.cultura-kulturveranstaltungen.de/veranstaltungen/",
       "first_seen": "2026-09-23"
+    },
+    {
+      "id": "burkev|2026-11-24|istanbul",
+      "artist": "İlyun Bürkev",
+      "date": "2026-11-24",
+      "city": "Istanbul",
+      "country": "Turkey",
+      "venue": "ENKA Auditorium",
+      "program": "Resonance — chamber trio with Elvin Hoxha Ganiyev (violin) and Dilbağ Tokay (cello)",
+      "pieces": "Programme not announced",
+      "location_tag": "europe",
+      "source_url": "https://ilyunburkev.com/en/portfolio/concerts/",
+      "detail_url": "https://www.biletix.com/etkinlik/5FJ39/TURKIYE/tr",
+      "first_seen": "2026-09-28"
+    },
+    {
+      "id": "burkev|2026-12-10|istanbul",
+      "artist": "İlyun Bürkev",
+      "date": "2026-12-10",
+      "city": "Istanbul",
+      "country": "Turkey",
+      "venue": null,
+      "program": "Borusan Istanbul Philharmonic Orchestra: Rachmaninoff Piano Concerto No. 2",
+      "pieces": [
+        "Rachmaninoff: Piano Concerto No. 2"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://ilyunburkev.com/en/portfolio/concerts/",
+      "detail_url": null,
+      "first_seen": "2026-09-28"
+    },
+    {
+      "id": "burkev|2027-01-08|izmir",
+      "artist": "İlyun Bürkev",
+      "date": "2027-01-08",
+      "city": "Izmir",
+      "country": "Turkey",
+      "venue": null,
+      "program": "Izmir State Symphony Orchestra: Beethoven Piano Concerto No. 3",
+      "pieces": [
+        "Beethoven: Piano Concerto No. 3"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://ilyunburkev.com/en/portfolio/concerts/",
+      "detail_url": null,
+      "first_seen": "2026-09-28"
+    },
+    {
+      "id": "burkev|2027-01-15|eskişehir",
+      "artist": "İlyun Bürkev",
+      "date": "2027-01-15",
+      "city": "Eskişehir",
+      "country": "Turkey",
+      "venue": null,
+      "program": "Eskişehir State Symphony Orchestra: Beethoven Triple Concerto",
+      "pieces": [
+        "Beethoven: Triple Concerto"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://ilyunburkev.com/en/portfolio/concerts/",
+      "detail_url": null,
+      "first_seen": "2026-09-28"
+    },
+    {
+      "id": "burkev|2027-01-29|ankara",
+      "artist": "İlyun Bürkev",
+      "date": "2027-01-29",
+      "city": "Ankara",
+      "country": "Turkey",
+      "venue": null,
+      "program": "Presidential Symphony Orchestra: Saint-Saëns The Carnival of the Animals",
+      "pieces": [
+        "Saint-Saëns: The Carnival of the Animals"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://ilyunburkev.com/en/portfolio/concerts/",
+      "detail_url": null,
+      "first_seen": "2026-09-28"
+    },
+    {
+      "id": "burkev|2027-02-22|istanbul",
+      "artist": "İlyun Bürkev",
+      "date": "2027-02-22",
+      "city": "Istanbul",
+      "country": "Turkey",
+      "venue": "Caddebostan Cultural Center",
+      "program": "Solo Concert",
+      "pieces": "Programme not announced",
+      "location_tag": "europe",
+      "source_url": "https://ilyunburkev.com/en/portfolio/concerts/",
+      "detail_url": null,
+      "first_seen": "2026-09-28"
+    },
+    {
+      "id": "burkev|2027-02-25|ankara",
+      "artist": "İlyun Bürkev",
+      "date": "2027-02-25",
+      "city": "Ankara",
+      "country": "Turkey",
+      "venue": null,
+      "program": "Bilkent Symphony Orchestra: Mozart Piano Concerto No. 20",
+      "pieces": [
+        "Mozart: Piano Concerto No. 20"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://ilyunburkev.com/en/portfolio/concerts/",
+      "detail_url": null,
+      "first_seen": "2026-09-28"
+    },
+    {
+      "id": "burkev|2027-05-07|adana",
+      "artist": "İlyun Bürkev",
+      "date": "2027-05-07",
+      "city": "Adana",
+      "country": "Turkey",
+      "venue": null,
+      "program": "Adana Çukurova State Symphony Orchestra: Rachmaninoff Piano Concerto No. 2",
+      "pieces": [
+        "Rachmaninoff: Piano Concerto No. 2"
+      ],
+      "location_tag": "europe",
+      "source_url": "https://ilyunburkev.com/en/portfolio/concerts/",
+      "detail_url": null,
+      "first_seen": "2026-09-28"
     }
   ]
 }
