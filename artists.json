@@ -35,6 +35,11 @@
       "slug": "perlman",
       "name": "Itzhak Perlman",
       "instruments": ["violin"]
+    },
+    {
+      "slug": "ott",
+      "name": "Alice Sara Ott",
+      "instruments": ["piano"]
     }
   ]
 }
