@@ -81,6 +81,7 @@ var allowedHosts = map[string]bool{
 	"mayaoganyan.com":        true,
 	"janinejansen.com":       true, // no longer tracked; kept for her existing rows
 	"juliafischer.com":       true,
+	"alicesaraott.com":       true,
 	"itzhakperlman.com":      true,
 	"bachtrack.com":          true,
 	"deutschegrammophon.com": true, // Dueñas' label tour page (tertiary source)
