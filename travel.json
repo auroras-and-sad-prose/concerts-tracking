@@ -154,6 +154,17 @@
       }
     },
     {
+      "city": "Frankfurt",
+      "station": { "name": "Frankfurt (Main) Hbf", "eva": "8000105" },
+      "train": {
+        "query": "Frankfurt am Main, Germany",
+        "minutes": 241,
+        "route": "Train",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)"],
+        "checked": "2026-10-04"
+      }
+    },
+    {
       "city": "Hamburg",
       "station": { "name": "Hamburg Hbf", "eva": "8002549" },
       "train": {
@@ -162,6 +173,17 @@
         "route": "Train",
         "carriers": ["Deutsche Bahn Intercity (DB IC)"],
         "checked": "2026-09-26"
+      }
+    },
+    {
+      "city": "Hannover",
+      "station": { "name": "Hannover Hbf", "eva": "8000152" },
+      "train": {
+        "query": "Hannover, Germany",
+        "minutes": 101,
+        "route": "Train",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)"],
+        "checked": "2026-10-04"
       }
     },
     {
