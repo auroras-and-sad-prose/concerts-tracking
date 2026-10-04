@@ -3168,6 +3168,247 @@
       "source_url": "https://ilyunburkev.com/en/portfolio/concerts/",
       "detail_url": null,
       "first_seen": "2026-09-28"
+    },
+    {
+      "id": "ott|2026-10-24|yerevan",
+      "artist": "Alice Sara Ott",
+      "date": "2026-10-24",
+      "city": "Yerevan",
+      "country": "Armenia",
+      "venue": "Aram Khachaturian Concert Hall",
+      "program": null,
+      "pieces": [
+        "Beethoven: Coriolan Overture, Op. 62",
+        "Beethoven: Piano Concerto No. 4 in G major, Op. 58",
+        "Verdi: Overture to the opera The Sicilian Vespers",
+        "Debussy: The Sea, Three Symphonic Sketches for Orchestra"
+      ],
+      "instruments": null,
+      "location_tag": "europe",
+      "source_url": "https://www.alicesaraott.com/calendar",
+      "detail_url": "https://armsymphony.am/en/concert/symphonic_europe___alice_sara_ott__armenian_state_symphony_orchestra",
+      "first_seen": "2026-10-04"
+    },
+    {
+      "id": "ott|2026-10-29|luxembourg city",
+      "artist": "Alice Sara Ott",
+      "date": "2026-10-29",
+      "city": "Luxembourg City",
+      "country": "Luxembourg",
+      "venue": "Philharmonie Luxembourg: Grand Auditorium",
+      "program": null,
+      "pieces": [
+        "Ludwig van Beethoven: Piano Concerto No. 4",
+        "Sergei Prokofiev: Romeo and Juliet selections"
+      ],
+      "instruments": null,
+      "location_tag": "europe",
+      "source_url": "https://www.alicesaraott.com/calendar",
+      "detail_url": "https://www.philharmonie.lu/de/programm/2026-27/romeo-et-juliette-000000e9001bc9e7",
+      "first_seen": "2026-10-04"
+    },
+    {
+      "id": "ott|2026-11-06|london",
+      "artist": "Alice Sara Ott",
+      "date": "2026-11-06",
+      "city": "London",
+      "country": "United Kingdom",
+      "venue": "Royal Festival Hall",
+      "program": null,
+      "pieces": [
+        "Beethoven Piano Concerto No. 4",
+        "Mahler Symphony No. 1, including 'Blumine'"
+      ],
+      "instruments": null,
+      "location_tag": "europe",
+      "source_url": "https://www.alicesaraott.com/calendar",
+      "detail_url": "https://lpo.org.uk/event/alice-sara-ott-plays-beethoven/",
+      "first_seen": "2026-10-04"
+    },
+    {
+      "id": "ott|2026-11-08|munich",
+      "artist": "Alice Sara Ott",
+      "date": "2026-11-08",
+      "city": "Munich",
+      "country": "Germany",
+      "venue": "Isarphilharmonie",
+      "program": null,
+      "pieces": [
+        "Beethoven: Konzert für Klavier und Orchester Nr. 4 G-Dur op. 58",
+        "Prokofjew: Auszüge aus den Suiten zu „Romeo und Julia\" op. 64"
+      ],
+      "instruments": null,
+      "location_tag": "germany",
+      "source_url": "https://www.alicesaraott.com/calendar",
+      "detail_url": "https://www.muenchenmusik.de/mm/veranstaltungen/luxembourg-philharmonic-81126",
+      "first_seen": "2026-10-04"
+    },
+    {
+      "id": "ott|2026-11-13|utrecht",
+      "artist": "Alice Sara Ott",
+      "date": "2026-11-13",
+      "city": "Utrecht",
+      "country": "Netherlands",
+      "venue": "TivoliVredenburg",
+      "program": null,
+      "pieces": [
+        "Beethoven - Piano Concerto No. 4",
+        "Respighi - Fontane di Roma",
+        "Respighi - Pini di Roma"
+      ],
+      "instruments": null,
+      "location_tag": "europe",
+      "source_url": "https://www.alicesaraott.com/calendar",
+      "detail_url": "https://orkest.nl/en/concerten/1602-pianist-alice-sara-ott-plays-beethoven-with-the-netherlands-philharmonic/",
+      "first_seen": "2026-10-04"
+    },
+    {
+      "id": "ott|2026-11-14|amsterdam",
+      "artist": "Alice Sara Ott",
+      "date": "2026-11-14",
+      "city": "Amsterdam",
+      "country": "Netherlands",
+      "venue": "Het Concertgebouw: Grote Zaal",
+      "program": null,
+      "pieces": [
+        "Beethoven - Piano Concerto No. 4",
+        "Respighi - Fontane di Roma",
+        "Respighi - Pini di Roma"
+      ],
+      "instruments": null,
+      "location_tag": "europe",
+      "source_url": "https://www.alicesaraott.com/calendar",
+      "detail_url": "https://orkest.nl/en/concerten/1535-pianist-alice-sara-ott-plays-beethoven-with-the-netherlands-philharmonic/",
+      "first_seen": "2026-10-04"
+    },
+    {
+      "id": "ott|2026-11-15|amsterdam",
+      "artist": "Alice Sara Ott",
+      "date": "2026-11-15",
+      "city": "Amsterdam",
+      "country": "Netherlands",
+      "venue": "Het Concertgebouw: Grote Zaal",
+      "program": null,
+      "pieces": [
+        "Beethoven - Piano Concerto No. 4",
+        "Respighi - Fontane di Roma",
+        "Respighi - Pini di Roma"
+      ],
+      "instruments": null,
+      "location_tag": "europe",
+      "source_url": "https://www.alicesaraott.com/calendar",
+      "detail_url": "https://orkest.nl/en/concerten/1480-pianist-alice-sara-ott-plays-beethoven-with-the-netherlands-philharmonic/",
+      "first_seen": "2026-10-04"
+    },
+    {
+      "id": "ott|2026-11-20|lucerne",
+      "artist": "Alice Sara Ott",
+      "date": "2026-11-20",
+      "city": "Lucerne",
+      "country": "Switzerland",
+      "venue": "KKL Luzern, Konzertsaal",
+      "program": null,
+      "pieces": [
+        "Carl Maria von Weber — Overture to Der Freischütz",
+        "Ludwig van Beethoven — Piano Concerto No. 4 in G major, Op. 58",
+        "Antonín Dvořák — Symphony No. 8 in G major, Op. 88"
+      ],
+      "instruments": null,
+      "location_tag": "europe",
+      "source_url": "https://www.alicesaraott.com/calendar",
+      "detail_url": "https://sinfonieorchester.ch/en/veranstaltungen/css-benefit-concert/",
+      "first_seen": "2026-10-04"
+    },
+    {
+      "id": "ott|2026-12-01|hannover",
+      "artist": "Alice Sara Ott",
+      "date": "2026-12-01",
+      "city": "Hannover",
+      "country": "Germany",
+      "venue": "Hannover Congress Centrum: Kuppelsaal",
+      "program": null,
+      "pieces": [
+        "Ludwig van Beethoven: Piano Concerto No. 4 in G Major, Op. 58",
+        "Jean Sibelius: Symphony No. 5 in E-flat Major, Op. 82"
+      ],
+      "instruments": null,
+      "location_tag": "germany",
+      "source_url": "https://www.alicesaraott.com/calendar",
+      "detail_url": "https://www.hcc.de/programm/london-philharmonic-orchestra-5/",
+      "first_seen": "2026-10-04"
+    },
+    {
+      "id": "ott|2026-12-02|cologne",
+      "artist": "Alice Sara Ott",
+      "date": "2026-12-02",
+      "city": "Cologne",
+      "country": "Germany",
+      "venue": "Kölner Philharmonie",
+      "program": null,
+      "pieces": [
+        "Ludwig van Beethoven – Piano Concerto No. 4 in G Major, Op. 58",
+        "Jean Sibelius – Symphony No. 5 in E-flat Major, Op. 82"
+      ],
+      "instruments": null,
+      "location_tag": "germany",
+      "source_url": "https://www.alicesaraott.com/calendar",
+      "detail_url": "https://www.koelner-philharmonie.de/en/events/london-philharmonic-orchestra/9229",
+      "first_seen": "2026-10-04"
+    },
+    {
+      "id": "ott|2026-12-06|rotterdam",
+      "artist": "Alice Sara Ott",
+      "date": "2026-12-06",
+      "city": "Rotterdam",
+      "country": "Netherlands",
+      "venue": "De Doelen",
+      "program": null,
+      "pieces": [
+        "Beethoven: Piano Concerto No. 4"
+      ],
+      "instruments": null,
+      "location_tag": "europe",
+      "source_url": "https://www.alicesaraott.com/calendar",
+      "detail_url": null,
+      "first_seen": "2026-10-04"
+    },
+    {
+      "id": "ott|2026-12-07|hamburg",
+      "artist": "Alice Sara Ott",
+      "date": "2026-12-07",
+      "city": "Hamburg",
+      "country": "Germany",
+      "venue": "Elbphilharmonie: Großer Saal",
+      "program": null,
+      "pieces": [
+        "Dmitri Schostakowitsch — \"Festliche Ouvertüre op. 96\"",
+        "Ludwig van Beethoven — \"Konzert für Klavier und Orchester Nr. 4 G-Dur op. 58\"",
+        "Sergej Rachmaninow — \"Sinfonie Nr. 1 d-Moll op. 13\""
+      ],
+      "instruments": null,
+      "location_tag": "germany",
+      "source_url": "https://www.alicesaraott.com/calendar",
+      "detail_url": "https://www.elbphilharmonie.de/de/programm/london-philharmonic-orchestra-alice-sara-ott-edward-gardner/27880",
+      "first_seen": "2026-10-04"
+    },
+    {
+      "id": "ott|2026-12-09|frankfurt",
+      "artist": "Alice Sara Ott",
+      "date": "2026-12-09",
+      "city": "Frankfurt",
+      "country": "Germany",
+      "venue": "Alte Oper Frankfurt: Großer Saal",
+      "program": null,
+      "pieces": [
+        "Dmitri Shostakovich - \"Festliche Ouvertüre\" op. 96",
+        "Ludwig van Beethoven - Piano Concerto No. 4 in G major op. 58",
+        "Sergei Rachmaninoff - Symphony No. 1 in D minor op. 13"
+      ],
+      "instruments": null,
+      "location_tag": "germany",
+      "source_url": "https://www.alicesaraott.com/calendar",
+      "detail_url": "https://www.alteoper.de/de/programm/london-philharmonic-orchestra/19000",
+      "first_seen": "2026-10-04"
     }
   ]
 }
