@@ -3409,6 +3409,23 @@
       "source_url": "https://www.alicesaraott.com/calendar",
       "detail_url": "https://www.alteoper.de/de/programm/london-philharmonic-orchestra/19000",
       "first_seen": "2026-10-04"
+    },
+    {
+      "id": "duenas|2027-02-22|vienna",
+      "artist": "María Dueñas",
+      "date": "2027-02-22",
+      "city": "Vienna",
+      "country": "Austria",
+      "venue": "Konzerthaus",
+      "program": "Filarmónica Joven de Colombia / Andrés Orozco-Estrada: Lalo: Symphonie espagnole",
+      "pieces": [
+        "Lalo: Symphonie espagnole"
+      ],
+      "instruments": null,
+      "location_tag": "europe",
+      "source_url": "https://www.deutschegrammophon.com/en/artists/maria-duenas/on-tour",
+      "detail_url": "https://www.deutschegrammophon.com/en/artists/maria-duenas/on-tour/22-02-2027-konzerthaus-vienna-lalo-symphonie-espagnole-1159896",
+      "first_seen": "2026-10-11"
     }
   ]
 }
