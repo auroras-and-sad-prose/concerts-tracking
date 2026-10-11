@@ -8,6 +8,6 @@
     "test": "node --test"
   },
   "devDependencies": {
-    "playwright": "1.62.1"
+    "playwright": "1.64.0"
   }
 }
