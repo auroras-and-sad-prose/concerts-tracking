@@ -1,3 +1,3 @@
 module github.com/auroras-and-sad-prose/concerts-tracking
 
-go 1.24
+go 1.27.2
