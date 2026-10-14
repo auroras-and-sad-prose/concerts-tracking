@@ -79,6 +79,7 @@
       "patterns": [
         ["beethoven", "op 61"],
         ["beethoven", "violin", "concerto", "d major"],
+        ["beethoven", "violin concerto"],
         ["beethoven", "violinkonzert"],
         ["beethoven", "violine", "d dur"],
         ["beethoven", "violon", "re majeur"],
