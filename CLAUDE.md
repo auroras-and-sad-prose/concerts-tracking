@@ -500,12 +500,24 @@ profile, don't add rows for her — CI rejects one — and don't drill or refine
 her existing rows. If a page you are reading for someone else happens to bill
 her, that is not a discovery.
 
-Each profile has a "Live Events" section listing upcoming concerts (ignore
-"Latest reviews"/"Latest articles" — past content). Bachtrack sometimes lists
-engagements before they appear on the artist's own site, so treat it as a
-genuine cross-check, not a formality. If a profile URL 404s or the slug has
-changed, try `https://bachtrack.com/search-events/performer=<slug>` as a
-fallback before giving up on that artist's Bachtrack check.
+Each profile has a "Live Events" section, but it is only a teaser: it shows
+the first six upcoming events and ends in a "See more…" link to the full list
+(ignore "Latest reviews"/"Latest articles" — past content). The full list is
+`https://bachtrack.com/search-events/performer=<slug>`, and that is the page to
+read for every artist, not just a fallback: on 2026-10-14 the profile showed 6
+of Alice Sara Ott's 17 events, and all four of her European dates past
+December had never been recorded. The search page lists everything on one page
+(no pager was seen), with each event's date in its `concert-event` link, so
+read the dates from there. Bachtrack sometimes lists engagements before they
+appear on the artist's own site, so treat it as a genuine cross-check, not a
+formality. If the profile URL 404s, 410s or the slug has changed (Maya
+Oganyan's profile returned 410 on 2026-10-14 while her search page still
+loaded), the search page is the only one that matters anyway.
+
+A row first found on Bachtrack cites the search-events URL as its `source_url`,
+not the profile: rule 5 needs the cited page to show the concert, and the
+profile's teaser usually does not. Its `concert-event` page is the
+`detail_url`.
 
 **Tertiary source — record label tour pages, for signed artists.** A label
 can announce a date before the artist's own site or Bachtrack catch up (this
@@ -618,7 +630,11 @@ extract every listed concert (ignore cookie banners, nav, and other page
 chrome). "Every listed" includes whatever sits behind a "Load more" or
 next-page control: a fetch returns only the first screen, so check each page
 for such a control and exhaust it (the Deutschegrammophon page's is spelled out
-under "Tertiary source") before calling the page read. Perlman has no primary source, so fetch his Bachtrack profile
+under "Tertiary source") before calling the page read. Known pagers: Julia
+Fischer's events page (`/en/events?page=2`, and so on until there is no "Next
+page" link; one page past the end loops back to page one) and Olga Scheps'
+upcoming list (`/konzerte/?incoming_page=2`; the `past_page` pager on the same
+page is the past list and is ignored). Perlman has no primary source, so fetch his Bachtrack profile
 only — don't attempt itzhakperlman.com.
 For each, capture `artist`, `date`, `city`, `country`, `venue`, `program` (if
 shown), `pieces` (per grounding rule 3), `instruments` (per grounding rule 7),
