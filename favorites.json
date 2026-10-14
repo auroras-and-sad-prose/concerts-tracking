@@ -8,7 +8,9 @@
         ["beethoven", "piano", "concerto", "no 3"],
         ["beethoven", "piano", "concerto", "c minor"],
         ["beethoven", "klavierkonzert", "nr 3"],
-        ["beethoven", "klavierkonzert", "c moll"]
+        ["beethoven", "klavierkonzert", "c moll"],
+        ["beethoven", "konzert fur klavier", "nr 3"],
+        ["beethoven", "konzert fur klavier", "c moll"]
       ]
     },
     {
@@ -22,7 +24,10 @@
         ["rachmaninoff", "piano", "concerto", "no 2"],
         ["rachmaninov", "klavierkonzert", "nr 2"],
         ["rachmaninoff", "klavierkonzert", "nr 2"],
-        ["rachmaninow", "klavierkonzert", "nr 2"]
+        ["rachmaninow", "klavierkonzert", "nr 2"],
+        ["rachmaninov", "konzert fur klavier", "nr 2"],
+        ["rachmaninoff", "konzert fur klavier", "nr 2"],
+        ["rachmaninow", "konzert fur klavier", "nr 2"]
       ]
     },
     {
@@ -32,6 +37,7 @@
         ["grieg", "op 16"],
         ["grieg", "piano", "concerto"],
         ["grieg", "klavierkonzert"],
+        ["grieg", "konzert fur klavier"],
         ["grieg", "pianoforte", "concerto"]
       ]
     },
@@ -147,7 +153,9 @@
         ["chopin", "piano", "concerto", "no 1"],
         ["chopin", "piano", "concerto", "e minor"],
         ["chopin", "klavierkonzert", "nr 1"],
-        ["chopin", "klavierkonzert", "e moll"]
+        ["chopin", "klavierkonzert", "e moll"],
+        ["chopin", "konzert fur klavier", "nr 1"],
+        ["chopin", "konzert fur klavier", "e moll"]
       ]
     },
     {
@@ -174,7 +182,10 @@
         ["tchaikovsky", "piano", "concerto", "b flat minor"],
         ["tschaikowsky", "klavierkonzert", "nr 1"],
         ["tschaikowski", "klavierkonzert", "nr 1"],
-        ["tchaikovsky", "klavierkonzert", "nr 1"]
+        ["tchaikovsky", "klavierkonzert", "nr 1"],
+        ["tchaikovsky", "konzert fur klavier", "nr 1"],
+        ["tschaikowsky", "konzert fur klavier", "nr 1"],
+        ["tschaikowski", "konzert fur klavier", "nr 1"]
       ]
     }
   ]
