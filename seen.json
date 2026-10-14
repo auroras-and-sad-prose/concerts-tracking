@@ -3369,7 +3369,7 @@
       "instruments": null,
       "location_tag": "europe",
       "source_url": "https://www.alicesaraott.com/calendar",
-      "detail_url": null,
+      "detail_url": "https://www.dedoelen.nl/en/agenda/london-philharmonic-orchestra-alice-sara-ott-fnpm",
       "first_seen": "2026-10-04"
     },
     {
@@ -3426,6 +3426,225 @@
       "source_url": "https://www.deutschegrammophon.com/en/artists/maria-duenas/on-tour",
       "detail_url": "https://www.deutschegrammophon.com/en/artists/maria-duenas/on-tour/22-02-2027-konzerthaus-vienna-lalo-symphonie-espagnole-1159896",
       "first_seen": "2026-10-11"
+    },
+    {
+      "id": "duenas|2027-02-25|düsseldorf",
+      "artist": "María Dueñas",
+      "date": "2027-02-25",
+      "city": "Düsseldorf",
+      "country": "Germany",
+      "venue": "Tonhalle: Mendelssohn Saal",
+      "program": "Colombian Youth Philharmonic / Andrés Orozco-Estrada: Lalo, Stravinsky",
+      "pieces": [
+        "Lalo: Symphonie espagnole, Op.21",
+        "Stravinsky: The Firebird: Suite"
+      ],
+      "instruments": null,
+      "location_tag": "germany",
+      "source_url": "https://bachtrack.com/search-events/performer=maria-duenas",
+      "detail_url": "https://bachtrack.com/concert-event/filarmonica-joven-de-colombia-colombian-youth-philharmonic-tonhalle-mendelssohn-saal-25-february-2027/437302",
+      "first_seen": "2026-10-14"
+    },
+    {
+      "id": "duenas|2027-02-26|freiburg",
+      "artist": "María Dueñas",
+      "date": "2027-02-26",
+      "city": "Freiburg",
+      "country": "Germany",
+      "venue": "Konzerthaus",
+      "program": null,
+      "pieces": [
+        "Lalo: Symphonie espagnole"
+      ],
+      "instruments": null,
+      "location_tag": "germany",
+      "source_url": "https://www.deutschegrammophon.com/en/artists/maria-duenas/on-tour",
+      "detail_url": null,
+      "first_seen": "2026-10-14"
+    },
+    {
+      "id": "duenas|2027-02-28|frankfurt",
+      "artist": "María Dueñas",
+      "date": "2027-02-28",
+      "city": "Frankfurt",
+      "country": "Germany",
+      "venue": "Alte Oper",
+      "program": null,
+      "pieces": [
+        "Lalo: Symphonie espagnole"
+      ],
+      "instruments": null,
+      "location_tag": "germany",
+      "source_url": "https://www.deutschegrammophon.com/en/artists/maria-duenas/on-tour",
+      "detail_url": null,
+      "first_seen": "2026-10-14"
+    },
+    {
+      "id": "duenas|2027-03-01|zurich",
+      "artist": "María Dueñas",
+      "date": "2027-03-01",
+      "city": "Zurich",
+      "country": "Switzerland",
+      "venue": "Tonhalle: Grosser Saal",
+      "program": "Colombian Youth Philharmonic / Andrés Orozco-Estrada: Lalo, Stravinsky",
+      "pieces": [
+        "Lalo: Symphonie espagnole, Op.21",
+        "Stravinsky: The Firebird: Suite"
+      ],
+      "instruments": null,
+      "location_tag": "europe",
+      "source_url": "https://bachtrack.com/search-events/performer=maria-duenas",
+      "detail_url": "https://bachtrack.com/concert-event/filarmonica-joven-de-colombia-orozco-estrada-maria-duenas-colombian-youth-philharmonic-tonhalle-grosser-saal-1-march-2027/444544",
+      "first_seen": "2026-10-14"
+    },
+    {
+      "id": "duenas|2027-03-02|paris",
+      "artist": "María Dueñas",
+      "date": "2027-03-02",
+      "city": "Paris",
+      "country": "France",
+      "venue": "Philharmonie de Paris: Grande salle Pierre Boulez",
+      "program": "Colombian Youth Philharmonic / Andrés Orozco-Estrada: Lalo, Stravinsky",
+      "pieces": [
+        "Lalo: Symphonie espagnole, Op.21",
+        "Stravinsky: The Firebird: Suite"
+      ],
+      "instruments": null,
+      "location_tag": "europe",
+      "source_url": "https://bachtrack.com/search-events/performer=maria-duenas",
+      "detail_url": "https://bachtrack.com/concert-event/filarmonica-joven-de-colombia-andres-orozco-estrada-maria-duenas-colombian-youth-philharmonic-philharmonie-de-paris-grande-salle-pierre-boulez-2-march-2027/437857",
+      "first_seen": "2026-10-14"
+    },
+    {
+      "id": "duenas|2027-03-08|hamburg",
+      "artist": "María Dueñas",
+      "date": "2027-03-08",
+      "city": "Hamburg",
+      "country": "Germany",
+      "venue": "Elbphilharmonie: Grand Hall",
+      "program": "Bamberg Symphony / Jakub Hrůša: Martinů, Prokofiev, Beethoven",
+      "pieces": [
+        "Martinů: Symphony no. 6, \"Fantaisies symphoniques\" H 343",
+        "Prokofiev: Violin Concerto no. 1 in D major, Op.19",
+        "Beethoven: Symphony no. 8 in F major, Op.93"
+      ],
+      "instruments": null,
+      "location_tag": "germany",
+      "source_url": "https://bachtrack.com/search-events/performer=maria-duenas",
+      "detail_url": "https://bachtrack.com/concert-event/guest-in-hamburg-bamberg-symphony-elbphilharmonie-grand-hall-8-march-2027/441978",
+      "first_seen": "2026-10-14"
+    },
+    {
+      "id": "duenas|2027-05-04|munich",
+      "artist": "María Dueñas",
+      "date": "2027-05-04",
+      "city": "Munich",
+      "country": "Germany",
+      "venue": "Isarphilharmonie",
+      "program": null,
+      "pieces": [
+        "Beethoven: Violin Concerto"
+      ],
+      "instruments": null,
+      "location_tag": "germany",
+      "source_url": "https://www.deutschegrammophon.com/en/artists/maria-duenas/on-tour",
+      "detail_url": null,
+      "first_seen": "2026-10-14"
+    },
+    {
+      "id": "duenas|2027-05-08|nottingham",
+      "artist": "María Dueñas",
+      "date": "2027-05-08",
+      "city": "Nottingham",
+      "country": "United Kingdom",
+      "venue": "Royal Concert Hall",
+      "program": null,
+      "pieces": [
+        "Beethoven: Violin Concerto"
+      ],
+      "instruments": null,
+      "location_tag": "europe",
+      "source_url": "https://www.deutschegrammophon.com/en/artists/maria-duenas/on-tour",
+      "detail_url": null,
+      "first_seen": "2026-10-14"
+    },
+    {
+      "id": "ott|2027-04-09|gateshead",
+      "artist": "Alice Sara Ott",
+      "date": "2027-04-09",
+      "city": "Gateshead",
+      "country": "United Kingdom",
+      "venue": "The Glasshouse International Centre for Music: Sage One",
+      "program": "Royal Northern Sinfonia / Dinis Sousa / Paul Lewis: Beethoven",
+      "pieces": [
+        "Beethoven: Piano Concerto no. 1 in C major, Op.15",
+        "Beethoven: Piano Concerto no. 3 in C minor, Op.37"
+      ],
+      "instruments": null,
+      "location_tag": "europe",
+      "source_url": "https://bachtrack.com/search-events/performer=alice-sara-ott",
+      "detail_url": "https://bachtrack.com/concert-event/beethovens-first-and-third-piano-concertos-royal-northern-sinfonia-the-glasshouse-international-centre-for-music-sage-one-9-april-2027/437974",
+      "first_seen": "2026-10-14"
+    },
+    {
+      "id": "ott|2027-05-29|birmingham",
+      "artist": "Alice Sara Ott",
+      "date": "2027-05-29",
+      "city": "Birmingham",
+      "country": "United Kingdom",
+      "venue": "Symphony Hall",
+      "program": "City of Birmingham Symphony Orchestra / Kazuki Yamada: Walton, Ravel, Shostakovich",
+      "pieces": [
+        "Walton: Orb and Sceptre, Coronation March",
+        "Ravel: Piano Concerto in G major",
+        "Shostakovich: Symphony no. 5 in D minor, Op.47"
+      ],
+      "instruments": null,
+      "location_tag": "europe",
+      "source_url": "https://bachtrack.com/search-events/performer=alice-sara-ott",
+      "detail_url": "https://bachtrack.com/concert-event/kazuki-conducts-shostakovichs-5th-symphony-city-of-birmingham-symphony-orchestra-symphony-hall-29-may-2027/440577",
+      "first_seen": "2026-10-14"
+    },
+    {
+      "id": "ott|2027-05-30|birmingham",
+      "artist": "Alice Sara Ott",
+      "date": "2027-05-30",
+      "city": "Birmingham",
+      "country": "United Kingdom",
+      "venue": "Symphony Hall",
+      "program": "City of Birmingham Symphony Orchestra / Kazuki Yamada: Ravel, Satie, Debussy",
+      "pieces": [
+        "Ravel: Introduction and Allegro for flute, clarinet, harp and string quartet",
+        "Satie: Gnossienne no. 1",
+        "Satie: Gnossienne no. 3",
+        "Debussy: Danses sacrée et profane",
+        "Ravel: La Valse"
+      ],
+      "instruments": null,
+      "location_tag": "europe",
+      "source_url": "https://bachtrack.com/search-events/performer=alice-sara-ott",
+      "detail_url": "https://bachtrack.com/concert-event/centre-stage-kazuki-yamada-alice-sara-ott-city-of-birmingham-symphony-orchestra-symphony-hall-30-may-2027/440723",
+      "first_seen": "2026-10-14"
+    },
+    {
+      "id": "ott|2027-06-11|brussels",
+      "artist": "Alice Sara Ott",
+      "date": "2027-06-11",
+      "city": "Brussels",
+      "country": "Belgium",
+      "venue": "Palais des Beaux-Arts (BOZAR): Henry Le Bœuf Concert Hall",
+      "program": "Belgian National Orchestra / Matthew Halls: Strauss R., Ravel, Sibelius",
+      "pieces": [
+        "Strauss R.: Don Juan, Op.20",
+        "Ravel: Piano Concerto in G major",
+        "Sibelius: En Saga, a symphonic poem for orchestra, Op.9",
+        "Ravel: Boléro"
+      ],
+      "instruments": null,
+      "location_tag": "europe",
+      "source_url": "https://bachtrack.com/search-events/performer=alice-sara-ott",
+      "detail_url": "https://bachtrack.com/concert-event/belgian-national-orchestra-halls-ott-belgian-national-orchestra-palais-des-beaux-arts-bozar-henry-le-boeuf-concert-hall-11-june-2027/449935",
+      "first_seen": "2026-10-14"
     }
   ]
 }

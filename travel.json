@@ -165,6 +165,17 @@
       }
     },
     {
+      "city": "Freiburg",
+      "station": { "name": "Freiburg (Breisgau) Hbf", "eva": "8000107" },
+      "train": {
+        "query": "Freiburg im Breisgau, Germany",
+        "minutes": 378,
+        "route": "Train",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)"],
+        "checked": "2026-10-14"
+      }
+    },
+    {
       "city": "Hamburg",
       "station": { "name": "Hamburg Hbf", "eva": "8002549" },
       "train": {
