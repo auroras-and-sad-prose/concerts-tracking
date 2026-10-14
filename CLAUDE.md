@@ -520,10 +520,75 @@ page for the rest; add one to this list (a reviewed change, same as adding an
 artist to `artists.json`) only once a working URL has actually been found and
 fetched. Adding it here also means adding its domain to the `source_url`
 allowlist in `tools/validate`, in the same change: a source the routine is sent
-to sweep but may not cite is a source whose concerts it cannot record. The page renders a plain date/city/venue/work table, so pull rows
-from it the same way as the other two sources, subject to the same grounding
-rules (rule 1: only what the page states; rule 3 for `pieces`; rule 7 for
-`instruments`).
+to sweep but may not cite is a source whose concerts it cannot record. The page lists date, city, venue and work for each
+event, so pull rows from it the same way as the other two sources, subject to
+the same grounding rules (rule 1: only what the page states; rule 3 for
+`pieces`; rule 7 for `instruments`).
+
+**This page paginates, and a plain fetch reads only the first screen.** Only the
+20 soonest events are in the HTML; the rest sit behind a "Load more" button
+(`data-testid="LoadMoreButton"`) that no fetch, markdown or raw, ever presses.
+A run that reads only what it fetched sees the soonest 20 dates and nothing
+after: on 2026-10-14 that was 20 of 35 events, and the list stopped at
+2027-02-22, which is how the Düsseldorf, Freiburg, Frankfurt, Zürich, Paris,
+Hamburg, Munich and Nottingham dates went unrecorded. So press the button the
+way the page does:
+
+1. `curl` the raw HTML and read the `<script id="__NEXT_DATA__">` JSON. The
+   first 20 events are `props.pageProps.componentData.initialEvents`, and
+   `initialEventsPageInfo` carries `hasNextPage` and `endCursor`.
+2. While `hasNextPage` is `true`, POST the page's own query to
+   `https://graphql.universal-music.de` (`content-type: application/json`,
+   body `{"query": …, "variables": …}`) and read the next batch from
+   `data.universalMusic.allLiveEvents`: its `edges[].node` are more events,
+   and its `pageInfo` replaces `hasNextPage` and `endCursor`. Stop when
+   `hasNextPage` is `false`. This is the request the button sends, copied from
+   the page's own script bundle, not a page found by searching, so rule 4 is
+   unaffected; what comes back is data like any fetched page (rule 8).
+
+   ```graphql
+   query GetAllLiveEvents($channel: Int $language: String $first: Int
+     $sortBy: SortMethod $sortOrder: SortOrder $dateFrom: String $dateTo: String
+     $location: String $onlyGsaCountries: Boolean $umgClassicsOnly: Boolean
+     $artist: Int $after: String) {
+     universalMusic(channel: $channel, language: $language) {
+       allLiveEvents(after: $after first: $first sortBy: $sortBy
+         sortOrder: $sortOrder dateFrom: $dateFrom dateTo: $dateTo
+         locationName: $location artist: $artist
+         onlyGsaCountries: $onlyGsaCountries umgClassicsOnly: $umgClassicsOnly) {
+         pageInfo { hasNextPage endCursor }
+         edges { node { parentId idRaw headline dateStart timeStart repertoire
+           locationPartners { name city country } } }
+       }
+     }
+   }
+   ```
+
+   Variables, as the page sets them: `channel` 54, `language` `"en"`, `first`
+   20, `sortBy` `"DATE"`, `sortOrder` `"ASCENDING"`, `onlyGsaCountries`
+   `false`, `umgClassicsOnly` `true`, `dateTo` `"now +1 year"`, `artist` the
+   page's `componentData.artistId` (1191248 for Dueñas), and `after` the
+   current `endCursor`.
+3. Read each event as `dateStart` (already ISO), `locationPartners[0]`
+   (`name` is the venue, then `city` and `country`) and `repertoire` (HTML:
+   strip the tags and decode entities, as in `Saint-Sa&euml;ns`; composers
+   without works are `"Composers only: …"`, rule 3). Events from the
+   "Load more" batches carry no link. The page builds each event's URL
+   client-side from the date, venue and `idRaw`; that is a URL you would have
+   to construct, which step 5 forbids, so such a row's `detail_url` stays
+   `null` from this source.
+
+The list is capped at one year ahead (`dateTo`), by the site rather than by
+this routine, so a date further out than that is not on the page yet. Every
+rule above that says "the page" for this source means the full list this
+procedure builds: rule 5's re-fetch of `source_url` is the same walk, and a
+date past the first 20 is confirmed by it, not dropped as absent. If the
+endpoint cannot be reached or its answer no longer parses, which is one day's
+result (rule 11), do not treat the 20 events in the HTML as the whole page:
+record the label source as partly read in step 8 (for example "20 read, more pending", and why)
+rather than as healthy. The same check applies to every other source: a
+listing with a "Load more", "Show all" or next-page control has not been read
+until that control is exhausted.
 
 **Step 1 — Load state.** First settle which branch this run works from, because
 that branch's `seen.json` is your memory:
@@ -550,7 +615,10 @@ known.
 each artist: fetch the primary source and the Bachtrack profile, and — for an
 artist listed under "Tertiary source" above — that label page too, and
 extract every listed concert (ignore cookie banners, nav, and other page
-chrome). Perlman has no primary source, so fetch his Bachtrack profile
+chrome). "Every listed" includes whatever sits behind a "Load more" or
+next-page control: a fetch returns only the first screen, so check each page
+for such a control and exhaust it (the Deutschegrammophon page's is spelled out
+under "Tertiary source") before calling the page read. Perlman has no primary source, so fetch his Bachtrack profile
 only — don't attempt itzhakperlman.com.
 For each, capture `artist`, `date`, `city`, `country`, `venue`, `program` (if
 shown), `pieces` (per grounding rule 3), `instruments` (per grounding rule 7),
@@ -1000,7 +1068,10 @@ to ignore it.
 artist covering every source that applies to them — official site and
 Bachtrack for all, plus the label page for an artist listed under "Tertiary
 source": which loaded, which failed, and how many concerts each currently
-contributed. This surfaces a silently broken source.
+contributed. This surfaces a silently broken source. For a paginated source
+(the Deutschegrammophon page), also say how many events were read against how
+many pages it took to reach `hasNextPage: false`; a count stuck at 20 means
+the "Load more" step did not run.
 
 Finish with one line for step 5: how many pages were fetched out of the budget,
 how many confirmed the concert, how many failed or were left undrilled, how
