@@ -223,6 +223,7 @@ func main() {
 	artistsPath := flag.String("artists", "artists.json", "path to the artist roster; empty disables the roster checks")
 	favoritesPath := flag.String("favorites", "favorites.json", "path to the curated favorite works; empty disables the favorites checks")
 	travelPath := flag.String("travel", "travel.json", "path to the train times from Berlin; empty disables the travel checks")
+	checkedPath := flag.String("checked", "checked.json", "path to the per-artist last-checked times; empty disables the checks on it")
 	stationsPath := flag.String("stations", "tools/stations/de.csv", "path to the German station list travel.json stations are checked against; empty skips that check")
 	findStation := flag.String("find-station", "", "look up a German place name in the station list, print the station to copy into travel.json, and exit")
 	favoritesReport := flag.Bool("favorites-report", false, "print which upcoming concerts play a favorite work; with -base, mark which of those are news")
@@ -260,6 +261,8 @@ func main() {
 	// Artists the roster marks as no longer tracked; the favorites report
 	// leaves their concerts out, as the page does.
 	var untracked map[string]bool
+	// Kept so checked.json, validated further down, can be tied to the roster.
+	var roster *Artists
 
 	if *artistsPath != "" {
 		artists, err := loadJSON[Artists](*artistsPath)
@@ -275,6 +278,7 @@ func main() {
 			problems = append(problems, CheckUntracked(*base, f, artists)...)
 		}
 		untracked = UntrackedNames(artists)
+		roster = &artists
 	}
 
 	if *favoritesPath != "" {
@@ -310,6 +314,17 @@ func main() {
 		}
 		for _, p := range ValidateTravel(travel, f, stationList) {
 			problems = append(problems, fmt.Sprintf("%s: %s", *travelPath, p))
+		}
+	}
+
+	if *checkedPath != "" {
+		checked, err := loadJSON[Checked](*checkedPath)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "error: cannot read %s: %v\n", *checkedPath, err)
+			os.Exit(1)
+		}
+		for _, p := range ValidateChecked(checked, roster, now) {
+			problems = append(problems, fmt.Sprintf("%s: %s", *checkedPath, p))
 		}
 	}
 

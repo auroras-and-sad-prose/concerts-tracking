@@ -10,6 +10,9 @@ for each German city a concert is in, the approximate train time from Berlin
 (from the Rome2Rio connector) and the city's station (from
 `tools/stations/de.csv`), which the routine fills in and the page turns into a
 travel line and a bahn.de link — see "Train times from Berlin" below.
+`checked.json` records, per artist, when the routine last finished reading that
+artist's sources, which the page shows as "Last checked" — see "When the data
+was last checked" below.
 
 Reducing hallucination in this dataset relies on three layers: the **enforced
 layer**, which is what actually gates the data (CI); the **operating
@@ -102,10 +105,15 @@ both:
   `Train`, so a `Drive`, `Fly …` or `Night train` line copied by mistake
   fails), and a non-empty `carriers` list with no blank or repeated name.
 
+It checks `checked.json` as well: every key an artist slug on the roster, every
+value a UTC timestamp of exactly the shape `2026-10-16T05:12:00Z` that is not in
+the future. A tracked artist with no entry is allowed (the page reads it as not
+checked yet), so adding someone to the roster never turns the build red.
+
 Run locally before committing (the validator reads `artists.json`,
-`favorites.json`, `travel.json` and `tools/stations/de.csv` from the working
-directory too; `-artists ""`, `-favorites ""`, `-travel ""` and `-stations ""`
-turn those checks off):
+`favorites.json`, `travel.json`, `checked.json` and `tools/stations/de.csv` from
+the working directory too; `-artists ""`, `-favorites ""`, `-travel ""`,
+`-checked ""` and `-stations ""` turn those checks off):
 
 ```sh
 go test ./tools/...
@@ -374,6 +382,67 @@ Like every negative finding in this file, those refusals are one day's result
 browser headers, no headless browser. When the connector is not available to
 the run, the `train` halves wait for a run where it is.
 
+## When the data was last checked (`checked.json`)
+
+`seen.json` changes only when there is news, so it cannot say how recently the
+routine looked. A quiet run, which finds nothing and opens no PR, would
+otherwise leave the page indistinguishable from one the routine had stopped
+running for. `checked.json` closes that gap:
+
+```json
+{
+  "artists": {
+    "scheps": "2026-10-16T05:12:00Z",
+    "perlman": "2026-10-14T05:10:00Z"
+  }
+}
+```
+
+Each key is an artist slug from `artists.json`; each value is the UTC time the
+run **began reading** that artist's sources, on a run that then read every
+required source to the end (official site and Bachtrack, or Bachtrack alone for
+Perlman, with every pager exhausted — step 2). Stamping the time the reading
+started, not the time it finished, keeps the claim conservative. An artist whose
+source failed, or was only partly read, is not stamped that run and keeps its
+old time. A failed tertiary label page withholds nothing, as in step 2.
+
+**What the page shows.** "Last checked 16 Oct, 07:12 (3 h ago)", in the
+viewer's own time zone: the *oldest* stamp among the artists in view, which is
+the claim that is true for all of them, and one artist's own stamp when the
+artist filter is on. The wording is deliberate. "Last updated" would read as
+"the data changed", which is usually false and is not what the stamp promises;
+"checked" says only that someone looked, and found nothing the page lacks. A
+stamp older than 36 hours turns the line red and names who is overdue, because
+a missed run is the one case where the list may be missing something. An artist
+with no stamp counts as overdue, and nothing at all is shown until the first
+stamp lands. The overdue and "never checked" states are worked out when the page
+loads and never stored, like a favorite.
+
+**The one file a run pushes to `main` directly.** A stamp is not news and not
+something a person can usefully review, and putting it through a PR would mean a
+daily PR to merge, which is exactly the noise the quiet-run rule exists to
+prevent. So step 7a commits it straight to `main`, and *only* it. That exception
+is as narrow as it can be made:
+
+- The validator (above) rejects a malformed, future-dated or unknown-artist
+  stamp, and CI runs it on every push that touches the file.
+- `.github/workflows/stamp-guard.yml` runs on every push to `main`. A push that
+  did not arrive by merging a pull request may change `checked.json` and nothing
+  else; if it changed anything else, the guard commits an undo of those other
+  files and fails the build, so it shows red. (`.github/scripts/stamp-guard.sh`
+  is the logic.) A reviewed, merged PR is never touched by it.
+- The guard reacts after the push; it cannot stop one. It also runs from the
+  commit it is guarding, so a direct push that rewrote the workflow itself would
+  disarm it. Closing that gap takes a repository setting, not a file in this
+  repo: branch protection on `main` that requires pull requests, with only the
+  routine's identity allowed to bypass, or a ruleset that restricts that
+  identity to the path `checked.json` where the plan supports one. Either is a
+  person's change to make.
+
+**The routine writes this file and nothing else is its business.** It never
+edits it to move a time backward or to stamp an artist it did not read, and a
+person corrects a wrong entry like any other reviewed change.
+
 ## Where a row may come from (`source_url` vs `detail_url`)
 
 Calendar pages are terse. Most entries give a date, a city and — if you are
@@ -453,11 +522,14 @@ memory so the same concert is never alerted on twice. You run inside a fresh
 clone of this private repo with read/write access to repo contents, to Pull
 Requests. All state lives in `seen.json` at the repo root.
 
-**The run never writes to `main`.** Everything a run changes goes on a branch,
-reaches `main` only through a pull request a person merges, and the run ends by
-notifying that person that it is waiting. Step 7 sets out the mechanics; step 1
-is where it starts, because which branch you are working from decides what
-counts as already seen.
+**The run writes to `main` in exactly one way.** Everything a run changes in the
+data goes on a branch, reaches `main` only through a pull request a person
+merges, and the run ends by notifying that person that it is waiting. Step 7
+sets out the mechanics; step 1 is where it starts, because which branch you are
+working from decides what counts as already seen. The one exception is the
+`checked.json` stamp of step 7a, which is pushed to `main` directly and touches
+nothing else; "When the data was last checked" above says why, and what holds it
+to that.
 
 **Artists and starting points.** These are where every run begins, not the only
 pages it may read: the sweep below is what makes coverage predictable, and
@@ -623,8 +695,12 @@ procedure has: step 4 dedupes against them, and step 6 refines them in place
 like any other row. "Not merged yet" is a fact about review, not about what is
 known.
 
-**Step 2 — Gather current concerts.** Determine today's date at runtime. For
-each artist: fetch the primary source and the Bachtrack profile, and — for an
+**Step 2 — Gather current concerts.** Determine today's date at runtime. Before
+fetching anything, also note the exact time with
+`date -u +%Y-%m-%dT%H:%M:%SZ` and keep it in a file such as
+`/tmp/concert-watch-started` (shell state does not persist between commands):
+step 7a stamps `checked.json` with it, copied from the clock, never typed from
+memory. For each artist: fetch the primary source and the Bachtrack profile, and — for an
 artist listed under "Tertiary source" above — that label page too, and
 extract every listed concert (ignore cookie banners, nav, and other page
 chrome). "Every listed" includes whatever sits behind a "Load more" or
@@ -958,7 +1034,8 @@ toward `<N> new` or `<M> changed`, and never trigger a notification alone
 (step 7).
 
 **Step 7 — Record, open a PR, and alert.** Never commit to `main` and never push
-to it. A run's writes land on a branch, go up as a pull request, and a person
+to it — except for the step 7a stamp, which is its own push and carries nothing
+else. A run's writes land on a branch, go up as a pull request, and a person
 merges them; the run's last act is a push notification telling that person there
 is something waiting.
 
@@ -971,7 +1048,8 @@ is something waiting.
    captured fields (including `pieces`, `instruments`, and `detail_url`) plus
    `"first_seen": "<today's ISO date>"` and `"id"`, and apply step 6's
    refinements to existing rows, then step 6a's entries to `travel.json`.
-   `seen.json` and `travel.json` are the only files the run's PR may touch —
+   `seen.json` and `travel.json` are the only files the run's PR may touch
+   (`checked.json` never rides in it; step 7a pushes that on its own) —
    never `artists.json`, `favorites.json`, this file, `index.html`, or
    `tools/`. Those are reviewed changes a person makes, and slipping one into a
    run's PR is how a routine edits its own rules.
@@ -1076,7 +1154,43 @@ If there are zero new concerts, no status changed, no favorite turned up on an
 existing row and no conflict was found, print a one-line summary instead (e.g.
 "No new concerts. Checked 7 artists, all sources OK."). A quiet run leaves no
 branch behind, opens no PR, and sends no notification: with nothing to say,
-saying it loudly is how a daily routine trains its reader to ignore it.
+saying it loudly is how a daily routine trains its reader to ignore it. The
+step 7a stamp still happens on such a run: it is the one record that the run
+took place.
+
+**Step 7a — Stamp `checked.json`.** Every run that got as far as reading
+sources does this, whether or not it found anything, after step 7 is finished
+(or after the one-line summary of a quiet run). It is the only thing a run
+pushes to `main`, and it is not news: no PR, no notification, and nothing in the
+PR body or the `+<N> new` count.
+
+1. **Which artists.** Stamp an artist only if every one of their required
+   sources (step 2) was read to the end this run. An artist skipped, or whose
+   source failed or was only partly read, keeps whatever time they have. An
+   untracked artist is never stamped. If no artist qualifies, there is nothing
+   to push.
+2. **Work from `main`, not from the run's branch**, so nothing but this one file
+   can ride along. A separate worktree does it without disturbing the branch:
+
+   ```sh
+   T=$(cat /tmp/concert-watch-started)        # noted at the start of step 2
+   git fetch origin main
+   git worktree add --detach /tmp/stamp origin/main
+   cd /tmp/stamp
+   jq -S --arg t "$T" '.artists.scheps = $t | .artists.duenas = $t' \
+     checked.json > checked.new && mv checked.new checked.json   # one assignment per stamped slug
+   go run ./tools/validate -file seen.json    # also checks checked.json
+   git diff --stat                            # must list checked.json and nothing else
+   git add checked.json
+   git commit -m "concert-watch: checked $T"
+   git push origin HEAD:main
+   ```
+3. **If the push is rejected** because `main` moved (a PR was merged meanwhile),
+   fetch, rebuild the worktree from the new `origin/main`, redo the edit and
+   push again, up to three tries in all. Never merge, rebase onto or force-push
+   anything for this. If it still fails, or a push to `main` is refused outright,
+   do not look for another way in: leave the stamp undone and say so in step 8.
+   The only cost is that the page shows an older time, which is the truth.
 
 **Step 8 — Report source health.** End the run output with a status line per
 artist covering every source that applies to them — official site and
@@ -1096,6 +1210,10 @@ its listings without links, or whose pages stop confirming, shows up as that
 count going to zero. Name any artist whose entries yielded no links at all —
 that is the signature of a link hiding in the page's data rather than a site
 that stopped publishing them.
+
+Then one line for step 7a: which artists were stamped and with what time, which
+were not and why, and whether the push to `main` landed. A run that could not
+push says so plainly, since the page will show those artists as overdue.
 
 Then one line for the favorites report: how many upcoming concerts play a work
 on the list, how many of those are news this run, and — separately — any

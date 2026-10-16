@@ -71,6 +71,13 @@ const FIXTURE_ARTISTS = {
   ],
 };
 
+// Nothing stamped yet: the state of a fresh checkout, and what the page must
+// stay silent about. Tests that exercise the "Last checked" line pass their own.
+const FIXTURE_CHECKED = { artists: {} };
+
+// A checked.json stamp the validator would accept, `hours` ago.
+const stamp = hours => new Date(Date.now() - hours * 3600e3).toISOString().slice(0, 19) + "Z";
+
 // One favorite the fixture programmes play, one named only by a row whose
 // pieces are the string form (which must never match), and one nothing plays.
 const FIXTURE_FAVORITES = {
@@ -208,6 +215,8 @@ async function open(data = null, query = "") {
       route.fulfill({ json: data.favorites ?? FIXTURE_FAVORITES }));
     await page.route("**/travel.json", route =>
       route.fulfill({ json: data.travel ?? FIXTURE_TRAVEL }));
+    await page.route("**/checked.json", route =>
+      route.fulfill({ json: data.checked ?? FIXTURE_CHECKED }));
   }
 
   await page.goto(origin + "/" + query, { waitUntil: "networkidle" });
@@ -417,6 +426,64 @@ describe("the concert page", () => {
   // tools/favorites). This is the fixture that keeps them from drifting: if it
   // fails here, the page and the alerts have started disagreeing about what
   // counts as a favorite.
+  test("says nothing about checking until a run has stamped something", async () => {
+    const { page, errors } = await open({});
+
+    assert.equal(await page.locator("#checked").isHidden(), true);
+    assert.deepEqual(errors, []);
+    await page.close();
+  });
+
+  test("shows when the sources were last checked, as the oldest of the artists in view", async () => {
+    const { page, errors } = await open({
+      checked: { artists: { fischer: stamp(1), scheps: stamp(5) } },
+    });
+
+    const line = page.locator("#checked");
+    assert.equal(await line.isVisible(), true);
+    // The oldest stamp is the claim that holds for everyone: 5 h, not 1 h.
+    assert.match(await line.innerText(), /^Last checked .+ \(5 h ago\)$/);
+    assert.equal(await line.evaluate(el => el.classList.contains("stale")), false);
+
+    // Narrowing to one artist narrows the claim to that artist's own stamp.
+    await page.selectOption("#artistFilter", "Julia Fischer");
+    assert.match(await line.innerText(), /\(1 h ago\)$/);
+    assert.deepEqual(errors, []);
+    await page.close();
+  });
+
+  test("flags a check that is overdue, and names who", async () => {
+    const { page, errors } = await open({
+      checked: { artists: { fischer: stamp(2), scheps: stamp(72) } },
+    });
+
+    const line = page.locator("#checked");
+    assert.match(await line.innerText(), /\(3 days ago\) · overdue: Olga Scheps$/);
+    assert.equal(await line.evaluate(el => el.classList.contains("stale")), true);
+
+    // The artist who is up to date is not tarred with it.
+    await page.selectOption("#artistFilter", "Julia Fischer");
+    assert.doesNotMatch(await line.innerText(), /overdue/);
+    assert.equal(await line.evaluate(el => el.classList.contains("stale")), false);
+    assert.deepEqual(errors, []);
+    await page.close();
+  });
+
+  test("treats an artist with no stamp, or a malformed one, as not checked yet", async () => {
+    const { page, errors } = await open({
+      checked: { artists: { fischer: stamp(1), scheps: "yesterday" } },
+    });
+
+    const line = page.locator("#checked");
+    assert.match(await line.innerText(), /overdue: Olga Scheps$/);
+
+    await page.selectOption("#artistFilter", "Olga Scheps");
+    assert.equal(await line.innerText(), "Not checked yet");
+    assert.equal(await line.evaluate(el => el.classList.contains("stale")), true);
+    assert.deepEqual(errors, []);
+    await page.close();
+  });
+
   test("matches favorites exactly as the Go implementation does", async () => {
     const { page, errors } = await open({});
     const cases = JSON.parse(
@@ -573,6 +640,26 @@ describe("the concert page", () => {
     assert.equal(await page.locator(".card.favorite").count(), 0);
     assert.equal(await page.locator("#favoriteFilter").isHidden(), true);
     assert.equal(await page.locator("#subtitle").innerText(), "3 upcoming concerts");
+    assert.deepEqual(crashes, []);
+    await page.close();
+  });
+
+  test("still lists concerts when checked.json is missing", async () => {
+    const page = await browser.newPage();
+    const crashes = [];
+    page.on("pageerror", err => crashes.push(String(err)));
+    await page.route("https://fonts.*/**", route =>
+      route.fulfill({ status: 200, contentType: "text/css", body: "" }));
+    await page.route("**/seen.json", route => route.fulfill({ json: FIXTURE_CONCERTS }));
+    await page.route("**/artists.json", route => route.fulfill({ json: FIXTURE_ARTISTS }));
+    await page.route("**/favorites.json", route => route.fulfill({ json: FIXTURE_FAVORITES }));
+    await page.route("**/travel.json", route => route.fulfill({ json: FIXTURE_TRAVEL }));
+    await page.route("**/checked.json", route => route.fulfill({ status: 404, body: "" }));
+
+    await page.goto(origin, { waitUntil: "networkidle" });
+
+    assert.equal(await page.locator(".card").count(), 3);
+    assert.equal(await page.locator("#checked").isHidden(), true);
     assert.deepEqual(crashes, []);
     await page.close();
   });

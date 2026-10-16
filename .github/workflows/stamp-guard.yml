@@ -1,0 +1,44 @@
+name: stamp-guard
+
+# The routine pushes checked.json to main directly. This holds such a push to
+# that one file: see .github/scripts/stamp-guard.sh.
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+  pull-requests: read
+
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0 # the guard diffs against the commit before the push
+
+      # Two independent signals that the head came in through a merged PR: the
+      # committer GitHub itself records for merges made on its site, and the
+      # API's own list of pull requests the commit belongs to. Either is enough;
+      # a direct push has neither.
+      - name: Did a merged pull request bring this in?
+        id: merged
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          committer=$(git log -1 --format=%ce "${{ github.sha }}")
+          merged=false
+          if [ "$committer" = "noreply@github.com" ]; then
+            merged=true
+          else
+            n=$(gh api "repos/${{ github.repository }}/commits/${{ github.sha }}/pulls" \
+                  --jq '[.[] | select(.merged_at != null)] | length')
+            [ "$n" -gt 0 ] && merged=true
+          fi
+          echo "merged=$merged" >> "$GITHUB_OUTPUT"
+
+      - name: Hold a direct push to checked.json
+        env:
+          MERGED: ${{ steps.merged.outputs.merged }}
+        run: .github/scripts/stamp-guard.sh "${{ github.event.before }}" "${{ github.sha }}"

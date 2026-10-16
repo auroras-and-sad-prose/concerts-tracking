@@ -89,6 +89,11 @@
     letter-spacing: -.012em; line-height: 1.06;
   }
   .subtitle { margin-top: .5rem; color: var(--muted); font-size: .92rem; }
+  /* When the routine last read the sources. Quiet by default; it only raises
+     its voice when a check is overdue, because that is the one case where the
+     list may be missing something. */
+  .checked { margin-top: .3rem; color: var(--faint); font-size: .8rem; }
+  .checked.stale { color: var(--alert); }
 
   /* ---------- Filters ---------- */
   .controls-wrap {
@@ -608,6 +613,7 @@
   <div class="eyebrow">Concert Watch</div>
   <h1>Upcoming Concerts</h1>
   <div class="subtitle" id="subtitle">Loading…</div>
+  <div class="checked" id="checked" hidden></div>
 </header>
 
 <div class="controls-wrap">
@@ -660,6 +666,85 @@ function loadRoster(artists) {
       instrumentsByName.set(a.name, a.instruments.filter(i => typeof i === "string" && i.trim()));
     }
   }
+}
+
+// ---------- When the sources were last read ----------
+//
+// checked.json maps an artist slug to the UTC time the concert-watch routine
+// last read that artist's sources in full. It moves on every completed run,
+// including those that find nothing new, so it says "nothing has been missed
+// since then", which seen.json's dates cannot. The headline is the OLDEST time
+// among the artists in view: the claim that is true for all of them. An artist
+// with no entry yet counts as overdue rather than being skipped, so a source
+// that has never been read cannot hide behind the others.
+let checkedByName = new Map();
+let rosterNames = [];
+
+// A check older than this is overdue. The routine is daily, so a day and a half
+// means a run was missed, not just that it hasn't happened yet today.
+const CHECKED_STALE_MS = 36 * 3600 * 1000;
+
+// Only the exact shape the validator accepts. Anything else is dropped, so a
+// corrupt entry reads as "never checked" and cannot show a made-up time.
+function parseCheckedTime(v) {
+  if (typeof v !== "string" || !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/.test(v)) return null;
+  const t = new Date(v);
+  return Number.isNaN(t.getTime()) ? null : t;
+}
+
+function loadChecked(file, artists) {
+  checkedByName = new Map();
+  const stamps = file && typeof file.artists === "object" && file.artists ? file.artists : {};
+  for (const a of artists) {
+    if (!a.name || !a.slug || a.tracked === false) continue;
+    const t = parseCheckedTime(stamps[a.slug]);
+    if (t) checkedByName.set(a.name, t);
+  }
+  rosterNames = artists.filter(a => a.name && a.slug && a.tracked !== false).map(a => a.name);
+}
+
+function formatAgo(ms) {
+  const min = Math.floor(Math.max(0, ms) / 60000);
+  if (min < 2) return "just now";
+  if (min < 60) return `${min} min ago`;
+  const h = Math.floor(min / 60);
+  if (h < 48) return `${h} h ago`;
+  return `${Math.floor(h / 24)} days ago`;
+}
+
+function formatChecked(t) {
+  return t.toLocaleString(undefined, { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
+}
+
+// The line under the count, or null when there is nothing honest to say: the
+// file is missing, or no run has stamped anything yet.
+function checkedSummary(artist) {
+  if (checkedByName.size === 0) return null;
+  const scope = artist ? [artist] : rosterNames;
+  const now = Date.now();
+  const overdue = scope.filter(n => !checkedByName.has(n) || now - checkedByName.get(n) > CHECKED_STALE_MS);
+  const known = scope.filter(n => checkedByName.has(n)).map(n => checkedByName.get(n).getTime());
+  const detail = scope
+    .map(n => `${n}: ${checkedByName.has(n) ? formatChecked(checkedByName.get(n)) : "not checked yet"}`)
+    .join("\n");
+
+  if (!known.length) return { text: "Not checked yet", detail, stale: true };
+  const oldest = new Date(Math.min(...known));
+  let text = `Last checked ${formatChecked(oldest)} (${formatAgo(now - oldest)})`;
+  if (overdue.length) {
+    text += scope.length === 1 ? " · overdue" : ` · overdue: ${overdue.join(", ")}`;
+  }
+  return { text, detail, stale: overdue.length > 0 };
+}
+
+function renderChecked(artist) {
+  const el = document.getElementById("checked");
+  const s = checkedSummary(artist);
+  el.hidden = !s;
+  if (!s) return;
+  el.textContent = s.text;
+  el.title = s.detail;
+  el.classList.toggle("stale", s.stale);
 }
 
 // Every instrument the artist plays, from the roster.
@@ -1333,6 +1418,7 @@ function render() {
   document.getElementById("subtitle").textContent =
     `${list.length} upcoming concert${list.length === 1 ? "" : "s"}` +
     (withFavorite ? ` · ${withFavorite} with a favorite` : "");
+  renderChecked(artist);
 
   if (list.length === 0) {
     main.innerHTML = '<div class="empty">No upcoming concerts match your filters.</div>';
@@ -1512,12 +1598,17 @@ async function init() {
     console.error(e);
     return null;
   });
+  const checkedFile = fetchJSON("checked.json").catch(e => {
+    console.error(e);
+    return null;
+  });
   try {
     const data = await fetchJSON("seen.json");
     allConcerts = data.concerts || [];
-    const [artists, favoritesFile, travelFile] = await Promise.all([roster, starred, trains]);
+    const [artists, favoritesFile, travelFile, checked] = await Promise.all([roster, starred, trains, checkedFile]);
     loadTravel((travelFile && Array.isArray(travelFile.cities) && travelFile.cities) || []);
     loadRoster((artists && artists.artists) || []);
+    loadChecked(checked, (artists && artists.artists) || []);
     allConcerts = allConcerts.filter(c => !untrackedNames.has(c.artist));
     // The whole roster, untracked artists included, so that dropping one
     // doesn't shift everyone else's colour.
