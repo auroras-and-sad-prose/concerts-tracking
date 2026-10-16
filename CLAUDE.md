@@ -1262,9 +1262,9 @@ branch nobody has been told about.
     invent a second row to cover both readings.
 
     Instead: leave the existing row exactly as it stands, take no detail from
-    the page that disagrees, and report the conflict in step 8 and in the PR body (or the notification,
-    when there is no PR), quoting what each page said and linking both. A human decides whether it is
-    two concerts, a moved date or a bad listing. Only genuinely new, separately
+    the page that disagrees, and report the conflict in step 8 and in the PR
+    body (or the notification, when there is no PR), quoting what each page
+    said and linking both. A human decides whether it is two concerts, a moved date or a bad listing. Only genuinely new, separately
     corroborated concerts become rows; a contradiction is news, not data.
 
     A page that fails the artist-and-date check is not a conflict — it is just a
