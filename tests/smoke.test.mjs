@@ -421,11 +421,6 @@ describe("the concert page", () => {
     await page.close();
   });
 
-  // The page highlights favorites and the concert-watch routine alerts on
-  // them, from two implementations of one rule (index.html and
-  // tools/favorites). This is the fixture that keeps them from drifting: if it
-  // fails here, the page and the alerts have started disagreeing about what
-  // counts as a favorite.
   test("says nothing about checking until a run has stamped something", async () => {
     const { page, errors } = await open({});
 
@@ -469,6 +464,17 @@ describe("the concert page", () => {
     await page.close();
   });
 
+  test("treats a future-dated stamp as not checked yet", async () => {
+    const { page, errors } = await open({
+      checked: { artists: { fischer: stamp(1), scheps: stamp(-24) } },
+    });
+
+    await page.selectOption("#artistFilter", "Olga Scheps");
+    assert.equal(await page.locator("#checked").innerText(), "Not checked yet");
+    assert.deepEqual(errors, []);
+    await page.close();
+  });
+
   test("treats an artist with no stamp, or a malformed one, as not checked yet", async () => {
     const { page, errors } = await open({
       checked: { artists: { fischer: stamp(1), scheps: "yesterday" } },
@@ -484,6 +490,11 @@ describe("the concert page", () => {
     await page.close();
   });
 
+  // The page highlights favorites and the concert-watch routine alerts on
+  // them, from two implementations of one rule (index.html and
+  // tools/favorites). This is the fixture that keeps them from drifting: if it
+  // fails here, the page and the alerts have started disagreeing about what
+  // counts as a favorite.
   test("matches favorites exactly as the Go implementation does", async () => {
     const { page, errors } = await open({});
     const cases = JSON.parse(

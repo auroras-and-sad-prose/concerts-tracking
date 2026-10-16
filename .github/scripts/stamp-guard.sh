@@ -34,15 +34,19 @@ git cat-file -e "$before^{commit}" 2>/dev/null || {
 }
 
 # --no-renames lists both sides of a rename, so a file moved onto or off
-# another path cannot hide behind the allowed one.
-others=$(git diff --no-renames --name-only "$before" "$after" | grep -vxF "$allowed" || true)
-if [ -z "$others" ]; then
+# another path cannot hide behind the allowed one. -z keeps every path intact,
+# whatever spaces or non-ASCII characters it holds.
+others=()
+while IFS= read -r -d '' f; do
+  [ "$f" = "$allowed" ] || others+=("$f")
+done < <(git diff -z --no-renames --name-only "$before" "$after")
+if [ ${#others[@]} -eq 0 ]; then
   echo "Direct push changes only $allowed (or nothing)."
   exit 0
 fi
 
 echo "::error::A direct push to main changed files other than $allowed:"
-printf '  %s\n' $others
+printf '  %s\n' "${others[@]}"
 
 # Only undo on top of the very commit that was pushed: if main has moved on
 # since, someone built on this push, and rewinding files under them is not this
@@ -54,7 +58,7 @@ if [ "$(git rev-parse origin/main)" != "$after" ]; then
 fi
 
 git checkout --quiet --detach "$after"
-for f in $others; do
+for f in "${others[@]}"; do
   if git cat-file -e "$before:$f" 2>/dev/null; then
     git checkout "$before" -- "$f"
   else

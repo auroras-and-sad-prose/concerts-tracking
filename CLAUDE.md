@@ -401,28 +401,42 @@ running for. `checked.json` closes that gap:
 Each key is an artist slug from `artists.json`; each value is the UTC time the
 run **began reading** that artist's sources, on a run that then read every
 required source to the end (official site and Bachtrack, or Bachtrack alone for
-Perlman, with every pager exhausted — step 2). Stamping the time the reading
-started, not the time it finished, keeps the claim conservative. An artist whose
-source failed, or was only partly read, is not stamped that run and keeps its
-old time. A failed tertiary label page withholds nothing, as in step 2.
+Perlman, with every pager exhausted — step 2). For an artist listed under
+"Tertiary source" the label page must have been read to the end as well. Step 2
+lets a failed label page go without skipping the artist, but the stamp claims
+more than that the artist was looked at: it claims nothing was missed, and a
+label page stuck at its first 20 events is the known way of missing something.
+Stamping the time the reading started, not the time it finished, keeps the
+claim conservative. An artist whose sources were not all read in full is not
+stamped that run and keeps their old time.
 
 **What the page shows.** "Last checked 16 Oct, 07:12 (3 h ago)", in the
-viewer's own time zone: the *oldest* stamp among the artists in view, which is
-the claim that is true for all of them, and one artist's own stamp when the
-artist filter is on. The wording is deliberate. "Last updated" would read as
+viewer's own time zone: the *oldest* stamp among all tracked artists, which is
+the claim that is true for every one of them, or one artist's own stamp when the
+artist filter is on. The other filters don't narrow it. The wording is deliberate. "Last updated" would read as
 "the data changed", which is usually false and is not what the stamp promises;
 "checked" says only that someone looked, and found nothing the page lacks. A
 stamp older than 36 hours turns the line red and names who is overdue, because
 a missed run is the one case where the list may be missing something. An artist
 with no stamp counts as overdue, and nothing at all is shown until the first
 stamp lands. The overdue and "never checked" states are worked out when the page
-loads and never stored, like a favorite.
+loads and never stored, like a favorite. A stamp dated in the future is
+treated as no stamp, so a bad clock cannot pin the line at "just now".
 
-**The one file a run pushes to `main` directly.** A stamp is not news and not
-something a person can usefully review, and putting it through a PR would mean a
-daily PR to merge, which is exactly the noise the quiet-run rule exists to
-prevent. So step 7a commits it straight to `main`, and *only* it. That exception
-is as narrow as it can be made:
+**A stamp reaches `main` no earlier than what the run found.** If a run's new
+rows are waiting in a PR, a stamp already on `main` would tell the reader
+nothing had been missed while the page lacks those rows. So while a run PR is
+open, the stamp rides in it as its own commit and lands when the PR is merged,
+together with the rows it vouches for. Until then the page keeps the previous
+stamp, and goes overdue after 36 hours, which is the truth: there is news the
+page doesn't have yet. That includes a PR carrying only `travel.json`, which
+sends no notification, so an overdue line is also the cue to look for one.
+
+**The one file a run pushes to `main` directly.** When no run PR is open, the
+run has nothing that needs review. Putting the stamp through a PR would then
+mean a daily PR to merge, which is exactly the noise the quiet-run rule exists
+to prevent. So step 7a commits it straight to `main`, and *only* it. That
+exception is as narrow as it can be made:
 
 - The validator (above) rejects a malformed, future-dated or unknown-artist
   stamp, and CI runs it on every push that touches the file.
@@ -430,7 +444,9 @@ is as narrow as it can be made:
   did not arrive by merging a pull request may change `checked.json` and nothing
   else; if it changed anything else, the guard commits an undo of those other
   files and fails the build, so it shows red. (`.github/scripts/stamp-guard.sh`
-  is the logic.) A reviewed, merged PR is never touched by it.
+  is the logic.) A reviewed, merged PR is never touched by it. Whether a push
+  came from a merged PR is decided only by GitHub's own record of the commit's
+  pull requests, never by the committer field, which the pusher sets.
 - The guard reacts after the push; it cannot stop one. It also runs from the
   commit it is guarding, so a direct push that rewrote the workflow itself would
   disarm it. Closing that gap takes a repository setting, not a file in this
@@ -527,9 +543,9 @@ data goes on a branch, reaches `main` only through a pull request a person
 merges, and the run ends by notifying that person that it is waiting. Step 7
 sets out the mechanics; step 1 is where it starts, because which branch you are
 working from decides what counts as already seen. The one exception is the
-`checked.json` stamp of step 7a, which is pushed to `main` directly and touches
-nothing else; "When the data was last checked" above says why, and what holds it
-to that.
+`checked.json` stamp of step 7a: when no run PR is open, it is pushed to `main`
+directly and touches nothing else. "When the data was last checked" above says
+why, and what holds it to that.
 
 **Artists and starting points.** These are where every run begins, not the only
 pages it may read: the sweep below is what makes coverage predictable, and
@@ -1034,7 +1050,7 @@ toward `<N> new` or `<M> changed`, and never trigger a notification alone
 (step 7).
 
 **Step 7 — Record, open a PR, and alert.** Never commit to `main` and never push
-to it — except for the step 7a stamp, which is its own push and carries nothing
+to it, except for a step 7a stamp, which is its own push and carries nothing
 else. A run's writes land on a branch, go up as a pull request, and a person
 merges them; the run's last act is a push notification telling that person there
 is something waiting.
@@ -1048,9 +1064,9 @@ is something waiting.
    captured fields (including `pieces`, `instruments`, and `detail_url`) plus
    `"first_seen": "<today's ISO date>"` and `"id"`, and apply step 6's
    refinements to existing rows, then step 6a's entries to `travel.json`.
-   `seen.json` and `travel.json` are the only files the run's PR may touch
-   (`checked.json` never rides in it; step 7a pushes that on its own) —
-   never `artists.json`, `favorites.json`, this file, `index.html`, or
+   `seen.json` and `travel.json` are the only files this step writes, and
+   with step 7a's stamp, `checked.json` is the only other file the run's PR
+   may touch — never `artists.json`, `favorites.json`, this file, `index.html`, or
    `tools/`. Those are reviewed changes a person makes, and slipping one into a
    run's PR is how a routine edits its own rules.
 3. **Check before pushing.** Run `go test ./tools/...` and
@@ -1160,37 +1176,63 @@ took place.
 
 **Step 7a — Stamp `checked.json`.** Every run that got as far as reading
 sources does this, whether or not it found anything, after step 7 is finished
-(or after the one-line summary of a quiet run). It is the only thing a run
-pushes to `main`, and it is not news: no PR, no notification, and nothing in the
-PR body or the `+<N> new` count.
+(or after the one-line summary of a quiet run). It is not news: it sends no
+notification, adds nothing to the PR body's lists or the `+<N> new` count, and
+on its own it never opens a PR or retitles one.
 
 1. **Which artists.** Stamp an artist only if every one of their required
-   sources (step 2) was read to the end this run. An artist skipped, or whose
-   source failed or was only partly read, keeps whatever time they have. An
-   untracked artist is never stamped. If no artist qualifies, there is nothing
-   to push.
-2. **Work from `main`, not from the run's branch**, so nothing but this one file
-   can ride along. A separate worktree does it without disturbing the branch:
+   sources (step 2) was read to the end this run, and, for an artist listed
+   under "Tertiary source", the label page too, through every "Load more"
+   batch to `hasNextPage: false`. An artist skipped, or with any of those
+   sources failed or only partly read, keeps whatever time they have. An
+   untracked artist is never stamped. If no artist qualifies, there is
+   nothing to write.
+2. **The edit.** Set each stamped artist's entry to the time noted at the start
+   of step 2, and leave every other entry exactly as it is:
 
    ```sh
    T=$(cat /tmp/concert-watch-started)        # noted at the start of step 2
-   git fetch origin main
-   git worktree add --detach /tmp/stamp origin/main
-   cd /tmp/stamp
-   jq -S --arg t "$T" '.artists.scheps = $t | .artists.duenas = $t' \
-     checked.json > checked.new && mv checked.new checked.json   # one assignment per stamped slug
+   python3 - "$T" scheps duenas <<'EOF'       # the stamped slugs, one per argument
+   import json, sys
+   t, slugs = sys.argv[1], sys.argv[2:]
+   d = json.load(open("checked.json"))
+   d.setdefault("artists", {}).update({s: t for s in slugs})
+   open("checked.json", "w").write(json.dumps(d, indent=2, sort_keys=True, ensure_ascii=False) + "\n")
+   EOF
    go run ./tools/validate -file seen.json    # also checks checked.json
-   git diff --stat                            # must list checked.json and nothing else
-   git add checked.json
-   git commit -m "concert-watch: checked $T"
-   git push origin HEAD:main
    ```
-3. **If the push is rejected** because `main` moved (a PR was merged meanwhile),
-   fetch, rebuild the worktree from the new `origin/main`, redo the edit and
-   push again, up to three tries in all. Never merge, rebase onto or force-push
-   anything for this. If it still fails, or a push to `main` is refused outright,
-   do not look for another way in: leave the stamp undone and say so in step 8.
-   The only cost is that the page shows an older time, which is the truth.
+3. **Where it goes.** A stamp reaches `main` no earlier than the rows it vouches
+   for ("When the data was last checked" says why).
+   - **A run PR is open**, either one step 1 picked up or one step 7 just
+     opened. First confirm it is still open; if a person merged it meanwhile,
+     treat it as the next case. Make the edit on that branch and commit
+     it there as its own commit, `concert-watch: checked <T>`, then push the
+     branch as step 7 did. A quiet run working on a still-open branch does this
+     too: it is the only commit such a run adds. The PR's title and body don't
+     change for it.
+   - **No run PR is open.** Push the stamp to `main` from a fresh worktree of
+     `origin/main`, so nothing but this one file can ride along:
+
+     ```sh
+     git fetch origin main
+     W=$(mktemp -d)
+     git worktree add --detach "$W" origin/main
+     cd "$W"
+     # the edit from item 2, run here
+     git status --porcelain                     # must list checked.json and nothing else
+     git add checked.json
+     git commit -m "concert-watch: checked $T"
+     git push origin HEAD:main
+     cd - && git worktree remove --force "$W"
+     ```
+4. **If the push to `main` is rejected** because `main` moved (a PR was merged
+   meanwhile), remove the worktree, fetch, and start item 3 again from a new
+   one. If the move was the merge of a run PR, the stamp simply goes to `main`
+   as above. Make up to three tries in all. Never merge, rebase onto or
+   force-push anything for this. If it still fails, or a push to `main` is
+   refused outright, do not look for another way in: leave the stamp undone
+   and say so in step 8. The only cost is that the page shows an older time,
+   which is the truth.
 
 **Step 8 — Report source health.** End the run output with a status line per
 artist covering every source that applies to them — official site and
@@ -1212,7 +1254,8 @@ that is the signature of a link hiding in the page's data rather than a site
 that stopped publishing them.
 
 Then one line for step 7a: which artists were stamped and with what time, which
-were not and why, and whether the push to `main` landed. A run that could not
+were not and why, and where the stamp went: pushed to `main`, or committed to
+the open PR's branch to land when it is merged. A run that could not
 push says so plainly, since the page will show those artists as overdue.
 
 Then one line for the favorites report: how many upcoming concerts play a work

@@ -3,11 +3,11 @@
 // "Last checked", so a quiet run, which finds nothing to put in seen.json, still
 // moves the date forward: the concerts are current as of that time.
 //
-// It is the one file the routine pushes straight to main (see "When the data
-// was last checked" in CLAUDE.md), which is why it is kept apart from
-// seen.json and travel.json, whose changes all go through a reviewed PR, and
-// why the stamp-guard workflow refuses a direct push that touches anything
-// else. Because nothing reviews a stamp, the checks here are what stand between
+// It is the one file the routine may push straight to main, when it has no PR
+// open (see "When the data was last checked" in CLAUDE.md). That is why it is
+// kept apart from seen.json and travel.json, whose changes all go through a
+// reviewed PR, and why the stamp-guard workflow refuses a direct push that
+// touches anything else. Because nothing reviews a stamp, the checks here are what stand between
 // a bad one and the page: a timestamp has one exact shape, it cannot lie in the
 // future, and it can only be for an artist the roster knows.
 package main

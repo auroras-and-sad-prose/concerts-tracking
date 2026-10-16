@@ -672,11 +672,14 @@ function loadRoster(artists) {
 //
 // checked.json maps an artist slug to the UTC time the concert-watch routine
 // last read that artist's sources in full. It moves on every completed run,
-// including those that find nothing new, so it says "nothing has been missed
-// since then", which seen.json's dates cannot. The headline is the OLDEST time
-// among the artists in view: the claim that is true for all of them. An artist
-// with no entry yet counts as overdue rather than being skipped, so a source
-// that has never been read cannot hide behind the others.
+// including those that find nothing new, and reaches this page only together
+// with whatever that run found, so it says "nothing had been missed as of
+// then", which seen.json's dates cannot. The headline is the OLDEST time among
+// all tracked artists, the claim that is true for every one of them, or the
+// selected artist's own time when the artist filter is set; the other filters
+// don't narrow it. An artist with no entry yet counts as overdue rather than
+// being skipped, so a source that has never been read cannot hide behind the
+// others.
 let checkedByName = new Map();
 let rosterNames = [];
 
@@ -684,12 +687,18 @@ let rosterNames = [];
 // means a run was missed, not just that it hasn't happened yet today.
 const CHECKED_STALE_MS = 36 * 3600 * 1000;
 
-// Only the exact shape the validator accepts. Anything else is dropped, so a
-// corrupt entry reads as "never checked" and cannot show a made-up time.
+// How far ahead of the viewer's clock a stamp may be and still count: the
+// validator's tolerance for clock skew between machines.
+const CHECKED_SKEW_MS = 10 * 60 * 1000;
+
+// Only the exact shape the validator accepts, and never a time in the future.
+// Anything else is dropped, so a corrupt entry reads as "never checked": a
+// future stamp would otherwise show as "just now" forever and never go overdue.
 function parseCheckedTime(v) {
   if (typeof v !== "string" || !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/.test(v)) return null;
   const t = new Date(v);
-  return Number.isNaN(t.getTime()) ? null : t;
+  if (Number.isNaN(t.getTime()) || t.getTime() > Date.now() + CHECKED_SKEW_MS) return null;
+  return t;
 }
 
 function loadChecked(file, artists) {
