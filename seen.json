@@ -3645,6 +3645,25 @@
       "source_url": "https://bachtrack.com/search-events/performer=alice-sara-ott",
       "detail_url": "https://bachtrack.com/concert-event/belgian-national-orchestra-halls-ott-belgian-national-orchestra-palais-des-beaux-arts-bozar-henry-le-boeuf-concert-hall-11-june-2027/449935",
       "first_seen": "2026-10-14"
+    },
+    {
+      "id": "duenas|2027-05-06|london",
+      "artist": "María Dueñas",
+      "date": "2027-05-06",
+      "city": "London",
+      "country": "United Kingdom",
+      "venue": "Southbank Centre: Royal Festival Hall",
+      "program": "Philharmonia Orchestra / Santtu-Matias Rouvali: Chin, Beethoven, Tchaikovsky",
+      "pieces": [
+        "Chin: subito con forza",
+        "Beethoven: Violin Concerto in D major, Op.61",
+        "Tchaikovsky: Symphony no. 4 in F minor, Op.36"
+      ],
+      "instruments": null,
+      "location_tag": "europe",
+      "source_url": "https://bachtrack.com/search-events/performer=maria-duenas",
+      "detail_url": "https://bachtrack.com/concert-event/beethoven-violin-concerto-with-maria-duenas-philharmonia-orchestra-southbank-centre-royal-festival-hall-6-may-2027/450274",
+      "first_seen": "2026-10-16"
     }
   ]
 }
