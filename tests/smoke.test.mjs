@@ -464,9 +464,22 @@ describe("the concert page", () => {
     await page.close();
   });
 
+  test("warns, rather than going quiet, when every stamp is unusable", async () => {
+    const { page, errors } = await open({
+      checked: { artists: { fischer: "2026-10-16 07:12", scheps: "yesterday" } },
+    });
+
+    const line = page.locator("#checked");
+    assert.equal(await line.isVisible(), true);
+    assert.equal(await line.innerText(), "Not checked yet");
+    assert.equal(await line.evaluate(el => el.classList.contains("stale")), true);
+    assert.deepEqual(errors, []);
+    await page.close();
+  });
+
   test("treats a future-dated stamp as not checked yet", async () => {
     const { page, errors } = await open({
-      checked: { artists: { fischer: stamp(1), scheps: stamp(-24) } },
+      checked: { artists: { fischer: stamp(1), scheps: stamp(-48) } },
     });
 
     await page.selectOption("#artistFilter", "Olga Scheps");

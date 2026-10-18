@@ -1,0 +1,62 @@
+name: stamp-merge
+
+# Merges a concert-watch stamp PR (branch stamp/…) when, and only when, it
+# changes checked.json and nothing else. See "When the data was last checked"
+# in CLAUDE.md.
+#
+# pull_request_target runs this file as it is on main, never as the PR has it,
+# so a stamp PR cannot edit the check that judges it. For the same reason the
+# PR's code is never checked out: its file list and its checked.json are read
+# through the API, as data.
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+    branches: [main]
+
+permissions:
+  contents: write
+  pull-requests: write
+  pages: write
+
+jobs:
+  merge:
+    if: startsWith(github.head_ref, 'stamp/') && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      REPO: ${{ github.repository }}
+      PR: ${{ github.event.pull_request.number }}
+      HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+    steps:
+      - uses: actions/checkout@v6 # main, not the PR
+
+      - uses: actions/setup-go@v6
+        with:
+          go-version-file: go.mod
+
+      # Exactly one change, checked.json modified in place. A rename onto it
+      # or a deletion shows up with another status and is refused.
+      - name: Changes checked.json and nothing else
+        run: |
+          changes=$(gh api --paginate "repos/$REPO/pulls/$PR/files" --jq '.[] | "\(.status) \(.filename)"')
+          if [ "$changes" != "modified checked.json" ]; then
+            echo "::error::A stamp PR may only modify checked.json. It changes:"
+            printf '%s\n' "$changes"
+            exit 1
+          fi
+
+      - name: Validate the stamp with main's validator
+        run: |
+          gh api "repos/$REPO/contents/checked.json?ref=$HEAD_SHA" --jq .content | base64 -d > "$RUNNER_TEMP/checked.json"
+          go run ./tools/validate -file seen.json -checked "$RUNNER_TEMP/checked.json"
+
+      # --match-head-commit: merge only the commit checked above, never one
+      # pushed onto the branch since.
+      - name: Merge
+        run: gh pr merge "$PR" --repo "$REPO" --squash --delete-branch --match-head-commit "$HEAD_SHA"
+
+      # A push made with this workflow's token may not start a Pages build on
+      # its own. Asking for one is harmless if it would have anyway.
+      - name: Request a Pages build
+        continue-on-error: true
+        run: gh api -X POST "repos/$REPO/pages/builds" --silent

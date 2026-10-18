@@ -1,15 +1,17 @@
 // checked.json records, per tracked artist, when the concert-watch routine
-// last finished reading that artist's required sources. The page shows it as
-// "Last checked", so a quiet run, which finds nothing to put in seen.json, still
-// moves the date forward: the concerts are current as of that time.
+// began the last run that read all of that artist's sources to the end. The
+// page shows it as "Last checked", so a quiet run, which finds nothing to put
+// in seen.json, still moves the date forward: the concerts are current as of
+// that time.
 //
-// It is the one file the routine may push straight to main, when it has no PR
-// open (see "When the data was last checked" in CLAUDE.md). That is why it is
-// kept apart from seen.json and travel.json, whose changes all go through a
-// reviewed PR, and why the stamp-guard workflow refuses a direct push that
-// touches anything else. Because nothing reviews a stamp, the checks here are what stand between
-// a bad one and the page: a timestamp has one exact shape, it cannot lie in the
-// future, and it can only be for an artist the roster knows.
+// It is the one file that may reach main without a person merging it: a stamp
+// PR that changes nothing else is merged by the stamp-merge workflow (see
+// "When the data was last checked" in CLAUDE.md). That is why it is kept apart
+// from seen.json and travel.json, whose changes all go through a reviewed PR.
+// Because no person reviews a stamp, the checks here, which the workflow runs
+// before merging, are what stand between a bad one and the page: a timestamp
+// has one exact shape, it cannot lie in the future, and it can only be for an
+// artist the roster knows.
 package main
 
 import (

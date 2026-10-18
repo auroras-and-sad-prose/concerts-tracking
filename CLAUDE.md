@@ -10,8 +10,8 @@ for each German city a concert is in, the approximate train time from Berlin
 (from the Rome2Rio connector) and the city's station (from
 `tools/stations/de.csv`), which the routine fills in and the page turns into a
 travel line and a bahn.de link — see "Train times from Berlin" below.
-`checked.json` records, per artist, when the routine last finished reading that
-artist's sources, which the page shows as "Last checked" — see "When the data
+`checked.json` records, per artist, when the routine began the last run that
+read all of that artist's sources, which the page shows as "Last checked" — see "When the data
 was last checked" below.
 
 Reducing hallucination in this dataset relies on three layers: the **enforced
@@ -108,7 +108,8 @@ both:
 It checks `checked.json` as well: every key an artist slug on the roster, every
 value a UTC timestamp of exactly the shape `2026-10-16T05:12:00Z` that is not in
 the future. A tracked artist with no entry is allowed (the page reads it as not
-checked yet), so adding someone to the roster never turns the build red.
+checked yet), so adding someone to the roster never turns the build red. The
+stamp-merge workflow runs this same check on a stamp PR before merging it.
 
 Run locally before committing (the validator reads `artists.json`,
 `favorites.json`, `travel.json`, `checked.json` and `tools/stations/de.csv` from
@@ -420,40 +421,43 @@ stamp older than 36 hours turns the line red and names who is overdue, because
 a missed run is the one case where the list may be missing something. An artist
 with no stamp counts as overdue, and nothing at all is shown until the first
 stamp lands. The overdue and "never checked" states are worked out when the page
-loads and never stored, like a favorite. A stamp dated in the future is
-treated as no stamp, so a bad clock cannot pin the line at "just now".
+loads and never stored, like a favorite. A stamp more than a day ahead of the
+viewer's clock is treated as no stamp, so a bad stamp cannot pin the line at
+"just now"; a file whose entries are all unusable reads as "not checked yet",
+never as the silence of a file with none.
 
 **A stamp reaches `main` no earlier than what the run found.** If a run's new
 rows are waiting in a PR, a stamp already on `main` would tell the reader
-nothing had been missed while the page lacks those rows. So while a run PR is
-open, the stamp rides in it as its own commit and lands when the PR is merged,
-together with the rows it vouches for. Until then the page keeps the previous
-stamp, and goes overdue after 36 hours, which is the truth: there is news the
-page doesn't have yet. That includes a PR carrying only `travel.json`, which
-sends no notification, so an overdue line is also the cue to look for one.
+nothing had been missed while the page lacks those rows. So while a run PR that
+changes `seen.json` is open, the stamp rides in it as its own commit and lands
+when the PR is merged, together with the rows it vouches for. Until then the
+page keeps the previous stamp, and goes overdue after 36 hours, which is the
+truth: there is news the page doesn't have yet. A run PR that changes only
+`travel.json` doesn't hold the stamp back, since the page lacks no concert.
 
-**The one file a run pushes to `main` directly.** When no run PR is open, the
-run has nothing that needs review. Putting the stamp through a PR would then
-mean a daily PR to merge, which is exactly the noise the quiet-run rule exists
-to prevent. So step 7a commits it straight to `main`, and *only* it. That
-exception is as narrow as it can be made:
+**Otherwise it arrives in a stamp PR that merges itself.** With no rows
+waiting, there is nothing for a person to review, and a daily PR to merge by
+hand is exactly the noise the quiet-run rule exists to prevent. So step 7a opens
+a pull request from a `stamp/…` branch, and
+`.github/workflows/stamp-merge.yml` merges it with nobody involved, but only if
+it changes `checked.json` and nothing else:
 
-- The validator (above) rejects a malformed, future-dated or unknown-artist
-  stamp, and CI runs it on every push that touches the file.
-- `.github/workflows/stamp-guard.yml` runs on every push to `main`. A push that
-  did not arrive by merging a pull request may change `checked.json` and nothing
-  else; if it changed anything else, the guard commits an undo of those other
-  files and fails the build, so it shows red. (`.github/scripts/stamp-guard.sh`
-  is the logic.) A reviewed, merged PR is never touched by it. Whether a push
-  came from a merged PR is decided only by GitHub's own record of the commit's
-  pull requests, never by the committer field, which the pusher sets.
-- The guard reacts after the push; it cannot stop one. It also runs from the
-  commit it is guarding, so a direct push that rewrote the workflow itself would
-  disarm it. Closing that gap takes a repository setting, not a file in this
-  repo: branch protection on `main` that requires pull requests, with only the
-  routine's identity allowed to bypass, or a ruleset that restricts that
-  identity to the path `checked.json` where the plan supports one. Either is a
-  person's change to make.
+- It runs as `pull_request_target`, so its own code always comes from `main`. A
+  stamp PR cannot edit the check that judges it.
+- It never checks out the PR's code. It asks GitHub for the PR's changed files
+  and requires exactly one, `checked.json`, modified in place (a deletion, or a
+  rename onto it, is refused), then runs `main`'s validator over that file as
+  it stands at the PR's head.
+- It squash-merges only the commit it checked, and deletes the branch. Anything
+  else stays open with a red check, and nothing reaches `main`.
+
+So the routine never pushes to `main` at all, and `main` can be locked. Branch
+protection requiring a pull request, with no bypass, is what turns "nothing
+else gets in" from a convention into a guarantee. That is a repository setting
+a person turns on (Settings → Branches), with no required approvals and no
+required status checks: the workflow is the check, and it merges as soon as it
+has run. If a rule requiring a person's approval is ever added, the workflow's
+merge will be refused and stamp PRs will sit open; step 7a stops after one.
 
 **The routine writes this file and nothing else is its business.** It never
 edits it to move a time backward or to stamp an artist it did not read, and a
@@ -538,14 +542,14 @@ memory so the same concert is never alerted on twice. You run inside a fresh
 clone of this private repo with read/write access to repo contents, to Pull
 Requests. All state lives in `seen.json` at the repo root.
 
-**The run writes to `main` in exactly one way.** Everything a run changes in the
-data goes on a branch, reaches `main` only through a pull request a person
-merges, and the run ends by notifying that person that it is waiting. Step 7
-sets out the mechanics; step 1 is where it starts, because which branch you are
-working from decides what counts as already seen. The one exception is the
-`checked.json` stamp of step 7a: when no run PR is open, it is pushed to `main`
-directly and touches nothing else. "When the data was last checked" above says
-why, and what holds it to that.
+**The run never writes to `main`.** Everything a run changes goes on a branch,
+reaches `main` only through a pull request a person merges, and the run ends by
+notifying that person that it is waiting. Step 7 sets out the mechanics; step 1
+is where it starts, because which branch you are working from decides what
+counts as already seen. The `checked.json` stamp of step 7a is no exception:
+it too arrives by pull request, either inside the run's PR or in a stamp PR
+that a workflow merges after checking it changes nothing else ("When the data
+was last checked" above).
 
 **Artists and starting points.** These are where every run begins, not the only
 pages it may read: the sweep below is what makes coverage predictable, and
@@ -1050,8 +1054,7 @@ toward `<N> new` or `<M> changed`, and never trigger a notification alone
 (step 7).
 
 **Step 7 — Record, open a PR, and alert.** Never commit to `main` and never push
-to it, except for a step 7a stamp, which is its own push and carries nothing
-else. A run's writes land on a branch, go up as a pull request, and a person
+to it. A run's writes land on a branch, go up as a pull request, and a person
 merges them; the run's last act is a push notification telling that person there
 is something waiting.
 
@@ -1104,7 +1107,8 @@ is something waiting.
      later one would re-report rows the earlier already carries.
    - Never merge it yourself, and never enable auto-merge. The freeze on
      `artist`/`date`/`city` and the append-only check are enforcement; the
-     review is judgement, and it is a person's.
+     review is judgement, and it is a person's. (A step 7a stamp PR is merged
+     by the stamp-merge workflow, never by the run either.)
 6. **Notify.** Once the PR exists, send ONE push notification: one line,
    under 200 characters, no markdown, leading with what the reader would act
    on — e.g. `concert-watch 2026-08-22: 3 new (1 Berlin, 1 favorite), 1
@@ -1168,17 +1172,17 @@ everything together.
 
 If there are zero new concerts, no status changed, no favorite turned up on an
 existing row and no conflict was found, print a one-line summary instead (e.g.
-"No new concerts. Checked 7 artists, all sources OK."). A quiet run leaves no
-branch behind, opens no PR, and sends no notification: with nothing to say,
-saying it loudly is how a daily routine trains its reader to ignore it. The
-step 7a stamp still happens on such a run: it is the one record that the run
-took place.
+"No new concerts. Checked 7 artists, all sources OK."). A quiet run opens no
+run PR, and sends no notification: with nothing to say, saying it loudly is how
+a daily routine trains its reader to ignore it. The step 7a stamp still happens
+on such a run, through a stamp PR that merges itself and deletes its branch: it
+is the one record that the run took place.
 
 **Step 7a — Stamp `checked.json`.** Every run that got as far as reading
 sources does this, whether or not it found anything, after step 7 is finished
 (or after the one-line summary of a quiet run). It is not news: it sends no
-notification, adds nothing to the PR body's lists or the `+<N> new` count, and
-on its own it never opens a PR or retitles one.
+notification, adds nothing to the run PR's body or the `+<N> new` count, and
+never opens or retitles a run PR.
 
 1. **Which artists.** Stamp an artist only if every one of their required
    sources (step 2) was read to the end this run, and, for an artist listed
@@ -1203,36 +1207,42 @@ on its own it never opens a PR or retitles one.
    ```
 3. **Where it goes.** A stamp reaches `main` no earlier than the rows it vouches
    for ("When the data was last checked" says why).
-   - **A run PR is open**, either one step 1 picked up or one step 7 just
-     opened. First confirm it is still open; if a person merged it meanwhile,
-     treat it as the next case. Make the edit on that branch and commit
-     it there as its own commit, `concert-watch: checked <T>`, then push the
-     branch as step 7 did. A quiet run working on a still-open branch does this
-     too: it is the only commit such a run adds. The PR's title and body don't
-     change for it.
-   - **No run PR is open.** Push the stamp to `main` from a fresh worktree of
-     `origin/main`, so nothing but this one file can ride along:
+   - **A run PR is open and changes `seen.json`**, whether step 1 picked it up
+     or step 7 just opened it. On its branch,
+     `git diff --quiet origin/main...HEAD -- seen.json` fails. First bring
+     `main` in with `git merge --no-edit origin/main`. That is a merge commit,
+     which adds to the branch and rewrites nothing, and it keeps this stamp from
+     conflicting with one a stamp PR has merged since the branch was cut. If
+     that merge conflicts, run `git merge --abort`, leave the stamp undone and
+     report it. Otherwise make the edit, commit it as `concert-watch: checked
+     <T>`, and push the branch. Then check the PR is still open. If a person
+     merged it before the push landed, the commit missed `main`, so stamp
+     through the next case instead. The PR's title and body don't change for a
+     stamp.
+   - **Otherwise**, open a stamp PR from a fresh worktree of `origin/main`, so
+     nothing but this one file can ride along:
 
      ```sh
+     B="stamp/${T//:/}"                         # git refs may not contain ':'
      git fetch origin main
      W=$(mktemp -d)
-     git worktree add --detach "$W" origin/main
+     git worktree add -b "$B" "$W" origin/main
      cd "$W"
      # the edit from item 2, run here
      git status --porcelain                     # must list checked.json and nothing else
-     git add checked.json
-     git commit -m "concert-watch: checked $T"
-     git push origin HEAD:main
+     git commit -am "concert-watch: checked $T"
+     git push -u origin "$B"
      cd - && git worktree remove --force "$W"
      ```
-4. **If the push to `main` is rejected** because `main` moved (a PR was merged
-   meanwhile), remove the worktree, fetch, and start item 3 again from a new
-   one. If the move was the merge of a run PR, the stamp simply goes to `main`
-   as above. Make up to three tries in all. Never merge, rebase onto or
-   force-push anything for this. If it still fails, or a push to `main` is
-   refused outright, do not look for another way in: leave the stamp undone
-   and say so in step 8. The only cost is that the page shows an older time,
-   which is the truth.
+
+     Then open a PR from `$B` to `main` titled `concert-watch: checked <T>`,
+     with a one-line body naming the stamped artists. Do not merge it. The
+     stamp-merge workflow does, usually within a couple of minutes.
+4. **An earlier stamp PR still open** means the workflow refused it or could not
+   merge it. Don't open another on top of it: leave this run's stamp undone and
+   name the open stamp PR in step 8, for a person to look at. Never close,
+   merge or force anything for a stamp. A stamp left undone costs nothing but an
+   older time on the page, which is the truth.
 
 **Step 8 — Report source health.** End the run output with a status line per
 artist covering every source that applies to them — official site and
@@ -1254,9 +1264,10 @@ that is the signature of a link hiding in the page's data rather than a site
 that stopped publishing them.
 
 Then one line for step 7a: which artists were stamped and with what time, which
-were not and why, and where the stamp went: pushed to `main`, or committed to
-the open PR's branch to land when it is merged. A run that could not
-push says so plainly, since the page will show those artists as overdue.
+were not and why, and where the stamp went: committed to the open run PR's
+branch to land when it is merged, or a stamp PR (its number, and whether it had
+merged by the end of the run), or nowhere and why. A run that could not stamp
+says so plainly, since the page will show those artists as overdue.
 
 Then one line for the favorites report: how many upcoming concerts play a work
 on the list, how many of those are news this run, and — separately — any

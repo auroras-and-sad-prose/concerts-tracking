@@ -671,7 +671,7 @@ function loadRoster(artists) {
 // ---------- When the sources were last read ----------
 //
 // checked.json maps an artist slug to the UTC time the concert-watch routine
-// last read that artist's sources in full. It moves on every completed run,
+// began the last run that read that artist's sources in full. It moves on every completed run,
 // including those that find nothing new, and reaches this page only together
 // with whatever that run found, so it says "nothing had been missed as of
 // then", which seen.json's dates cannot. The headline is the OLDEST time among
@@ -682,14 +682,20 @@ function loadRoster(artists) {
 // others.
 let checkedByName = new Map();
 let rosterNames = [];
+// Whether checked.json has any entry for a tracked artist, usable or not. Only
+// a file with none at all hides the line; one whose entries are all unusable
+// reads as "not checked yet", not as "no run has happened".
+let checkedAny = false;
 
 // A check older than this is overdue. The routine is daily, so a day and a half
 // means a run was missed, not just that it hasn't happened yet today.
 const CHECKED_STALE_MS = 36 * 3600 * 1000;
 
-// How far ahead of the viewer's clock a stamp may be and still count: the
-// validator's tolerance for clock skew between machines.
-const CHECKED_SKEW_MS = 10 * 60 * 1000;
+// How far ahead of the viewer's clock a stamp may be and still count. Generous,
+// because a phone's clock can be well off: this only has to catch a stamp that
+// is plainly wrong, such as a typoed year. The validator holds stamps to ten
+// minutes before they are merged.
+const CHECKED_SKEW_MS = 24 * 3600 * 1000;
 
 // Only the exact shape the validator accepts, and never a time in the future.
 // Anything else is dropped, so a corrupt entry reads as "never checked": a
@@ -703,9 +709,11 @@ function parseCheckedTime(v) {
 
 function loadChecked(file, artists) {
   checkedByName = new Map();
+  checkedAny = false;
   const stamps = file && typeof file.artists === "object" && file.artists ? file.artists : {};
   for (const a of artists) {
     if (!a.name || !a.slug || a.tracked === false) continue;
+    if (Object.hasOwn(stamps, a.slug)) checkedAny = true;
     const t = parseCheckedTime(stamps[a.slug]);
     if (t) checkedByName.set(a.name, t);
   }
@@ -728,7 +736,7 @@ function formatChecked(t) {
 // The line under the count, or null when there is nothing honest to say: the
 // file is missing, or no run has stamped anything yet.
 function checkedSummary(artist) {
-  if (checkedByName.size === 0) return null;
+  if (!checkedAny) return null;
   const scope = artist ? [artist] : rosterNames;
   const now = Date.now();
   const overdue = scope.filter(n => !checkedByName.has(n) || now - checkedByName.get(n) > CHECKED_STALE_MS);
