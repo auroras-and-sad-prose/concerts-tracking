@@ -3664,6 +3664,26 @@
       "source_url": "https://bachtrack.com/search-events/performer=maria-duenas",
       "detail_url": "https://bachtrack.com/concert-event/beethoven-violin-concerto-with-maria-duenas-philharmonia-orchestra-southbank-centre-royal-festival-hall-6-may-2027/450274",
       "first_seen": "2026-10-16"
+    },
+    {
+      "id": "scheps|2027-02-19|cologne",
+      "artist": "Olga Scheps",
+      "date": "2027-02-19",
+      "city": "Cologne",
+      "country": "Germany",
+      "venue": "Kölner Philharmonie",
+      "program": "Love is in the Air — Swiss Orchestra / Lena-Lisa Wüstendörfer: Schumann, Brahms",
+      "pieces": [
+        "Schumann: Piano Concerto in A minor, Op.54",
+        "Brahms: Symphony no. 1 in C minor, Op.68"
+      ],
+      "instruments": [
+        "piano"
+      ],
+      "location_tag": "germany",
+      "source_url": "https://bachtrack.com/search-events/performer=olga-scheps",
+      "detail_url": "https://bachtrack.com/concert-event/love-is-in-the-air-swiss-orchestra-kolner-philharmonie-19-february-2027/450541",
+      "first_seen": "2026-10-22"
     }
   ]
 }
