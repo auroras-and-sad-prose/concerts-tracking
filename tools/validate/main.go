@@ -6,7 +6,9 @@
 //   - the file matches the expected schema exactly (no missing/unknown fields);
 //   - every required field is present and non-empty;
 //   - date and first_seen are real, zero-padded YYYY-MM-DD calendar dates;
-//   - concert dates fall within a sane window around "now" (catches typoed years);
+//   - a concert's date falls between its first_seen and three years after it,
+//     and first_seen is not in the future (catches typoed years, and since the
+//     window hangs off first_seen rather than "now", old rows never age out);
 //   - location_tag is drawn from a fixed vocabulary;
 //   - source_url is http(s) and points at an allowlisted domain;
 //   - detail_url, when stated, is a real absolute http(s) link;
@@ -16,6 +18,7 @@
 //   - instruments, when stated, holds distinct values from the allowed set;
 //   - id has the canonical "<slug>|<date>|<city>" shape consistent with its row;
 //   - ids are unique;
+//   - no artist has two rows on one date, unless one of them carries a status;
 //   - every artist is registered in artists.json, under the same slug and name
 //     (see artists.go, which also validates that roster itself), and with
 //     -base, no row is added for an artist the roster marks as no longer
@@ -39,7 +42,8 @@
 //     different concert while keeping its id;
 //   - descriptive fields (venue, program, pieces, ...) may be refined as more is
 //     learned about an event, but a field that already carried information may
-//     not be emptied back out. Detail can be added or corrected, never erased.
+//     not be emptied back out, and a list of works may not revert to the string
+//     form. Detail can be added or corrected, never erased.
 package main
 
 import (
@@ -98,6 +102,11 @@ var allowedStatuses = map[string]bool{
 }
 
 const dateLayout = "2006-01-02"
+
+// maxLeadYears is how far past first_seen a concert date may lie. Listings
+// rarely run more than a season or two ahead (the Deutsche Grammophon page
+// stops at one year), so anything further is far more likely a typoed year.
+const maxLeadYears = 3
 
 var (
 	dateRe = regexp.MustCompile(`^\d{4}-\d{2}-\d{2}$`)
@@ -370,11 +379,12 @@ func loadJSON[T any](path string) (T, error) {
 }
 
 // Validate returns a human-readable list of every problem found. An empty slice
-// means the file is valid. now is injected so the year-window check is testable.
+// means the file is valid. now is injected so the first_seen check is testable.
 func Validate(f File, base *File, now time.Time) []string {
 	var problems []string
 
 	seen := make(map[string]int, len(f.Concerts))
+	playing := make(map[string]int, len(f.Concerts)) // "<artist>|<date>" of rows without a status
 	for i, c := range f.Concerts {
 		label := c.ID
 		if label == "" {
@@ -393,13 +403,16 @@ func Validate(f File, base *File, now time.Time) []string {
 			}
 		}
 
-		if !validDate(c.Date) {
+		dateOK := validDate(c.Date)
+		if !dateOK {
 			problems = append(problems, fmt.Sprintf("%s: date %q is not a valid YYYY-MM-DD date", label, c.Date))
-		} else if y := yearOf(c.Date); y < now.Year()-1 || y > now.Year()+3 {
-			problems = append(problems, fmt.Sprintf("%s: date year %d is outside the expected window %d..%d (possible typo)", label, y, now.Year()-1, now.Year()+3))
 		}
 		if !validDate(c.FirstSeen) {
 			problems = append(problems, fmt.Sprintf("%s: first_seen %q is not a valid YYYY-MM-DD date", label, c.FirstSeen))
+		} else if dateOK {
+			for _, m := range checkDateWindow(c.Date, c.FirstSeen, now) {
+				problems = append(problems, fmt.Sprintf("%s: %s", label, m))
+			}
 		}
 
 		if c.LocationTag != "" && !allowedTags[c.LocationTag] {
@@ -454,6 +467,24 @@ func Validate(f File, base *File, now time.Time) []string {
 				seen[c.ID] = i
 			}
 		}
+
+		// One artist, one concert a day. Two rows on the same date in
+		// different cities are nearly always one engagement whose city two
+		// sources spelled differently (Luzern and Lucerne), and since rows are
+		// never deleted, a duplicate let in stays on the page for good. A row
+		// with a status doesn't count — the artist isn't playing it — so a date
+		// the artist withdrew from, or that was called off, doesn't block a
+		// concert they play elsewhere that day.
+		if c.Status == nil && c.Artist != "" && dateOK {
+			key := c.Artist + "|" + c.Date
+			if prev, dup := playing[key]; !dup {
+				playing[key] = i
+			} else if other := f.Concerts[prev].ID; other != c.ID { // an identical id is reported above
+				problems = append(problems, fmt.Sprintf(
+					"%s: same artist and date as %q; a second row for one artist on one day is usually the same concert with its city spelled differently — report it as a source conflict rather than adding it",
+					label, other))
+			}
+		}
 	}
 
 	if base != nil {
@@ -474,9 +505,29 @@ func validDate(s string) bool {
 	return t.Format(dateLayout) == s // rejects normalized invalids like 2026-02-30
 }
 
-func yearOf(s string) int {
-	t, _ := time.Parse(dateLayout, s)
-	return t.Year()
+// checkDateWindow catches a typoed year in a row whose date and first_seen are
+// both valid. The window hangs off first_seen, which is frozen once written,
+// rather than off today: rows are never deleted, so a window that moved with
+// the clock would one day reject every row in the file. The routine records
+// only concerts dated on or after the day it finds them, so a date before
+// first_seen is a typo, and so is one further out than any listing runs.
+// first_seen, which the window now trusts, gets the one check the clock can
+// give it — it cannot lie in the future — with a day's grace, since the
+// routine dates it in Berlin while CI runs in UTC.
+func checkDateWindow(date, firstSeen string, now time.Time) []string {
+	var problems []string
+	seen, _ := time.Parse(dateLayout, firstSeen)
+	if date < firstSeen {
+		problems = append(problems, fmt.Sprintf(
+			"date %s is before first_seen %s; a concert is recorded on or before the day it happens (possible typo)", date, firstSeen))
+	} else if limit := seen.AddDate(maxLeadYears, 0, 0).Format(dateLayout); date > limit {
+		problems = append(problems, fmt.Sprintf(
+			"date %s is more than %d years after first_seen %s (possible typo)", date, maxLeadYears, firstSeen))
+	}
+	if tomorrow := now.UTC().AddDate(0, 0, 1).Format(dateLayout); firstSeen > tomorrow {
+		problems = append(problems, fmt.Sprintf("first_seen %s is in the future (possible typo)", firstSeen))
+	}
+	return problems
 }
 
 func allowedHost(raw string) bool {
@@ -625,6 +676,14 @@ func checkAppendOnly(base, head File) []string {
 				problems = append(problems, fmt.Sprintf(
 					"append-only: existing entry %q cleared %s; detail may be refined but not erased", b.ID, f.name))
 			}
+		}
+		// Both shapes of pieces count as populated above, so a list of works
+		// falling back to a string would slip through. It is an erasure all the
+		// same: the string form says the works are unknown, and the page would
+		// quietly stop marking any favorite the list had matched.
+		if b.Pieces.List != nil && h.Pieces.Text != nil {
+			problems = append(problems, fmt.Sprintf(
+				"append-only: existing entry %q replaced its list of works with %q; detail may be refined but not erased", b.ID, *h.Pieces.Text))
 		}
 	}
 	return problems
