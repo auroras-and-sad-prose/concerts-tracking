@@ -519,6 +519,24 @@ describe("the concert page", () => {
     await page.close();
   });
 
+  // A search usually names an artist and a place, in whatever order they come
+  // to mind, and the two live in different fields.
+  test("matches every word of a search, in any order and any field", async () => {
+    const { page, errors } = await open({});
+
+    for (const query of ["fischer berlin", "berlin fischer", "philharmonie julia"]) {
+      await page.fill("#searchBox", query);
+      assert.equal(await page.locator(".card").count(), 1, query);
+      assert.match(await page.locator(".card").innerText(), /Philharmonie/, query);
+    }
+    // Every word must match: the Kempen date is Olga Scheps', not Julia Fischer's.
+    await page.fill("#searchBox", "fischer kempen");
+    assert.equal(await page.locator(".card").count(), 0);
+
+    assert.deepEqual(errors, []);
+    await page.close();
+  });
+
   // The names on this page carry accents an English keyboard doesn't type, so
   // search folds both sides the way favorites are matched.
   test("finds names typed without their accents, and with them", async () => {

@@ -1369,7 +1369,15 @@ function render() {
   else if (favorite) list = list.filter(c => hitsOf(c).some(h => h.slug === favorite));
   if (country) list = list.filter(c => c.country === country);
   if (onlyNew) list = list.filter(isNew);
-  if (search) list = list.filter(c => (searchTexts.get(c) || "").includes(search));
+  if (search) {
+    // Each word is looked for on its own, anywhere in the concert, so a search
+    // can name an artist and a city in either order: "fischer munich".
+    const words = search.split(" ");
+    list = list.filter(c => {
+      const text = searchTexts.get(c) || "";
+      return words.every(w => text.includes(w));
+    });
+  }
   list.sort((a, b) => a.date.localeCompare(b.date));
 
   // The overview draws every concert the filters let through; a day picked on
