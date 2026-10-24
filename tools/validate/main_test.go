@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-// now is fixed so the year-window check is deterministic in tests.
+// now is fixed so the first_seen check is deterministic in tests.
 var now = time.Date(2026, 7, 20, 0, 0, 0, 0, time.UTC)
 
 func strptr(s string) *string { return &s }
@@ -46,6 +46,9 @@ func TestFieldChecks(t *testing.T) {
 		{"bad date format", func(c *Concert) { c.Date = "2026-9-12" }},
 		{"impossible date", func(c *Concert) { c.Date = "2026-02-30"; c.ID = "scheps|2026-02-30|altenkrempe" }},
 		{"year typo", func(c *Concert) { c.Date = "2072-09-12"; c.ID = "scheps|2072-09-12|altenkrempe" }},
+		{"date before first_seen", func(c *Concert) { c.Date = "2026-07-19"; c.ID = "scheps|2026-07-19|altenkrempe" }},
+		{"date over three years past first_seen", func(c *Concert) { c.Date = "2029-07-21"; c.ID = "scheps|2029-07-21|altenkrempe" }},
+		{"first_seen in the future", func(c *Concert) { c.FirstSeen = "2026-07-22" }},
 		{"unknown tag", func(c *Concert) { c.LocationTag = "mars" }},
 		{"javascript url", func(c *Concert) { c.SourceURL = "javascript:alert(1)" }},
 		{"offlist domain", func(c *Concert) { c.SourceURL = "https://evil.example.com/x" }},
@@ -75,6 +78,67 @@ func TestFieldChecks(t *testing.T) {
 				t.Fatalf("expected a problem for %q, got none", tt.name)
 			}
 		})
+	}
+}
+
+// The edges of the date window are inside it, and first_seen gets a day's grace
+// because the routine dates it in Berlin while CI runs in UTC.
+func TestDateWindowEdges(t *testing.T) {
+	for _, tt := range []struct {
+		name  string
+		mutel func(*Concert)
+	}{
+		{"concert on the day it was found", func(c *Concert) { c.Date = "2026-07-20"; c.ID = "scheps|2026-07-20|altenkrempe" }},
+		{"concert exactly three years out", func(c *Concert) { c.Date = "2029-07-20"; c.ID = "scheps|2029-07-20|altenkrempe" }},
+		{"first_seen a day ahead of UTC", func(c *Concert) { c.FirstSeen = "2026-07-21" }},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			c := valid()
+			tt.mutel(&c)
+			if p := Validate(File{Concerts: []Concert{c}}, nil, now); len(p) != 0 {
+				t.Fatalf("expected no problems, got %v", p)
+			}
+		})
+	}
+}
+
+// Rows are never deleted, so a row valid today has to stay valid however long
+// it sits in the file. A window measured from the clock rejected every row a
+// couple of years on; measured from first_seen, it never moves.
+func TestDateWindowDoesNotAge(t *testing.T) {
+	f := File{Concerts: []Concert{valid()}}
+	for _, later := range []time.Time{now.AddDate(2, 0, 0), now.AddDate(10, 0, 0)} {
+		if p := Validate(f, &f, later); len(p) != 0 {
+			t.Errorf("validated on %s: expected no problems, got %v", later.Format(dateLayout), p)
+		}
+	}
+}
+
+// One artist, one concert a day: a second row for the same date is usually
+// the same engagement with its city spelled differently, and could never be
+// deleted once merged.
+func TestOneConcertPerArtistPerDay(t *testing.T) {
+	first := valid()
+	second := valid()
+	second.City = "Hasselburg"
+	second.ID = "scheps|2026-09-12|hasselburg"
+	if p := Validate(File{Concerts: []Concert{first, second}}, nil, now); len(p) == 0 {
+		t.Fatal("two rows for one artist on one date should be rejected")
+	}
+
+	other := second
+	other.Artist = "María Dueñas"
+	other.ID = "duenas|2026-09-12|hasselburg"
+	if p := Validate(File{Concerts: []Concert{first, other}}, nil, now); len(p) != 0 {
+		t.Fatalf("two artists on one date should be allowed, got %v", p)
+	}
+
+	// A date the artist isn't playing doesn't block one they are.
+	withdrawn := first
+	withdrawn.Status = strptr("artist_replaced")
+	withdrawn.StatusNote = strptr("Karen Gomyo replaces Olga Scheps")
+	if p := Validate(File{Concerts: []Concert{withdrawn, second}}, nil, now); len(p) != 0 {
+		t.Fatalf("a row with a status should not clash with another that day, got %v", p)
 	}
 }
 
@@ -294,6 +358,31 @@ func TestExistingEntriesMayBeRefined(t *testing.T) {
 	}
 }
 
+// Only a list of works falling back to a string erases anything: a string may
+// still be reworded as a source firms up, and a list corrected to another list.
+func TestPiecesMayBeReworded(t *testing.T) {
+	unknown := valid()
+	unknown.Pieces = pieceText("Programme not announced")
+	listed := valid()
+	for _, tt := range []struct {
+		name   string
+		was    Concert
+		pieces Pieces
+	}{
+		{"string to string", unknown, pieceText("Composers only: Mozart")},
+		{"list to list", listed, pieceList("Mozart String Quartet No. 23 in F major, KV 590")},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			base := File{Concerts: []Concert{tt.was}}
+			c := tt.was
+			c.Pieces = tt.pieces
+			if p := Validate(File{Concerts: []Concert{c}}, &base, now); len(p) != 0 {
+				t.Fatalf("expected no problems, got %v", p)
+			}
+		})
+	}
+}
+
 func TestExistingDetailMayNotBeErased(t *testing.T) {
 	withInstrument := valid()
 	withInstrument.Instruments = []string{"piano"}
@@ -306,6 +395,7 @@ func TestExistingDetailMayNotBeErased(t *testing.T) {
 	}{
 		{"venue", func(c *Concert) { c.Venue = nil }},
 		{"pieces", func(c *Concert) { c.Pieces = Pieces{} }},
+		{"pieces back to a string", func(c *Concert) { c.Pieces = pieceText("Programme not announced") }},
 		{"instruments", func(c *Concert) { c.Instruments = nil }},
 		{"detail_url", func(c *Concert) { c.DetailURL = nil }},
 	} {

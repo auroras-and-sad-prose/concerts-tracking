@@ -36,7 +36,9 @@ entry:
 
 - is missing a required field, or has an unknown/extra field;
 - has a `date` or `first_seen` that is not a real zero-padded `YYYY-MM-DD`;
-- has a concert year outside `now-1 .. now+3` (catches typoed years);
+- has a `date` before its `first_seen` or more than three years after it, or a
+  `first_seen` later than tomorrow (catches typoed years; measured from
+  `first_seen` rather than today, so a row never ages out of validity);
 - has a `location_tag` outside the allowed set (`europe`, `germany`, `berlin`);
 - has a `source_url` that is not an absolute http(s) link on an allowlisted
   domain — the artist sites, `bachtrack.com`, and the label tour pages under
@@ -52,6 +54,9 @@ entry:
 - has an `id` whose shape isn't `<slug>|<date>|<city>` or whose date/city
   segments disagree with the row's own fields;
 - duplicates another entry's `id`;
+- shares its `artist` and `date` with another entry, unless one of the two
+  carries a `status` — two listings of one concert under different spellings of
+  its city (`Luzern`, `Lucerne`) would otherwise become two permanent rows;
 - names an artist absent from `artists.json`, or whose `artist` string disagrees
   with the name registered there for that id slug;
 - is new (absent from the base) and belongs to an artist `artists.json` marks
@@ -73,9 +78,10 @@ so `venue`, `program`, `pieces`, `instruments`, `country`, `location_tag`,
 `source_url`, `detail_url`, `status`, and `status_note` may be updated by a
 later run. The one limit is that information may not be *erased*: a `venue`,
 `program`, `pieces`, `instruments`, `detail_url`, `status`, or `status_note`
-that already carried a value may not be set back to `null`. Detail can be added
-or corrected, never blanked out — a `status` may be corrected to another value
-as a source firms up, but dropping it, which would quietly put a called-off
+that already carried a value may not be set back to `null`, and a `pieces` that
+lists works may not fall back to the string form. Detail can be added or
+corrected, never blanked out — a `status` may be corrected to another value as
+a source firms up, but dropping it, which would quietly put a called-off
 concert back on the page, is a reviewed change like any other erasure.
 
 Extending the `location_tag` or `instruments` vocabularies or the `source_url`
@@ -694,6 +700,11 @@ each page said. Genuinely separate concerts — a festival billing the same
 soloist on two nights, each page naming its own date — are two rows, and the
 way to tell is that each date is set out as its own event rather than the same
 event given two dates.
+
+CI enforces the commonest case: a second row for the same artist on the same
+date fails the build unless one of the two carries a `status`. A NEW id that
+shares its artist and date with an existing row that has no `status` is
+therefore always a conflict to report, never a row to add.
 
 **Step 5 — Follow the links to the concert's own page (new concerts first).**
 This is the expensive step, so it is rationed: it runs for the concerts step 4
