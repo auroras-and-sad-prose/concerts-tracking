@@ -519,6 +519,97 @@ describe("the concert page", () => {
     await page.close();
   });
 
+  // The names on this page carry accents an English keyboard doesn't type, so
+  // search folds both sides the way favorites are matched.
+  test("finds names typed without their accents, and with them", async () => {
+    const concerts = {
+      concerts: [...FIXTURE_CONCERTS.concerts, {
+        id: `duenas|${SOON}|düsseldorf`,
+        artist: "María Dueñas",
+        date: SOON,
+        city: "Düsseldorf",
+        country: "Germany",
+        venue: "Tonhalle",
+        program: null,
+        pieces: "Programme not announced",
+        location_tag: "germany",
+        source_url: "https://www.mariaduenasviolin.com/en/calendar",
+        first_seen: PAST,
+      }],
+    };
+    const { page, errors } = await open({ concerts });
+
+    for (const query of ["duenas", "Dueñas", "dusseldorf", "DÜSSELDORF"]) {
+      await page.fill("#searchBox", query);
+      assert.equal(await page.locator(".card").count(), 1, query);
+      assert.match(await page.locator(".card").innerText(), /María Dueñas/, query);
+    }
+    // An accent typed where the data has none matches too.
+    await page.fill("#searchBox", "Musikvérein");
+    assert.equal(await page.locator(".card").count(), 1);
+
+    assert.deepEqual(errors, []);
+    await page.close();
+  });
+
+  // A row reaches the page when a run's PR is merged, often days after its
+  // first_seen, so the page marks what this browser hasn't shown before. Loads
+  // within an hour are one visit; the helper below ends one by backdating it.
+  test("marks concerts that weren't on the page at the last visit", async () => {
+    const { page, errors } = await open({});
+    const endVisit = () => page.evaluate(() => {
+      const seen = JSON.parse(localStorage.getItem("concert-watch-seen"));
+      localStorage.setItem("concert-watch-seen", JSON.stringify({ ...seen, at: seen.at - 2 * 60 * 60 * 1000 }));
+    });
+
+    // A browser that has never been here has nothing to compare with.
+    assert.equal(await page.locator(".tag.new").count(), 0);
+    assert.equal(await page.locator("#newFilter").isHidden(), true);
+
+    // Next visit, the dataset has gained a row. Its first_seen is long past
+    // on purpose: the mark must not depend on it.
+    const added = {
+      id: `scheps|${SOON}|leipzig`, artist: "Olga Scheps", date: SOON, city: "Leipzig",
+      country: "Germany", venue: "Gewandhaus", program: null, pieces: "Programme not announced",
+      location_tag: "germany", source_url: "https://www.olgascheps.com/konzerte", first_seen: PAST,
+    };
+    await page.route("**/seen.json", route =>
+      route.fulfill({ json: { concerts: [...FIXTURE_CONCERTS.concerts, added] } }));
+    await endVisit();
+    await page.reload({ waitUntil: "networkidle" });
+
+    const fresh = page.locator(".card", { has: page.locator(".tag.new") });
+    assert.equal(await fresh.count(), 1);
+    assert.match(await fresh.innerText(), /Leipzig/);
+    assert.equal(await page.locator("#subtitle").innerText(), "4 upcoming concerts · 1 with a favorite · 1 new");
+
+    assert.equal(await page.locator("#newFilter").isHidden(), false);
+    await page.selectOption("#newFilter", "new");
+    assert.equal(await page.locator(".card").count(), 1);
+    await page.selectOption("#newFilter", "");
+
+    // Every theme shows the mark.
+    const themes = await page.locator("#themePicker option").evaluateAll(opts => opts.map(o => o.value));
+    for (const theme of themes) {
+      await page.selectOption("#themePicker", theme);
+      assert.equal(await page.locator(".tag.new").isVisible(), true, theme);
+    }
+    await page.selectOption("#themePicker", "classic");
+
+    // A reload within the visit keeps the mark...
+    await page.reload({ waitUntil: "networkidle" });
+    assert.equal(await page.locator(".tag.new").count(), 1);
+
+    // ...and by the next visit the concert has been seen.
+    await endVisit();
+    await page.reload({ waitUntil: "networkidle" });
+    assert.equal(await page.locator(".tag.new").count(), 0);
+    assert.equal(await page.locator("#newFilter").isHidden(), true);
+
+    assert.deepEqual(errors, []);
+    await page.close();
+  });
+
   test("reports a failure to load seen.json instead of hanging on Loading…", async () => {
     const page = await browser.newPage();
     const crashes = [];

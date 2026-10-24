@@ -35,6 +35,10 @@
        findable by colour alone while scrolling. */
     --fav: #8a5a10;
     --fav-soft: #fbf0d9;
+    /* Green for "new since your last visit": unlike blue, gold and red, it says
+       nothing about the concert itself, only about what you have seen. */
+    --new: #1d7046;
+    --new-soft: #e2f3e8;
     --shadow: 0 1px 2px rgba(21, 27, 38, .04);
     --shadow-hover: 0 8px 24px -16px rgba(21, 27, 38, .45);
   }
@@ -55,6 +59,8 @@
       --alert-soft: #3a1f22;
       --fav: #e5b45c;
       --fav-soft: #33280f;
+      --new: #74d19c;
+      --new-soft: #17301f;
       --shadow: 0 1px 2px rgba(0, 0, 0, .35);
       --shadow-hover: 0 8px 24px -16px rgba(0, 0, 0, .85);
     }
@@ -237,6 +243,7 @@
      has to stay legible on both. */
   .tag.status { background: var(--alert); color: var(--card-bg); text-transform: uppercase; letter-spacing: .06em; }
   .tag.favorite { background: var(--fav-soft); color: var(--fav); }
+  .tag.new { background: var(--new-soft); color: var(--new); }
 
   /* Declared before .card.flagged so that, on a card which is both, the red
      edge wins: a concert that has been called off is news that outranks a
@@ -298,7 +305,7 @@
     --bg: #f5f7fa; --card-bg: #ffffff; --text: #151b26; --muted: #667085; --faint: #98a1b3;
     --border: #e4e8ef; --border-strong: #cfd6e2; --accent: #24548c; --accent-soft: #e8eff8;
     --on-accent: #ffffff; --chip-bg: #eef1f6; --alert: #a3282d; --alert-soft: #fbe9e9;
-    --fav: #8a5a10; --fav-soft: #fbf0d9;
+    --fav: #8a5a10; --fav-soft: #fbf0d9; --new: #1d7046; --new-soft: #e2f3e8;
     --shadow: 0 1px 2px rgba(21, 27, 38, .04); --shadow-hover: 0 8px 24px -16px rgba(21, 27, 38, .45);
   }
   :root:is([data-theme="swiss"], [data-theme="poster"], [data-theme="calendar"], [data-theme="tickets"], [data-theme="lanes"], [data-theme="listings"]) .card.favorite,
@@ -405,6 +412,7 @@
   [data-theme="poster"] .tag { background: none; color: var(--text); box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .35); border-radius: 999px; letter-spacing: .12em; text-transform: uppercase; }
   [data-theme="poster"] .tag.favorite { background: #151515; color: #fbf8f3; box-shadow: none; }
   [data-theme="poster"] .tag.status { background: var(--alert); color: #ffffff; box-shadow: none; }
+  [data-theme="poster"] .tag.new { background: var(--new); color: #ffffff; box-shadow: none; }
   [data-theme="poster"] .tag.loc-berlin {
     position: absolute; top: 1.4rem; right: 1.4rem; width: 5.2rem; height: 5.2rem; border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
@@ -615,6 +623,7 @@
     <select id="artistFilter" aria-label="Filter by artist"><option value="">All artists</option></select>
     <select id="instrumentFilter" hidden aria-label="Filter by instrument"><option value="">All instruments</option></select>
     <select id="favoriteFilter" hidden aria-label="Filter by favorite work"><option value="">All programmes</option></select>
+    <select id="newFilter" hidden aria-label="Show only concerts new since your last visit"><option value="">All concerts</option></select>
     <select id="countryFilter" aria-label="Filter by country"><option value="">All countries</option></select>
     <input type="search" id="searchBox" placeholder="Search city, venue, programme…" aria-label="Search concerts">
     <select id="themePicker" aria-label="Page theme"></select>
@@ -961,6 +970,60 @@ function favoriteTagHTML(concert) {
   return `<span class="tag favorite">★ ${escapeHTML(label)}</span>`;
 }
 
+// ---------- New since your last visit ----------
+//
+// A concert reaches this page only when a person merges the run's PR, which
+// can be days after its first_seen, so "new" can't be read off that date: a
+// row found on Monday and merged on Friday would already look old to someone
+// who last looked on Wednesday. Instead the browser remembers which upcoming
+// concerts it showed, and one it hasn't shown before is new. Loads less than
+// an hour apart count as one visit, so a reload — or a phone reloading a tab
+// you switched away from — doesn't clear the marks while you are still
+// reading. Like the theme, this lives in this browser's storage only: each
+// device keeps its own, and a browser that has never been here marks nothing.
+const SEEN_KEY = "concert-watch-seen";
+const VISIT_GAP_MS = 60 * 60 * 1000;
+let newIds = new Set();
+
+function loadNewSinceLastVisit(concerts, today, now = Date.now()) {
+  const ids = concerts.filter(c => c.date >= today && typeof c.id === "string").map(c => c.id);
+  let stored = null;
+  try {
+    stored = JSON.parse(window.localStorage.getItem(SEEN_KEY));
+  } catch { /* unreadable or blocked: a first visit */ }
+  const usable = stored && Array.isArray(stored.baseline) && Array.isArray(stored.current) &&
+    typeof stored.at === "number";
+  // What this visit is compared against: on a first visit, everything shown
+  // now (so nothing is new); within a visit, whatever the visit started from;
+  // otherwise, what the last visit showed.
+  const baseline = !usable ? ids : now - stored.at < VISIT_GAP_MS ? stored.baseline : stored.current;
+  const known = new Set(baseline);
+  newIds = new Set(ids.filter(id => !known.has(id)));
+  try {
+    window.localStorage.setItem(SEEN_KEY, JSON.stringify({ baseline, current: ids, at: now }));
+  } catch { /* not remembered; the marks just won't carry over */ }
+}
+
+function isNew(concert) {
+  return newIds.has(concert.id);
+}
+
+function newTagHTML(concert) {
+  if (!isNew(concert)) return "";
+  return '<span class="tag new" title="Not on this page at your last visit">New</span>';
+}
+
+// Stays hidden when nothing is new, like the instrument and favorite controls.
+function populateNewFilter() {
+  if (newIds.size === 0) return;
+  const sel = document.getElementById("newFilter");
+  const opt = document.createElement("option");
+  opt.value = "new";
+  opt.textContent = `New since last visit (${newIds.size})`;
+  sel.appendChild(opt);
+  sel.hidden = false;
+}
+
 function titleCase(s) {
   return s.charAt(0).toUpperCase() + s.slice(1);
 }
@@ -1294,7 +1357,8 @@ function render() {
   const instrument = document.getElementById("instrumentFilter").value;
   const favorite = document.getElementById("favoriteFilter").value;
   const country = document.getElementById("countryFilter").value;
-  const search = document.getElementById("searchBox").value.trim().toLowerCase();
+  const onlyNew = document.getElementById("newFilter").value === "new";
+  const search = normalizeTitle(document.getElementById("searchBox").value);
   const today = todayISO();
 
   let list = allConcerts.filter(c => c.date >= today);
@@ -1304,16 +1368,8 @@ function render() {
   if (favorite === "*") list = list.filter(c => hitsOf(c).length > 0);
   else if (favorite) list = list.filter(c => hitsOf(c).some(h => h.slug === favorite));
   if (country) list = list.filter(c => c.country === country);
-  if (search) {
-    list = list.filter(c =>
-      (c.city || "").toLowerCase().includes(search) ||
-      (c.venue || "").toLowerCase().includes(search) ||
-      (c.program || "").toLowerCase().includes(search) ||
-      piecesText(c.pieces).toLowerCase().includes(search) ||
-      (c.artist || "").toLowerCase().includes(search) ||
-      (c.status_note || "").toLowerCase().includes(search)
-    );
-  }
+  if (onlyNew) list = list.filter(isNew);
+  if (search) list = list.filter(c => (searchTexts.get(c) || "").includes(search));
   list.sort((a, b) => a.date.localeCompare(b.date));
 
   // The overview draws every concert the filters let through; a day picked on
@@ -1330,9 +1386,11 @@ function render() {
 
   const main = document.getElementById("main");
   const withFavorite = list.filter(c => hitsOf(c).length > 0).length;
+  const fresh = list.filter(isNew).length;
   document.getElementById("subtitle").textContent =
     `${list.length} upcoming concert${list.length === 1 ? "" : "s"}` +
-    (withFavorite ? ` · ${withFavorite} with a favorite` : "");
+    (withFavorite ? ` · ${withFavorite} with a favorite` : "") +
+    (fresh ? ` · ${fresh} new` : "");
 
   if (list.length === 0) {
     main.innerHTML = '<div class="empty">No upcoming concerts match your filters.</div>';
@@ -1388,7 +1446,7 @@ function cardHTML(c) {
           <div class="route">${escapeHTML(route)}</div>
         </div>
         <div class="body">
-          <div class="topline"><span class="artist">${escapeHTML(c.artist)}</span>${statusTagHTML(c)}${favoriteTagHTML(c)}${locationTagHTML(c.location_tag)}${instrumentTagsHTML(c)}</div>
+          <div class="topline"><span class="artist">${escapeHTML(c.artist)}</span>${statusTagHTML(c)}${favoriteTagHTML(c)}${newTagHTML(c)}${locationTagHTML(c.location_tag)}${instrumentTagsHTML(c)}</div>
           <div class="place">${whereHTML}${travelHTML(c)}</div>
           ${statusLineHTML(c)}
           ${c.program ? `<div class="program">${escapeHTML(c.program)}</div>` : ""}
@@ -1426,9 +1484,10 @@ function listingHTML(c) {
   const tripParts = travelParts(c);
   const trip = tripParts.length ? ` <span class="trip travel">${tripParts.join(" · ")}.</span>` : "";
   const status = statusTagHTML(c);
+  const fresh = newTagHTML(c);
   return `
       <article class="${cardClasses(c, "listing")}" data-id="${escapeHTML(c.id || "")}">
-        <p>${hits.length ? '<span class="lead-star">★ </span>' : ""}<strong class="artist">${escapeHTML(c.artist)}</strong>${status ? " " + status : ""}${c.program ? ` — ${escapeHTML(c.program)}.` : ""} ${works ? works + "." : ""} ${where}${where ? "." : ""}${trip} <span class="when">${DOW[d.getDay()]} ${d.getDate()} ${MONTH_ABBR[d.getMonth()]}</span>${linksOf(c)}</p>
+        <p>${hits.length ? '<span class="lead-star">★ </span>' : ""}<strong class="artist">${escapeHTML(c.artist)}</strong>${status ? " " + status : ""}${fresh ? " " + fresh : ""}${c.program ? ` — ${escapeHTML(c.program)}.` : ""} ${works ? works + "." : ""} ${where}${where ? "." : ""}${trip} <span class="when">${DOW[d.getDay()]} ${d.getDate()} ${MONTH_ABBR[d.getMonth()]}</span>${linksOf(c)}</p>
         ${statusLineHTML(c)}
       </article>`;
 }
@@ -1473,6 +1532,18 @@ function piecesHTML(pieces, hits = []) {
 function piecesText(pieces) {
   if (Array.isArray(pieces)) return pieces.filter(p => typeof p === "string").join(" ");
   return typeof pieces === "string" ? pieces : "";
+}
+
+// Search runs over the same folded form favorites are matched in, so "duenas"
+// finds Dueñas and "dusseldorf" finds Düsseldorf: these names carry accents an
+// English keyboard doesn't type. Built once when the data loads, like the
+// favorite hits, rather than on every keystroke.
+let searchTexts = new Map();
+
+function indexSearch(concerts) {
+  searchTexts = new Map(concerts.map(c => [c, normalizeTitle(
+    [c.city, c.venue, c.program, piecesText(c.pieces), c.artist, c.status_note]
+      .filter(v => typeof v === "string").join(" "))]));
 }
 
 function escapeHTML(str) {
@@ -1524,8 +1595,11 @@ async function init() {
     artistOrder = ((artists && artists.artists) || []).map(a => a.name).filter(n => typeof n === "string");
     favorites = parseFavorites((favoritesFile && favoritesFile.favorites) || []);
     indexFavorites(allConcerts);
+    indexSearch(allConcerts);
+    loadNewSinceLastVisit(allConcerts, todayISO());
     populateFilters(allConcerts);
     populateFavoriteFilter();
+    populateNewFilter();
     render();
   } catch (e) {
     document.getElementById("main").innerHTML =
@@ -1538,6 +1612,7 @@ async function init() {
 document.getElementById("artistFilter").addEventListener("change", render);
 document.getElementById("instrumentFilter").addEventListener("change", render);
 document.getElementById("favoriteFilter").addEventListener("change", render);
+document.getElementById("newFilter").addEventListener("change", render);
 document.getElementById("countryFilter").addEventListener("change", render);
 document.getElementById("searchBox").addEventListener("input", render);
 document.getElementById("themePicker").addEventListener("change", e => {
