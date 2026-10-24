@@ -1027,7 +1027,8 @@ is something waiting.
    on — e.g. `concert-watch 2026-08-22: 3 new (1 Berlin, 1 favorite), 1
    cancelled — PR #42 open`. A favorite is the strongest reason to act on the
    line at all, so say so whenever the report found one. One per run, and only
-   when the run had news; a quiet run notifies nobody.
+   when the run had news; a quiet run notifies nobody. A source that failed is
+   news (see below), so a run with one is never quiet.
 
 **The run opens no GitHub issues.** The PR and the notification are the whole
 alert; the PR body is where the news is read.
@@ -1062,6 +1063,9 @@ the PR is merged. Then:
   `artist — what page A said — what page B said`, with both links, and say
   plainly that nothing was changed. These are the run's open questions: whether
   it is two concerts, a moved date or a bad listing is for a person to settle.
+- **Sources**, if any source failed this run (see below). One line each, naming
+  the artist, the source and how it failed, so that a short list of new rows
+  isn't read as a quiet week.
 - A line naming which rows are new and which are refinements, and the
   `travel.json` line from item 5.
 
@@ -1077,6 +1081,22 @@ source conflict, nothing changed — see run report`) and in full in step 8,
 quoting both pages and linking both: an unresolved conflict is exactly the kind
 of open question a person needs to see.
 
+A run in which a source failed has news too, however little else it found. A
+source has failed when one the sweep was sent to — an artist's calendar, a
+Bachtrack list, a label tour page — did not load; was only partly read, with a
+pager or "Load more" left unexhausted (step 8's count); or loaded but showed
+none of that artist's upcoming rows whose `source_url` is on its site, when
+`seen.json` has any. The last is what a redesigned site looks like: the fetch
+succeeds, and the concerts are simply no longer in the bytes. All three look
+exactly like a quiet day, and a quiet day sends nothing, so unless the run says
+so the reader mistakes a hole in the coverage for a day without news. Name the
+source in the notification (`concert-watch 2026-08-22: no new concerts;
+bachtrack.com failed for all 7 artists — see run report`) and in full in step
+8. With no data to change there is nothing to commit and no PR to open, as for
+a conflict. When the run has other news, or a `travel.json` change that would
+otherwise go out silently, the failure rides on the same notification line and
+gets its line under **Sources** in the PR body.
+
 A run whose only change is to `travel.json` also gets its commit and PR, with
 `+0 new` in the message, so the times and stations reach `main`. It sends no
 notification: a train time is a convenience, not news. That PR stays open,
@@ -1084,16 +1104,18 @@ and the next run with news picks up its branch in step 1 and announces
 everything together.
 
 If there are zero new concerts, no status changed, no favorite turned up on an
-existing row and no conflict was found, print a one-line summary instead (e.g.
-"No new concerts. Checked 7 artists, all sources OK."). A quiet run leaves no
-branch behind, opens no PR, and sends no notification: with nothing to say,
-saying it loudly is how a daily routine trains its reader to ignore it.
+existing row, no conflict was found and no source failed, print a one-line
+summary instead (e.g. "No new concerts. Checked 7 artists, all sources OK.").
+A quiet run leaves no branch behind, opens no PR, and sends no notification:
+with nothing to say, saying it loudly is how a daily routine trains its reader
+to ignore it.
 
 **Step 8 — Report source health.** End the run output with a status line per
 artist covering every source that applies to them — official site and
 Bachtrack for all, plus the label page for an artist listed under "Tertiary
 source": which loaded, which failed, and how many concerts each currently
-contributed. This surfaces a silently broken source. For a paginated source
+contributed. This surfaces a silently broken source, and a failed one (as step
+7 defines it) is also named in the notification. For a paginated source
 (the Deutschegrammophon page), also say how many events were read against how
 many pages it took to reach `hasNextPage: false`; a count stuck at 20 means
 the "Load more" step did not run.
