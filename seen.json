@@ -3684,6 +3684,40 @@
       "source_url": "https://bachtrack.com/search-events/performer=olga-scheps",
       "detail_url": "https://bachtrack.com/concert-event/love-is-in-the-air-swiss-orchestra-kolner-philharmonie-19-february-2027/450541",
       "first_seen": "2026-10-22"
+    },
+    {
+      "id": "ott|2027-02-04|madrid",
+      "artist": "Alice Sara Ott",
+      "date": "2027-02-04",
+      "city": "Madrid",
+      "country": "Spain",
+      "venue": "Teatro Monumental de Madrid",
+      "program": "La Orquesta Sinfónica Radiotelevisión Española (ORTVE) / Alexandre Bloch",
+      "pieces": [
+        "Ravel: Piano Concerto in G Major"
+      ],
+      "instruments": null,
+      "location_tag": "europe",
+      "source_url": "https://www.alicesaraott.com/calendar",
+      "detail_url": null,
+      "first_seen": "2026-10-24"
+    },
+    {
+      "id": "ott|2027-02-05|madrid",
+      "artist": "Alice Sara Ott",
+      "date": "2027-02-05",
+      "city": "Madrid",
+      "country": "Spain",
+      "venue": "Teatro Monumental de Madrid",
+      "program": "La Orquesta Sinfónica Radiotelevisión Española (ORTVE) / Alexandre Bloch",
+      "pieces": [
+        "Ravel: Piano Concerto in G Major"
+      ],
+      "instruments": null,
+      "location_tag": "europe",
+      "source_url": "https://www.alicesaraott.com/calendar",
+      "detail_url": null,
+      "first_seen": "2026-10-24"
     }
   ]
 }
