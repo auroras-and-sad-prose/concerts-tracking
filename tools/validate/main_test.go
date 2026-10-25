@@ -231,7 +231,7 @@ func TestStatusMayBeCorrectedButNotDropped(t *testing.T) {
 	}
 }
 
-// The allowlist has to cover every source CLAUDE.md sends the routine to,
+// The allowlist has to cover every source ROUTINE.md sends the routine to,
 // including the label tour pages under "Tertiary source" — a concert that only
 // that page lists is unrecordable otherwise.
 func TestSweptSourcesAreAllowed(t *testing.T) {

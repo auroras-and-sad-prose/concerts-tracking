@@ -12,7 +12,7 @@
 // than by reading programmes and deciding for itself which works count. That
 // judgement is a person's, made once when they curate a pattern, not remade
 // from memory on every run. So each line it prints is a finished ★ Favorites
-// entry in the shape CLAUDE.md's step 7 asks for — artist, date, place, the
+// entry in the shape ROUTINE.md's step 7 asks for — artist, date, place, the
 // curated title, the words the source actually printed, and the row's links —
 // grouped under the section of the issue it belongs to. Nothing is left for
 // the run to look up and reassemble, because reassembly is where a URL gets
