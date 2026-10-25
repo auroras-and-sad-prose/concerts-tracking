@@ -73,7 +73,7 @@ var allowedTags = map[string]bool{
 // allowedHosts is the set of registrable domains a source_url may point at,
 // compared after stripping a leading "www.". Anything else is treated as an
 // untrusted (possibly fabricated) source. It holds exactly the sources
-// CLAUDE.md sends the routine to sweep — the artist sites, Bachtrack, and the
+// ROUTINE.md sends the routine to sweep — the artist sites, Bachtrack, and the
 // label tour pages listed under "Tertiary source" — so adding a source there
 // means adding its domain here too, or rows citing it fail validation. A
 // domain stays after its artist stops being tracked, because their old rows
