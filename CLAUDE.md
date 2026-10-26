@@ -181,8 +181,8 @@ rows still need an entry to validate against (and their site stays on the
 `source_url` allowlist for the same reason). The page hides every row of an
 untracked artist, the favorites report skips them, and CI rejects any row
 added for them after the flag is set. The field is either absent or `false`;
-writing `true` fails the build. Also take the artist out of the source lists in
-`ROUTINE.md` (the starting points, Bachtrack, and any label page).
+writing `true` fails the build. Also take the artist out of the routine's
+starting points in `ROUTINE.md`.
 
 **The concert-watch routine never writes this file.** Adding an artist,
 correcting an instrument, or extending the instrument vocabulary is a reviewed
