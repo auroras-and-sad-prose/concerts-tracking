@@ -3718,6 +3718,23 @@
       "source_url": "https://www.alicesaraott.com/calendar",
       "detail_url": null,
       "first_seen": "2026-10-24"
+    },
+    {
+      "id": "ott|2027-03-26|baden-baden",
+      "artist": "Alice Sara Ott",
+      "date": "2027-03-26",
+      "city": "Baden-Baden",
+      "country": "Germany",
+      "venue": "Festspielhaus Baden-Baden",
+      "program": "Mahler Chamber Orchestra / Joanna Mallwitz",
+      "pieces": [
+        "Beethoven: Choral Fantasy"
+      ],
+      "instruments": null,
+      "location_tag": "germany",
+      "source_url": "https://www.alicesaraott.com/calendar",
+      "detail_url": "https://mahlerchamber.com/concerts/1017",
+      "first_seen": "2026-10-25"
     }
   ]
 }
