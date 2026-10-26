@@ -181,8 +181,9 @@ rows still need an entry to validate against (and their site stays on the
 `source_url` allowlist for the same reason). The page hides every row of an
 untracked artist, the favorites report skips them, and CI rejects any row
 added for them after the flag is set. The field is either absent or `false`;
-writing `true` fails the build. Also take the artist out of the Sources table
-in `ROUTINE.md`.
+writing `true` fails the build. In `ROUTINE.md`, also take the artist out of
+the Sources table and any "Tertiary source" entry, add them to the untracked
+artists bullet, and update the artist count in its intro and examples.
 
 **The concert-watch routine never writes this file.** Adding an artist,
 correcting an instrument, or extending the instrument vocabulary is a reviewed
