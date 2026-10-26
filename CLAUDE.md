@@ -44,10 +44,10 @@ entry:
 - has a `location_tag` outside the allowed set (`europe`, `germany`, `berlin`);
 - has a `source_url` that is not an absolute http(s) link on an allowlisted
   domain — the artist sites, `bachtrack.com`, and the label tour pages under
-  "Tertiary source"; or a `detail_url` that is present and is not an absolute
-  http(s) link — `detail_url` is deliberately not restricted by domain, since
-  the pages that carry the detail are exactly the ones no list vets (see
-  "Where a row may come from" below);
+  "Tertiary source" in `ROUTINE.md`; or a `detail_url` that is present and is
+  not an absolute http(s) link — `detail_url` is deliberately not restricted by
+  domain, since the pages that carry the detail are exactly the ones no list
+  vets (see "Where a row may come from" below);
 - has a `status` outside the allowed set (`cancelled`, `postponed`,
   `artist_replaced`), or a `status` without a `status_note` (or a note without a
   status) — the two always travel together;
@@ -182,7 +182,7 @@ rows still need an entry to validate against (and their site stays on the
 untracked artist, the favorites report skips them, and CI rejects any row
 added for them after the flag is set. The field is either absent or `false`;
 writing `true` fails the build. Also take the artist out of the routine's
-starting points below.
+starting points in `ROUTINE.md`.
 
 **The concert-watch routine never writes this file.** Adding an artist,
 correcting an instrument, or extending the instrument vocabulary is a reviewed

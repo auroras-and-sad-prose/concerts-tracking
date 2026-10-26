@@ -578,10 +578,10 @@ is something waiting.
    - Never merge it yourself, and never enable auto-merge. The freeze on
      `artist`/`date`/`city` and the append-only check are enforcement; the
      review is judgement, and it is a person's.
-6. **Notify.** Once the PR exists, send ONE push notification: one line,
-   under 200 characters, no markdown, leading with what the reader would act
-   on — e.g. `concert-watch 2026-08-22: 3 new (1 Berlin, 1 favorite), 1
-   cancelled — PR #42 open`. A favorite is the strongest reason to act on the
+6. **Notify.** Send ONE push notification, after the PR is opened or updated
+   if the run has one: one line, under 200 characters, no markdown, leading
+   with what the reader would act on — e.g. `concert-watch 2026-08-22: 3 new
+   (1 Berlin, 1 favorite), 1 cancelled — PR #42 open`. A favorite is the strongest reason to act on the
    line at all, so say so whenever the report found one. One per run, and only
    when the run had news; a quiet run notifies nobody. A source that failed is
    news (see below), so a run with one is never quiet.
@@ -868,9 +868,11 @@ branch nobody has been told about.
 
     So a note may explain a `null`; it may never be the reason a page went
     unread. When a note and the bytes disagree, the bytes win: take what the
-    page gives, and correct the note in the same run so the next one starts from
-    the truth. The same applies to a `null` already in `seen.json` — it records
-    a past attempt, not a verdict.
+    page gives. The same applies to a `null` already in `seen.json` — it records
+    a past attempt, not a verdict. A run never edits this file (step 7), so name
+    the contradicted note, with what the page showed, in the step 8 report and,
+    when the run has a PR, in its body, so a person can correct it and the next
+    run starts from the truth.
 12. **A favorite is what the tool says it is.** Whether a concert plays a
     favorite work is decided by `tools/validate -favorites-report` against the
     curated patterns in `favorites.json`, not by reading the programme and
