@@ -503,26 +503,37 @@ list is Germany's.
    nothing you fetched settles it, skip the city and report it. The answer's
    `plain_text` names the place Rome2Rio resolved the query to; if that is
    plainly a different place, don't write the result — report it.
-2. From `available_routes`, keep only the **all-train** routes: those whose
-   `name`, read as legs separated by commas, has only `Train …` and `Night
-   train …` legs — `Train`, `Train via Nuremberg`, `Train, night train`,
-   `Night train, train`. A comma inside a `via` list (`Train via Wolfsburg,
-   Hauptbahnhof`) names a place, not a leg. That excludes `Drive`, `Fly …`,
-   `Bus` and `Rideshare`, and also every mixed route: `Train, bus`, `Train,
-   bus, car ferry`, `Train to Leipzig-Halle Airport, fly`. CI applies the
-   same reading and fails a `train` that isn't all-train.
-3. If any are left, take the one with the smallest `duration` and write
-   `train` as `{query, minutes, route, carriers, checked}`: `query` exactly as
-   sent, `minutes` = that route's `duration`, `route` = its `name` copied
-   verbatim, `carriers` = its `carriers` list copied verbatim and in order,
-   and `checked` = today.
-4. If none are left, write `no_train` as `{query, routes, checked}`: `query`
-   exactly as sent, `routes` = the `name` of every route returned, copied
-   verbatim and in order, and `checked` = today. That says "Rome2Rio listed
-   no train", not "there is no train": it returns only its top four routes,
-   and on 2026-11-03 it listed none for Sofia while routing Istanbul through
-   Bulgarian Railways. Don't overrule it either way from what you know about
-   the line.
+2. Read each route's `name` as legs separated by commas. A comma inside a
+   `via` list (`Train via Wolfsburg, Hauptbahnhof`) names a place, not a leg;
+   places are capitalized, later legs are not (`Train, bus`). A train leg is
+   `Train` or `Night train`, bare or followed by `via`, `to` or `from`.
+   - **All-train:** every leg a train leg — `Train`, `Train via Nuremberg`,
+     `Train, night train`, `Night train, train`.
+   - **Train-based:** at least half the legs train legs and none a flight
+     (`Fly …`) or a drive (`Drive …`) — the all-train routes, plus `Train,
+     bus`, `Train, bus via Bordeaux`, `Train, bus, night train, taxi`. Not
+     `Train, bus, car ferry` (one leg in three) and not `Train to
+     Leipzig-Halle Airport, fly`.
+   CI applies the same reading and fails a `train` that isn't train-based, or
+   a `no_train` that lists one that is.
+3. If any route is all-train, take the all-train one with the smallest
+   `duration`; otherwise, if any is train-based, the train-based one with the
+   smallest `duration`. Prefer all-train even when a mixed route is quicker:
+   Istanbul's `Train, bus` beats its `Train, night train` by six hours, and
+   the bus is most of the trip. Write it as `train`, `{query, minutes, route,
+   carriers, checked}`: `query` exactly as sent, `minutes` = that route's
+   `duration`, `route` = its `name` copied verbatim, `carriers` = its
+   `carriers` list copied verbatim and in order, and `checked` = today.
+4. If no route is train-based, write `no_train` as `{query, routes,
+   checked}`: `query` exactly as sent, `routes` = every route returned, each
+   as `{name, minutes, carriers}` with `minutes` = its `duration` and the
+   rest copied verbatim (a `Drive` keeps its empty `carriers`), in the order
+   returned, and `checked` = today. Don't pick the alternative yourself: the
+   page works out the quickest route that needs no driving. That says
+   "Rome2Rio listed no train", not "there is no train": it returns only its
+   top four routes, and on 2026-11-03 it listed none for Sofia while routing
+   Istanbul through Bulgarian Railways. Don't overrule it either way from what
+   you know about the line.
 5. A refresh replaces the entry's route answer in place: a `train` with the
    newer `train`, a `no_train` with the newer `no_train`, and one with the
    other when the newer answer differs. An entry never carries both.
@@ -535,7 +546,7 @@ can add it.
 
 Nothing else may supply a number. If the connector isn't available to the run
 or its call fails, write neither `train` nor `no_train` and name the city in
-step 8. A call that succeeds and lists no all-train route is an answer, and
+step 8. A call that succeeds and lists no train-based route is an answer, and
 goes in `no_train`; a failed call is not. Never estimate a duration from distance, from a neighbouring
 city's entry, or from what you know about the line: a missing time costs the
 reader a click, while a made-up one costs them a missed last train. The

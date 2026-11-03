@@ -7,8 +7,8 @@ instrument(s) each one plays — see "The artist roster" below. `favorites.json`
 is the hand-maintained list of works worth travelling for, which the page marks
 and the run alerts on — see "The favorites list" below. `travel.json` holds,
 for each city outside Berlin a concert is in — in Germany or elsewhere in
-Europe — the approximate train time from Berlin, or the fact that none was
-listed (both from the Rome2Rio connector), and for a German city its station
+Europe — the approximate time from Berlin by the best train-based route, or,
+when none was listed, the routes that were (both from the Rome2Rio connector), and for a German city its station
 (from `tools/stations/de.csv`), which the routine fills in and the page turns
 into a travel line and, in Germany, a bahn.de link — see "Train times from
 Berlin" below.
@@ -107,15 +107,21 @@ red build.) It also needs at least one of `station`, `train` and `no_train`,
 and never both of the last two:
 - a `station` must be a name-and-number pair listed in `tools/stations/de.csv`,
   so a station number recalled rather than looked up fails;
-- a `train` needs all its fields, a duration of 1 to 4320 minutes (three
-  days), a real `checked` date, a `route` that is trains all the way, and a
-  non-empty `carriers` list with no blank or repeated name. Rome2Rio names a
-  route after its legs — `Train, night train`, `Train, bus, car ferry`,
-  `Train to Leipzig-Halle Airport, fly` — so every leg must be a train or a
-  night train; a `Drive`, a `Fly …` or a train-then-bus line copied by mistake
-  fails;
+- a `train` needs all its fields, a real `checked` date, a non-empty
+  `carriers` list with no blank or repeated name, a duration of 1 to 1440
+  minutes for a city whose concerts are all tagged `germany` or `berlin` and
+  up to 4320 (three days) for one abroad, and a `route` that is
+  *train-based*. Rome2Rio names a route after its legs — `Train, night
+  train`, `Train, bus, car ferry`, `Train to Leipzig-Halle Airport, fly` — and
+  a route is train-based when at least half its legs are trains or night
+  trains and none is a flight or a drive. So `Train, bus` passes, while
+  `Drive`, `Fly …`, `Train to Leipzig-Halle Airport, fly` and `Train, bus, car
+  ferry` (one leg in three) fail; so does a leg the validator doesn't
+  recognise, rather than being guessed at;
 - a `no_train` needs its `query`, a real `checked` date, and a non-empty
-  `routes` list none of which is all-train — one that is belongs in `train`.
+  `routes` list, each with a `name`, `minutes` of 1 to 10080 (a week) and a
+  `carriers` list that may be empty (a drive has none) — and none of them
+  train-based: one that is belongs in `train`.
 
 Run locally before committing (the validator reads `artists.json`,
 `favorites.json`, `travel.json` and `tools/stations/de.csv` from the working
@@ -307,7 +313,9 @@ planner:
 
 `≈ 9h 10m by train from Berlin` (Vienna)
 
-`✕ No train route found from Berlin` (Tenerife)
+`≈ 19h 15m by train + bus from Berlin` (Bilbao)
+
+`✕ No train route listed · ≈ 7h 50m by plane from Berlin` (Tenerife)
 
 These are facts about the city, not the concert, so they are stored once per
 city rather than on each row:
@@ -330,8 +338,12 @@ city rather than on each row:
       "city": "Tenerife",
       "no_train": {
         "query": "Tenerife, Spain",
-        "routes": ["Fly from Berlin Brandenburg Airport", "Train, bus, car ferry",
-                   "Bus, car ferry", "Train to Leipzig-Halle Airport, fly"],
+        "routes": [
+          { "name": "Fly from Berlin Brandenburg Airport", "minutes": 470, "carriers": ["easyJet"] },
+          { "name": "Train, bus, car ferry", "minutes": 4635, "carriers": ["Deutsche Bahn Intercity (DB IC)", "…"] },
+          { "name": "Bus, car ferry", "minutes": 4649, "carriers": ["FlixBus", "Interbus", "Fred Olsen"] },
+          { "name": "Train to Leipzig-Halle Airport, fly", "minutes": 535, "carriers": ["…"] }
+        ],
         "checked": "2026-11-03"
       }
     }
@@ -345,40 +357,53 @@ city rather than on each row:
   number (its EVA number) listed in `tools/stations/de.csv`, found with
   `-find-station`. It is left out when there is no clear answer; step 6a says
   when that is. A city abroad never has one: the list is Germany's.
-- `train` is the quickest *all-train* route the Rome2Rio connector returned
-  from Berlin Hbf — night trains included, since abroad they are often the
-  only all-train answer. `query` is the destination string sent: the city and
+- `train` is the best *train-based* route the Rome2Rio connector returned
+  from Berlin Hbf: the quickest all-train one (night trains included, since
+  abroad they are often the only all-train answer), or, when there is none,
+  the quickest that is mostly train (see above). `query` is the destination string sent: the city and
   its country (`"Vienna, Austria"`), fuller when the name alone is ambiguous
   (`"Frankfurt am Main, Germany"`), or the venue when the row's `city` is not
   a place (`"Louisiana Museum of Modern Art, Denmark"`). `minutes`, `route`
   and `carriers` are the route's duration, name and operators, copied as
   returned; and `checked` is the day the query ran.
 - `no_train` takes the place of `train` when none of the routes Rome2Rio
-  returned is all-train: the `query` and `checked` day as for `train`, and
-  `routes`, the name of every route it did return, copied in order.
+  returned is train-based: the `query` and `checked` day as for `train`, and
+  `routes`, every route it did return — `name`, `minutes` (its `duration`)
+  and `carriers` — copied in order.
 
 Any half may be missing, for example when the connector wasn't available to a
 run, or when the place has no station of its own. All missing means no entry
 at all. Berlin cards show nothing, and neither does a city nobody has filled
 in yet.
 
-**"No train route found" is not "impossible by train".** Rome2Rio returns only
+**"Mostly train" is counted in legs, not hours.** Rome2Rio gives one duration
+for a whole route, not one per leg, so nothing it returns says how long the
+bus in `Train, bus` takes: the last ten minutes to a village, or a day across
+the Balkans (Izmir). The rule is a proxy the validator can check, and the page
+names every mode in the route ("by train + bus") so the reader can judge.
+
+**"No train route listed" is not "impossible by train".** Rome2Rio returns only
 its top four routes, and a slow rail connection loses its place to a flight, a
 coach and a drive. On 2026-11-03 it listed no train for Sofia, while its
 answer for Istanbul ran through Bulgarian Railways. Where the only surface
 routes it lists end in a car ferry, as for the Canary Islands, the reader can
 draw the obvious conclusion; the page doesn't draw it for them. So `no_train`
-records what one answer held, the card says "found", and the tooltip lists
+records what one answer held, the card says "listed", and the tooltip lists
 what Rome2Rio offered instead and why a train may still exist. Deciding a
 place cannot be reached by rail would be knowledge from outside the fetched
 answer — exactly what the rest of this file exists to keep out.
 
 **What the page shows.**
-- **The time**, from `train`, rounded to five minutes and marked "≈". What
-  Rome2Rio returns is a typical duration for a route, not a timetable, and the
-  tooltip names the route and the day it was checked.
-- **✕ No train route found from Berlin**, from `no_train`, with a tooltip
-  listing the routes Rome2Rio returned instead.
+- **The time**, from `train`, rounded to five minutes and marked "≈", with
+  the route's modes: "by train" when every leg is a train, otherwise each mode
+  in order, "by train + bus". What Rome2Rio returns is a typical duration for
+  a route, not a timetable, and the tooltip names the route and the day it was
+  checked.
+- **✕ No train route listed**, from `no_train`, followed by the quickest of
+  its `routes` that needs no driving — the reader doesn't drive — usually a
+  flight: "· ≈ 7h 50m by plane from Berlin". The tooltip lists every route
+  Rome2Rio returned. Which route that is gets worked out when the page loads,
+  never stored.
 - **A ✓ Deutschlandticket badge**, on a German card only (the ticket ends at
   the border), when every one of the route's `carriers` is
   on the page's list of regional operators (`REGIONAL_CARRIERS` in

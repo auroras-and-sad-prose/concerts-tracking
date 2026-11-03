@@ -28,8 +28,8 @@
 //     refers to it, so there is no cross-check — with -favorites-report the
 //     command instead prints which upcoming concerts play one of those works;
 //   - travel.json, the train times and stations the page shows on German and
-//     European cards, is well-formed, records all-train routes only (and,
-//     where Rome2Rio listed none, no all-train route among the ones it did
+//     European cards, is well-formed, records train-based routes only (and,
+//     where Rome2Rio listed none, no train-based route among the ones it did
 //     list), names only stations listed in tools/stations/de.csv, and names
 //     only cities some concert in seen.json is in (see travel.go). With -find-station the command
 //     instead looks a place up in that station list.

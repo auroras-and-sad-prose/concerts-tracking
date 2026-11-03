@@ -2,9 +2,11 @@
   "cities": [
     {
       "city": "Adana",
-      "no_train": {
+      "train": {
         "query": "Adana, Turkey",
-        "routes": ["Fly", "Train, bus, night train, taxi", "Drive", "Train, bus"],
+        "minutes": 2782,
+        "route": "Train, bus, night train, taxi",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)", "Arda Tur", "Bulgarian Railways (BDZh)", "Turkish Railways (TCDD)", "Kamil Koç"],
         "checked": "2026-11-03"
       }
     },
@@ -73,9 +75,11 @@
     },
     {
       "city": "Bilbao",
-      "no_train": {
+      "train": {
         "query": "Bilbao, Spain",
-        "routes": ["Fly", "Train, bus via Frankfurt am Main", "Bus", "Drive"],
+        "minutes": 1156,
+        "route": "Train, bus via Frankfurt am Main",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)", "TGV inOui", "BlaBlaCar Bus"],
         "checked": "2026-11-03"
       }
     },
@@ -315,7 +319,12 @@
       "city": "Gran Canaria",
       "no_train": {
         "query": "Gran Canaria, Spain",
-        "routes": ["Fly Berlin Brandenburg Airport to Gran Canaria Airport", "Bus, car ferry", "Train, bus, car ferry", "Train to Leipzig-Halle Airport, fly to Gran Canaria Airport"],
+        "routes": [
+          { "name": "Fly Berlin Brandenburg Airport to Gran Canaria Airport", "minutes": 465, "carriers": ["easyJet"] },
+          { "name": "Bus, car ferry", "minutes": 4638, "carriers": ["FlixBus", "Socibus", "Naviera Armas S.A."] },
+          { "name": "Train, bus, car ferry", "minutes": 4849, "carriers": ["Deutsche Bahn Intercity (DB IC)", "FlixBus", "ALSA", "Naviera Armas S.A."] },
+          { "name": "Train to Leipzig-Halle Airport, fly to Gran Canaria Airport", "minutes": 535, "carriers": ["Deutsche Bahn Intercity (DB IC)", "Norwegian Air UK ltd"] }
+        ],
         "checked": "2026-11-03"
       }
     },
@@ -384,9 +393,11 @@
     },
     {
       "city": "Izmir",
-      "no_train": {
+      "train": {
         "query": "Izmir, Turkey",
-        "routes": ["Fly", "Train, bus", "Train, bus, night train", "Drive"],
+        "minutes": 2477,
+        "route": "Train, bus",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)", "Alpar Turizm", "Kamil Koç"],
         "checked": "2026-11-03"
       }
     },
@@ -437,7 +448,12 @@
       "city": "La Palma",
       "no_train": {
         "query": "La Palma, Spain",
-        "routes": ["Fly from Berlin Brandenburg Airport", "Bus, car ferry", "Train to Leipzig-Halle Airport, fly", "Train to Hamburg Airport, fly"],
+        "routes": [
+          { "name": "Fly from Berlin Brandenburg Airport", "minutes": 480, "carriers": ["easyJet"] },
+          { "name": "Bus, car ferry", "minutes": 5868, "carriers": ["FlixBus", "Socibus", "Naviera Armas S.A."] },
+          { "name": "Train to Leipzig-Halle Airport, fly", "minutes": 705, "carriers": ["Deutsche Bahn Intercity (DB IC)", "Lufthansa"] },
+          { "name": "Train to Hamburg Airport, fly", "minutes": 564, "carriers": ["Deutsche Bahn Intercity (DB IC)", "Eurowings"] }
+        ],
         "checked": "2026-11-03"
       }
     },
@@ -445,7 +461,12 @@
       "city": "Las Palmas de Gran Canaria",
       "no_train": {
         "query": "Las Palmas de Gran Canaria, Spain",
-        "routes": ["Fly Berlin Brandenburg Airport to Gran Canaria Airport", "Bus, car ferry", "Train, bus, car ferry", "Train to Leipzig-Halle Airport, fly to Gran Canaria Airport"],
+        "routes": [
+          { "name": "Fly Berlin Brandenburg Airport to Gran Canaria Airport", "minutes": 490, "carriers": ["easyJet"] },
+          { "name": "Bus, car ferry", "minutes": 4647, "carriers": ["FlixBus", "Socibus", "Naviera Armas S.A."] },
+          { "name": "Train, bus, car ferry", "minutes": 4858, "carriers": ["Deutsche Bahn Intercity (DB IC)", "FlixBus", "ALSA", "Naviera Armas S.A."] },
+          { "name": "Train to Leipzig-Halle Airport, fly to Gran Canaria Airport", "minutes": 560, "carriers": ["Deutsche Bahn Intercity (DB IC)", "Norwegian Air UK ltd"] }
+        ],
         "checked": "2026-11-03"
       }
     },
@@ -585,9 +606,11 @@
     },
     {
       "city": "Oviedo",
-      "no_train": {
+      "train": {
         "query": "Oviedo, Spain",
-        "routes": ["Fly to Asturias Airport, bus", "Train, bus via Bordeaux", "Bus", "Drive"],
+        "minutes": 1462,
+        "route": "Train, bus via Bordeaux",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)", "TGV inOui", "FlixBus"],
         "checked": "2026-11-03"
       }
     },
@@ -678,7 +701,12 @@
       "city": "Santa Cruz de Tenerife",
       "no_train": {
         "query": "Santa Cruz de Tenerife, Spain",
-        "routes": ["Fly Berlin Brandenburg Airport to Tenerife South-Reina Sofia Airport, bus", "Train, bus, car ferry", "Bus, car ferry", "Train to Leipzig-Halle Airport, fly to Tenerife South-Reina Sofia Airport, bus"],
+        "routes": [
+          { "name": "Fly Berlin Brandenburg Airport to Tenerife South-Reina Sofia Airport, bus", "minutes": 551, "carriers": ["easyJet", "TITSA"] },
+          { "name": "Train, bus, car ferry", "minutes": 4635, "carriers": ["Deutsche Bahn Intercity (DB IC)", "BlaBlaCar Bus", "Socibus", "Naviera Armas S.A."] },
+          { "name": "Bus, car ferry", "minutes": 4649, "carriers": ["FlixBus", "Interbus", "Fred Olsen"] },
+          { "name": "Train to Leipzig-Halle Airport, fly to Tenerife South-Reina Sofia Airport, bus", "minutes": 615, "carriers": ["Deutsche Bahn Intercity (DB IC)", "Norwegian Air UK ltd", "TITSA"] }
+        ],
         "checked": "2026-11-03"
       }
     },
@@ -696,7 +724,12 @@
       "city": "Sofia",
       "no_train": {
         "query": "Sofia, Bulgaria",
-        "routes": ["Fly", "Bus", "Drive", "Bus via S Westkreuz"],
+        "routes": [
+          { "name": "Fly", "minutes": 314, "carriers": ["Wizz Air"] },
+          { "name": "Bus", "minutes": 1451, "carriers": ["Union Ivkoni"] },
+          { "name": "Drive", "minutes": 977, "carriers": [] },
+          { "name": "Bus via S Westkreuz", "minutes": 1510, "carriers": ["Arda Tur"] }
+        ],
         "checked": "2026-11-03"
       }
     },
@@ -725,7 +758,12 @@
       "city": "Tenerife",
       "no_train": {
         "query": "Tenerife, Spain",
-        "routes": ["Fly from Berlin Brandenburg Airport", "Train, bus, car ferry", "Bus, car ferry", "Train to Leipzig-Halle Airport, fly"],
+        "routes": [
+          { "name": "Fly from Berlin Brandenburg Airport", "minutes": 470, "carriers": ["easyJet"] },
+          { "name": "Train, bus, car ferry", "minutes": 4635, "carriers": ["Deutsche Bahn Intercity (DB IC)", "BlaBlaCar Bus", "Socibus", "Naviera Armas S.A."] },
+          { "name": "Bus, car ferry", "minutes": 4649, "carriers": ["FlixBus", "Interbus", "Fred Olsen"] },
+          { "name": "Train to Leipzig-Halle Airport, fly", "minutes": 535, "carriers": ["Deutsche Bahn Intercity (DB IC)", "Norwegian Air UK ltd"] }
+        ],
         "checked": "2026-11-03"
       }
     },

@@ -92,17 +92,18 @@ func TestTravelFieldChecks(t *testing.T) {
 			e.Train.Route = "Fly Berlin Brandenburg Airport to Düsseldorf International Airport, train"
 		}},
 		{"bus", func(e *TravelTime) { e.Train.Route = "Bus" }},
-		// Each starts with "Train", and none is a trip by train.
-		{"train then bus", func(e *TravelTime) { e.Train.Route = "Train, bus" }},
-		{"train then bus via a place", func(e *TravelTime) { e.Train.Route = "Train, bus via Frankfurt am Main" }},
-		{"train via places then bus", func(e *TravelTime) { e.Train.Route = "Train via Hamburg, Lübeck, bus" }},
+		// Each starts with "Train", and none is mostly a trip by train.
 		{"train to the airport, then fly", func(e *TravelTime) {
 			e.Train.Route = "Train to Leipzig-Halle Airport, fly to Gran Canaria Airport"
 		}},
 		{"train, bus and ferry", func(e *TravelTime) { e.Train.Route = "Train, bus, car ferry" }},
-		{"night train with a bus leg", func(e *TravelTime) { e.Train.Route = "Night train, bus, train" }},
-		{"train then a taxi", func(e *TravelTime) { e.Train.Route = "Train, night train, taxi" }},
 		{"unknown leg with no via", func(e *TravelTime) { e.Train.Route = "Train, hovercraft" }},
+		{"unknown lowercase leg after a via", func(e *TravelTime) { e.Train.Route = "Train via Calais, hovercraft" }},
+		{"water taxi after a via", func(e *TravelTime) { e.Train.Route = "Train via Calais, water taxi, bus" }},
+		{"train and bus as one leg", func(e *TravelTime) { e.Train.Route = "Train and bus" }},
+		{"mostly bus", func(e *TravelTime) { e.Train.Route = "Bus, train, bus" }},
+		{"train then a drive", func(e *TravelTime) { e.Train.Route = "Train, drive" }},
+		{"German city a day away", func(e *TravelTime) { e.Train.Minutes = 1500 }},
 		{"city with no concert", func(e *TravelTime) { e.City = "Altenkremp" }},
 		{"no carriers", func(e *TravelTime) { e.Train.Carriers = nil }},
 		{"empty carriers", func(e *TravelTime) { e.Train.Carriers = []string{} }},
@@ -130,6 +131,9 @@ func TestTravelAcceptsTrainRouteNames(t *testing.T) {
 	for _, route := range []string{
 		"Train", "Train via Wolfsburg", "Train via Wolfsburg, Hauptbahnhof", "Train via Frankfurt am Main",
 		"Night train", "Train, night train", "Night train, train", "Train to Hamburg Airport",
+		// Mostly train: at least half the legs, none a flight or a drive.
+		"Train, bus", "Train, bus via Frankfurt am Main", "Train via Hamburg, Lübeck, bus",
+		"Train, bus, night train, taxi", "Bus, train", "Train, car ferry", "Night train, bus, train",
 	} {
 		e := travelEntry()
 		e.Train.Route = route
@@ -140,14 +144,16 @@ func TestTravelAcceptsTrainRouteNames(t *testing.T) {
 	}
 }
 
-// noTrain is a correct no_train half: what Rome2Rio returned for the Canary
-// Islands, none of it all-train.
+// noTrain is a correct no_train half, after what Rome2Rio returned for the
+// Canary Islands: none of it train-based, a drive with no carriers.
 func noTrain() *NoTrainRoute {
 	return &NoTrainRoute{
 		Query: "Tenerife, Spain",
-		Routes: []string{
-			"Fly from Berlin Brandenburg Airport", "Train, bus, car ferry", "Bus, car ferry",
-			"Train to Leipzig-Halle Airport, fly",
+		Routes: []ListedRoute{
+			{Name: "Fly from Berlin Brandenburg Airport", Minutes: 470, Carriers: []string{"easyJet"}},
+			{Name: "Train, bus, car ferry", Minutes: 4635, Carriers: []string{"Deutsche Bahn Intercity (DB IC)", "Socibus"}},
+			{Name: "Bus, car ferry", Minutes: 4649, Carriers: []string{"FlixBus", "Fred Olsen"}},
+			{Name: "Drive", Minutes: 4100, Carriers: []string{}},
 		},
 		Checked: "2026-11-03",
 	}
@@ -171,10 +177,15 @@ func TestTravelNoTrainChecks(t *testing.T) {
 		{"missing checked", func(n *NoTrainRoute) { n.Checked = "" }},
 		{"bad checked date", func(n *NoTrainRoute) { n.Checked = "2026-11-31" }},
 		{"no routes", func(n *NoTrainRoute) { n.Routes = nil }},
-		{"blank route", func(n *NoTrainRoute) { n.Routes = append(n.Routes, " ") }},
-		// Rome2Rio did list a train, so it belongs in train.
-		{"lists a train route", func(n *NoTrainRoute) { n.Routes = append(n.Routes, "Train via Hamburg") }},
-		{"lists a night train", func(n *NoTrainRoute) { n.Routes = append(n.Routes, "Night train, train") }},
+		{"blank route name", func(n *NoTrainRoute) { n.Routes[0].Name = " " }},
+		{"zero minutes", func(n *NoTrainRoute) { n.Routes[0].Minutes = 0 }},
+		{"minutes in seconds", func(n *NoTrainRoute) { n.Routes[1].Minutes = 4635 * 60 }},
+		{"blank carrier", func(n *NoTrainRoute) { n.Routes[0].Carriers = []string{" "} }},
+		{"repeated carrier", func(n *NoTrainRoute) { n.Routes[0].Carriers = []string{"easyJet", "easyJet"} }},
+		// Rome2Rio did list a train-based route, so it belongs in train.
+		{"lists a train route", func(n *NoTrainRoute) { n.Routes[0].Name = "Train via Hamburg" }},
+		{"lists a night train", func(n *NoTrainRoute) { n.Routes[0].Name = "Night train, train" }},
+		{"lists a train-then-bus route", func(n *NoTrainRoute) { n.Routes[0].Name = "Train, bus via Bordeaux" }},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -184,6 +195,21 @@ func TestTravelNoTrainChecks(t *testing.T) {
 				t.Fatalf("expected a problem for %q, got none", tt.name)
 			}
 		})
+	}
+}
+
+// A city abroad may take up to three days; a German one may not take one.
+func TestTravelDurationBoundByCountry(t *testing.T) {
+	abroad := valid()
+	abroad.LocationTag = "europe"
+	e := travelEntry()
+	e.Train.Minutes = 2728
+	if p := ValidateTravel(Travel{Cities: []TravelTime{e}}, File{Concerts: []Concert{abroad}}, stationList(t)); len(p) != 0 {
+		t.Fatalf("a 2728-minute route abroad should pass, got %v", p)
+	}
+	e.Train.Minutes = 4321
+	if p := ValidateTravel(Travel{Cities: []TravelTime{e}}, File{Concerts: []Concert{abroad}}, stationList(t)); len(p) == 0 {
+		t.Fatal("a route over three days should fail even abroad")
 	}
 }
 

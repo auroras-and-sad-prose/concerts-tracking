@@ -382,21 +382,49 @@ describe("the concert page", () => {
     await page.close();
   });
 
-  test("says so when Rome2Rio listed no train route, and what it listed instead", async () => {
+  // The reader can't drive, so the quickest drive is passed over for the
+  // quickest route that needs none.
+  test("says so when Rome2Rio listed no train route, and offers the quickest without driving", async () => {
     const travel = {
       cities: [{
         city: "Vienna",
-        no_train: { query: "Vienna, Austria", routes: ["Fly", "Bus, car ferry"], checked: PAST },
+        no_train: {
+          query: "Vienna, Austria",
+          routes: [
+            { name: "Drive", minutes: 200, carriers: [] },
+            { name: "Fly to Vienna Airport, bus", minutes: 314, carriers: ["Wizz Air", "Vienna Airport Lines"] },
+            { name: "Bus, car ferry", minutes: 4649, carriers: ["FlixBus", "Fred Olsen"] },
+          ],
+          checked: PAST,
+        },
       }],
     };
     const { page, errors } = await open({ travel });
 
     const note = page.locator(".card", { hasText: "Vienna" }).locator(".travel .no-train");
-    assert.equal(await note.innerText(), "✕ No train route found from Berlin");
+    assert.equal(await note.innerText(), "✕ No train route listed · ≈ 5h 15m by plane + bus from Berlin");
     const title = await note.getAttribute("title");
-    assert.match(title, /only: Fly; Bus, car ferry\./);
+    assert.match(title, /It listed: Drive \(3h 20m\); Fly to Vienna Airport, bus \(5h 15m\); Bus, car ferry \(77h 30m\)\./);
     assert.match(title, /top four routes/);
     assert.equal(await page.locator(".travel .time").count(), 0);
+
+    assert.deepEqual(errors, []);
+    await page.close();
+  });
+
+  test("names the modes of a route that is mostly but not only train", async () => {
+    const travel = {
+      cities: [{
+        city: "Kempen",
+        train: {
+          query: "Kempen, Germany", minutes: 328, route: "Train via Wolfsburg, Hauptbahnhof, bus",
+          carriers: ["Deutsche Bahn Intercity (DB IC)", "Autokraft"], checked: PAST,
+        },
+      }],
+    };
+    const { page, errors } = await open({ travel });
+
+    assert.equal(await page.locator(".travel .time").innerText(), "≈ 5h 30m by train + bus from Berlin");
 
     assert.deepEqual(errors, []);
     await page.close();
