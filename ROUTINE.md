@@ -467,13 +467,15 @@ followed page contradicts the row on `date`, `city` or `venue` rather than
 adding to it, rule 10 governs: report it, change nothing.
 
 **Step 6a — Fill in train times and stations.** With the concerts settled,
-take every city on an upcoming row (dated today or later) tagged `germany`,
-counting the rows this run added. For each one, fill in whichever half of its
-`travel.json` entry is missing, and refresh a `train` whose `checked` is more
-than a year old, since timetables change every December. A city with no entry
-yet needs both halves.
+take every city on an upcoming row (dated today or later) tagged `germany` or
+`europe`, counting the rows this run added. For each one, fill in whichever
+half of its `travel.json` entry is missing, and refresh a `train` or
+`no_train` whose `checked` is more than a year old, since timetables change
+every December. A German city with no entry yet needs a station and a route
+answer; a city abroad needs only the route answer — never a station, since the
+list is Germany's.
 
-*The station.*
+*The station (German cities only).*
 1. Run `go run ./tools/validate -find-station "<name>"` with the city's German
    name. That is `city` itself unless the row uses an English name for a
    German city (`Munich` → `München`, `Cologne` → `Köln`, `Nuremberg` →
@@ -491,17 +493,39 @@ yet needs both halves.
 
 *The train route.*
 1. Call the Rome2Rio connector's `get-routes` with `origin` `"Berlin
-   Hauptbahnhof"` and `destination` `"<city>, Germany"`. If the city name is
-   ambiguous in Germany, as `Frankfurt` is, settle which place it is from the
-   row's venue or its source page, and send the full name (`"Frankfurt am Main,
-   Germany"`). If nothing you fetched settles it, skip the city and report it.
-2. From `available_routes`, keep only the routes whose `name` starts with
-   `Train`. That excludes `Drive`, `Fly …`, `Bus`, `Rideshare` and `Night
-   train`. Take the one with the smallest `duration`.
-3. Write `train` as `{query, minutes, route, carriers, checked}`: `query`
-   exactly as sent, `minutes` = that route's `duration`, `route` = its `name`
-   copied verbatim, `carriers` = its `carriers` list copied verbatim and in
-   order, and `checked` = today. A refreshed `train` is updated in place.
+   Hauptbahnhof"` and `destination` `"<city>, <country>"`, the country as the
+   row gives it (`"Kempen, Germany"`, `"Vienna, Austria"`). If the city name
+   is ambiguous, as `Frankfurt` is, settle which place it is from the row's
+   venue or its source page, and send the full name (`"Frankfurt am Main,
+   Germany"`). If the row's `city` is not a place at all (a country, as on
+   the Louisiana Museum row whose city is `Denmark`), send the row's venue
+   with the country instead (`"Louisiana Museum of Modern Art, Denmark"`). If
+   nothing you fetched settles it, skip the city and report it. The answer's
+   `plain_text` names the place Rome2Rio resolved the query to; if that is
+   plainly a different place, don't write the result — report it.
+2. From `available_routes`, keep only the **all-train** routes: those whose
+   `name`, read as legs separated by commas, has only `Train …` and `Night
+   train …` legs — `Train`, `Train via Nuremberg`, `Train, night train`,
+   `Night train, train`. A comma inside a `via` list (`Train via Wolfsburg,
+   Hauptbahnhof`) names a place, not a leg. That excludes `Drive`, `Fly …`,
+   `Bus` and `Rideshare`, and also every mixed route: `Train, bus`, `Train,
+   bus, car ferry`, `Train to Leipzig-Halle Airport, fly`. CI applies the
+   same reading and fails a `train` that isn't all-train.
+3. If any are left, take the one with the smallest `duration` and write
+   `train` as `{query, minutes, route, carriers, checked}`: `query` exactly as
+   sent, `minutes` = that route's `duration`, `route` = its `name` copied
+   verbatim, `carriers` = its `carriers` list copied verbatim and in order,
+   and `checked` = today.
+4. If none are left, write `no_train` as `{query, routes, checked}`: `query`
+   exactly as sent, `routes` = the `name` of every route returned, copied
+   verbatim and in order, and `checked` = today. That says "Rome2Rio listed
+   no train", not "there is no train": it returns only its top four routes,
+   and on 2026-11-03 it listed none for Sofia while routing Istanbul through
+   Bulgarian Railways. Don't overrule it either way from what you know about
+   the line.
+5. A refresh replaces the entry's route answer in place: a `train` with the
+   newer `train`, a `no_train` with the newer `no_train`, and one with the
+   other when the newer answer differs. An entry never carries both.
 
 Don't decide for yourself whether a route is covered by the Deutschlandticket,
 and don't edit the page's list of regional operators. The page derives the
@@ -509,16 +533,19 @@ badge from `carriers`. If a route plainly made up of regional trains lists an
 operator you think is missing from that list, name it in step 8 so a person
 can add it.
 
-Nothing else may supply a number. If the connector isn't available to the run,
-its call fails, or it returns no train route, write no `train` and name the
-city in step 8. Never estimate a duration from distance, from a neighbouring
+Nothing else may supply a number. If the connector isn't available to the run
+or its call fails, write neither `train` nor `no_train` and name the city in
+step 8. A call that succeeds and lists no all-train route is an answer, and
+goes in `no_train`; a failed call is not. Never estimate a duration from distance, from a neighbouring
 city's entry, or from what you know about the line: a missing time costs the
 reader a click, while a made-up one costs them a missed last train. The
 connector's answer and the station list are the fetched text here, so rule 1
 holds for this file as it does for every row: copy, don't recall.
 
 Keep entries in the order the file already uses, with `city` exactly as the
-row spells it. Write an entry only once it has at least one half.
+row spells it — two spellings of one place (`Lucerne`, `Luzern`) are two
+entries, each with its own query. Write an entry only once it has at least
+one half.
 
 Train times and stations are not news. They never lead the PR body, never count
 toward `<N> new` or `<M> changed`, and never trigger a notification alone
@@ -570,7 +597,8 @@ is something waiting.
      opening it, plus a line naming which rows are new and which
      are refinements of rows already in the file, and a line listing the
      `travel.json` entries added or changed (`city — minutes — route —
-     station`, with `—` for a half left out).
+     station`, with `—` for a half left out, and `no train listed` in place
+     of minutes and route for a `no_train`).
    - If step 1 found the PR already open, push onto its branch and update its
      title and body to cover both runs rather than opening a second PR: two
      open PRs appending to the same array conflict with each other, and the
@@ -695,13 +723,14 @@ never a licence to edit `favorites.json` or to alert on the concert as if it had
 matched.
 
 Then one line for step 6a: how many `travel.json` entries were added and how
-many changed, and every German city on an upcoming row still missing a half,
-with the reason. For a missing `train`: the connector wasn't available, the
-call failed, no train route came back, or the city name was ambiguous. For a
-missing `station`: none found, or still ambiguous (list the candidates
-`-find-station` printed). Also name any regional
-operator you think the page's `REGIONAL_CARRIERS` list is missing (step 6a). A run that finds the connector
-missing says so plainly, since that silently leaves every new German city
+many changed, and every city on an upcoming `germany` or `europe` row still
+missing a half, with the reason. For a missing route answer (neither `train`
+nor `no_train`): the connector wasn't available, the call failed, the city
+name was ambiguous, or Rome2Rio resolved it to another place. For a missing
+`station` (German cities only): none found, or still ambiguous (list the
+candidates `-find-station` printed). Also name any regional operator you think
+the page's `REGIONAL_CARRIERS` list is missing (step 6a). A run that finds the
+connector missing says so plainly, since that silently leaves every new city
 without a time.
 
 Two things must always be named rather than buried in a count: any page that

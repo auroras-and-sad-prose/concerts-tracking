@@ -1,6 +1,44 @@
 {
   "cities": [
     {
+      "city": "Adana",
+      "no_train": {
+        "query": "Adana, Turkey",
+        "routes": ["Fly", "Train, bus, night train, taxi", "Drive", "Train, bus"],
+        "checked": "2026-11-03"
+      }
+    },
+    {
+      "city": "Amsterdam",
+      "train": {
+        "query": "Amsterdam, Netherlands",
+        "minutes": 401,
+        "route": "Train via Bünde",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)", "Nederlandse Spoorwegen (NS)"],
+        "checked": "2026-11-03"
+      }
+    },
+    {
+      "city": "Andermatt",
+      "train": {
+        "query": "Andermatt, Switzerland",
+        "minutes": 726,
+        "route": "Train via Frankfurt am Main",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)", "Schweizerische Südostbahn AG"],
+        "checked": "2026-11-03"
+      }
+    },
+    {
+      "city": "Ankara",
+      "train": {
+        "query": "Ankara, Turkey",
+        "minutes": 2728,
+        "route": "Night train, train",
+        "carriers": ["Nightjet", "ÖBB", "Bulgarian Railways (BDZh)", "Turkish Railways (TCDD)"],
+        "checked": "2026-11-03"
+      }
+    },
+    {
       "city": "Bad Wörishofen",
       "station": { "name": "Bad Wörishofen", "eva": "8000768" },
       "train": {
@@ -34,6 +72,24 @@
       }
     },
     {
+      "city": "Bilbao",
+      "no_train": {
+        "query": "Bilbao, Spain",
+        "routes": ["Fly", "Train, bus via Frankfurt am Main", "Bus", "Drive"],
+        "checked": "2026-11-03"
+      }
+    },
+    {
+      "city": "Birmingham",
+      "train": {
+        "query": "Birmingham, United Kingdom",
+        "minutes": 777,
+        "route": "Train via Cologne",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)", "Eurostar", "Avanti West Coast"],
+        "checked": "2026-11-03"
+      }
+    },
+    {
       "city": "Braunschweig",
       "station": { "name": "Braunschweig Hbf", "eva": "8000049" },
       "train": {
@@ -42,6 +98,26 @@
         "route": "Train via Wolfsburg, Hauptbahnhof",
         "carriers": ["Deutsche Bahn Intercity (DB IC)", "enno"],
         "checked": "2026-09-26"
+      }
+    },
+    {
+      "city": "Bregenz",
+      "train": {
+        "query": "Bregenz, Austria",
+        "minutes": 526,
+        "route": "Train via Nuremberg",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)", "Deutsche Bahn Regio (DB Regional)"],
+        "checked": "2026-11-03"
+      }
+    },
+    {
+      "city": "Brussels",
+      "train": {
+        "query": "Brussels, Belgium",
+        "minutes": 496,
+        "route": "Train",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)"],
+        "checked": "2026-11-03"
       }
     },
     {
@@ -75,6 +151,26 @@
         "route": "Train",
         "carriers": ["Deutsche Bahn Intercity (DB IC)"],
         "checked": "2026-09-26"
+      }
+    },
+    {
+      "city": "Copenhagen",
+      "train": {
+        "query": "Copenhagen, Denmark",
+        "minutes": 430,
+        "route": "Train",
+        "carriers": ["České dráhy (ČD)"],
+        "checked": "2026-11-03"
+      }
+    },
+    {
+      "city": "Denmark",
+      "train": {
+        "query": "Louisiana Museum of Modern Art, Denmark",
+        "minutes": 497,
+        "route": "Train",
+        "carriers": ["České dráhy (ČD)"],
+        "checked": "2026-11-03"
       }
     },
     {
@@ -122,6 +218,16 @@
       }
     },
     {
+      "city": "Eindhoven",
+      "train": {
+        "query": "Eindhoven, Netherlands",
+        "minutes": 425,
+        "route": "Train via Wolfsburg",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)", "Nederlandse Spoorwegen (NS)"],
+        "checked": "2026-11-03"
+      }
+    },
+    {
       "city": "Erlangen",
       "station": { "name": "Erlangen", "eva": "8001844" },
       "train": {
@@ -130,6 +236,16 @@
         "route": "Train",
         "carriers": ["Deutsche Bahn Intercity (DB IC)"],
         "checked": "2026-09-26"
+      }
+    },
+    {
+      "city": "Eskişehir",
+      "train": {
+        "query": "Eskişehir, Turkey",
+        "minutes": 2647,
+        "route": "Night train, train",
+        "carriers": ["Nightjet", "ÖBB", "Bulgarian Railways (BDZh)", "Turkish Railways (TCDD)"],
+        "checked": "2026-11-03"
       }
     },
     {
@@ -176,6 +292,34 @@
       }
     },
     {
+      "city": "Gateshead",
+      "train": {
+        "query": "Gateshead, United Kingdom",
+        "minutes": 850,
+        "route": "Train via Cologne",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)", "Eurostar", "London North Eastern Railway Limited (LNER)"],
+        "checked": "2026-11-03"
+      }
+    },
+    {
+      "city": "Geneva",
+      "train": {
+        "query": "Geneva, Switzerland",
+        "minutes": 647,
+        "route": "Train",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)", "Swiss Federal Railways (SBB CFF FFS)"],
+        "checked": "2026-11-03"
+      }
+    },
+    {
+      "city": "Gran Canaria",
+      "no_train": {
+        "query": "Gran Canaria, Spain",
+        "routes": ["Fly Berlin Brandenburg Airport to Gran Canaria Airport", "Bus, car ferry", "Train, bus, car ferry", "Train to Leipzig-Halle Airport, fly to Gran Canaria Airport"],
+        "checked": "2026-11-03"
+      }
+    },
+    {
       "city": "Hamburg",
       "station": { "name": "Hamburg Hbf", "eva": "8002549" },
       "train": {
@@ -198,6 +342,16 @@
       }
     },
     {
+      "city": "Heerlen",
+      "train": {
+        "query": "Heerlen, Netherlands",
+        "minutes": 424,
+        "route": "Train via Wolfsburg",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)", "National Express"],
+        "checked": "2026-11-03"
+      }
+    },
+    {
       "city": "Heidelberg",
       "station": { "name": "Heidelberg Hbf", "eva": "8000156" },
       "train": {
@@ -206,6 +360,44 @@
         "route": "Train",
         "carriers": ["Deutsche Bahn Intercity (DB IC)"],
         "checked": "2026-09-26"
+      }
+    },
+    {
+      "city": "Innsbruck",
+      "train": {
+        "query": "Innsbruck, Austria",
+        "minutes": 416,
+        "route": "Train via Nuremberg",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)", "Transdev GmbH", "Railjet"],
+        "checked": "2026-11-03"
+      }
+    },
+    {
+      "city": "Istanbul",
+      "train": {
+        "query": "Istanbul, Turkey",
+        "minutes": 2314,
+        "route": "Train, night train",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)", "České dráhy (ČD)", "ÖBB", "Bulgarian Railways (BDZh)"],
+        "checked": "2026-11-03"
+      }
+    },
+    {
+      "city": "Izmir",
+      "no_train": {
+        "query": "Izmir, Turkey",
+        "routes": ["Fly", "Train, bus", "Train, bus, night train", "Drive"],
+        "checked": "2026-11-03"
+      }
+    },
+    {
+      "city": "Katowice",
+      "train": {
+        "query": "Katowice, Poland",
+        "minutes": 502,
+        "route": "Train",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)", "PKP Intercity"],
+        "checked": "2026-11-03"
       }
     },
     {
@@ -242,6 +434,22 @@
       }
     },
     {
+      "city": "La Palma",
+      "no_train": {
+        "query": "La Palma, Spain",
+        "routes": ["Fly from Berlin Brandenburg Airport", "Bus, car ferry", "Train to Leipzig-Halle Airport, fly", "Train to Hamburg Airport, fly"],
+        "checked": "2026-11-03"
+      }
+    },
+    {
+      "city": "Las Palmas de Gran Canaria",
+      "no_train": {
+        "query": "Las Palmas de Gran Canaria, Spain",
+        "routes": ["Fly Berlin Brandenburg Airport to Gran Canaria Airport", "Bus, car ferry", "Train, bus, car ferry", "Train to Leipzig-Halle Airport, fly to Gran Canaria Airport"],
+        "checked": "2026-11-03"
+      }
+    },
+    {
       "city": "Leipzig",
       "station": { "name": "Leipzig Hbf", "eva": "8010205" },
       "train": {
@@ -250,6 +458,66 @@
         "route": "Train",
         "carriers": ["Deutsche Bahn Intercity (DB IC)"],
         "checked": "2026-09-26"
+      }
+    },
+    {
+      "city": "Linz",
+      "train": {
+        "query": "Linz, Austria",
+        "minutes": 491,
+        "route": "Train via Nuremberg",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)", "agilis", "ÖBB"],
+        "checked": "2026-11-03"
+      }
+    },
+    {
+      "city": "London",
+      "train": {
+        "query": "London, United Kingdom",
+        "minutes": 675,
+        "route": "Train via Cologne",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)", "Eurostar"],
+        "checked": "2026-11-03"
+      }
+    },
+    {
+      "city": "Lucerne",
+      "train": {
+        "query": "Lucerne, Switzerland",
+        "minutes": 569,
+        "route": "Train via Frankfurt am Main",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)", "Swiss Federal Railways (SBB CFF FFS)"],
+        "checked": "2026-11-03"
+      }
+    },
+    {
+      "city": "Lugano",
+      "train": {
+        "query": "Lugano, Switzerland",
+        "minutes": 703,
+        "route": "Train",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)", "Swiss Federal Railways (SBB CFF FFS)"],
+        "checked": "2026-11-03"
+      }
+    },
+    {
+      "city": "Luzern",
+      "train": {
+        "query": "Luzern, Switzerland",
+        "minutes": 569,
+        "route": "Train via Frankfurt am Main",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)", "Swiss Federal Railways (SBB CFF FFS)"],
+        "checked": "2026-11-03"
+      }
+    },
+    {
+      "city": "Madrid",
+      "train": {
+        "query": "Madrid, Spain",
+        "minutes": 1295,
+        "route": "Train",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)", "TGV inOui", "Renfe Viajeros", "Renfe AVE"],
+        "checked": "2026-11-03"
       }
     },
     {
@@ -275,6 +543,16 @@
       }
     },
     {
+      "city": "Monte-Carlo",
+      "train": {
+        "query": "Monte-Carlo, Monaco",
+        "minutes": 1046,
+        "route": "Train",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)", "TGV inOui"],
+        "checked": "2026-11-03"
+      }
+    },
+    {
       "city": "Munich",
       "station": { "name": "München Hbf", "eva": "8000261" },
       "train": {
@@ -283,6 +561,64 @@
         "route": "Train",
         "carriers": ["Deutsche Bahn Intercity (DB IC)"],
         "checked": "2026-09-26"
+      }
+    },
+    {
+      "city": "Nijmegen",
+      "train": {
+        "query": "Nijmegen, Netherlands",
+        "minutes": 353,
+        "route": "Train via Enschede",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)", "Blauwnet", "Nederlandse Spoorwegen (NS)"],
+        "checked": "2026-11-03"
+      }
+    },
+    {
+      "city": "Nottingham",
+      "train": {
+        "query": "Nottingham, United Kingdom",
+        "minutes": 803,
+        "route": "Train via Cologne",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)", "Eurostar", "East Midlands Railways"],
+        "checked": "2026-11-03"
+      }
+    },
+    {
+      "city": "Oviedo",
+      "no_train": {
+        "query": "Oviedo, Spain",
+        "routes": ["Fly to Asturias Airport, bus", "Train, bus via Bordeaux", "Bus", "Drive"],
+        "checked": "2026-11-03"
+      }
+    },
+    {
+      "city": "Oxford",
+      "train": {
+        "query": "Oxford, United Kingdom",
+        "minutes": 810,
+        "route": "Train via Bünde",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)", "Nederlandse Spoorwegen (NS)", "Great Western Railway (GWR)"],
+        "checked": "2026-11-03"
+      }
+    },
+    {
+      "city": "Paris",
+      "train": {
+        "query": "Paris, France",
+        "minutes": 589,
+        "route": "Train via Offenburg",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)", "TGV inOui"],
+        "checked": "2026-11-03"
+      }
+    },
+    {
+      "city": "Prague",
+      "train": {
+        "query": "Prague, Czech Republic",
+        "minutes": 225,
+        "route": "Train",
+        "carriers": ["Danish Railways (DSB)"],
+        "checked": "2026-11-03"
       }
     },
     {
@@ -319,6 +655,62 @@
       }
     },
     {
+      "city": "Rotterdam",
+      "train": {
+        "query": "Rotterdam, Netherlands",
+        "minutes": 395,
+        "route": "Train via Enschede",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)", "Nederlandse Spoorwegen (NS)"],
+        "checked": "2026-11-03"
+      }
+    },
+    {
+      "city": "Salzburg",
+      "train": {
+        "query": "Salzburg, Austria",
+        "minutes": 368,
+        "route": "Train",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)"],
+        "checked": "2026-11-03"
+      }
+    },
+    {
+      "city": "Santa Cruz de Tenerife",
+      "no_train": {
+        "query": "Santa Cruz de Tenerife, Spain",
+        "routes": ["Fly Berlin Brandenburg Airport to Tenerife South-Reina Sofia Airport, bus", "Train, bus, car ferry", "Bus, car ferry", "Train to Leipzig-Halle Airport, fly to Tenerife South-Reina Sofia Airport, bus"],
+        "checked": "2026-11-03"
+      }
+    },
+    {
+      "city": "Seon",
+      "train": {
+        "query": "Seon, Switzerland",
+        "minutes": 605,
+        "route": "Train via Frankfurt am Main",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)", "Swiss Federal Railways (SBB CFF FFS)"],
+        "checked": "2026-11-03"
+      }
+    },
+    {
+      "city": "Sofia",
+      "no_train": {
+        "query": "Sofia, Bulgaria",
+        "routes": ["Fly", "Bus", "Drive", "Bus via S Westkreuz"],
+        "checked": "2026-11-03"
+      }
+    },
+    {
+      "city": "Stockholm",
+      "train": {
+        "query": "Stockholm, Sweden",
+        "minutes": 853,
+        "route": "Train via Hamburg",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)", "Snälltåget"],
+        "checked": "2026-11-03"
+      }
+    },
+    {
       "city": "Stuttgart",
       "station": { "name": "Stuttgart Hbf", "eva": "8000096" },
       "train": {
@@ -327,6 +719,64 @@
         "route": "Train",
         "carriers": ["Deutsche Bahn Intercity (DB IC)"],
         "checked": "2026-09-26"
+      }
+    },
+    {
+      "city": "Tenerife",
+      "no_train": {
+        "query": "Tenerife, Spain",
+        "routes": ["Fly from Berlin Brandenburg Airport", "Train, bus, car ferry", "Bus, car ferry", "Train to Leipzig-Halle Airport, fly"],
+        "checked": "2026-11-03"
+      }
+    },
+    {
+      "city": "Toulouse",
+      "train": {
+        "query": "Toulouse, France",
+        "minutes": 999,
+        "route": "Train via Cologne",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)", "Eurostar", "TGV inOui"],
+        "checked": "2026-11-03"
+      }
+    },
+    {
+      "city": "Utrecht",
+      "train": {
+        "query": "Utrecht, Netherlands",
+        "minutes": 341,
+        "route": "Train via Enschede",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)", "Nederlandse Spoorwegen (NS)"],
+        "checked": "2026-11-03"
+      }
+    },
+    {
+      "city": "Vienna",
+      "train": {
+        "query": "Vienna, Austria",
+        "minutes": 550,
+        "route": "Train",
+        "carriers": ["Railways of Slovak Republic (ZSSK)", "České dráhy (ČD)"],
+        "checked": "2026-11-03"
+      }
+    },
+    {
+      "city": "Warsaw",
+      "train": {
+        "query": "Warsaw, Poland",
+        "minutes": 435,
+        "route": "Train",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)", "PKP Intercity"],
+        "checked": "2026-11-03"
+      }
+    },
+    {
+      "city": "Zurich",
+      "train": {
+        "query": "Zurich, Switzerland",
+        "minutes": 554,
+        "route": "Train via Frankfurt am Main",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)", "Swiss Federal Railways (SBB CFF FFS)"],
+        "checked": "2026-11-03"
       }
     }
   ]

@@ -1,28 +1,36 @@
-// travel.json holds, for each German city a concert is in, what the page needs
-// to help the reader get there from Berlin: roughly how long the quickest
-// train takes, and the city's railway station, from which the page builds a
-// bahn.de search for Deutschlandticket connections. Nothing in seen.json
-// refers to it.
+// travel.json holds, for each city outside Berlin a concert is in — in
+// Germany or elsewhere in Europe — what the page needs to help the reader get
+// there from Berlin: roughly how long the quickest all-train route takes, or
+// the fact that Rome2Rio listed none; and, for a German city, its railway
+// station, from which the page builds a bahn.de search for Deutschlandticket
+// connections. Nothing in seen.json refers to it.
 //
 // Unlike artists.json and favorites.json this file IS written by the
 // concert-watch routine (see "Train times from Berlin" in CLAUDE.md), and each
 // half of an entry is copied from one named source, never estimated:
 //
-//   - train: the quickest train route the Rome2Rio connector returned from
-//     Berlin Hbf — its name, duration and operators — with the query that was
-//     sent and the day, so a person can repeat it. The page reads the
+//   - train: the quickest all-train route the Rome2Rio connector returned
+//     from Berlin Hbf — its name, duration and operators — with the query that
+//     was sent and the day, so a person can repeat it. The page reads the
 //     operators to say whether the route is regional only, and so covered by a
 //     Deutschlandticket; that verdict is derived there, never stored here.
-//   - station: the city's station name and DB station number, found with
+//   - no_train: in place of train, when none of the routes Rome2Rio returned
+//     is all-train: the query, the day, and the names of every route it did
+//     return, so the page can say what it listed instead. That is a record of
+//     what one answer held, not proof that no rail connection exists —
+//     Rome2Rio returns only its top four routes.
+//   - station: a German city's station name and DB station number, found with
 //     -find-station in tools/stations/de.csv. CI checks the pair against that
 //     same file, so a number recalled rather than looked up fails the build.
 //
-// Either half may be missing — the connector may be unavailable to a run, or
-// a village may have no station — but not both. What else can be checked is
-// that the route is a train route rather than the drive or the flight Rome2Rio
-// lists beside it, and that the entry is for a city some concert in the
-// dataset is in, so a misspelt city, which the page could never match to a
-// card, fails the build instead of sitting unused.
+// Any half may be missing — the connector may be unavailable to a run, or a
+// place may have no station — but not all of them, and train and no_train
+// never appear together. What else can be checked is that a train route is
+// made of trains only, rather than the drive, the flight or the train-then-bus
+// Rome2Rio lists beside it; that a no_train entry lists no route that is; and
+// that the entry is for a city some concert in the dataset is in, so a
+// misspelt city, which the page could never match to a card, fails the build
+// instead of sitting unused.
 package main
 
 import (
@@ -33,10 +41,11 @@ import (
 	"github.com/auroras-and-sad-prose/concerts-tracking/tools/stations"
 )
 
-// maxTravelMinutes bounds a plausible duration. Nothing in Germany is a day's
-// train ride from Berlin, so a larger figure is a unit mix-up (seconds, or
-// hours and minutes run together), not a slow connection.
-const maxTravelMinutes = 24 * 60
+// maxTravelMinutes bounds a plausible duration. The longest rail journeys the
+// dataset needs, Berlin to central Turkey, take under two days, so a figure
+// past three is a unit mix-up (seconds, or hours and minutes run together),
+// not a slow connection.
+const maxTravelMinutes = 3 * 24 * 60
 
 // TravelTime is one entry in travel.json.
 type TravelTime struct {
@@ -45,6 +54,7 @@ type TravelTime struct {
 	City    string            `json:"city"`
 	Station *stations.Station `json:"station"`
 	Train   *TrainRoute       `json:"train"`
+	NoTrain *NoTrainRoute     `json:"no_train"`
 }
 
 // TrainRoute is what Rome2Rio returned for the quickest train route.
@@ -60,6 +70,17 @@ type TrainRoute struct {
 	// Carriers are the operators Rome2Rio listed for Route, copied as
 	// returned.
 	Carriers []string `json:"carriers"`
+	// Checked is the day the query was run.
+	Checked string `json:"checked"`
+}
+
+// NoTrainRoute records a Rome2Rio answer that held no all-train route.
+type NoTrainRoute struct {
+	// Query is the destination sent to Rome2Rio, as for TrainRoute.
+	Query string `json:"query"`
+	// Routes are the names of every route Rome2Rio returned, copied as
+	// returned and in order: "Fly", "Bus, car ferry", "Train, bus".
+	Routes []string `json:"routes"`
 	// Checked is the day the query was run.
 	Checked string `json:"checked"`
 }
@@ -104,9 +125,13 @@ func ValidateTravel(t Travel, f File, list *stations.List) []string {
 			}
 		}
 
-		if e.Station == nil && e.Train == nil {
+		if e.Station == nil && e.Train == nil && e.NoTrain == nil {
 			problems = append(problems, fmt.Sprintf(
-				"%s: has neither a station nor a train route; leave the city out until a run finds one", label))
+				"%s: has no station, train or no_train; leave the city out until a run finds one", label))
+		}
+		if e.Train != nil && e.NoTrain != nil {
+			problems = append(problems, fmt.Sprintf(
+				"%s: has both train and no_train; a refreshed entry keeps only the newer answer", label))
 		}
 		if e.Station != nil {
 			for _, m := range checkStation(*e.Station, list) {
@@ -118,8 +143,85 @@ func ValidateTravel(t Travel, f File, list *stations.List) []string {
 				problems = append(problems, fmt.Sprintf("%s: train: %s", label, m))
 			}
 		}
+		if e.NoTrain != nil {
+			for _, m := range checkNoTrain(*e.NoTrain) {
+				problems = append(problems, fmt.Sprintf("%s: no_train: %s", label, m))
+			}
+		}
 	}
 
+	return problems
+}
+
+// Rome2Rio names a route after its legs, joined by commas — "Train",
+// "Train via Wolfsburg", "Train, night train", "Train, bus, car ferry",
+// "Train to Leipzig-Halle Airport, fly" — and a "via" list is joined the same
+// way ("Train via Wolfsburg, Hauptbahnhof"). railModes are the legs a trip
+// "by train" may consist of; otherModes are the others it is known to use.
+var (
+	railModes  = []string{"train", "night train"}
+	otherModes = []string{
+		"fly", "bus", "drive", "car ferry", "ferry", "taxi", "rideshare", "walk", "eurotunnel",
+		"shuttle", "tram", "subway", "metro", "cable car", "funicular", "helicopter", "coach", "town car",
+	}
+)
+
+func startsWithMode(leg string, modes []string) bool {
+	leg = strings.ToLower(leg)
+	for _, m := range modes {
+		if leg == m || strings.HasPrefix(leg, m+" ") {
+			return true
+		}
+	}
+	return false
+}
+
+// isRailRoute reports whether every leg of a route Rome2Rio named is a train
+// or a night train. A comma segment that names no mode at all is accepted
+// only once a "via" has opened a list of places; anywhere else it is an
+// unfamiliar mode, and the route is not counted as all-train, which is the
+// safe way to be wrong.
+func isRailRoute(name string) bool {
+	legs := strings.Split(name, ",")
+	via := false
+	for i, leg := range legs {
+		leg = strings.TrimSpace(leg)
+		switch {
+		case startsWithMode(leg, railModes):
+		case i == 0, startsWithMode(leg, otherModes), !via:
+			return false
+		}
+		if strings.Contains(strings.ToLower(leg), " via ") {
+			via = true
+		}
+	}
+	return true
+}
+
+func checkNoTrain(r NoTrainRoute) []string {
+	var problems []string
+	for _, req := range []struct{ name, val string }{{"query", r.Query}, {"checked", r.Checked}} {
+		if strings.TrimSpace(req.val) == "" {
+			problems = append(problems, fmt.Sprintf("field %q is required but empty", req.name))
+		}
+	}
+	// Rome2Rio always returns something — a flight, a drive — so an empty
+	// list means the field was dropped, not that nothing came back.
+	if len(r.Routes) == 0 {
+		problems = append(problems, `field "routes" is required (the names of the routes Rome2Rio returned)`)
+	}
+	for j, name := range r.Routes {
+		switch {
+		case strings.TrimSpace(name) == "":
+			problems = append(problems, fmt.Sprintf("routes[%d] is empty", j))
+		case isRailRoute(name):
+			problems = append(problems, fmt.Sprintf(
+				"routes lists %q, which is all-train; record the quickest such route as train instead", name))
+		}
+	}
+	if r.Checked != "" && !validDate(r.Checked) {
+		problems = append(problems, fmt.Sprintf("checked %q is not a valid YYYY-MM-DD date", r.Checked))
+	}
 	return problems
 }
 
@@ -152,12 +254,11 @@ func checkTrain(r TrainRoute) []string {
 		problems = append(problems, fmt.Sprintf("minutes %d is outside 1..%d", r.Minutes, maxTravelMinutes))
 	}
 
-	// Rome2Rio names every option by its first mode — "Drive", "Fly to …",
-	// "Bus", "Night train", "Train via …" — so a route that doesn't open with
-	// "Train" is one of the others, copied from the wrong line.
-	if r.Route != "" && !strings.HasPrefix(r.Route, "Train") {
+	// A route that is not trains all the way — a drive, a flight, or a train
+	// to the airport or the coach station — was copied from the wrong line.
+	if r.Route != "" && !isRailRoute(r.Route) {
 		problems = append(problems, fmt.Sprintf(
-			"route %q is not a train route (Rome2Rio names those \"Train …\")", r.Route))
+			"route %q is not an all-train route (every leg must be a train or night train)", r.Route))
 	}
 
 	// Every train route Rome2Rio returns names who runs it, so an empty list

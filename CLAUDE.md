@@ -6,10 +6,12 @@ automated concert-watch routine and rendered by `index.html` (GitHub Pages).
 instrument(s) each one plays — see "The artist roster" below. `favorites.json`
 is the hand-maintained list of works worth travelling for, which the page marks
 and the run alerts on — see "The favorites list" below. `travel.json` holds,
-for each German city a concert is in, the approximate train time from Berlin
-(from the Rome2Rio connector) and the city's station (from
-`tools/stations/de.csv`), which the routine fills in and the page turns into a
-travel line and a bahn.de link — see "Train times from Berlin" below.
+for each city outside Berlin a concert is in — in Germany or elsewhere in
+Europe — the approximate train time from Berlin, or the fact that none was
+listed (both from the Rome2Rio connector), and for a German city its station
+(from `tools/stations/de.csv`), which the routine fills in and the page turns
+into a travel line and, in Germany, a bahn.de link — see "Train times from
+Berlin" below.
 
 Reducing hallucination in this dataset relies on three layers: the **enforced
 layer**, which is what actually gates the data (CI); the **operating
@@ -101,14 +103,19 @@ It checks `travel.json` too. Every entry needs a `city` that some row in
 never match, fails the build. (Any row, not just a `germany` one: a row's
 `location_tag` may be refined later, while its `city` is frozen and entries
 are never removed, so tying the check to the tag could turn a retag into a
-red build.) It also needs a `station`, a `train` or
-both:
+red build.) It also needs at least one of `station`, `train` and `no_train`,
+and never both of the last two:
 - a `station` must be a name-and-number pair listed in `tools/stations/de.csv`,
   so a station number recalled rather than looked up fails;
-- a `train` needs all its fields, a duration of 1 to 1440 minutes, a real
-  `checked` date, a `route` Rome2Rio names as a train route (it starts with
-  `Train`, so a `Drive`, `Fly …` or `Night train` line copied by mistake
-  fails), and a non-empty `carriers` list with no blank or repeated name.
+- a `train` needs all its fields, a duration of 1 to 4320 minutes (three
+  days), a real `checked` date, a `route` that is trains all the way, and a
+  non-empty `carriers` list with no blank or repeated name. Rome2Rio names a
+  route after its legs — `Train, night train`, `Train, bus, car ferry`,
+  `Train to Leipzig-Halle Airport, fly` — so every leg must be a train or a
+  night train; a `Drive`, a `Fly …` or a train-then-bus line copied by mistake
+  fails;
+- a `no_train` needs its `query`, a real `checked` date, and a non-empty
+  `routes` list none of which is all-train — one that is belongs in `train`.
 
 Run locally before committing (the validator reads `artists.json`,
 `favorites.json`, `travel.json` and `tools/stations/de.csv` from the working
@@ -292,10 +299,15 @@ Changing one means changing the other and adding a case there.
 
 ## Train times from Berlin (`travel.json`)
 
-Every card for a concert elsewhere in Germany helps the reader judge the trip
-from Berlin without opening a planner:
+Every card for a concert outside Berlin — elsewhere in Germany or abroad in
+Europe — helps the reader judge the trip from Berlin without opening a
+planner:
 
-`≈ 4h 05m by train from Berlin · Deutschlandticket route ↗`
+`≈ 4h 05m by train from Berlin · Deutschlandticket route ↗` (Kempen)
+
+`≈ 9h 10m by train from Berlin` (Vienna)
+
+`✕ No train route found from Berlin` (Tenerife)
 
 These are facts about the city, not the concert, so they are stored once per
 city rather than on each row:
@@ -313,6 +325,15 @@ city rather than on each row:
         "carriers": ["Deutsche Bahn Intercity (DB IC)"],
         "checked": "2026-09-27"
       }
+    },
+    {
+      "city": "Tenerife",
+      "no_train": {
+        "query": "Tenerife, Spain",
+        "routes": ["Fly from Berlin Brandenburg Airport", "Train, bus, car ferry",
+                   "Bus, car ferry", "Train to Leipzig-Halle Airport, fly"],
+        "checked": "2026-11-03"
+      }
     }
   ]
 }
@@ -320,26 +341,46 @@ city rather than on each row:
 
 - `city` is the concert's `city` exactly as `seen.json` spells it; the page
   joins on it, and CI rejects a city no row has.
-- `station` is the city's railway station, as the name and DB station number
-  (its EVA number) listed in `tools/stations/de.csv`, found with
+- `station` is a German city's railway station, as the name and DB station
+  number (its EVA number) listed in `tools/stations/de.csv`, found with
   `-find-station`. It is left out when there is no clear answer; step 6a says
-  when that is.
-- `train` is the quickest *train* route the Rome2Rio connector returned from
-  Berlin Hbf: `query` is the destination string sent, which may be fuller than
-  `city` when the name alone is ambiguous (`"Frankfurt am Main, Germany"`);
-  `minutes`, `route` and `carriers` are the route's duration, name and
-  operators, copied as returned; and `checked` is the day the query ran.
+  when that is. A city abroad never has one: the list is Germany's.
+- `train` is the quickest *all-train* route the Rome2Rio connector returned
+  from Berlin Hbf — night trains included, since abroad they are often the
+  only all-train answer. `query` is the destination string sent: the city and
+  its country (`"Vienna, Austria"`), fuller when the name alone is ambiguous
+  (`"Frankfurt am Main, Germany"`), or the venue when the row's `city` is not
+  a place (`"Louisiana Museum of Modern Art, Denmark"`). `minutes`, `route`
+  and `carriers` are the route's duration, name and operators, copied as
+  returned; and `checked` is the day the query ran.
+- `no_train` takes the place of `train` when none of the routes Rome2Rio
+  returned is all-train: the `query` and `checked` day as for `train`, and
+  `routes`, the name of every route it did return, copied in order.
 
-Either half may be missing, for example when the connector wasn't available
-to a run, or when the place has no station of its own. Both missing means no
-entry at all. Berlin cards show nothing, and neither do concerts abroad, or a
-German city nobody has filled in yet.
+Any half may be missing, for example when the connector wasn't available to a
+run, or when the place has no station of its own. All missing means no entry
+at all. Berlin cards show nothing, and neither does a city nobody has filled
+in yet.
+
+**"No train route found" is not "impossible by train".** Rome2Rio returns only
+its top four routes, and a slow rail connection loses its place to a flight, a
+coach and a drive. On 2026-11-03 it listed no train for Sofia, while its
+answer for Istanbul ran through Bulgarian Railways. Where the only surface
+routes it lists end in a car ferry, as for the Canary Islands, the reader can
+draw the obvious conclusion; the page doesn't draw it for them. So `no_train`
+records what one answer held, the card says "found", and the tooltip lists
+what Rome2Rio offered instead and why a train may still exist. Deciding a
+place cannot be reached by rail would be knowledge from outside the fetched
+answer — exactly what the rest of this file exists to keep out.
 
 **What the page shows.**
 - **The time**, from `train`, rounded to five minutes and marked "≈". What
   Rome2Rio returns is a typical duration for a route, not a timetable, and the
   tooltip names the route and the day it was checked.
-- **A ✓ Deutschlandticket badge**, when every one of the route's `carriers` is
+- **✕ No train route found from Berlin**, from `no_train`, with a tooltip
+  listing the routes Rome2Rio returned instead.
+- **A ✓ Deutschlandticket badge**, on a German card only (the ticket ends at
+  the border), when every one of the route's `carriers` is
   on the page's list of regional operators (`REGIONAL_CARRIERS` in
   `index.html`). In practice that means cities where regional trains are the
   fastest, such as Rostock. It is worked out when the page loads, never
@@ -347,8 +388,8 @@ German city nobody has filled in yet.
   operator nobody has added yet costs a route its badge and never makes an ICE
   look covered. Extending it is a reviewed change to `index.html`, not
   something a run does.
-- **A Deutschlandticket route ↗ link**, from `station`: an int.bahn.de search
-  from Berlin Hbf, arriving by 18:00 on the concert day, with
+- **A Deutschlandticket route ↗ link**, on a German card, from `station`: an
+  int.bahn.de search from Berlin Hbf, arriving by 18:00 on the concert day, with
   Deutschlandticket connections only. bahn.de ignores a destination given by
   name alone and resets the whole search, date included, so a city without a
   `station` gets no link. The link's shape was taken from a search a person
@@ -363,7 +404,8 @@ store, and the link stands in for one.
 
 **Unlike the roster and the favorites, the routine writes this file.** Step 6a
 says how. It adds entries, fills in a missing half, and refreshes a stale
-`train`; it never removes an entry. A wrong entry is corrected by a person
+`train` or `no_train` — replacing one with the other when the newer answer
+differs; it never removes an entry. A wrong entry is corrected by a person
 like any other reviewed change.
 
 **Where the numbers come from.**
@@ -380,7 +422,7 @@ like any other reviewed change.
 Like every negative finding in this file, those refusals are one day's result
 (rule 11). Still, don't route around a bot block to get a number: no faked
 browser headers, no headless browser. When the connector is not available to
-the run, the `train` halves wait for a run where it is.
+the run, the `train` and `no_train` halves wait for a run where it is.
 
 ## Where a row may come from (`source_url` vs `detail_url`)
 

@@ -17,8 +17,8 @@ func travelEntry() TravelTime {
 		Train: &TrainRoute{
 			Query:    "Altenkrempe, Germany",
 			Minutes:  190,
-			Route:    "Train, bus",
-			Carriers: []string{"Deutsche Bahn Regio (DB Regional)", "Autokraft"},
+			Route:    "Train",
+			Carriers: []string{"Deutsche Bahn Regio (DB Regional)"},
 			Checked:  "2026-09-26",
 		},
 	}
@@ -76,12 +76,14 @@ func TestTravelFieldChecks(t *testing.T) {
 	}{
 		{"missing city", func(e *TravelTime) { e.City = "" }},
 		{"neither half", func(e *TravelTime) { e.Station, e.Train = nil, nil }},
+		{"both train and no_train", func(e *TravelTime) { e.NoTrain = noTrain() }},
 		{"missing query", func(e *TravelTime) { e.Train.Query = " " }},
 		{"missing route", func(e *TravelTime) { e.Train.Route = "" }},
 		{"missing checked", func(e *TravelTime) { e.Train.Checked = "" }},
 		{"zero minutes", func(e *TravelTime) { e.Train.Minutes = 0 }},
 		{"negative minutes", func(e *TravelTime) { e.Train.Minutes = -5 }},
 		{"minutes in seconds", func(e *TravelTime) { e.Train.Minutes = 11400 }},
+		{"hours and minutes run together", func(e *TravelTime) { e.Train.Minutes = 4550 }},
 		{"bad checked date", func(e *TravelTime) { e.Train.Checked = "2026-9-26" }},
 		{"impossible checked date", func(e *TravelTime) { e.Train.Checked = "2026-02-30" }},
 		{"drive copied instead of train", func(e *TravelTime) { e.Train.Route = "Drive" }},
@@ -89,9 +91,19 @@ func TestTravelFieldChecks(t *testing.T) {
 		{"flight then train", func(e *TravelTime) {
 			e.Train.Route = "Fly Berlin Brandenburg Airport to Düsseldorf International Airport, train"
 		}},
-		{"night train", func(e *TravelTime) { e.Train.Route = "Night train" }},
 		{"bus", func(e *TravelTime) { e.Train.Route = "Bus" }},
-		{"city with no German concert", func(e *TravelTime) { e.City = "Altenkremp" }},
+		// Each starts with "Train", and none is a trip by train.
+		{"train then bus", func(e *TravelTime) { e.Train.Route = "Train, bus" }},
+		{"train then bus via a place", func(e *TravelTime) { e.Train.Route = "Train, bus via Frankfurt am Main" }},
+		{"train via places then bus", func(e *TravelTime) { e.Train.Route = "Train via Hamburg, Lübeck, bus" }},
+		{"train to the airport, then fly", func(e *TravelTime) {
+			e.Train.Route = "Train to Leipzig-Halle Airport, fly to Gran Canaria Airport"
+		}},
+		{"train, bus and ferry", func(e *TravelTime) { e.Train.Route = "Train, bus, car ferry" }},
+		{"night train with a bus leg", func(e *TravelTime) { e.Train.Route = "Night train, bus, train" }},
+		{"train then a taxi", func(e *TravelTime) { e.Train.Route = "Train, night train, taxi" }},
+		{"unknown leg with no via", func(e *TravelTime) { e.Train.Route = "Train, hovercraft" }},
+		{"city with no concert", func(e *TravelTime) { e.City = "Altenkremp" }},
 		{"no carriers", func(e *TravelTime) { e.Train.Carriers = nil }},
 		{"empty carriers", func(e *TravelTime) { e.Train.Carriers = []string{} }},
 		{"blank carrier", func(e *TravelTime) { e.Train.Carriers = []string{"Deutsche Bahn Regio (DB Regional)", " "} }},
@@ -115,13 +127,63 @@ func TestTravelFieldChecks(t *testing.T) {
 }
 
 func TestTravelAcceptsTrainRouteNames(t *testing.T) {
-	for _, route := range []string{"Train", "Train via Wolfsburg", "Train via Wolfsburg, Hauptbahnhof", "Train, bus"} {
+	for _, route := range []string{
+		"Train", "Train via Wolfsburg", "Train via Wolfsburg, Hauptbahnhof", "Train via Frankfurt am Main",
+		"Night train", "Train, night train", "Night train, train", "Train to Hamburg Airport",
+	} {
 		e := travelEntry()
 		e.Train.Route = route
 		f := File{Concerts: []Concert{valid()}}
 		if p := ValidateTravel(Travel{Cities: []TravelTime{e}}, f, stationList(t)); len(p) != 0 {
 			t.Fatalf("route %q should be accepted, got %v", route, p)
 		}
+	}
+}
+
+// noTrain is a correct no_train half: what Rome2Rio returned for the Canary
+// Islands, none of it all-train.
+func noTrain() *NoTrainRoute {
+	return &NoTrainRoute{
+		Query: "Tenerife, Spain",
+		Routes: []string{
+			"Fly from Berlin Brandenburg Airport", "Train, bus, car ferry", "Bus, car ferry",
+			"Train to Leipzig-Halle Airport, fly",
+		},
+		Checked: "2026-11-03",
+	}
+}
+
+// A city abroad has no station in the German list, and a no_train entry may
+// stand alone.
+func TestTravelNoTrainAlone(t *testing.T) {
+	e := TravelTime{City: "Altenkrempe", NoTrain: noTrain()}
+	if p := ValidateTravel(Travel{Cities: []TravelTime{e}}, File{Concerts: []Concert{valid()}}, stationList(t)); len(p) != 0 {
+		t.Fatalf("expected a lone no_train to be valid, got %v", p)
+	}
+}
+
+func TestTravelNoTrainChecks(t *testing.T) {
+	tests := []struct {
+		name   string
+		mutate func(*NoTrainRoute)
+	}{
+		{"missing query", func(n *NoTrainRoute) { n.Query = "" }},
+		{"missing checked", func(n *NoTrainRoute) { n.Checked = "" }},
+		{"bad checked date", func(n *NoTrainRoute) { n.Checked = "2026-11-31" }},
+		{"no routes", func(n *NoTrainRoute) { n.Routes = nil }},
+		{"blank route", func(n *NoTrainRoute) { n.Routes = append(n.Routes, " ") }},
+		// Rome2Rio did list a train, so it belongs in train.
+		{"lists a train route", func(n *NoTrainRoute) { n.Routes = append(n.Routes, "Train via Hamburg") }},
+		{"lists a night train", func(n *NoTrainRoute) { n.Routes = append(n.Routes, "Night train, train") }},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			e := TravelTime{City: "Altenkrempe", NoTrain: noTrain()}
+			tt.mutate(e.NoTrain)
+			if p := ValidateTravel(Travel{Cities: []TravelTime{e}}, File{Concerts: []Concert{valid()}}, stationList(t)); len(p) == 0 {
+				t.Fatalf("expected a problem for %q, got none", tt.name)
+			}
+		})
 	}
 }
 
@@ -133,8 +195,8 @@ func TestTravelDuplicateCity(t *testing.T) {
 }
 
 // location_tag is refinable and travel.json entries are never removed, so an
-// entry must stay valid after its city's only row is retagged away from
-// germany; it just stops being shown.
+// entry must stay valid whatever its city's rows are tagged; one retagged to
+// berlin just stops being shown.
 func TestTravelCitySurvivesRetag(t *testing.T) {
 	for _, tag := range []string{"berlin", "europe"} {
 		c := valid()

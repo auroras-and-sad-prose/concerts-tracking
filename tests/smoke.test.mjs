@@ -342,7 +342,7 @@ describe("the concert page", () => {
     await page.close();
   });
 
-  test("shows the train time from Berlin on German cards only", async () => {
+  test("shows the train time from Berlin on a German card, never on a Berlin one", async () => {
     const { page, errors } = await open({});
 
     const time = page.locator(".travel .time");
@@ -353,6 +353,50 @@ describe("the concert page", () => {
     assert.equal(await kempen.locator(".travel .time").count(), 1);
     // One of its two operators runs ICE/IC, so the route earns no badge.
     assert.equal(await page.locator(".travel .dticket").count(), 0);
+
+    assert.deepEqual(errors, []);
+    await page.close();
+  });
+
+  // A Deutschlandticket ends at the border and the station list is Germany's,
+  // so a card abroad gets the time alone, whatever its entry carries.
+  test("shows the train time on a card abroad, without badge or link", async () => {
+    const travel = {
+      cities: [{
+        city: "Vienna",
+        station: { name: "Kempen (Niederrhein)", eva: "8000409" },
+        train: {
+          query: "Vienna, Austria", minutes: 550, route: "Train",
+          carriers: ["Deutsche Bahn Regio (DB Regional)"], checked: PAST,
+        },
+      }],
+    };
+    const { page, errors } = await open({ travel });
+
+    const vienna = page.locator(".card", { hasText: "Vienna" });
+    assert.equal(await vienna.locator(".travel .time").innerText(), "≈ 9h 10m by train from Berlin");
+    assert.equal(await page.locator(".travel .dticket").count(), 0);
+    assert.equal(await page.locator("a.dticket-link").count(), 0);
+
+    assert.deepEqual(errors, []);
+    await page.close();
+  });
+
+  test("says so when Rome2Rio listed no train route, and what it listed instead", async () => {
+    const travel = {
+      cities: [{
+        city: "Vienna",
+        no_train: { query: "Vienna, Austria", routes: ["Fly", "Bus, car ferry"], checked: PAST },
+      }],
+    };
+    const { page, errors } = await open({ travel });
+
+    const note = page.locator(".card", { hasText: "Vienna" }).locator(".travel .no-train");
+    assert.equal(await note.innerText(), "✕ No train route found from Berlin");
+    const title = await note.getAttribute("title");
+    assert.match(title, /only: Fly; Bus, car ferry\./);
+    assert.match(title, /top four routes/);
+    assert.equal(await page.locator(".travel .time").count(), 0);
 
     assert.deepEqual(errors, []);
     await page.close();

@@ -180,6 +180,7 @@
      "where": how long it takes to get there. */
   .card .place .travel { display: block; font-size: .8rem; color: var(--faint); margin-top: .1rem; }
   .card .place .travel .dticket { color: var(--accent); font-weight: 600; white-space: nowrap; }
+  .card .place .travel .no-train { white-space: nowrap; }
   .card .place .travel a { color: var(--accent); text-decoration: none; white-space: nowrap; }
   .card .place .travel a:hover { text-decoration: underline; }
   .card .program { font-size: .82rem; color: var(--muted); margin-top: .4rem; line-height: 1.45; max-width: 62ch; }
@@ -705,15 +706,21 @@ function instrumentTagsHTML(concert) {
 
 // ---------- Train times from Berlin ----------
 //
-// travel.json holds, per German city, what the concert-watch routine found
-// for getting there from Berlin: `train`, the quickest train route Rome2Rio
-// listed from Berlin Hbf, and `station`, the city's station name and DB number
-// from tools/stations/de.csv. Either may be missing. Like the roster it is
-// joined in by city name; a city it doesn't cover yet simply shows nothing.
+// travel.json holds, per city in Germany or elsewhere in Europe, what the
+// concert-watch routine found for getting there from Berlin: `train`, the
+// quickest all-train route Rome2Rio listed from Berlin Hbf; or `no_train`,
+// when it listed none, with the routes it listed instead; and, for a German
+// city, `station`, its station name and DB number from
+// tools/stations/de.csv. Any may be missing. Like the roster it is joined in
+// by city name; a city it doesn't cover yet simply shows nothing.
 let travelByCity = new Map();
 
 function validTrain(t) {
   return Boolean(t) && Number.isInteger(t.minutes) && t.minutes > 0;
+}
+
+function validNoTrain(n) {
+  return Boolean(n) && Array.isArray(n.routes) && n.routes.some(r => typeof r === "string" && r.trim());
 }
 
 function validStation(s) {
@@ -726,15 +733,18 @@ function loadTravel(cities) {
   for (const e of cities) {
     if (!e || typeof e.city !== "string") continue;
     const train = validTrain(e.train) ? e.train : null;
+    // The validator never lets both through; if they meet anyway, the time wins.
+    const noTrain = !train && validNoTrain(e.no_train) ? e.no_train : null;
     const station = validStation(e.station) ? e.station : null;
-    if (train || station) travelByCity.set(e.city, { train, station });
+    if (train || noTrain || station) travelByCity.set(e.city, { train, noTrain, station });
   }
 }
 
-// Only for concerts elsewhere in Germany: a Berlin date needs no train, and
-// abroad is out of scope.
+// For concerts outside Berlin, in Germany or abroad: a Berlin date needs no
+// train.
 function travelOf(concert) {
-  return concert.location_tag === "germany" ? travelByCity.get(concert.city) || null : null;
+  const tag = concert.location_tag;
+  return tag === "germany" || tag === "europe" ? travelByCity.get(concert.city) || null : null;
 }
 
 // Rounded to five minutes and marked approximate: it is one route's typical
@@ -808,20 +818,35 @@ function travelTitle(train) {
     `: ${train.route || "train"}, ${train.minutes} min. Approximate — check the timetable before booking.`;
 }
 
+// Rome2Rio returns only its top four routes, so "none listed" is what the
+// card says, and the tooltip says what it listed instead and why a slow rail
+// connection may still exist.
+function noTrainTitle(noTrain) {
+  const routes = noTrain.routes.filter(r => typeof r === "string" && r.trim());
+  return `Rome2Rio listed no all-train route from Berlin Hbf` +
+    (noTrain.checked ? ` on ${noTrain.checked}` : "") +
+    `, only: ${routes.join("; ")}. It lists its top four routes, so a slow rail connection may still exist.`;
+}
+
 // Whatever the city's entry has: the time and badge come from `train`, the
-// bahn.de link from `station`.
+// "no train" note from `no_train`, the bahn.de link from `station`. The badge
+// and the link are for German cities only: a Deutschlandticket ends at the
+// border, and the station list is Germany's.
 function travelParts(concert) {
   const e = travelOf(concert);
   if (!e) return [];
-  const covered = Boolean(e.train) && coveredByDeutschlandticket(e.train);
+  const inGermany = concert.location_tag === "germany";
+  const covered = inGermany && Boolean(e.train) && coveredByDeutschlandticket(e.train);
   const parts = [];
   if (e.train) {
     parts.push(`<span class="time" title="${escapeHTML(travelTitle(e.train))}">≈ ${escapeHTML(formatDuration(e.train.minutes))} by train from Berlin</span>`);
+  } else if (e.noTrain) {
+    parts.push(`<span class="no-train" title="${escapeHTML(noTrainTitle(e.noTrain))}">✕ No train route found from Berlin</span>`);
   }
   if (covered) {
     parts.push(`<span class="dticket" title="Every operator on this route is a regional one, so a Deutschlandticket covers it">✓ Deutschlandticket</span>`);
   }
-  if (e.station) parts.push(dticketLinkHTML(concert, e.station, covered));
+  if (inGermany && e.station) parts.push(dticketLinkHTML(concert, e.station, covered));
   return parts;
 }
 
