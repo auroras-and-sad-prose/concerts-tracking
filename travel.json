@@ -328,6 +328,16 @@
         "carriers": ["Deutsche Bahn Intercity (DB IC)"],
         "checked": "2026-09-26"
       }
+    },
+    {
+      "city": "Elmau",
+      "train": {
+        "query": "Elmau, Germany",
+        "minutes": 479,
+        "route": "Train",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)", "Deutsche Bahn Regio (DB Regional)"],
+        "checked": "2026-11-06"
+      }
     }
   ]
 }

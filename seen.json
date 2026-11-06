@@ -3775,6 +3775,39 @@
       "source_url": "https://bachtrack.com/search-events/performer=alice-sara-ott",
       "detail_url": "https://bachtrack.com/concert-event/belgian-national-orchestra-halls-ott-belgian-national-orchestra-cultuurcentrum-hasselt-12-june-2027/451468",
       "first_seen": "2026-11-05"
+    },
+    {
+      "id": "oganyan|2027-02-08|elmau",
+      "artist": "Maya Oganyan",
+      "date": "2027-02-08",
+      "city": "Elmau",
+      "country": "Germany",
+      "venue": "Schloss Elmau",
+      "program": "Chamber Music with Gautier Capuçon (cello)",
+      "pieces": "Composers only: Beethoven, Brahms",
+      "instruments": null,
+      "location_tag": "germany",
+      "source_url": "https://www.mayaoganyan.com/calendar",
+      "detail_url": null,
+      "first_seen": "2026-11-06"
+    },
+    {
+      "id": "oganyan|2027-02-25|padova",
+      "artist": "Maya Oganyan",
+      "date": "2027-02-25",
+      "city": "Padova",
+      "country": "Italy",
+      "venue": "Auditorium Pollini",
+      "program": "Orchestra di Padova e del Veneto / Wolfram Christ",
+      "pieces": [
+        "Sergei Rachmaninov: Concerto per pianoforte n. 3, op. 30",
+        "Johannes Brahms: Sinfonia n. 3, op. 90"
+      ],
+      "instruments": null,
+      "location_tag": "europe",
+      "source_url": "https://www.mayaoganyan.com/calendar",
+      "detail_url": "https://www.opvorchestra.it/calendario/2027/02/25/2401/",
+      "first_seen": "2026-11-06"
     }
   ]
 }
