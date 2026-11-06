@@ -3735,6 +3735,79 @@
       "source_url": "https://www.alicesaraott.com/calendar",
       "detail_url": "https://mahlerchamber.com/concerts/1017",
       "first_seen": "2026-10-25"
+    },
+    {
+      "id": "ott|2027-06-09|leuven",
+      "artist": "Alice Sara Ott",
+      "date": "2027-06-09",
+      "city": "Leuven",
+      "country": "Belgium",
+      "venue": "30CC",
+      "program": "Belgian National Orchestra / Matthew Halls: Strauss R., Ravel, Sibelius",
+      "pieces": [
+        "Strauss R.: Don Juan, Op.20",
+        "Ravel: Piano Concerto in G major",
+        "Sibelius: En Saga, a symphonic poem for orchestra, Op.9",
+        "Ravel: Boléro"
+      ],
+      "instruments": null,
+      "location_tag": "europe",
+      "source_url": "https://bachtrack.com/search-events/performer=alice-sara-ott",
+      "detail_url": "https://bachtrack.com/concert-event/belgian-national-orchestra-halls-ott-belgian-national-orchestra-30cc-9-june-2027/451467",
+      "first_seen": "2026-11-05"
+    },
+    {
+      "id": "ott|2027-06-12|hasselt",
+      "artist": "Alice Sara Ott",
+      "date": "2027-06-12",
+      "city": "Hasselt",
+      "country": "Belgium",
+      "venue": "Cultuurcentrum Hasselt",
+      "program": "Belgian National Orchestra / Matthew Halls: Strauss R., Ravel, Sibelius",
+      "pieces": [
+        "Strauss R.: Don Juan, Op.20",
+        "Ravel: Piano Concerto in G major",
+        "Sibelius: En Saga, a symphonic poem for orchestra, Op.9",
+        "Ravel: Boléro"
+      ],
+      "instruments": null,
+      "location_tag": "europe",
+      "source_url": "https://bachtrack.com/search-events/performer=alice-sara-ott",
+      "detail_url": "https://bachtrack.com/concert-event/belgian-national-orchestra-halls-ott-belgian-national-orchestra-cultuurcentrum-hasselt-12-june-2027/451468",
+      "first_seen": "2026-11-05"
+    },
+    {
+      "id": "oganyan|2027-02-08|elmau",
+      "artist": "Maya Oganyan",
+      "date": "2027-02-08",
+      "city": "Elmau",
+      "country": "Germany",
+      "venue": "Schloss Elmau",
+      "program": "Chamber Music with Gautier Capuçon (cello)",
+      "pieces": "Composers only: Beethoven, Brahms",
+      "instruments": null,
+      "location_tag": "germany",
+      "source_url": "https://www.mayaoganyan.com/calendar",
+      "detail_url": null,
+      "first_seen": "2026-11-06"
+    },
+    {
+      "id": "oganyan|2027-02-25|padova",
+      "artist": "Maya Oganyan",
+      "date": "2027-02-25",
+      "city": "Padova",
+      "country": "Italy",
+      "venue": "Auditorium Pollini",
+      "program": "Orchestra di Padova e del Veneto / Wolfram Christ",
+      "pieces": [
+        "Sergei Rachmaninov: Concerto per pianoforte n. 3, op. 30",
+        "Johannes Brahms: Sinfonia n. 3, op. 90"
+      ],
+      "instruments": null,
+      "location_tag": "europe",
+      "source_url": "https://www.mayaoganyan.com/calendar",
+      "detail_url": "https://www.opvorchestra.it/calendario/2027/02/25/2401/",
+      "first_seen": "2026-11-06"
     }
   ]
 }
