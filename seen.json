@@ -3808,6 +3808,36 @@
       "source_url": "https://www.mayaoganyan.com/calendar",
       "detail_url": "https://www.opvorchestra.it/calendario/2027/02/25/2401/",
       "first_seen": "2026-11-06"
+    },
+    {
+      "id": "oganyan|2026-11-30|yerevan",
+      "artist": "Maya Oganyan",
+      "date": "2026-11-30",
+      "city": "Yerevan",
+      "country": "Armenia",
+      "venue": null,
+      "program": "Khatchaturian International Festival: Recital",
+      "pieces": "Composers only: Debussy, Chopin, Messiaen, Liszt",
+      "instruments": null,
+      "location_tag": "europe",
+      "source_url": "https://www.mayaoganyan.com/calendar",
+      "detail_url": null,
+      "first_seen": "2026-11-07"
+    },
+    {
+      "id": "oganyan|2026-12-02|yerevan",
+      "artist": "Maya Oganyan",
+      "date": "2026-12-02",
+      "city": "Yerevan",
+      "country": "Armenia",
+      "venue": null,
+      "program": "Khatchaturian International Festival: Chamber Music with Matteo Fabi (cello)",
+      "pieces": "Composers only: Prokofiev, Khatchaturian, Rachmaninov",
+      "instruments": null,
+      "location_tag": "europe",
+      "source_url": "https://www.mayaoganyan.com/calendar",
+      "detail_url": null,
+      "first_seen": "2026-11-07"
     }
   ]
 }
