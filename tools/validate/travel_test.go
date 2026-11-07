@@ -198,7 +198,7 @@ func TestTravelNoTrainChecks(t *testing.T) {
 	}
 }
 
-// A city abroad may take up to three days; a German one may not take one.
+// A city abroad may take up to a week; a German one may not take a day.
 func TestTravelDurationBoundByCountry(t *testing.T) {
 	abroad := valid()
 	abroad.LocationTag = "europe"
@@ -207,9 +207,13 @@ func TestTravelDurationBoundByCountry(t *testing.T) {
 	if p := ValidateTravel(Travel{Cities: []TravelTime{e}}, File{Concerts: []Concert{abroad}}, stationList(t)); len(p) != 0 {
 		t.Fatalf("a 2728-minute route abroad should pass, got %v", p)
 	}
-	e.Train.Minutes = 4321
+	e.Train.Minutes = 5148
+	if p := ValidateTravel(Travel{Cities: []TravelTime{e}}, File{Concerts: []Concert{abroad}}, stationList(t)); len(p) != 0 {
+		t.Fatalf("a 5148-minute route abroad should pass, got %v", p)
+	}
+	e.Train.Minutes = 10081
 	if p := ValidateTravel(Travel{Cities: []TravelTime{e}}, File{Concerts: []Concert{abroad}}, stationList(t)); len(p) == 0 {
-		t.Fatal("a route over three days should fail even abroad")
+		t.Fatal("a route over a week should fail even abroad")
 	}
 }
 

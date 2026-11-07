@@ -232,6 +232,16 @@
       }
     },
     {
+      "city": "Elmau",
+      "train": {
+        "query": "Elmau, Germany",
+        "minutes": 479,
+        "route": "Train",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)", "Deutsche Bahn Regio (DB Regional)"],
+        "checked": "2026-11-06"
+      }
+    },
+    {
       "city": "Erlangen",
       "station": { "name": "Erlangen", "eva": "8001844" },
       "train": {
@@ -348,6 +358,16 @@
         "route": "Train",
         "carriers": ["Deutsche Bahn Intercity (DB IC)"],
         "checked": "2026-10-04"
+      }
+    },
+    {
+      "city": "Hasselt",
+      "train": {
+        "query": "Hasselt, Belgium",
+        "minutes": 549,
+        "route": "Train",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)", "Belgian Railways (NMBS/SNCB)"],
+        "checked": "2026-11-07"
       }
     },
     {
@@ -479,6 +499,16 @@
         "route": "Train",
         "carriers": ["Deutsche Bahn Intercity (DB IC)"],
         "checked": "2026-09-26"
+      }
+    },
+    {
+      "city": "Leuven",
+      "train": {
+        "query": "Leuven, Belgium",
+        "minutes": 477,
+        "route": "Train",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)", "Belgian Railways (NMBS/SNCB)"],
+        "checked": "2026-11-07"
       }
     },
     {
@@ -622,6 +652,16 @@
         "route": "Train via Bünde",
         "carriers": ["Deutsche Bahn Intercity (DB IC)", "Nederlandse Spoorwegen (NS)", "Great Western Railway (GWR)"],
         "checked": "2026-11-03"
+      }
+    },
+    {
+      "city": "Padova",
+      "train": {
+        "query": "Padova, Italy",
+        "minutes": 863,
+        "route": "Train, night train",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)", "Nightjet"],
+        "checked": "2026-11-07"
       }
     },
     {
@@ -805,6 +845,16 @@
         "route": "Train",
         "carriers": ["Deutsche Bahn Intercity (DB IC)", "PKP Intercity"],
         "checked": "2026-11-03"
+      }
+    },
+    {
+      "city": "Yerevan",
+      "train": {
+        "query": "Yerevan, Armenia",
+        "minutes": 5148,
+        "route": "Train, bus",
+        "carriers": ["Deutsche Bahn Regio (DB Regional)", "DB Bus", "PKP Intercity", "Kaliningrad Bus Terminal", "Russian Railways (РЖД)", "Avazar Bus"],
+        "checked": "2026-11-07"
       }
     },
     {

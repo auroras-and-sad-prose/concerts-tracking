@@ -45,14 +45,14 @@ import (
 )
 
 // Bounds on a plausible duration; past them a figure is a unit mix-up
-// (seconds, or hours and minutes run together), not a slow connection.
-// Nothing in Germany is a day's train ride from Berlin. The longest
-// train-based routes abroad the dataset needs, to central Turkey, take under
-// two days. A route listed beside the train ones may be far slower — the bus
-// and car ferry to the Canary Islands take four — but not a week.
+// (seconds read as minutes), not a slow connection. Nothing in Germany is a
+// day's train ride from Berlin. Abroad, a train-based route can take days —
+// the one Rome2Rio listed to Yerevan on 2026-11-07 took more than three — and
+// so can a route listed beside the train ones (the bus and car ferry to the
+// Canary Islands take four), but none takes a week.
 const (
 	maxGermanTrainMinutes = 24 * 60
-	maxTrainMinutes       = 3 * 24 * 60
+	maxTrainMinutes       = 7 * 24 * 60
 	maxListedMinutes      = 7 * 24 * 60
 )
 

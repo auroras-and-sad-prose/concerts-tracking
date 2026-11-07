@@ -110,7 +110,7 @@ and never both of the last two:
 - a `train` needs all its fields, a real `checked` date, a non-empty
   `carriers` list with no blank or repeated name, a duration of 1 to 1440
   minutes for a city whose concerts are all tagged `germany` or `berlin` and
-  up to 4320 (three days) for one abroad, and a `route` that is
+  up to 10080 (a week) for one abroad, and a `route` that is
   *train-based*. Rome2Rio names a route after its legs — `Train, night
   train`, `Train, bus, car ferry`, `Train to Leipzig-Halle Airport, fly` — and
   a route is train-based when at least half its legs are trains or night
