@@ -342,7 +342,7 @@ describe("the concert page", () => {
     await page.close();
   });
 
-  test("shows the train time from Berlin on German cards only", async () => {
+  test("shows the train time from Berlin on a German card, never on a Berlin one", async () => {
     const { page, errors } = await open({});
 
     const time = page.locator(".travel .time");
@@ -353,6 +353,78 @@ describe("the concert page", () => {
     assert.equal(await kempen.locator(".travel .time").count(), 1);
     // One of its two operators runs ICE/IC, so the route earns no badge.
     assert.equal(await page.locator(".travel .dticket").count(), 0);
+
+    assert.deepEqual(errors, []);
+    await page.close();
+  });
+
+  // A Deutschlandticket ends at the border and the station list is Germany's,
+  // so a card abroad gets the time alone, whatever its entry carries.
+  test("shows the train time on a card abroad, without badge or link", async () => {
+    const travel = {
+      cities: [{
+        city: "Vienna",
+        station: { name: "Kempen (Niederrhein)", eva: "8000409" },
+        train: {
+          query: "Vienna, Austria", minutes: 550, route: "Train",
+          carriers: ["Deutsche Bahn Regio (DB Regional)"], checked: PAST,
+        },
+      }],
+    };
+    const { page, errors } = await open({ travel });
+
+    const vienna = page.locator(".card", { hasText: "Vienna" });
+    assert.equal(await vienna.locator(".travel .time").innerText(), "≈ 9h 10m by train from Berlin");
+    assert.equal(await page.locator(".travel .dticket").count(), 0);
+    assert.equal(await page.locator("a.dticket-link").count(), 0);
+
+    assert.deepEqual(errors, []);
+    await page.close();
+  });
+
+  // The reader can't drive, so the quickest drive is passed over for the
+  // quickest route that needs none.
+  test("says so when Rome2Rio listed no train route, and offers the quickest without driving", async () => {
+    const travel = {
+      cities: [{
+        city: "Vienna",
+        no_train: {
+          query: "Vienna, Austria",
+          routes: [
+            { name: "Drive", minutes: 200, carriers: [] },
+            { name: "Fly to Vienna Airport, bus", minutes: 314, carriers: ["Wizz Air", "Vienna Airport Lines"] },
+            { name: "Bus, car ferry", minutes: 4649, carriers: ["FlixBus", "Fred Olsen"] },
+          ],
+          checked: PAST,
+        },
+      }],
+    };
+    const { page, errors } = await open({ travel });
+
+    const note = page.locator(".card", { hasText: "Vienna" }).locator(".travel .no-train");
+    assert.equal(await note.innerText(), "✕ No train route listed · ≈ 5h 15m by plane + bus from Berlin");
+    const title = await note.getAttribute("title");
+    assert.match(title, /It listed: Drive \(3h 20m\); Fly to Vienna Airport, bus \(5h 15m\); Bus, car ferry \(77h 30m\)\./);
+    assert.match(title, /top four routes/);
+    assert.equal(await page.locator(".travel .time").count(), 0);
+
+    assert.deepEqual(errors, []);
+    await page.close();
+  });
+
+  test("names the modes of a route that is mostly but not only train", async () => {
+    const travel = {
+      cities: [{
+        city: "Kempen",
+        train: {
+          query: "Kempen, Germany", minutes: 328, route: "Train via Wolfsburg, Hauptbahnhof, bus",
+          carriers: ["Deutsche Bahn Intercity (DB IC)", "Autokraft"], checked: PAST,
+        },
+      }],
+    };
+    const { page, errors } = await open({ travel });
+
+    assert.equal(await page.locator(".travel .time").innerText(), "≈ 5h 30m by train + bus from Berlin");
 
     assert.deepEqual(errors, []);
     await page.close();
