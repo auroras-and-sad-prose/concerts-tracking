@@ -117,7 +117,11 @@ and never both of the last two:
   trains and none is a flight or a drive. So `Train, bus` passes, while
   `Drive`, `Fly …`, `Train to Leipzig-Halle Airport, fly` and `Train, bus, car
   ferry` (one leg in three) fail; so does a leg the validator doesn't
-  recognise, rather than being guessed at;
+  recognise, rather than being guessed at. A `train` of more than eight hours
+  also needs `others`, the other routes the same answer listed (`[]` if none),
+  each checked like a `no_train` route; and none of them may be the route step
+  6a should have picked instead (an all-train one beside a mixed `route`, or a
+  quicker one of the same kind);
 - a `no_train` needs its `query`, a real `checked` date, and a non-empty
   `routes` list, each with a `name`, `minutes` of 1 to 10080 (a week) and a
   `carriers` list that may be empty (a drive has none) — and none of them
@@ -365,7 +369,9 @@ city rather than on each row:
   (`"Frankfurt am Main, Germany"`), or the venue when the row's `city` is not
   a place (`"Louisiana Museum of Modern Art, Denmark"`). `minutes`, `route`
   and `carriers` are the route's duration, name and operators, copied as
-  returned; and `checked` is the day the query ran.
+  returned; `others` is every other route the same answer returned, as
+  `{name, minutes, carriers}` in order (required past eight hours, optional
+  below); and `checked` is the day the query ran.
 - `no_train` takes the place of `train` when none of the routes Rome2Rio
   returned is train-based: the `query` and `checked` day as for `train`, and
   `routes`, every route it did return — `name`, `minutes` (its `duration`)
@@ -399,6 +405,11 @@ answer — exactly what the rest of this file exists to keep out.
   in order, "by train + bus". What Rome2Rio returns is a typical duration for
   a route, not a timetable, and the tooltip names the route and the day it was
   checked.
+- **A quicker route beside a long train**: when the `train` takes more than
+  eight hours, the quickest of its `others` that needs no driving, if it is at
+  least two hours quicker — "≈ 9h 15m by train from Berlin · ≈ 4h 30m by
+  plane" (Zurich). The tooltip names the route. Worked out when the page
+  loads, never stored.
 - **✕ No train route listed**, from `no_train`, followed by the quickest of
   its `routes` that needs no driving — the reader doesn't drive — usually a
   flight: "· ≈ 7h 50m by plane from Berlin". The tooltip lists every route

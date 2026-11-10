@@ -7,7 +7,12 @@
         "minutes": 2782,
         "route": "Train, bus, night train, taxi",
         "carriers": ["Deutsche Bahn Intercity (DB IC)", "Arda Tur", "Bulgarian Railways (BDZh)", "Turkish Railways (TCDD)", "Kamil Koç"],
-        "checked": "2026-11-03"
+        "others": [
+          { "name": "Fly", "minutes": 394, "carriers": ["SunExpress"] },
+          { "name": "Drive", "minutes": 1735, "carriers": [] },
+          { "name": "Train, bus", "minutes": 2806, "carriers": ["Deutsche Bahn Intercity (DB IC)", "Alpar Turizm", "Metro Turizm"] }
+        ],
+        "checked": "2026-11-09"
       }
     },
     {
@@ -27,17 +32,27 @@
         "minutes": 726,
         "route": "Train via Frankfurt am Main",
         "carriers": ["Deutsche Bahn Intercity (DB IC)", "Schweizerische Südostbahn AG"],
-        "checked": "2026-11-03"
+        "others": [
+          { "name": "Bus", "minutes": 1234, "carriers": ["FlixBus", "RegioJet", "Auto AG Uri"] },
+          { "name": "Night train, train", "minutes": 929, "carriers": ["Nightjet", "Schweizerische Südostbahn AG"] },
+          { "name": "Drive", "minutes": 514, "carriers": [] }
+        ],
+        "checked": "2026-11-09"
       }
     },
     {
       "city": "Ankara",
       "train": {
         "query": "Ankara, Turkey",
-        "minutes": 2728,
-        "route": "Night train, train",
-        "carriers": ["Nightjet", "ÖBB", "Bulgarian Railways (BDZh)", "Turkish Railways (TCDD)"],
-        "checked": "2026-11-03"
+        "minutes": 2611,
+        "route": "Train, night train",
+        "carriers": ["Danish Railways (DSB)", "České dráhy (ČD)", "ÖBB", "Bulgarian Railways (BDZh)", "Turkish Railways (TCDD)"],
+        "others": [
+          { "name": "Fly", "minutes": 389, "carriers": ["AJet"] },
+          { "name": "Bus via Sofia", "minutes": 2446, "carriers": ["Union Ivkoni", "Citylines", "Metro Turizm"] },
+          { "name": "Drive", "minutes": 1506, "carriers": [] }
+        ],
+        "checked": "2026-11-09"
       }
     },
     {
@@ -77,20 +92,30 @@
       "city": "Bilbao",
       "train": {
         "query": "Bilbao, Spain",
-        "minutes": 1156,
+        "minutes": 1154,
         "route": "Train, bus via Frankfurt am Main",
         "carriers": ["Deutsche Bahn Intercity (DB IC)", "TGV inOui", "BlaBlaCar Bus"],
-        "checked": "2026-11-03"
+        "others": [
+          { "name": "Fly", "minutes": 345, "carriers": ["Eurowings"] },
+          { "name": "Bus", "minutes": 1664, "carriers": ["FlixBus"] },
+          { "name": "Drive", "minutes": 1065, "carriers": [] }
+        ],
+        "checked": "2026-11-09"
       }
     },
     {
       "city": "Birmingham",
       "train": {
         "query": "Birmingham, United Kingdom",
-        "minutes": 777,
+        "minutes": 757,
         "route": "Train via Cologne",
         "carriers": ["Deutsche Bahn Intercity (DB IC)", "Eurostar", "Avanti West Coast"],
-        "checked": "2026-11-03"
+        "others": [
+          { "name": "Fly to Birmingham Airport", "minutes": 295, "carriers": ["easyJet"] },
+          { "name": "Bus", "minutes": 1441, "carriers": ["FlixBus"] },
+          { "name": "Drive, Eurotunnel", "minutes": 726, "carriers": ["LeShuttle"] }
+        ],
+        "checked": "2026-11-09"
       }
     },
     {
@@ -108,10 +133,15 @@
       "city": "Bregenz",
       "train": {
         "query": "Bregenz, Austria",
-        "minutes": 526,
+        "minutes": 489,
         "route": "Train via Nuremberg",
-        "carriers": ["Deutsche Bahn Intercity (DB IC)", "Deutsche Bahn Regio (DB Regional)"],
-        "checked": "2026-11-03"
+        "carriers": ["Deutsche Bahn Intercity (DB IC)", "agilis", "Deutsche Bahn Regio (DB Regional)"],
+        "others": [
+          { "name": "Fly to Friedrichshafen Airport, train", "minutes": 276, "carriers": ["Euroairlines", "ÖBB"] },
+          { "name": "Bus", "minutes": 786, "carriers": ["FlixBus"] },
+          { "name": "Night train, train", "minutes": 881, "carriers": ["Nightjet", "Swiss Federal Railways (SBB CFF FFS)"] }
+        ],
+        "checked": "2026-11-09"
       }
     },
     {
@@ -121,7 +151,12 @@
         "minutes": 496,
         "route": "Train",
         "carriers": ["Deutsche Bahn Intercity (DB IC)"],
-        "checked": "2026-11-03"
+        "others": [
+          { "name": "Fly to Brussels Airport", "minutes": 251, "carriers": ["Brussels Airlines"] },
+          { "name": "Bus", "minutes": 844, "carriers": ["FlixBus"] },
+          { "name": "Drive", "minutes": 399, "carriers": [] }
+        ],
+        "checked": "2026-11-09"
       }
     },
     {
@@ -171,10 +206,15 @@
       "city": "Denmark",
       "train": {
         "query": "Louisiana Museum of Modern Art, Denmark",
-        "minutes": 497,
+        "minutes": 496,
         "route": "Train",
         "carriers": ["České dráhy (ČD)"],
-        "checked": "2026-11-03"
+        "others": [
+          { "name": "Night train", "minutes": 634, "carriers": ["Snälltåget"] },
+          { "name": "Drive", "minutes": 429, "carriers": [] },
+          { "name": "Fly Berlin Brandenburg Airport to Copenhagen Airport, train", "minutes": 303, "carriers": ["Norwegian Air International", "Danish Railways (DSB)"] }
+        ],
+        "checked": "2026-11-09"
       }
     },
     {
@@ -256,10 +296,15 @@
       "city": "Eskişehir",
       "train": {
         "query": "Eskişehir, Turkey",
-        "minutes": 2647,
-        "route": "Night train, train",
-        "carriers": ["Nightjet", "ÖBB", "Bulgarian Railways (BDZh)", "Turkish Railways (TCDD)"],
-        "checked": "2026-11-03"
+        "minutes": 2525,
+        "route": "Train, night train",
+        "carriers": ["Danish Railways (DSB)", "České dráhy (ČD)", "ÖBB", "Bulgarian Railways (BDZh)", "Turkish Railways (TCDD)"],
+        "others": [
+          { "name": "Fly to Ankara Esenboğa International Airport, train", "minutes": 508, "carriers": ["AJet", "Turkish Railways (TCDD)"] },
+          { "name": "Bus", "minutes": 2378, "carriers": ["Arda Tur", "Luks Yonca", "Kamil Koç"] },
+          { "name": "Drive", "minutes": 1469, "carriers": [] }
+        ],
+        "checked": "2026-11-09"
       }
     },
     {
@@ -309,20 +354,30 @@
       "city": "Gateshead",
       "train": {
         "query": "Gateshead, United Kingdom",
-        "minutes": 850,
+        "minutes": 832,
         "route": "Train via Cologne",
         "carriers": ["Deutsche Bahn Intercity (DB IC)", "Eurostar", "London North Eastern Railway Limited (LNER)"],
-        "checked": "2026-11-03"
+        "others": [
+          { "name": "Fly to Newcastle", "minutes": 308, "carriers": ["Eurowings"] },
+          { "name": "Drive, car ferry", "minutes": 1318, "carriers": ["P&O Ferries"] },
+          { "name": "Bus", "minutes": 1645, "carriers": ["FlixBus"] }
+        ],
+        "checked": "2026-11-09"
       }
     },
     {
       "city": "Geneva",
       "train": {
         "query": "Geneva, Switzerland",
-        "minutes": 647,
+        "minutes": 646,
         "route": "Train",
         "carriers": ["Deutsche Bahn Intercity (DB IC)", "Swiss Federal Railways (SBB CFF FFS)"],
-        "checked": "2026-11-03"
+        "others": [
+          { "name": "Fly", "minutes": 255, "carriers": ["easyJet"] },
+          { "name": "Bus", "minutes": 1097, "carriers": ["FlixBus"] },
+          { "name": "Night train, train", "minutes": 850, "carriers": ["Nightjet", "Swiss Federal Railways (SBB CFF FFS)"] }
+        ],
+        "checked": "2026-11-09"
       }
     },
     {
@@ -364,10 +419,15 @@
       "city": "Hasselt",
       "train": {
         "query": "Hasselt, Belgium",
-        "minutes": 549,
-        "route": "Train",
-        "carriers": ["Deutsche Bahn Intercity (DB IC)", "Belgian Railways (NMBS/SNCB)"],
-        "checked": "2026-11-07"
+        "minutes": 543,
+        "route": "Train via Kerkrade",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)", "National Express"],
+        "others": [
+          { "name": "Bus", "minutes": 635, "carriers": ["OrionBus"] },
+          { "name": "Drive", "minutes": 358, "carriers": [] },
+          { "name": "Fly to Brussels Airport, train", "minutes": 337, "carriers": ["Brussels Airlines", "Belgian Railways (NMBS/SNCB)"] }
+        ],
+        "checked": "2026-11-09"
       }
     },
     {
@@ -405,30 +465,45 @@
       "city": "Istanbul",
       "train": {
         "query": "Istanbul, Turkey",
-        "minutes": 2314,
+        "minutes": 2289,
         "route": "Train, night train",
-        "carriers": ["Deutsche Bahn Intercity (DB IC)", "České dráhy (ČD)", "ÖBB", "Bulgarian Railways (BDZh)"],
-        "checked": "2026-11-03"
+        "carriers": ["Danish Railways (DSB)", "České dráhy (ČD)", "ÖBB", "Bulgarian Railways (BDZh)"],
+        "others": [
+          { "name": "Fly to Istanbul Airport", "minutes": 391, "carriers": ["Turkish Airlines"] },
+          { "name": "Train, bus", "minutes": 1943, "carriers": ["Deutsche Bahn Intercity (DB IC)", "Alpar Turizm"] },
+          { "name": "Night train, train", "minutes": 2406, "carriers": ["Nightjet", "ÖBB", "Bulgarian Railways (BDZh)"] }
+        ],
+        "checked": "2026-11-09"
       }
     },
     {
       "city": "Izmir",
       "train": {
         "query": "Izmir, Turkey",
-        "minutes": 2477,
+        "minutes": 2526,
         "route": "Train, bus",
-        "carriers": ["Deutsche Bahn Intercity (DB IC)", "Alpar Turizm", "Kamil Koç"],
-        "checked": "2026-11-03"
+        "carriers": ["Deutsche Bahn Intercity (DB IC)", "Arda Tur", "Metro Turizm", "Balikesir Uludağ"],
+        "others": [
+          { "name": "Fly", "minutes": 349, "carriers": ["SunExpress"] },
+          { "name": "Train, bus, night train", "minutes": 3011, "carriers": ["Danish Railways (DSB)", "Arda Tur", "Bulgarian Railways (BDZh)", "Turkish Railways (TCDD)"] },
+          { "name": "Drive", "minutes": 1537, "carriers": [] }
+        ],
+        "checked": "2026-11-09"
       }
     },
     {
       "city": "Katowice",
       "train": {
         "query": "Katowice, Poland",
-        "minutes": 502,
+        "minutes": 487,
         "route": "Train",
-        "carriers": ["Deutsche Bahn Intercity (DB IC)", "PKP Intercity"],
-        "checked": "2026-11-03"
+        "carriers": ["ODEG", "PKP Intercity"],
+        "others": [
+          { "name": "Bus", "minutes": 458, "carriers": ["FlixBus"] },
+          { "name": "Drive", "minutes": 282, "carriers": [] },
+          { "name": "Fly to Katowice International Airport", "minutes": 498, "carriers": ["LOT"] }
+        ],
+        "checked": "2026-11-09"
       }
     },
     {
@@ -515,20 +590,30 @@
       "city": "Linz",
       "train": {
         "query": "Linz, Austria",
-        "minutes": 491,
+        "minutes": 477,
         "route": "Train via Nuremberg",
         "carriers": ["Deutsche Bahn Intercity (DB IC)", "agilis", "ÖBB"],
-        "checked": "2026-11-03"
+        "others": [
+          { "name": "Bus", "minutes": 554, "carriers": ["FlixBus"] },
+          { "name": "Night train, train", "minutes": 538, "carriers": ["Nightjet", "ÖBB EuroCity"] },
+          { "name": "Drive", "minutes": 358, "carriers": [] }
+        ],
+        "checked": "2026-11-09"
       }
     },
     {
       "city": "London",
       "train": {
         "query": "London, United Kingdom",
-        "minutes": 675,
+        "minutes": 648,
         "route": "Train via Cologne",
         "carriers": ["Deutsche Bahn Intercity (DB IC)", "Eurostar"],
-        "checked": "2026-11-03"
+        "others": [
+          { "name": "Fly to London City Airport", "minutes": 285, "carriers": ["British Airways"] },
+          { "name": "Bus", "minutes": 1244, "carriers": ["FlixBus"] },
+          { "name": "Drive, Eurotunnel", "minutes": 622, "carriers": ["LeShuttle"] }
+        ],
+        "checked": "2026-11-09"
       }
     },
     {
@@ -538,7 +623,12 @@
         "minutes": 569,
         "route": "Train via Frankfurt am Main",
         "carriers": ["Deutsche Bahn Intercity (DB IC)", "Swiss Federal Railways (SBB CFF FFS)"],
-        "checked": "2026-11-03"
+        "others": [
+          { "name": "Fly to Zurich Airport, train", "minutes": 308, "carriers": ["Eurowings", "Swiss Federal Railways (SBB CFF FFS)"] },
+          { "name": "Bus", "minutes": 1019, "carriers": ["FlixBus", "Zlatan Prevoz doo"] },
+          { "name": "Night train, train", "minutes": 791, "carriers": ["Nightjet", "Swiss Federal Railways (SBB CFF FFS)"] }
+        ],
+        "checked": "2026-11-09"
       }
     },
     {
@@ -548,7 +638,12 @@
         "minutes": 703,
         "route": "Train",
         "carriers": ["Deutsche Bahn Intercity (DB IC)", "Swiss Federal Railways (SBB CFF FFS)"],
-        "checked": "2026-11-03"
+        "others": [
+          { "name": "Fly to Milano Malpensa Airport, train", "minutes": 391, "carriers": ["Ulendo Airlink", "Trenord"] },
+          { "name": "Bus", "minutes": 1049, "carriers": ["RegioJet", "FlixBus"] },
+          { "name": "Night train, train", "minutes": 878, "carriers": ["Nightjet", "Swiss Federal Railways (SBB CFF FFS)"] }
+        ],
+        "checked": "2026-11-09"
       }
     },
     {
@@ -558,17 +653,27 @@
         "minutes": 569,
         "route": "Train via Frankfurt am Main",
         "carriers": ["Deutsche Bahn Intercity (DB IC)", "Swiss Federal Railways (SBB CFF FFS)"],
-        "checked": "2026-11-03"
+        "others": [
+          { "name": "Fly to Zurich Airport, train", "minutes": 308, "carriers": ["Eurowings", "Swiss Federal Railways (SBB CFF FFS)"] },
+          { "name": "Bus", "minutes": 1019, "carriers": ["FlixBus", "Zlatan Prevoz doo"] },
+          { "name": "Night train, train", "minutes": 791, "carriers": ["Nightjet", "Swiss Federal Railways (SBB CFF FFS)"] }
+        ],
+        "checked": "2026-11-09"
       }
     },
     {
       "city": "Madrid",
       "train": {
         "query": "Madrid, Spain",
-        "minutes": 1295,
+        "minutes": 1288,
         "route": "Train",
         "carriers": ["Deutsche Bahn Intercity (DB IC)", "TGV inOui", "Renfe Viajeros", "Renfe AVE"],
-        "checked": "2026-11-03"
+        "others": [
+          { "name": "Fly from Berlin Brandenburg Airport", "minutes": 365, "carriers": ["Ryanair"] },
+          { "name": "Bus", "minutes": 1874, "carriers": ["FlixBus", "BlaBlaCar Bus"] },
+          { "name": "Drive", "minutes": 1271, "carriers": [] }
+        ],
+        "checked": "2026-11-09"
       }
     },
     {
@@ -600,7 +705,12 @@
         "minutes": 1046,
         "route": "Train",
         "carriers": ["Deutsche Bahn Intercity (DB IC)", "TGV inOui"],
-        "checked": "2026-11-03"
+        "others": [
+          { "name": "Fly to Nice Côte D'Azur International Airport", "minutes": 336, "carriers": ["Eurowings"] },
+          { "name": "Bus", "minutes": 1629, "carriers": ["Sindbad"] },
+          { "name": "Drive", "minutes": 758, "carriers": [] }
+        ],
+        "checked": "2026-11-09"
       }
     },
     {
@@ -628,50 +738,75 @@
       "city": "Nottingham",
       "train": {
         "query": "Nottingham, United Kingdom",
-        "minutes": 803,
+        "minutes": 782,
         "route": "Train via Cologne",
         "carriers": ["Deutsche Bahn Intercity (DB IC)", "Eurostar", "East Midlands Railways"],
-        "checked": "2026-11-03"
+        "others": [
+          { "name": "Fly to Birmingham Airport, train", "minutes": 394, "carriers": ["easyJet", "Cross Country"] },
+          { "name": "Bus", "minutes": 1467, "carriers": ["FlixBus"] },
+          { "name": "Drive, Eurotunnel", "minutes": 740, "carriers": ["LeShuttle"] }
+        ],
+        "checked": "2026-11-09"
       }
     },
     {
       "city": "Oviedo",
       "train": {
         "query": "Oviedo, Spain",
-        "minutes": 1462,
-        "route": "Train, bus via Bordeaux",
+        "minutes": 1613,
+        "route": "Train, bus via Frankfurt am Main",
         "carriers": ["Deutsche Bahn Intercity (DB IC)", "TGV inOui", "FlixBus"],
-        "checked": "2026-11-03"
+        "others": [
+          { "name": "Fly to Asturias Airport, bus", "minutes": 488, "carriers": ["Lufthansa", "ALSA"] },
+          { "name": "Train, bus", "minutes": 2210, "carriers": ["Belgian Railways (NMBS/SNCB)", "FlixBus"] },
+          { "name": "Drive", "minutes": 1236, "carriers": [] }
+        ],
+        "checked": "2026-11-09"
       }
     },
     {
       "city": "Oxford",
       "train": {
         "query": "Oxford, United Kingdom",
-        "minutes": 810,
-        "route": "Train via Bünde",
-        "carriers": ["Deutsche Bahn Intercity (DB IC)", "Nederlandse Spoorwegen (NS)", "Great Western Railway (GWR)"],
-        "checked": "2026-11-03"
+        "minutes": 832,
+        "route": "Train via Hanover",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)", "Nederlandse Spoorwegen (NS)", "Eurostar", "Great Western Railway (GWR)"],
+        "others": [
+          { "name": "Fly to London Heathrow Airport, train", "minutes": 362, "carriers": ["British Airways", "Great Western Railway (GWR)"] },
+          { "name": "Bus", "minutes": 1376, "carriers": ["FlixBus", "Stagecoach Oxfordshire"] },
+          { "name": "Drive, Eurotunnel", "minutes": 671, "carriers": ["LeShuttle"] }
+        ],
+        "checked": "2026-11-09"
       }
     },
     {
       "city": "Padova",
       "train": {
         "query": "Padova, Italy",
-        "minutes": 863,
-        "route": "Train, night train",
-        "carriers": ["Deutsche Bahn Intercity (DB IC)", "Nightjet"],
-        "checked": "2026-11-07"
+        "minutes": 730,
+        "route": "Train",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)", "Transdev GmbH", "Railjet"],
+        "others": [
+          { "name": "Fly to Venice Marco Polo Airport", "minutes": 297, "carriers": ["easyJet"] },
+          { "name": "Bus", "minutes": 1001, "carriers": ["FlixBus"] },
+          { "name": "Train, night train", "minutes": 861, "carriers": ["Deutsche Bahn Intercity (DB IC)", "Nightjet"] }
+        ],
+        "checked": "2026-11-09"
       }
     },
     {
       "city": "Paris",
       "train": {
         "query": "Paris, France",
-        "minutes": 589,
-        "route": "Train via Offenburg",
-        "carriers": ["Deutsche Bahn Intercity (DB IC)", "TGV inOui"],
-        "checked": "2026-11-03"
+        "minutes": 577,
+        "route": "Train via Wuppertal",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)", "Eurostar"],
+        "others": [
+          { "name": "Fly Berlin Brandenburg Airport to Paris Charles De Gaulle Airport", "minutes": 300, "carriers": ["easyJet"] },
+          { "name": "Bus", "minutes": 808, "carriers": ["FlixBus"] },
+          { "name": "Drive", "minutes": 558, "carriers": [] }
+        ],
+        "checked": "2026-11-09"
       }
     },
     {
@@ -757,7 +892,12 @@
         "minutes": 605,
         "route": "Train via Frankfurt am Main",
         "carriers": ["Deutsche Bahn Intercity (DB IC)", "Swiss Federal Railways (SBB CFF FFS)"],
-        "checked": "2026-11-03"
+        "others": [
+          { "name": "Fly Berlin Brandenburg Airport to Zurich Airport, train", "minutes": 312, "carriers": ["Eurowings", "Swiss Federal Railways (SBB CFF FFS)"] },
+          { "name": "Bus", "minutes": 982, "carriers": ["FlixBus"] },
+          { "name": "Night train", "minutes": 812, "carriers": ["Nightjet"] }
+        ],
+        "checked": "2026-11-09"
       }
     },
     {
@@ -777,10 +917,15 @@
       "city": "Stockholm",
       "train": {
         "query": "Stockholm, Sweden",
-        "minutes": 853,
-        "route": "Train via Hamburg",
-        "carriers": ["Deutsche Bahn Intercity (DB IC)", "Snälltåget"],
-        "checked": "2026-11-03"
+        "minutes": 966,
+        "route": "Train",
+        "carriers": ["Snälltåget"],
+        "others": [
+          { "name": "Fly from Berlin Brandenburg Airport", "minutes": 273, "carriers": ["Norwegian Air International"] },
+          { "name": "Bus", "minutes": 1229, "carriers": ["FlixBus"] },
+          { "name": "Night train", "minutes": 985, "carriers": ["Snälltåget"] }
+        ],
+        "checked": "2026-11-09"
       }
     },
     {
@@ -811,10 +956,15 @@
       "city": "Toulouse",
       "train": {
         "query": "Toulouse, France",
-        "minutes": 999,
+        "minutes": 990,
         "route": "Train via Cologne",
         "carriers": ["Deutsche Bahn Intercity (DB IC)", "Eurostar", "TGV inOui"],
-        "checked": "2026-11-03"
+        "others": [
+          { "name": "Fly from Berlin Brandenburg Airport", "minutes": 405, "carriers": ["Lufthansa"] },
+          { "name": "Night train, bus, train", "minutes": 1557, "carriers": ["Nightjet", "Sindbad", "Société Nationale des Chemins de fer Français (SNCF)"] },
+          { "name": "Drive", "minutes": 952, "carriers": [] }
+        ],
+        "checked": "2026-11-09"
       }
     },
     {
@@ -831,10 +981,15 @@
       "city": "Vienna",
       "train": {
         "query": "Vienna, Austria",
-        "minutes": 550,
+        "minutes": 519,
         "route": "Train",
-        "carriers": ["Railways of Slovak Republic (ZSSK)", "České dráhy (ČD)"],
-        "checked": "2026-11-03"
+        "carriers": ["Danish Railways (DSB)", "České dráhy (ČD)"],
+        "others": [
+          { "name": "Fly", "minutes": 241, "carriers": ["Austrian Airlines"] },
+          { "name": "Bus", "minutes": 579, "carriers": ["FlixBus"] },
+          { "name": "Night train", "minutes": 649, "carriers": ["Nightjet"] }
+        ],
+        "checked": "2026-11-09"
       }
     },
     {
@@ -854,7 +1009,12 @@
         "minutes": 5148,
         "route": "Train, bus",
         "carriers": ["Deutsche Bahn Regio (DB Regional)", "DB Bus", "PKP Intercity", "Kaliningrad Bus Terminal", "Russian Railways (РЖД)", "Avazar Bus"],
-        "checked": "2026-11-07"
+        "others": [
+          { "name": "Fly", "minutes": 423, "carriers": ["Flyone"] },
+          { "name": "Bus, taxi", "minutes": 3054, "carriers": ["OrionBus", "Pavluks Trans", "Donbass Buses", "Avazar Bus"] },
+          { "name": "Bus, car ferry", "minutes": 6719, "carriers": ["FlixBus", "Black Sea Ferry Services", "EliteBus"] }
+        ],
+        "checked": "2026-11-09"
       }
     },
     {
@@ -864,7 +1024,12 @@
         "minutes": 554,
         "route": "Train via Frankfurt am Main",
         "carriers": ["Deutsche Bahn Intercity (DB IC)", "Swiss Federal Railways (SBB CFF FFS)"],
-        "checked": "2026-11-03"
+        "others": [
+          { "name": "Fly Berlin Brandenburg Airport to Zurich Airport", "minutes": 269, "carriers": ["Eurowings"] },
+          { "name": "Bus", "minutes": 914, "carriers": ["FlixBus"] },
+          { "name": "Night train", "minutes": 733, "carriers": ["Nightjet"] }
+        ],
+        "checked": "2026-11-09"
       }
     }
   ]

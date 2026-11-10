@@ -521,9 +521,14 @@ list is Germany's.
    smallest `duration`. Prefer all-train even when a mixed route is quicker:
    Istanbul's `Train, bus` beats its `Train, night train` by six hours, and
    the bus is most of the trip. Write it as `train`, `{query, minutes, route,
-   carriers, checked}`: `query` exactly as sent, `minutes` = that route's
-   `duration`, `route` = its `name` copied verbatim, `carriers` = its
-   `carriers` list copied verbatim and in order, and `checked` = today.
+   carriers, others, checked}`: `query` exactly as sent, `minutes` = that
+   route's `duration`, `route` = its `name` copied verbatim, `carriers` = its
+   `carriers` list copied verbatim and in order, `others` = every other route
+   returned, each as `{name, minutes, carriers}` with `minutes` = its
+   `duration`, in the order returned (`[]` if there were none), and `checked`
+   = today. Don't pick among `others`: the page offers the quickest one that
+   needs no driving beside a train of more than eight hours. CI requires
+   `others` on such a train, so always record it.
 4. If no route is train-based, write `no_train` as `{query, routes,
    checked}`: `query` exactly as sent, `routes` = every route returned, each
    as `{name, minutes, carriers}` with `minutes` = its `duration` and the
