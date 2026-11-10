@@ -876,14 +876,28 @@ function quickestWithoutDriving(routes) {
 // quicker. Under two hours the saving is within what an airport transfer and
 // these rounded, typical durations can swallow, and a second time on the line
 // would be noise: Katowice's coach beats its train by half an hour.
+// A route that is itself mostly train is left out: step 6a already passed it
+// over for the one shown, as Istanbul's `Train, bus` is passed over for its
+// `Train, night train` because the bus is most of the trip.
 // tools/validate requires `others` past the same eight hours, so the page has
-// something to pick from; its longTrainMinutes is the same number.
+// something to pick from; its longTrainMinutes is the same number, and
+// tools/validate/testdata/long-train.json holds the two together.
 const LONG_TRAIN_MINUTES = 8 * 60;
 const QUICKER_BY_MINUTES = 2 * 60;
 
+// Whether at least half a route's legs are trains and none is a flight or a
+// drive. tools/validate decides that for the file; this only keeps such a
+// route from being offered as the alternative to one.
+function mostlyTrain(name) {
+  const legs = legsOf(name);
+  if (legs.includes("plane") || legs.includes("car")) return false;
+  const rail = legs.filter(l => l === "train" || l === "night train").length;
+  return rail > 0 && 2 * rail >= legs.length;
+}
+
 function quickerThanTrain(train) {
   if (train.minutes <= LONG_TRAIN_MINUTES) return null;
-  const best = quickestWithoutDriving(train.others);
+  const best = quickestWithoutDriving(train.others.filter(r => !mostlyTrain(r.name)));
   return best && train.minutes - best.minutes >= QUICKER_BY_MINUTES ? best : null;
 }
 

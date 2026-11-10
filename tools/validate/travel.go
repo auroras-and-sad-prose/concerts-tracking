@@ -435,6 +435,9 @@ func checkTrain(r TrainRoute, maxMinutes int) []string {
 // the file itself shows.
 func checkOthers(r TrainRoute) []string {
 	var problems []string
+	// A route that isn't train-based is reported on its own, and nothing can
+	// be said about what should have been chosen in its place.
+	chosenTrainBased := isTrainBased(r.Route)
 	chosenAllTrain := isAllTrain(r.Route)
 	for j, o := range r.Others {
 		label, routeProblems := checkListedRoute("others", j, o)
@@ -443,9 +446,7 @@ func checkOthers(r TrainRoute) []string {
 			problems = append(problems, label+": repeats the route itself; list only the other routes")
 			continue
 		}
-		// A route that isn't train-based is reported on its own, and nothing
-		// can be said about what should have been chosen in its place.
-		if !isTrainBased(r.Route) || !isTrainBased(o.Name) {
+		if !chosenTrainBased || !isTrainBased(o.Name) {
 			continue
 		}
 		switch otherAllTrain := isAllTrain(o.Name); {

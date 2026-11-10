@@ -444,6 +444,26 @@ describe("the concert page", () => {
     assert.equal(await page.locator(".travel .quicker").count(), 0);
     assert.deepEqual(errors, []);
     await page.close();
+
+    // A quicker route that is itself mostly train is the one step 6a passed
+    // over, not an alternative: the train alone.
+    const mixed = { cities: [{ city: "Vienna", train: { query: "Vienna, Austria", minutes: 2289, route: "Train, night train", carriers: ["ÖBB"],
+      others: [{ name: "Train, bus", minutes: 1943, carriers: ["ÖBB", "Alpar Turizm"] }], checked: PAST } }] };
+    ({ page, errors } = await open({ travel: mixed }));
+    assert.equal(await page.locator(".travel .quicker").count(), 0);
+    assert.deepEqual(errors, []);
+    await page.close();
+  });
+
+  // tools/validate requires `others` past the same eight hours after which
+  // the page offers a quicker route; the shared fixture holds them together.
+  test("uses the long-train threshold the validator uses", async () => {
+    const { page, errors } = await open({});
+    const fixture = JSON.parse(
+      await readFile(join(REPO_ROOT, "tools", "validate", "testdata", "long-train.json"), "utf8"));
+    assert.equal(await page.evaluate(() => LONG_TRAIN_MINUTES), fixture.long_train_minutes);
+    assert.deepEqual(errors, []);
+    await page.close();
   });
 
   test("names the modes of a route that is mostly but not only train", async () => {

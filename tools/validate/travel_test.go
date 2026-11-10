@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"os"
 	"path/filepath"
 	"strings"
@@ -349,6 +350,51 @@ func TestTravelOthersChecks(t *testing.T) {
 				t.Fatalf("expected a problem for %q, got none", tt.name)
 			}
 		})
+	}
+}
+
+// The best-route check is about what step 6a picks, not about the page, so it
+// holds on a short train too, and on a German one under the day's cap.
+func TestTravelOthersCheckedOnShortTrain(t *testing.T) {
+	f := File{Concerts: []Concert{valid()}}
+	ok := travelEntry()
+	ok.Train.Others = []ListedRoute{
+		{Name: "Train", Minutes: 240, Carriers: []string{"Deutsche Bahn Intercity (DB IC)"}},
+		{Name: "Bus", Minutes: 150, Carriers: []string{"FlixBus"}},
+	}
+	if p := ValidateTravel(Travel{Cities: []TravelTime{ok}}, f, stationList(t)); len(p) != 0 {
+		t.Fatalf("slower and non-train others should pass, got %v", p)
+	}
+
+	quicker := travelEntry()
+	quicker.Train.Others = []ListedRoute{{Name: "Train", Minutes: 170, Carriers: []string{"Deutsche Bahn Intercity (DB IC)"}}}
+	if p := ValidateTravel(Travel{Cities: []TravelTime{quicker}}, f, stationList(t)); len(p) == 0 {
+		t.Fatal("a quicker all-train route beside a short train should be rejected")
+	}
+
+	tooLong := travelEntry()
+	tooLong.Train.Others = []ListedRoute{{Name: "Bus", Minutes: maxListedMinutes + 1, Carriers: []string{"FlixBus"}}}
+	if p := ValidateTravel(Travel{Cities: []TravelTime{tooLong}}, f, stationList(t)); len(p) == 0 {
+		t.Fatal("an other route over a week should be rejected")
+	}
+}
+
+// index.html offers a quicker route past the same eight hours after which
+// this requires others; the shared fixture keeps the two numbers together.
+func TestLongTrainMatchesFixture(t *testing.T) {
+	data, err := os.ReadFile(filepath.Join("testdata", "long-train.json"))
+	if err != nil {
+		t.Fatalf("read fixture: %v", err)
+	}
+	var fixture struct {
+		LongTrainMinutes int `json:"long_train_minutes"`
+	}
+	if err := json.Unmarshal(data, &fixture); err != nil {
+		t.Fatalf("parse fixture: %v", err)
+	}
+	if fixture.LongTrainMinutes != longTrainMinutes {
+		t.Fatalf("longTrainMinutes = %d, fixture says %d; change index.html's LONG_TRAIN_MINUTES with it",
+			longTrainMinutes, fixture.LongTrainMinutes)
 	}
 }
 
