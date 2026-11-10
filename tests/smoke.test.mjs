@@ -412,6 +412,60 @@ describe("the concert page", () => {
     await page.close();
   });
 
+  // Past eight hours a train is no longer the obvious way to go, so the card
+  // also offers the quickest route without driving, if it saves two hours.
+  test("offers a quicker route beside a train of more than eight hours", async () => {
+    const others = [
+      { name: "Fly", minutes: 241, carriers: ["Austrian Airlines"] },
+      { name: "Drive", minutes: 200, carriers: [] },
+      { name: "Bus", minutes: 579, carriers: ["FlixBus"] },
+    ];
+    const entry = minutes => ({
+      cities: [{ city: "Vienna", train: { query: "Vienna, Austria", minutes, route: "Train", carriers: ["ČD"], others, checked: PAST } }],
+    });
+
+    let { page, errors } = await open({ travel: entry(519) });
+    const line = page.locator(".card", { hasText: "Vienna" }).locator(".travel");
+    assert.equal(await line.innerText(), "≈ 8h 40m by train from Berlin · ≈ 4h by plane");
+    assert.match(await line.locator(".quicker").getAttribute("title"), /Fly, 241 min/);
+    assert.deepEqual(errors, []);
+    await page.close();
+
+    // Eight hours or under: the train alone.
+    ({ page, errors } = await open({ travel: entry(480) }));
+    assert.equal(await page.locator(".travel .quicker").count(), 0);
+    assert.deepEqual(errors, []);
+    await page.close();
+
+    // Long, but the alternative saves under two hours: the train alone.
+    const close = { cities: [{ city: "Vienna", train: { query: "Vienna, Austria", minutes: 500, route: "Train", carriers: ["ČD"],
+      others: [{ name: "Bus", minutes: 458, carriers: ["FlixBus"] }], checked: PAST } }] };
+    ({ page, errors } = await open({ travel: close }));
+    assert.equal(await page.locator(".travel .quicker").count(), 0);
+    assert.deepEqual(errors, []);
+    await page.close();
+
+    // A quicker route that is itself mostly train is the one step 6a passed
+    // over, not an alternative: the train alone.
+    const mixed = { cities: [{ city: "Vienna", train: { query: "Vienna, Austria", minutes: 2289, route: "Train, night train", carriers: ["ÖBB"],
+      others: [{ name: "Train, bus", minutes: 1943, carriers: ["ÖBB", "Alpar Turizm"] }], checked: PAST } }] };
+    ({ page, errors } = await open({ travel: mixed }));
+    assert.equal(await page.locator(".travel .quicker").count(), 0);
+    assert.deepEqual(errors, []);
+    await page.close();
+  });
+
+  // tools/validate requires `others` past the same eight hours after which
+  // the page offers a quicker route; the shared fixture holds them together.
+  test("uses the long-train threshold the validator uses", async () => {
+    const { page, errors } = await open({});
+    const fixture = JSON.parse(
+      await readFile(join(REPO_ROOT, "tools", "validate", "testdata", "long-train.json"), "utf8"));
+    assert.equal(await page.evaluate(() => LONG_TRAIN_MINUTES), fixture.long_train_minutes);
+    assert.deepEqual(errors, []);
+    await page.close();
+  });
+
   test("names the modes of a route that is mostly but not only train", async () => {
     const travel = {
       cities: [{

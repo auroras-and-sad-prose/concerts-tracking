@@ -1,0 +1,4 @@
+{
+  "_comment": "Minutes past which a train route must record its others (tools/validate longTrainMinutes) and the page offers a quicker route beside it (index.html LONG_TRAIN_MINUTES). Both test suites compare their constant to this, so changing one without the other fails.",
+  "long_train_minutes": 480
+}

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"os"
 	"path/filepath"
 	"strings"
@@ -203,6 +204,7 @@ func TestTravelDurationBoundByCountry(t *testing.T) {
 	abroad := valid()
 	abroad.LocationTag = "europe"
 	e := travelEntry()
+	e.Train.Others = []ListedRoute{} // a route this long must say what else was listed
 	e.Train.Minutes = 2728
 	if p := ValidateTravel(Travel{Cities: []TravelTime{e}}, File{Concerts: []Concert{abroad}}, stationList(t)); len(p) != 0 {
 		t.Fatalf("a 2728-minute route abroad should pass, got %v", p)
@@ -214,6 +216,185 @@ func TestTravelDurationBoundByCountry(t *testing.T) {
 	e.Train.Minutes = 10081
 	if p := ValidateTravel(Travel{Cities: []TravelTime{e}}, File{Concerts: []Concert{abroad}}, stationList(t)); len(p) == 0 {
 		t.Fatal("a route over a week should fail even abroad")
+	}
+}
+
+// longTrain is a correct entry for a city most of two days away by train,
+// after what Rome2Rio returned for Istanbul on 2026-11-09: the all-train route
+// is the one recorded, though a mixed one and a flight are quicker.
+func longTrain() TravelTime {
+	return TravelTime{
+		City: "Altenkrempe",
+		Train: &TrainRoute{
+			Query:    "Istanbul, Turkey",
+			Minutes:  2289,
+			Route:    "Train, night train",
+			Carriers: []string{"Danish Railways (DSB)", "ÖBB", "Bulgarian Railways (BDZh)"},
+			Others: []ListedRoute{
+				{Name: "Fly to Istanbul Airport", Minutes: 391, Carriers: []string{"Turkish Airlines"}},
+				{Name: "Train, bus", Minutes: 1943, Carriers: []string{"Deutsche Bahn Intercity (DB IC)", "Alpar Turizm"}},
+				{Name: "Night train, train", Minutes: 2406, Carriers: []string{"Nightjet", "ÖBB"}},
+				{Name: "Drive", Minutes: 1506, Carriers: []string{}},
+			},
+			Checked: "2026-11-09",
+		},
+	}
+}
+
+// abroadFile is a dataset whose one concert is abroad, so its city may be
+// more than a day away.
+func abroadFile() File {
+	c := valid()
+	c.LocationTag = "europe"
+	return File{Concerts: []Concert{c}}
+}
+
+func TestTravelOthersAccepted(t *testing.T) {
+	if p := ValidateTravel(Travel{Cities: []TravelTime{longTrain()}}, abroadFile(), stationList(t)); len(p) != 0 {
+		t.Fatalf("expected no problems, got %v", p)
+	}
+
+	// The answer may have listed nothing else.
+	alone := longTrain()
+	alone.Train.Others = []ListedRoute{}
+	if p := ValidateTravel(Travel{Cities: []TravelTime{alone}}, abroadFile(), stationList(t)); len(p) != 0 {
+		t.Fatalf("an empty others list should pass, got %v", p)
+	}
+
+	// A short route may carry them too; the page just doesn't use them.
+	short := travelEntry()
+	short.Train.Others = []ListedRoute{{Name: "Drive", Minutes: 170, Carriers: []string{}}}
+	if p := ValidateTravel(Travel{Cities: []TravelTime{short}}, File{Concerts: []Concert{valid()}}, stationList(t)); len(p) != 0 {
+		t.Fatalf("others on a short route should pass, got %v", p)
+	}
+}
+
+// Past eight hours the page offers a quicker route beside the train, which it
+// can only take from others. Up to eight, entries written before the field
+// existed stay valid.
+func TestTravelOthersRequiredForLongTrain(t *testing.T) {
+	e := longTrain()
+	e.Train.Others = nil
+	e.Train.Minutes = longTrainMinutes
+	if p := ValidateTravel(Travel{Cities: []TravelTime{e}}, abroadFile(), stationList(t)); len(p) != 0 {
+		t.Fatalf("a route of exactly eight hours needs no others, got %v", p)
+	}
+	e.Train.Minutes = longTrainMinutes + 1
+	if p := ValidateTravel(Travel{Cities: []TravelTime{e}}, abroadFile(), stationList(t)); len(p) == 0 {
+		t.Fatal("a route over eight hours without others should be rejected")
+	}
+}
+
+// Absent and empty are different answers, and the file has to be able to say
+// either: "not recorded" fails on a long route, "nothing else listed" passes.
+func TestTravelOthersAbsentIsNotEmpty(t *testing.T) {
+	for _, tt := range []struct {
+		name, others string
+		wantProblem  bool
+	}{
+		{"absent", ``, true},
+		{"null", `"others":null,`, true},
+		{"empty", `"others":[],`, false},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			path := filepath.Join(t.TempDir(), "travel.json")
+			content := `{"cities":[{"city":"Altenkrempe","train":{"query":"Istanbul, Turkey","minutes":2289,"route":"Train, night train","carriers":["ÖBB"],` +
+				tt.others + `"checked":"2026-11-09"}}]}`
+			if err := os.WriteFile(path, []byte(content), 0o600); err != nil {
+				t.Fatalf("write temp file: %v", err)
+			}
+			travel, err := loadJSON[Travel](path)
+			if err != nil {
+				t.Fatalf("load: %v", err)
+			}
+			p := ValidateTravel(travel, abroadFile(), stationList(t))
+			if got := len(p) != 0; got != tt.wantProblem {
+				t.Fatalf("problems = %v, want a problem: %v", p, tt.wantProblem)
+			}
+		})
+	}
+}
+
+func TestTravelOthersChecks(t *testing.T) {
+	tests := []struct {
+		name   string
+		mutate func(*TrainRoute)
+	}{
+		{"blank name", func(r *TrainRoute) { r.Others[0].Name = " " }},
+		{"zero minutes", func(r *TrainRoute) { r.Others[0].Minutes = 0 }},
+		{"minutes in seconds", func(r *TrainRoute) { r.Others[0].Minutes = 391 * 60 * 60 }},
+		{"blank carrier", func(r *TrainRoute) { r.Others[0].Carriers = []string{""} }},
+		{"repeated carrier", func(r *TrainRoute) { r.Others[2].Carriers = []string{"ÖBB", "ÖBB"} }},
+		{"repeats the route itself", func(r *TrainRoute) {
+			r.Others[2] = ListedRoute{Name: r.Route, Minutes: r.Minutes, Carriers: r.Carriers}
+		}},
+		// Step 6a takes the quickest all-train route, so a quicker one listed
+		// beside the route means the wrong line was copied.
+		{"a quicker all-train route", func(r *TrainRoute) { r.Others[2].Minutes = 2200 }},
+		// It prefers all-train to mixed whatever their durations.
+		{"an all-train route beside a mixed one", func(r *TrainRoute) {
+			r.Route, r.Minutes = "Train, bus", 1943
+			r.Others[1] = ListedRoute{Name: "Train, night train", Minutes: 2289, Carriers: []string{"ÖBB"}}
+		}},
+		// With no all-train route, the quickest mixed one.
+		{"a quicker mixed route beside a mixed one", func(r *TrainRoute) {
+			r.Route, r.Minutes = "Train, bus, night train, taxi", 2782
+			r.Others = []ListedRoute{{Name: "Train, bus", Minutes: 2500, Carriers: []string{"Alpar Turizm"}}}
+		}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			e := longTrain()
+			tt.mutate(e.Train)
+			if p := ValidateTravel(Travel{Cities: []TravelTime{e}}, abroadFile(), stationList(t)); len(p) == 0 {
+				t.Fatalf("expected a problem for %q, got none", tt.name)
+			}
+		})
+	}
+}
+
+// The best-route check is about what step 6a picks, not about the page, so it
+// holds on a short train too, and on a German one under the day's cap.
+func TestTravelOthersCheckedOnShortTrain(t *testing.T) {
+	f := File{Concerts: []Concert{valid()}}
+	ok := travelEntry()
+	ok.Train.Others = []ListedRoute{
+		{Name: "Train", Minutes: 240, Carriers: []string{"Deutsche Bahn Intercity (DB IC)"}},
+		{Name: "Bus", Minutes: 150, Carriers: []string{"FlixBus"}},
+	}
+	if p := ValidateTravel(Travel{Cities: []TravelTime{ok}}, f, stationList(t)); len(p) != 0 {
+		t.Fatalf("slower and non-train others should pass, got %v", p)
+	}
+
+	quicker := travelEntry()
+	quicker.Train.Others = []ListedRoute{{Name: "Train", Minutes: 170, Carriers: []string{"Deutsche Bahn Intercity (DB IC)"}}}
+	if p := ValidateTravel(Travel{Cities: []TravelTime{quicker}}, f, stationList(t)); len(p) == 0 {
+		t.Fatal("a quicker all-train route beside a short train should be rejected")
+	}
+
+	tooLong := travelEntry()
+	tooLong.Train.Others = []ListedRoute{{Name: "Bus", Minutes: maxListedMinutes + 1, Carriers: []string{"FlixBus"}}}
+	if p := ValidateTravel(Travel{Cities: []TravelTime{tooLong}}, f, stationList(t)); len(p) == 0 {
+		t.Fatal("an other route over a week should be rejected")
+	}
+}
+
+// index.html offers a quicker route past the same eight hours after which
+// this requires others; the shared fixture keeps the two numbers together.
+func TestLongTrainMatchesFixture(t *testing.T) {
+	data, err := os.ReadFile(filepath.Join("testdata", "long-train.json"))
+	if err != nil {
+		t.Fatalf("read fixture: %v", err)
+	}
+	var fixture struct {
+		LongTrainMinutes int `json:"long_train_minutes"`
+	}
+	if err := json.Unmarshal(data, &fixture); err != nil {
+		t.Fatalf("parse fixture: %v", err)
+	}
+	if fixture.LongTrainMinutes != longTrainMinutes {
+		t.Fatalf("longTrainMinutes = %d, fixture says %d; change index.html's LONG_TRAIN_MINUTES with it",
+			longTrainMinutes, fixture.LongTrainMinutes)
 	}
 }
 

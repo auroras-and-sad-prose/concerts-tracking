@@ -15,7 +15,10 @@
 //     the query that was sent and the day, so a person can repeat it. The page
 //     reads the operators to say whether the route is regional only, and so
 //     covered by a Deutschlandticket; that verdict is derived there, never
-//     stored here.
+//     stored here. With it go others, the other routes that same answer
+//     listed, so that when the train takes most of a day the page can offer
+//     the quickest one that needs no driving — usually a flight. Which one
+//     that is, and whether to show it, is likewise derived there.
 //   - no_train: in place of train, when none of the routes Rome2Rio returned
 //     is train-based: the query, the day, and every route it did return, from
 //     which the page picks the quickest one that needs no driving. That is a
@@ -28,8 +31,10 @@
 // Any half may be missing — the connector may be unavailable to a run, or a
 // place may have no station — but not all of them, and train and no_train
 // never appear together. What else can be checked is that a train route is
-// train-based rather than the drive or the flight Rome2Rio lists beside it;
-// that a no_train entry lists no route that is; and that the entry is for a
+// train-based rather than the drive or the flight Rome2Rio lists beside it,
+// and the best such route among those recorded with it; that a long train
+// route carries the others at all; that a no_train entry lists no route that
+// is train-based; and that the entry is for a
 // city some concert in the dataset is in, so a misspelt city, which the page could never
 // match to a card, fails the build instead of sitting unused.
 package main
@@ -56,6 +61,14 @@ const (
 	maxListedMinutes      = 7 * 24 * 60
 )
 
+// longTrainMinutes is where a train-based route stops being the obvious way
+// to go: past eight hours the page also offers the quickest route that needs
+// no driving, if one is clearly quicker, and it can only pick that from the
+// other routes the same answer listed. So past this a train must carry them.
+// Below it they are optional, which keeps entries written before the field
+// existed valid. index.html's LONG_TRAIN_MINUTES is the same number.
+const longTrainMinutes = 8 * 60
+
 // TravelTime is one entry in travel.json.
 type TravelTime struct {
 	// City is the concert's city exactly as seen.json spells it; the page
@@ -79,6 +92,11 @@ type TrainRoute struct {
 	// Carriers are the operators Rome2Rio listed for Route, copied as
 	// returned.
 	Carriers []string `json:"carriers"`
+	// Others are the other routes the same answer listed, copied as returned
+	// and in order. Nil when they were not recorded, which only a route of
+	// up to longTrainMinutes may leave; empty when the answer listed nothing
+	// else.
+	Others []ListedRoute `json:"others"`
 	// Checked is the day the query was run.
 	Checked string `json:"checked"`
 }
@@ -292,6 +310,14 @@ func isTrainBased(name string) bool {
 	return !s.unknown && !s.excluded && s.rail > 0 && 2*s.rail >= s.total
 }
 
+// isAllTrain reports whether every leg of a route is a train or a night
+// train. Such a route is preferred over a mixed one even when the mixed one is
+// quicker (ROUTINE.md, step 6a).
+func isAllTrain(name string) bool {
+	s := readLegs(name)
+	return !s.unknown && !s.excluded && s.rail > 0 && s.rail == s.total
+}
+
 // checkProvenance checks the query and day every route answer records.
 func checkProvenance(query, checked string) []string {
 	var problems []string
@@ -327,23 +353,32 @@ func checkNoTrain(r NoTrainRoute) []string {
 		problems = append(problems, `field "routes" is required (every route Rome2Rio returned)`)
 	}
 	for j, route := range r.Routes {
-		label := fmt.Sprintf("routes[%d]", j)
-		if strings.TrimSpace(route.Name) == "" {
-			problems = append(problems, label+`: field "name" is required but empty`)
-		} else {
-			label = fmt.Sprintf("routes[%d] %q", j, route.Name)
-			if isTrainBased(route.Name) {
-				problems = append(problems, label+": is train-based; record the best such route as train instead")
-			}
-		}
-		if route.Minutes < 1 || route.Minutes > maxListedMinutes {
-			problems = append(problems, fmt.Sprintf("%s: minutes %d is outside 1..%d", label, route.Minutes, maxListedMinutes))
-		}
-		for _, m := range checkCarriers(route.Carriers) {
-			problems = append(problems, label+": "+m)
+		label, routeProblems := checkListedRoute("routes", j, route)
+		problems = append(problems, routeProblems...)
+		if isTrainBased(route.Name) {
+			problems = append(problems, label+": is train-based; record the best such route as train instead")
 		}
 	}
 	return problems
+}
+
+// checkListedRoute checks one route copied from a Rome2Rio answer, and
+// returns the label its problems carry so a caller can add its own.
+func checkListedRoute(field string, j int, route ListedRoute) (string, []string) {
+	var problems []string
+	label := fmt.Sprintf("%s[%d]", field, j)
+	if strings.TrimSpace(route.Name) == "" {
+		problems = append(problems, label+`: field "name" is required but empty`)
+	} else {
+		label = fmt.Sprintf("%s[%d] %q", field, j, route.Name)
+	}
+	if route.Minutes < 1 || route.Minutes > maxListedMinutes {
+		problems = append(problems, fmt.Sprintf("%s: minutes %d is outside 1..%d", label, route.Minutes, maxListedMinutes))
+	}
+	for _, m := range checkCarriers(route.Carriers) {
+		problems = append(problems, label+": "+m)
+	}
+	return label, problems
 }
 
 func checkStation(s stations.Station, list *stations.List) []string {
@@ -383,5 +418,45 @@ func checkTrain(r TrainRoute, maxMinutes int) []string {
 	if len(r.Carriers) == 0 {
 		problems = append(problems, `field "carriers" is required (the operators Rome2Rio listed for the route)`)
 	}
-	return append(problems, checkCarriers(r.Carriers)...)
+	problems = append(problems, checkCarriers(r.Carriers)...)
+
+	if r.Others == nil && r.Minutes > longTrainMinutes {
+		problems = append(problems, fmt.Sprintf(
+			`field "others" is required when the route takes more than %d minutes (every other route Rome2Rio returned; [] if it returned none)`,
+			longTrainMinutes))
+	}
+	return append(problems, checkOthers(r)...)
+}
+
+// checkOthers checks the routes recorded beside a train route, and that none
+// of them is the one step 6a would have picked instead: an all-train route
+// beats a mixed one whatever their durations, and within a kind the quicker
+// wins. That turns "the best train-based route" from a claim into something
+// the file itself shows.
+func checkOthers(r TrainRoute) []string {
+	var problems []string
+	// A route that isn't train-based is reported on its own, and nothing can
+	// be said about what should have been chosen in its place.
+	chosenTrainBased := isTrainBased(r.Route)
+	chosenAllTrain := isAllTrain(r.Route)
+	for j, o := range r.Others {
+		label, routeProblems := checkListedRoute("others", j, o)
+		problems = append(problems, routeProblems...)
+		if o.Name == r.Route && o.Minutes == r.Minutes {
+			problems = append(problems, label+": repeats the route itself; list only the other routes")
+			continue
+		}
+		if !chosenTrainBased || !isTrainBased(o.Name) {
+			continue
+		}
+		switch otherAllTrain := isAllTrain(o.Name); {
+		case otherAllTrain && !chosenAllTrain:
+			problems = append(problems, fmt.Sprintf(
+				"%s: is all-train while route %q is not; an all-train route is preferred even when slower", label, r.Route))
+		case otherAllTrain == chosenAllTrain && o.Minutes < r.Minutes:
+			problems = append(problems, fmt.Sprintf(
+				"%s: takes %d minutes, less than route %q at %d; record the quicker one as the route", label, o.Minutes, r.Route, r.Minutes))
+		}
+	}
+	return problems
 }
