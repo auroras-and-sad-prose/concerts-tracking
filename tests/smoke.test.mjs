@@ -479,8 +479,39 @@ describe("the concert page", () => {
       routes.map(r => r.name));
     assert.deepEqual(read, routes);
 
+    // Every mode the page knows needs a case, so that a mode added here alone
+    // meets the validator's reader in the Go tests.
+    const modes = await page.evaluate(() => [...RAIL_MODES, ...LEG_LABELS.map(([mode]) => mode)]);
+    const legs = routes.flatMap(r => r.name.split(",").map(seg => seg.trim().toLowerCase()));
+    assert.deepEqual(modes.filter(mode => !legs.some(leg => leg === mode || leg.startsWith(mode + " "))), []);
+
     assert.deepEqual(errors, []);
     await page.close();
+  });
+
+  // A route the page can't read may be a drive, or a rail route under
+  // another name, so it is never the alternative offered.
+  test("never offers a route with a leg it cannot read", async () => {
+    const unread = [
+      { name: "Train, hovercraft", minutes: 200, carriers: ["Hoverspeed"] },
+      { name: "Car", minutes: 150, carriers: [] },
+    ];
+    const bus = { name: "Bus", minutes: 300, carriers: ["FlixBus"] };
+    for (const [travel, selector, expected] of [
+      [{ cities: [{ city: "Vienna", train: { query: "Vienna, Austria", minutes: 550, route: "Train", carriers: ["ČD"],
+        others: unread, checked: PAST } }] }, ".travel .quicker", null],
+      [{ cities: [{ city: "Vienna", train: { query: "Vienna, Austria", minutes: 550, route: "Train", carriers: ["ČD"],
+        others: [...unread, bus], checked: PAST } }] }, ".travel .quicker", "≈ 5h by bus"],
+      [{ cities: [{ city: "Vienna", no_train: { query: "Vienna, Austria", routes: [...unread, bus], checked: PAST } }] },
+        ".travel .no-train", "✕ No train route listed · ≈ 5h by bus from Berlin"],
+    ]) {
+      const { page, errors } = await open({ travel });
+      await page.locator(".travel").first().waitFor();
+      if (expected === null) assert.equal(await page.locator(selector).count(), 0);
+      else assert.equal(await page.locator(selector).first().innerText(), expected);
+      assert.deepEqual(errors, []);
+      await page.close();
+    }
   });
 
   test("names the modes of a route that is mostly but not only train", async () => {

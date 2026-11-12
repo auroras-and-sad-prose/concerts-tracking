@@ -747,10 +747,15 @@ function noTrainRoutes(n) {
 const RAIL_MODES = ["night train", "train"];
 const RAIL_SUFFIXES = [" via ", " to ", " from "];
 
+// A flight or a drive rules a route out of being train-based, and a drive out
+// of being offered at all: the reader doesn't drive.
+const FLY_LEG = ["fly", "plane"];
+const DRIVE_LEG = ["drive", "car"];
+
 // The other legs Rome2Rio is known to use, and what the page calls each. A
-// "town car" is driven for the reader, so it is not a "car".
+// "town car" is driven for the reader, so it is not a drive.
 const LEG_LABELS = [
-  ["fly", "plane"], ["drive", "car"],
+  FLY_LEG, DRIVE_LEG,
   ["car ferry", "ferry"], ["ferry", "ferry"], ["bus", "bus"], ["coach", "bus"], ["water taxi", "water taxi"],
   ["taxi", "taxi"], ["rideshare", "rideshare"], ["walk", "walk"], ["eurotunnel", "Eurotunnel"],
   ["shuttle", "shuttle"], ["tram", "tram"], ["subway", "metro"], ["metro", "metro"], ["boat", "boat"],
@@ -758,16 +763,13 @@ const LEG_LABELS = [
   ["town car", "town car"], ["towncar", "town car"],
 ];
 
-// A flight or a drive rules a route out of being train-based.
-const EXCLUDED_LABELS = ["plane", "car"];
-
 // What a route's name says about its legs: a label for each, how many are
 // trains, whether one is a flight or a drive, and whether some segment is
-// neither a known mode nor, after a "via", a capitalized place. Such a route
-// is not train-based, which is the safe way to be wrong; its unknown segment
-// is labelled with its own words.
+// neither a known mode nor, after a "via", a capitalized place. Such a segment
+// is labelled "other", never with its own text, and its route is neither
+// train-based nor offered as an alternative: nothing says what it is.
 function readLegs(name) {
-  const s = { labels: [], rail: 0, total: 0, excluded: false, unknown: false };
+  const s = { labels: [], rail: 0, total: 0, drive: false, excluded: false, unknown: false };
   let via = false;
   for (const raw of name.split(",")) {
     const seg = raw.trim();
@@ -781,9 +783,10 @@ function readLegs(name) {
     } else if (hit) {
       s.labels.push(hit[1]);
       s.total++;
-      if (EXCLUDED_LABELS.includes(hit[1])) s.excluded = true;
+      if (hit === DRIVE_LEG) s.drive = true;
+      if (hit === DRIVE_LEG || hit === FLY_LEG) s.excluded = true;
     } else if (!(via && /^\p{Lu}/u.test(seg))) {
-      s.labels.push(low || "?");
+      s.labels.push("other");
       s.unknown = true;
     }
     if (low.includes(" via ")) via = true;
@@ -791,29 +794,32 @@ function readLegs(name) {
   return s;
 }
 
-function legsOf(name) {
-  return readLegs(name).labels;
-}
-
-// Whether at least half a route's legs are trains and none is a flight or a
-// drive: isTrainBased in tools/validate.
-function mostlyTrain(name) {
-  const s = readLegs(name);
+// Whether at least half the legs are trains and none is a flight or a drive.
+function legsTrainBased(s) {
   return !s.unknown && !s.excluded && s.rail > 0 && 2 * s.rail >= s.total;
 }
 
-// Whether every leg is a train or a night train: isAllTrain in tools/validate.
-function allTrain(name) {
-  const s = readLegs(name);
+// Whether every leg is a train or a night train.
+function legsAllTrain(s) {
   return !s.unknown && !s.excluded && s.rail > 0 && s.rail === s.total;
+}
+
+// isTrainBased and isAllTrain in tools/validate; the shared fixture is run
+// over these two.
+function mostlyTrain(name) {
+  return legsTrainBased(readLegs(name));
+}
+
+function allTrain(name) {
+  return legsAllTrain(readLegs(name));
 }
 
 // "train" for a route of trains and night trains; otherwise its modes in
 // order, as "train + bus".
 function modesLabel(name) {
-  if (allTrain(name)) return "train";
-  const legs = legsOf(name);
-  return legs.filter((l, i) => l !== legs[i - 1]).join(" + ");
+  const s = readLegs(name);
+  if (legsAllTrain(s)) return "train";
+  return s.labels.filter((l, i) => l !== s.labels[i - 1]).join(" + ");
 }
 
 function validStation(s) {
@@ -913,9 +919,14 @@ function travelTitle(train) {
 }
 
 // With no train-based route listed, the card offers the quickest route that
-// needs no driving — the reader can't drive — which is usually a flight.
+// needs no driving — the reader can't drive — which is usually a flight. A
+// route with a leg the page can't read is left out with the drives: it may be
+// one, and beside a long train it may be a rail route under another name.
 function quickestWithoutDriving(routes) {
-  const usable = routes.filter(r => !legsOf(r.name).includes("car"));
+  const usable = routes.filter(r => {
+    const s = readLegs(r.name);
+    return !s.drive && !s.unknown;
+  });
   return usable.length ? usable.reduce((a, b) => (b.minutes < a.minutes ? b : a)) : null;
 }
 

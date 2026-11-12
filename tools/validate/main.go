@@ -323,7 +323,7 @@ func main() {
 			problems = append(problems, fmt.Sprintf("%s: %s", *travelPath, p))
 		}
 		if *travelBasePath != "" {
-			travelBase, err := loadJSON[Travel](*travelBasePath)
+			travelBase, err := loadTravelBase(*travelBasePath)
 			if err != nil {
 				fmt.Fprintf(os.Stderr, "error: cannot read travel base %s: %v\n", *travelBasePath, err)
 				os.Exit(1)
