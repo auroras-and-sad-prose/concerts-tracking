@@ -40,7 +40,9 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	"os"
 	"slices"
 	"strings"
 	"unicode"
@@ -218,6 +220,8 @@ func ValidateTravel(t Travel, f File, list *stations.List) []string {
 // one some row in seen.json has and those rows are never deleted. What an
 // entry holds may change freely: a refreshed answer replaces train with
 // no_train, or one route with another.
+//
+// Only base's cities are read; see loadTravelBase.
 func CheckTravelAppendOnly(base, head Travel) []string {
 	var problems []string
 	kept := make(map[string]bool, len(head.Cities))
@@ -231,6 +235,32 @@ func CheckTravelAppendOnly(base, head Travel) []string {
 		}
 	}
 	return problems
+}
+
+// loadTravelBase reads the previous version of travel.json for the one thing
+// CheckTravelAppendOnly needs from it, each entry's city. Unlike loadJSON it
+// accepts fields this version of the validator doesn't know and ignores the
+// shape of everything else, so a reviewed change to the file's schema isn't
+// failed by the old schema still on main. A base that is not JSON at all is
+// still an error.
+func loadTravelBase(path string) (Travel, error) {
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return Travel{}, err
+	}
+	var raw struct {
+		Cities []struct {
+			City string `json:"city"`
+		} `json:"cities"`
+	}
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return Travel{}, err
+	}
+	var t Travel
+	for _, c := range raw.Cities {
+		t.Cities = append(t.Cities, TravelTime{City: c.City})
+	}
+	return t, nil
 }
 
 // Rome2Rio names a route after its legs, joined by commas: "Train",

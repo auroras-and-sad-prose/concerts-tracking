@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"os"
 	"path/filepath"
+	"slices"
 	"strings"
 	"testing"
 
@@ -419,6 +420,25 @@ func TestRouteReadingMatchesFixture(t *testing.T) {
 	if len(fixture.Routes) == 0 {
 		t.Fatal("fixture lists no routes")
 	}
+	// Every mode this reader knows needs a case, so that a mode added here
+	// alone meets index.html's reader in the smoke suite.
+	for _, mode := range slices.Concat(railModes, excludedModes, otherModes) {
+		covered := slices.ContainsFunc(fixture.Routes, func(r struct {
+			Name       string `json:"name"`
+			TrainBased bool   `json:"train_based"`
+			AllTrain   bool   `json:"all_train"`
+		}) bool {
+			for _, seg := range strings.Split(r.Name, ",") {
+				if leg := strings.ToLower(strings.TrimSpace(seg)); leg == mode || strings.HasPrefix(leg, mode+" ") {
+					return true
+				}
+			}
+			return false
+		})
+		if !covered {
+			t.Errorf("mode %q has no case in the fixture; add one, and the mode to index.html", mode)
+		}
+	}
 	for _, r := range fixture.Routes {
 		if got := isTrainBased(r.Name); got != r.TrainBased {
 			t.Errorf("isTrainBased(%q) = %v, fixture says %v", r.Name, got, r.TrainBased)
@@ -483,6 +503,36 @@ func TestTravelAppendOnly(t *testing.T) {
 	respelt.City = "altenkrempe"
 	if p := CheckTravelAppendOnly(base, Travel{Cities: []TravelTime{respelt, kempen}}); len(p) != 1 {
 		t.Fatalf("expected a respelt city to count as removed, got %v", p)
+	}
+}
+
+// The base is read for its cities alone, so a reviewed change to the file's
+// shape isn't failed by the old shape still sitting on main.
+func TestTravelBaseToleratesAnotherSchema(t *testing.T) {
+	path := filepath.Join(t.TempDir(), "travel.json")
+	old := `{"version": 1, "cities": [{"city": "Kempen", "train": "5h", "retired_field": true}, {"city": "Rostock"}]}`
+	if err := os.WriteFile(path, []byte(old), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := loadJSON[Travel](path); err == nil {
+		t.Fatal("expected the strict loader to reject this file; the test no longer shows anything")
+	}
+	base, err := loadTravelBase(path)
+	if err != nil {
+		t.Fatalf("expected the base to load, got %v", err)
+	}
+	kempen := travelEntry()
+	kempen.City = "Kempen"
+	p := CheckTravelAppendOnly(base, Travel{Cities: []TravelTime{kempen}})
+	if len(p) != 1 || !strings.Contains(p[0], `"Rostock" was removed`) {
+		t.Fatalf("expected one problem naming Rostock, got %v", p)
+	}
+
+	if err := os.WriteFile(path, []byte(`{"cities": [`), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := loadTravelBase(path); err == nil {
+		t.Fatal("expected a base that is not JSON to be an error")
 	}
 }
 

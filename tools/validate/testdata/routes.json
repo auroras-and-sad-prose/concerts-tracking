@@ -1,5 +1,5 @@
 {
-  "_comment": "Route names as Rome2Rio writes them, and what both readers of them must answer: train_based is isTrainBased in tools/validate/travel.go and mostlyTrain in index.html (at least half the legs trains, none a flight or a drive, no segment unrecognised); all_train is isAllTrain and allTrain (every leg a train or night train). Both test suites run their reader over this file, so changing one without the other fails.",
+  "_comment": "Route names as Rome2Rio writes them, and what both readers of them must answer: train_based is isTrainBased in tools/validate/travel.go and mostlyTrain in index.html (at least half the legs trains, none a flight or a drive, no segment unrecognised); all_train is isAllTrain and allTrain (every leg a train or night train). Both test suites run their reader over this file, so changing one without the other fails. Every mode either reader lists needs a case here, which each suite also checks, so a mode added to one reader alone fails the other.",
   "routes": [
     {"name": "Train", "train_based": true, "all_train": true},
     {"name": "train", "train_based": true, "all_train": true},
@@ -58,6 +58,16 @@
     {"name": "Hauptbahnhof, train", "train_based": false, "all_train": false},
     {"name": "Night", "train_based": false, "all_train": false},
     {"name": "", "train_based": false, "all_train": false},
-    {"name": "Train,", "train_based": false, "all_train": false}
+    {"name": "Train,", "train_based": false, "all_train": false},
+    {"name": "Train, ferry", "train_based": true, "all_train": false},
+    {"name": "Train, rideshare", "train_based": true, "all_train": false},
+    {"name": "Train, walk", "train_based": true, "all_train": false},
+    {"name": "Train, shuttle", "train_based": true, "all_train": false},
+    {"name": "Train, tram", "train_based": true, "all_train": false},
+    {"name": "Train, subway", "train_based": true, "all_train": false},
+    {"name": "Train, metro", "train_based": true, "all_train": false},
+    {"name": "Train, boat", "train_based": true, "all_train": false},
+    {"name": "Train, taxi", "train_based": true, "all_train": false},
+    {"name": "Train, Car", "train_based": false, "all_train": false}
   ]
 }

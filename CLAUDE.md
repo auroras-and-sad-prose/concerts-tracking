@@ -402,7 +402,10 @@ to keep a mostly-train route from being offered beside a long train — so the
 reading has two implementations: `readLegs` in `tools/validate/travel.go` and
 its mirror in `index.html`, held to the same answers by the shared fixture
 `tools/validate/testdata/routes.json`. Changing one means changing the other
-and adding a case there.
+and adding a case there; each suite also fails a mode its reader lists that
+the fixture has no case for. A route with a leg the page cannot read is never
+offered as an alternative: it may be a drive, or a rail route under another
+name.
 
 **"No train route listed" is not "impossible by train".** Rome2Rio returns only
 its top four routes, and a slow rail connection loses its place to a flight, a
