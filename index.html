@@ -735,35 +735,84 @@ function noTrainRoutes(n) {
 
 // Rome2Rio names a route after its legs, joined by commas ("Train, bus via
 // Bordeaux", "Fly Berlin Brandenburg Airport to Gran Canaria Airport, bus"),
-// and a "via" list of places the same way. This reads the legs only to label
-// a route for the reader and to set drives aside; which routes count as
-// train-based is decided by tools/validate, which CI holds the file to.
+// and a "via" list of places the same way. The page reads the legs to label a
+// route for the reader, to set drives aside, and to tell a train-based route
+// from the rest. tools/validate reads them too (readLegs in travel.go), and
+// CI holds travel.json to its reading, so the two must agree:
+// tools/validate/testdata/routes.json holds both to the same answers, and a
+// change here means the same change there and a case in that file.
+//
+// A rail leg is the bare word or the word followed by "via", "to" or "from",
+// so "Train and bus" is not one.
+const RAIL_MODES = ["night train", "train"];
+const RAIL_SUFFIXES = [" via ", " to ", " from "];
+
+// The other legs Rome2Rio is known to use, and what the page calls each. A
+// "town car" is driven for the reader, so it is not a "car".
 const LEG_LABELS = [
-  ["night train", "night train"], ["train", "train"], ["fly", "plane"], ["drive", "car"],
+  ["fly", "plane"], ["drive", "car"],
   ["car ferry", "ferry"], ["ferry", "ferry"], ["bus", "bus"], ["coach", "bus"], ["water taxi", "water taxi"],
   ["taxi", "taxi"], ["rideshare", "rideshare"], ["walk", "walk"], ["eurotunnel", "Eurotunnel"],
   ["shuttle", "shuttle"], ["tram", "tram"], ["subway", "metro"], ["metro", "metro"], ["boat", "boat"],
+  ["cable car", "cable car"], ["funicular", "funicular"], ["helicopter", "helicopter"],
+  ["town car", "town car"], ["towncar", "town car"],
 ];
 
-function legsOf(name) {
-  const legs = [];
+// A flight or a drive rules a route out of being train-based.
+const EXCLUDED_LABELS = ["plane", "car"];
+
+// What a route's name says about its legs: a label for each, how many are
+// trains, whether one is a flight or a drive, and whether some segment is
+// neither a known mode nor, after a "via", a capitalized place. Such a route
+// is not train-based, which is the safe way to be wrong; its unknown segment
+// is labelled with its own words.
+function readLegs(name) {
+  const s = { labels: [], rail: 0, total: 0, excluded: false, unknown: false };
   let via = false;
   for (const raw of name.split(",")) {
     const seg = raw.trim();
     const low = seg.toLowerCase();
+    const rail = RAIL_MODES.find(m => low === m || RAIL_SUFFIXES.some(rest => low.startsWith(m + rest)));
     const hit = LEG_LABELS.find(([mode]) => low === mode || low.startsWith(mode + " "));
-    if (hit) legs.push(hit[1]);
-    else if (!(via && /^\p{Lu}/u.test(seg))) legs.push(low.split(" ")[0] || "?");
+    if (rail) {
+      s.labels.push(rail);
+      s.rail++;
+      s.total++;
+    } else if (hit) {
+      s.labels.push(hit[1]);
+      s.total++;
+      if (EXCLUDED_LABELS.includes(hit[1])) s.excluded = true;
+    } else if (!(via && /^\p{Lu}/u.test(seg))) {
+      s.labels.push(low || "?");
+      s.unknown = true;
+    }
     if (low.includes(" via ")) via = true;
   }
-  return legs;
+  return s;
+}
+
+function legsOf(name) {
+  return readLegs(name).labels;
+}
+
+// Whether at least half a route's legs are trains and none is a flight or a
+// drive: isTrainBased in tools/validate.
+function mostlyTrain(name) {
+  const s = readLegs(name);
+  return !s.unknown && !s.excluded && s.rail > 0 && 2 * s.rail >= s.total;
+}
+
+// Whether every leg is a train or a night train: isAllTrain in tools/validate.
+function allTrain(name) {
+  const s = readLegs(name);
+  return !s.unknown && !s.excluded && s.rail > 0 && s.rail === s.total;
 }
 
 // "train" for a route of trains and night trains; otherwise its modes in
 // order, as "train + bus".
 function modesLabel(name) {
+  if (allTrain(name)) return "train";
   const legs = legsOf(name);
-  if (legs.every(l => l === "train" || l === "night train")) return "train";
   return legs.filter((l, i) => l !== legs[i - 1]).join(" + ");
 }
 
@@ -884,16 +933,6 @@ function quickestWithoutDriving(routes) {
 // tools/validate/testdata/long-train.json holds the two together.
 const LONG_TRAIN_MINUTES = 8 * 60;
 const QUICKER_BY_MINUTES = 2 * 60;
-
-// Whether at least half a route's legs are trains and none is a flight or a
-// drive. tools/validate decides that for the file; this only keeps such a
-// route from being offered as the alternative to one.
-function mostlyTrain(name) {
-  const legs = legsOf(name);
-  if (legs.includes("plane") || legs.includes("car")) return false;
-  const rail = legs.filter(l => l === "train" || l === "night train").length;
-  return rail > 0 && 2 * rail >= legs.length;
-}
 
 function quickerThanTrain(train) {
   if (train.minutes <= LONG_TRAIN_MINUTES) return null;

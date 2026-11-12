@@ -158,10 +158,12 @@ reports a load failure instead of hanging — plus one pass over the real
 catch a page that has stopped working, not a subtly wrong one, and they say
 nothing about whether the data is right, which is the validator's job above.
 
-The one exception is favorite-matching, which the page and the routine
-implement separately: the suite runs the page's matcher over
-`tools/favorites/testdata/cases.json` and requires the same answers the Go tests
-get from that file, so the two cannot quietly drift apart.
+The exceptions are the rules the page and the Go tools implement separately,
+each held to the same answers by a fixture both test suites read, so the two
+cannot quietly drift apart: favorite-matching
+(`tools/favorites/testdata/cases.json`), how a route's name is read for its
+legs (`tools/validate/testdata/routes.json`), and the eight-hour threshold
+(`tools/validate/testdata/long-train.json`).
 
 ```sh
 cd tests && npm install && npx playwright install chromium && npm test
@@ -394,6 +396,13 @@ for a whole route, not one per leg, so nothing it returns says how long the
 bus in `Train, bus` takes: the last ten minutes to a village, or a day across
 the Balkans (Izmir). The rule is a proxy the validator can check, and the page
 names every mode in the route ("by train + bus") so the reader can judge.
+
+The page reads route names too — to label a route, to set drives aside, and
+to keep a mostly-train route from being offered beside a long train — so the
+reading has two implementations: `readLegs` in `tools/validate/travel.go` and
+its mirror in `index.html`, held to the same answers by the shared fixture
+`tools/validate/testdata/routes.json`. Changing one means changing the other
+and adding a case there.
 
 **"No train route listed" is not "impossible by train".** Rome2Rio returns only
 its top four routes, and a slow rail connection loses its place to a flight, a

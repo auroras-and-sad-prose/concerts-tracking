@@ -466,6 +466,23 @@ describe("the concert page", () => {
     await page.close();
   });
 
+  // The page and tools/validate each read a route's name for its legs; the
+  // shared fixture holds them to the same answers.
+  test("reads route names exactly as the validator does", async () => {
+    const { page, errors } = await open({});
+    const { routes } = JSON.parse(
+      await readFile(join(REPO_ROOT, "tools", "validate", "testdata", "routes.json"), "utf8"));
+    assert.ok(routes.length > 0);
+
+    const read = await page.evaluate(
+      names => names.map(name => ({ name, train_based: mostlyTrain(name), all_train: allTrain(name) })),
+      routes.map(r => r.name));
+    assert.deepEqual(read, routes);
+
+    assert.deepEqual(errors, []);
+    await page.close();
+  });
+
   test("names the modes of a route that is mostly but not only train", async () => {
     const travel = {
       cities: [{
