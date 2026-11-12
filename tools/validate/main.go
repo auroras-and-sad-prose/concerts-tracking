@@ -88,6 +88,7 @@ var allowedHosts = map[string]bool{
 	"juliafischer.com":       true,
 	"alicesaraott.com":       true,
 	"itzhakperlman.com":      true,
+	"helenegrimaud.com":      true,
 	"bachtrack.com":          true,
 	"deutschegrammophon.com": true, // Dueñas' label tour page (tertiary source)
 }

@@ -40,6 +40,11 @@
       "slug": "ott",
       "name": "Alice Sara Ott",
       "instruments": ["piano"]
+    },
+    {
+      "slug": "grimaud",
+      "name": "Hélène Grimaud",
+      "instruments": ["piano"]
     }
   ]
 }

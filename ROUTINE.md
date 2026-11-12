@@ -10,7 +10,7 @@ is in `CLAUDE.md`.
 ## Operating procedure for the concert-watch routine
 
 You are a scheduled concert-monitoring agent. Your job: detect NEW upcoming
-concerts by seven classical musicians and alert about them, using this repo as
+concerts by eight classical musicians and alert about them, using this repo as
 memory so the same concert is never alerted on twice. You run inside a fresh
 clone of this private repo with read/write access to repo contents, to Pull
 Requests. All state lives in `seen.json` at the repo root.
@@ -39,14 +39,21 @@ following links out of it is how detail — and sometimes a concert — is found
 7. Itzhak Perlman — no primary source. His official site is not a working
    source for this routine; rely on his Bachtrack profile alone (see below).
    Do not attempt to fetch itzhakperlman.com.
+8. Hélène Grimaud — https://helenegrimaud.com/calendar/ (English dates
+   split over three lines, `NOV` / `16` / `2026`; each entry names the
+   city, the country — with the state for US dates — the venue and the
+   programme, and carries a "View event" link to her own
+   `helenegrimaud.com/event/…` page. On 2026-11-12 all 38 upcoming dates,
+   through July 2027, were in the one fetched page; the `←`/`→` arrows
+   belong to the Month view, not a pager)
 
-These six pages list upcoming concerts directly (Perlman has no primary
+These seven pages list upcoming concerts directly (Perlman has no primary
 source — see above). Bürkev's and Oganyan's pages separate an upcoming list
 from a past-concerts list on the same page — don't trust the page's own
 "upcoming/past" labels; decide what's current purely from the date filter in
 step 2.
 
-**Secondary source — Bachtrack, for all seven artists (Perlman's only source):**
+**Secondary source — Bachtrack, for all eight artists (Perlman's only source):**
 
 1. Olga Scheps — https://bachtrack.com/performer/olga-scheps
 2. María Dueñas — https://bachtrack.com/performer/maria-duenas
@@ -55,6 +62,7 @@ step 2.
 5. Julia Fischer — https://bachtrack.com/performer/julia-fischer
 6. Alice Sara Ott — https://bachtrack.com/performer/alice-sara-ott
 7. Itzhak Perlman — https://bachtrack.com/performer/itzhak-perlman
+8. Hélène Grimaud — https://bachtrack.com/performer/helene-grimaud
 
 Janine Jansen is no longer tracked: `artists.json` marks her `"tracked":
 false` (see "The artist roster"). Don't fetch her calendar or her Bachtrack
@@ -691,7 +699,7 @@ succeeds, and the concerts are simply no longer in the bytes. All three look
 exactly like a quiet day, and a quiet day sends nothing, so unless the run says
 so the reader mistakes a hole in the coverage for a day without news. Name the
 source in the notification (`concert-watch 2026-08-22: no new concerts;
-bachtrack.com failed for all 7 artists — see run report`) and in full in step
+bachtrack.com failed for all 8 artists — see run report`) and in full in step
 8. With no data to change there is nothing to commit and no PR to open, as for
 a conflict. When the run has other news, or a `travel.json` change that would
 otherwise go out silently, the failure rides on the same notification line and
@@ -705,7 +713,7 @@ everything together.
 
 If there are zero new concerts, no status changed, no favorite turned up on an
 existing row, no conflict was found and no source failed, print a one-line
-summary instead (e.g. "No new concerts. Checked 7 artists, all sources OK.").
+summary instead (e.g. "No new concerts. Checked 8 artists, all sources OK.").
 A quiet run leaves no branch behind, opens no PR, and sends no notification:
 with nothing to say, saying it loudly is how a daily routine trains its reader
 to ignore it.
