@@ -16,6 +16,21 @@
       }
     },
     {
+      "city": "Aix-en-Provence",
+      "train": {
+        "query": "Aix-en-Provence, France",
+        "minutes": 852,
+        "route": "Train",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)", "TGV inOui"],
+        "others": [
+          { "name": "Fly from Berlin Brandenburg Airport", "minutes": 327, "carriers": ["Ryanair"] },
+          { "name": "Bus", "minutes": 1478, "carriers": ["FlixBus"] },
+          { "name": "Drive", "minutes": 892, "carriers": [] }
+        ],
+        "checked": "2026-11-12"
+      }
+    },
+    {
       "city": "Amsterdam",
       "train": {
         "query": "Amsterdam, Netherlands",
@@ -89,6 +104,21 @@
       }
     },
     {
+      "city": "Barcelona",
+      "train": {
+        "query": "Barcelona, Spain",
+        "minutes": 1099,
+        "route": "Train via Karlsruhe",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)", "TGV inOui", "Renfe Viajeros"],
+        "others": [
+          { "name": "Fly from Berlin Brandenburg Airport", "minutes": 352, "carriers": ["Vueling Airlines"] },
+          { "name": "Night train, bus", "minutes": 1686, "carriers": ["Nightjet", "BlaBlaCar Bus"] },
+          { "name": "Drive", "minutes": 1079, "carriers": [] }
+        ],
+        "checked": "2026-11-12"
+      }
+    },
+    {
       "city": "Bilbao",
       "train": {
         "query": "Bilbao, Spain",
@@ -116,6 +146,21 @@
           { "name": "Drive, Eurotunnel", "minutes": 726, "carriers": ["LeShuttle"] }
         ],
         "checked": "2026-11-09"
+      }
+    },
+    {
+      "city": "Bordeaux",
+      "train": {
+        "query": "Bordeaux, France",
+        "minutes": 798,
+        "route": "Train via Cologne",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)", "Eurostar", "TGV inOui"],
+        "others": [
+          { "name": "Fly", "minutes": 331, "carriers": ["easyJet"] },
+          { "name": "Bus", "minutes": 1554, "carriers": ["FlixBus"] },
+          { "name": "Drive", "minutes": 879, "carriers": [] }
+        ],
+        "checked": "2026-11-12"
       }
     },
     {
@@ -157,6 +202,22 @@
           { "name": "Drive", "minutes": 399, "carriers": [] }
         ],
         "checked": "2026-11-09"
+      }
+    },
+    {
+      "city": "Burghausen",
+      "station": { "name": "Burghausen (Oberbay)", "eva": "8001284" },
+      "train": {
+        "query": "Burghausen, Germany",
+        "minutes": 457,
+        "route": "Train",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)", "agilis", "Deutsche Bahn Regio (DB Regional)"],
+        "others": [
+          { "name": "Bus", "minutes": 795, "carriers": ["FlixBus", "Deutsche Bahn Intercity (DB IC)"] },
+          { "name": "Drive", "minutes": 336, "carriers": [] },
+          { "name": "Fly Berlin Brandenburg Airport to Munich International Airport, train", "minutes": 390, "carriers": ["Lufthansa", "agilis", "Deutsche Bahn Regio (DB Regional)"] }
+        ],
+        "checked": "2026-11-12"
       }
     },
     {
@@ -348,6 +409,22 @@
         "route": "Train",
         "carriers": ["Deutsche Bahn Intercity (DB IC)"],
         "checked": "2026-10-14"
+      }
+    },
+    {
+      "city": "Fulda",
+      "station": { "name": "Fulda", "eva": "8000115" },
+      "train": {
+        "query": "Fulda, Germany",
+        "minutes": 181,
+        "route": "Train",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)"],
+        "others": [
+          { "name": "Night train", "minutes": 329, "carriers": ["Nightjet"] },
+          { "name": "Drive", "minutes": 275, "carriers": [] },
+          { "name": "Fly, train", "minutes": 278, "carriers": ["Condor Flugdienst", "Deutsche Bahn Intercity (DB IC)"] }
+        ],
+        "checked": "2026-11-12"
       }
     },
     {
@@ -647,6 +724,21 @@
       }
     },
     {
+      "city": "Luxembourg",
+      "train": {
+        "query": "Luxembourg, Luxembourg",
+        "minutes": 513,
+        "route": "Train, bus",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)", "Luxembourg Railways (CFL)"],
+        "others": [
+          { "name": "Fly to Luxembourg", "minutes": 258, "carriers": ["Luxair"] },
+          { "name": "Bus", "minutes": 754, "carriers": ["FlixBus"] },
+          { "name": "Night train, train, bus", "minutes": 744, "carriers": ["Nightjet", "Süwex", "Luxembourg Railways (CFL)"] }
+        ],
+        "checked": "2026-11-12"
+      }
+    },
+    {
       "city": "Luzern",
       "train": {
         "query": "Luzern, Switzerland",
@@ -722,6 +814,37 @@
         "route": "Train",
         "carriers": ["Deutsche Bahn Intercity (DB IC)"],
         "checked": "2026-09-26"
+      }
+    },
+    {
+      "city": "Neubrandenburg",
+      "station": { "name": "Neubrandenburg", "eva": "8010241" },
+      "train": {
+        "query": "Neubrandenburg, Germany",
+        "minutes": 103,
+        "route": "Train",
+        "carriers": ["Deutsche Bahn Regio (DB Regional)"],
+        "others": [
+          { "name": "Rideshare", "minutes": 157, "carriers": ["BlaBlaCar"] },
+          { "name": "Train, line 600 bus", "minutes": 177, "carriers": ["Deutsche Bahn Regio (DB Regional)", "Mecklenburg Vorpommersche VG"] },
+          { "name": "Drive", "minutes": 119, "carriers": [] }
+        ],
+        "checked": "2026-11-12"
+      }
+    },
+    {
+      "city": "Neuvecelle",
+      "train": {
+        "query": "Neuvecelle, France",
+        "minutes": 1004,
+        "route": "Night train, train",
+        "carriers": ["Nightjet", "Swiss Federal Railways (SBB CFF FFS)", "RegionalAlps"],
+        "others": [
+          { "name": "Train, drive", "minutes": 704, "carriers": ["Deutsche Bahn Intercity (DB IC)", "Swiss Federal Railways (SBB CFF FFS)"] },
+          { "name": "Bus", "minutes": 1306, "carriers": ["FlixBus"] },
+          { "name": "Drive", "minutes": 621, "carriers": [] }
+        ],
+        "checked": "2026-11-12"
       }
     },
     {
@@ -828,6 +951,21 @@
         "route": "Train",
         "carriers": ["Deutsche Bahn Intercity (DB IC)", "agilis"],
         "checked": "2026-09-26"
+      }
+    },
+    {
+      "city": "Riehen",
+      "train": {
+        "query": "Riehen, Switzerland",
+        "minutes": 427,
+        "route": "Train",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)"],
+        "others": [
+          { "name": "Night train", "minutes": 618, "carriers": ["Nightjet"] },
+          { "name": "Drive", "minutes": 461, "carriers": [] },
+          { "name": "Fly to Basel, line 6 tram", "minutes": 293, "carriers": ["easyJet", "Basler Verkehrs-Betriebe"] }
+        ],
+        "checked": "2026-11-12"
       }
     },
     {
@@ -1000,6 +1138,22 @@
         "route": "Train",
         "carriers": ["Deutsche Bahn Intercity (DB IC)", "PKP Intercity"],
         "checked": "2026-11-03"
+      }
+    },
+    {
+      "city": "Worms",
+      "station": { "name": "Worms Hbf", "eva": "8000257" },
+      "train": {
+        "query": "Worms, Germany",
+        "minutes": 363,
+        "route": "Train",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)", "Süwex"],
+        "others": [
+          { "name": "Bus", "minutes": 721, "carriers": ["FlixBus", "ORN Omnibusverkehr Rhein-Nahe GmbH"] },
+          { "name": "Night train", "minutes": 486, "carriers": ["Nightjet"] },
+          { "name": "Drive", "minutes": 341, "carriers": [] }
+        ],
+        "checked": "2026-11-12"
       }
     },
     {

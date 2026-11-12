@@ -3838,6 +3838,529 @@
       "source_url": "https://www.mayaoganyan.com/calendar",
       "detail_url": null,
       "first_seen": "2026-11-07"
+    },
+    {
+      "id": "grimaud|2027-02-07|riehen",
+      "artist": "Hélène Grimaud",
+      "date": "2027-02-07",
+      "city": "Riehen",
+      "country": "Switzerland",
+      "venue": "Fondation Beyeler",
+      "program": null,
+      "pieces": [
+        "Ludwig van Beethoven: Piano Sonata No. 30 in E major, Op. 109",
+        "Johannes Brahms: Three Intermezzi for piano, Op. 117"
+      ],
+      "instruments": null,
+      "location_tag": "europe",
+      "source_url": "https://helenegrimaud.com/calendar/",
+      "detail_url": "https://helenegrimaud.com/event/riehen/",
+      "first_seen": "2026-11-12"
+    },
+    {
+      "id": "grimaud|2027-02-11|fulda",
+      "artist": "Hélène Grimaud",
+      "date": "2027-02-11",
+      "city": "Fulda",
+      "country": "Germany",
+      "venue": "Schlosstheater Fulda",
+      "program": "The Last Testament",
+      "pieces": [
+        "Ludwig van Beethoven: Piano Sonata No. 32 in C minor, Op. 111",
+        "Franz Schubert: Piano Sonata No. 21 in B-flat major, D 960"
+      ],
+      "instruments": null,
+      "location_tag": "germany",
+      "source_url": "https://helenegrimaud.com/calendar/",
+      "detail_url": "https://helenegrimaud.com/event/fulda/",
+      "first_seen": "2026-11-12"
+    },
+    {
+      "id": "grimaud|2027-02-13|worms",
+      "artist": "Hélène Grimaud",
+      "date": "2027-02-13",
+      "city": "Worms",
+      "country": "Germany",
+      "venue": "Das Wormser Theater",
+      "program": "The Last Testament",
+      "pieces": [
+        "Ludwig van Beethoven: Piano Sonata No. 32 in C minor, Op. 111",
+        "Franz Schubert: Piano Sonata No. 21 in B-flat major, D 960"
+      ],
+      "instruments": null,
+      "location_tag": "germany",
+      "source_url": "https://helenegrimaud.com/calendar/",
+      "detail_url": "https://helenegrimaud.com/event/worms/",
+      "first_seen": "2026-11-12"
+    },
+    {
+      "id": "grimaud|2027-02-16|luxembourg",
+      "artist": "Hélène Grimaud",
+      "date": "2027-02-16",
+      "city": "Luxembourg",
+      "country": "Luxembourg",
+      "venue": "Philharmonie Luxembourg, Grand Auditorium",
+      "program": "The Last Testament",
+      "pieces": [
+        "Ludwig van Beethoven: Piano Sonata No. 32 in C minor, Op. 111",
+        "Franz Schubert: Piano Sonata No. 21 in B-flat major, D 960"
+      ],
+      "instruments": null,
+      "location_tag": "europe",
+      "source_url": "https://helenegrimaud.com/calendar/",
+      "detail_url": "https://helenegrimaud.com/event/luxembourg/",
+      "first_seen": "2026-11-12"
+    },
+    {
+      "id": "grimaud|2027-02-19|baden-baden",
+      "artist": "Hélène Grimaud",
+      "date": "2027-02-19",
+      "city": "Baden-Baden",
+      "country": "Germany",
+      "venue": "Festspielhaus Baden-Baden",
+      "program": "The Last Testament",
+      "pieces": [
+        "Ludwig van Beethoven: Piano Sonata No. 32 in C minor, Op. 111",
+        "Franz Schubert: Piano Sonata No. 21 in B-flat major, D 960"
+      ],
+      "instruments": null,
+      "location_tag": "germany",
+      "source_url": "https://helenegrimaud.com/calendar/",
+      "detail_url": "https://helenegrimaud.com/event/baden-baden/",
+      "first_seen": "2026-11-12"
+    },
+    {
+      "id": "grimaud|2027-02-22|paris",
+      "artist": "Hélène Grimaud",
+      "date": "2027-02-22",
+      "city": "Paris",
+      "country": "France",
+      "venue": "Philharmonie de Paris, Grande salle Pierre Boulez",
+      "program": "The Last Testament",
+      "pieces": [
+        "Ludwig van Beethoven: Piano Sonata No. 32 in C minor, Op. 111",
+        "Franz Schubert: Piano Sonata No. 21 in B-flat major, D 960"
+      ],
+      "instruments": null,
+      "location_tag": "europe",
+      "source_url": "https://helenegrimaud.com/calendar/",
+      "detail_url": "https://helenegrimaud.com/event/paris/",
+      "first_seen": "2026-11-12"
+    },
+    {
+      "id": "grimaud|2027-02-25|dortmund",
+      "artist": "Hélène Grimaud",
+      "date": "2027-02-25",
+      "city": "Dortmund",
+      "country": "Germany",
+      "venue": "Konzerthaus Dortmund",
+      "program": "The Last Testament",
+      "pieces": [
+        "Ludwig van Beethoven: Piano Sonata No. 32 in C minor, Op. 111",
+        "Franz Schubert: Piano Sonata No. 21 in B-flat major, D 960"
+      ],
+      "instruments": null,
+      "location_tag": "germany",
+      "source_url": "https://helenegrimaud.com/calendar/",
+      "detail_url": "https://helenegrimaud.com/event/dortmund/",
+      "first_seen": "2026-11-12"
+    },
+    {
+      "id": "grimaud|2027-02-28|stockholm",
+      "artist": "Hélène Grimaud",
+      "date": "2027-02-28",
+      "city": "Stockholm",
+      "country": "Sweden",
+      "venue": "Konserthuset Stockholm",
+      "program": "The Last Testament",
+      "pieces": [
+        "Ludwig van Beethoven: Piano Sonata No. 32 in C minor, Op. 111",
+        "Franz Schubert: Piano Sonata No. 21 in B-flat major, D 960"
+      ],
+      "instruments": null,
+      "location_tag": "europe",
+      "source_url": "https://helenegrimaud.com/calendar/",
+      "detail_url": "https://helenegrimaud.com/event/stockholm/",
+      "first_seen": "2026-11-12"
+    },
+    {
+      "id": "grimaud|2027-03-03|hamburg",
+      "artist": "Hélène Grimaud",
+      "date": "2027-03-03",
+      "city": "Hamburg",
+      "country": "Germany",
+      "venue": "Laeiszhalle",
+      "program": "The Last Testament",
+      "pieces": [
+        "Ludwig van Beethoven: Piano Sonata No. 32 in C minor, Op. 111",
+        "Franz Schubert: Piano Sonata No. 21 in B-flat major, D 960"
+      ],
+      "instruments": null,
+      "location_tag": "germany",
+      "source_url": "https://helenegrimaud.com/calendar/",
+      "detail_url": "https://helenegrimaud.com/event/hamburg/",
+      "first_seen": "2026-11-12"
+    },
+    {
+      "id": "grimaud|2027-03-06|hannover",
+      "artist": "Hélène Grimaud",
+      "date": "2027-03-06",
+      "city": "Hannover",
+      "country": "Germany",
+      "venue": "NDR Konzerthaus, Großer Sendesaal",
+      "program": "The Last Testament",
+      "pieces": [
+        "Ludwig van Beethoven: Piano Sonata No. 32 in C minor, Op. 111",
+        "Franz Schubert: Piano Sonata No. 21 in B-flat major, D 960"
+      ],
+      "instruments": null,
+      "location_tag": "germany",
+      "source_url": "https://helenegrimaud.com/calendar/",
+      "detail_url": "https://helenegrimaud.com/event/hannover/",
+      "first_seen": "2026-11-12"
+    },
+    {
+      "id": "grimaud|2027-03-10|frankfurt",
+      "artist": "Hélène Grimaud",
+      "date": "2027-03-10",
+      "city": "Frankfurt",
+      "country": "Germany",
+      "venue": "Alte Oper Frankfurt",
+      "program": "The Last Testament",
+      "pieces": [
+        "Ludwig van Beethoven: Piano Sonata No. 32 in C minor, Op. 111",
+        "Franz Schubert: Piano Sonata No. 21 in B-flat major, D 960"
+      ],
+      "instruments": null,
+      "location_tag": "germany",
+      "source_url": "https://helenegrimaud.com/calendar/",
+      "detail_url": "https://helenegrimaud.com/event/frankfurt/",
+      "first_seen": "2026-11-12"
+    },
+    {
+      "id": "grimaud|2027-03-13|düsseldorf",
+      "artist": "Hélène Grimaud",
+      "date": "2027-03-13",
+      "city": "Düsseldorf",
+      "country": "Germany",
+      "venue": "Tonhalle Düsseldorf, Mendelssohn-Saal",
+      "program": "The Last Testament",
+      "pieces": [
+        "Ludwig van Beethoven: Piano Sonata No. 32 in C minor, Op. 111",
+        "Franz Schubert: Piano Sonata No. 21 in B-flat major, D 960"
+      ],
+      "instruments": null,
+      "location_tag": "germany",
+      "source_url": "https://helenegrimaud.com/calendar/",
+      "detail_url": "https://helenegrimaud.com/event/dusseldorf/",
+      "first_seen": "2026-11-12"
+    },
+    {
+      "id": "grimaud|2027-03-16|london",
+      "artist": "Hélène Grimaud",
+      "date": "2027-03-16",
+      "city": "London",
+      "country": "United Kingdom",
+      "venue": "Barbican Centre",
+      "program": "The Last Testament",
+      "pieces": [
+        "Ludwig van Beethoven: Piano Sonata No. 32 in C minor, Op. 111",
+        "Franz Schubert: Piano Sonata No. 21 in B-flat major, D 960"
+      ],
+      "instruments": null,
+      "location_tag": "europe",
+      "source_url": "https://helenegrimaud.com/calendar/",
+      "detail_url": "https://helenegrimaud.com/event/london/",
+      "first_seen": "2026-11-12"
+    },
+    {
+      "id": "grimaud|2027-03-19|brussels",
+      "artist": "Hélène Grimaud",
+      "date": "2027-03-19",
+      "city": "Brussels",
+      "country": "Belgium",
+      "venue": "Bozar – Henry Le Boeuf Hall",
+      "program": "The Last Testament",
+      "pieces": [
+        "Ludwig van Beethoven: Piano Sonata No. 32 in C minor, Op. 111",
+        "Franz Schubert: Piano Sonata No. 21 in B-flat major, D 960"
+      ],
+      "instruments": null,
+      "location_tag": "europe",
+      "source_url": "https://helenegrimaud.com/calendar/",
+      "detail_url": "https://helenegrimaud.com/event/brussels/",
+      "first_seen": "2026-11-12"
+    },
+    {
+      "id": "grimaud|2027-03-22|aix-en-provence",
+      "artist": "Hélène Grimaud",
+      "date": "2027-03-22",
+      "city": "Aix-en-Provence",
+      "country": "France",
+      "venue": "Grand Théâtre de Provence",
+      "program": "The Last Testament",
+      "pieces": [
+        "Ludwig van Beethoven: Piano Sonata No. 32 in C minor, Op. 111",
+        "Franz Schubert: Piano Sonata No. 21 in B-flat major, D 960"
+      ],
+      "instruments": null,
+      "location_tag": "europe",
+      "source_url": "https://helenegrimaud.com/calendar/",
+      "detail_url": "https://helenegrimaud.com/event/aix-en-provence/",
+      "first_seen": "2026-11-12"
+    },
+    {
+      "id": "grimaud|2027-03-24|bordeaux",
+      "artist": "Hélène Grimaud",
+      "date": "2027-03-24",
+      "city": "Bordeaux",
+      "country": "France",
+      "venue": "L’Auditorium Bordeaux",
+      "program": "The Last Testament",
+      "pieces": [
+        "Ludwig van Beethoven: Piano Sonata No. 32 in C minor, Op. 111",
+        "Franz Schubert: Piano Sonata No. 21 in B-flat major, D 960"
+      ],
+      "instruments": null,
+      "location_tag": "europe",
+      "source_url": "https://helenegrimaud.com/calendar/",
+      "detail_url": "https://helenegrimaud.com/event/bordeaux/",
+      "first_seen": "2026-11-12"
+    },
+    {
+      "id": "grimaud|2027-05-18|barcelona",
+      "artist": "Hélène Grimaud",
+      "date": "2027-05-18",
+      "city": "Barcelona",
+      "country": "Spain",
+      "venue": "Palau de la Música Catalana",
+      "program": "The Last Testament",
+      "pieces": [
+        "Ludwig van Beethoven: Piano Sonata No. 32 in C minor, Op. 111",
+        "Franz Schubert: Piano Sonata No. 21 in B-flat major, D 960"
+      ],
+      "instruments": null,
+      "location_tag": "europe",
+      "source_url": "https://helenegrimaud.com/calendar/",
+      "detail_url": "https://helenegrimaud.com/event/barcelona/",
+      "first_seen": "2026-11-12"
+    },
+    {
+      "id": "grimaud|2027-05-20|madrid",
+      "artist": "Hélène Grimaud",
+      "date": "2027-05-20",
+      "city": "Madrid",
+      "country": "Spain",
+      "venue": "Auditorio Nacional de Música",
+      "program": "The Last Testament",
+      "pieces": [
+        "Ludwig van Beethoven: Piano Sonata No. 32 in C minor, Op. 111",
+        "Franz Schubert: Piano Sonata No. 21 in B-flat major, D 960"
+      ],
+      "instruments": null,
+      "location_tag": "europe",
+      "source_url": "https://helenegrimaud.com/calendar/",
+      "detail_url": "https://helenegrimaud.com/event/madrid/",
+      "first_seen": "2026-11-12"
+    },
+    {
+      "id": "grimaud|2027-05-23|oviedo",
+      "artist": "Hélène Grimaud",
+      "date": "2027-05-23",
+      "city": "Oviedo",
+      "country": "Spain",
+      "venue": "Auditorio Príncipe Felipe",
+      "program": "The Last Testament",
+      "pieces": [
+        "Ludwig van Beethoven: Piano Sonata No. 32 in C minor, Op. 111",
+        "Franz Schubert: Piano Sonata No. 21 in B-flat major, D 960"
+      ],
+      "instruments": null,
+      "location_tag": "europe",
+      "source_url": "https://helenegrimaud.com/calendar/",
+      "detail_url": "https://helenegrimaud.com/event/oviedo/",
+      "first_seen": "2026-11-12"
+    },
+    {
+      "id": "grimaud|2027-05-25|valència",
+      "artist": "Hélène Grimaud",
+      "date": "2027-05-25",
+      "city": "València",
+      "country": "Spain",
+      "venue": "Palau de la Música de València",
+      "program": "The Last Testament",
+      "pieces": [
+        "Ludwig van Beethoven: Piano Sonata No. 32 in C minor, Op. 111",
+        "Franz Schubert: Piano Sonata No. 21 in B-flat major, D 960"
+      ],
+      "instruments": null,
+      "location_tag": "europe",
+      "source_url": "https://helenegrimaud.com/calendar/",
+      "detail_url": "https://helenegrimaud.com/event/valencia/",
+      "first_seen": "2026-11-12"
+    },
+    {
+      "id": "grimaud|2027-06-08|lugano",
+      "artist": "Hélène Grimaud",
+      "date": "2027-06-08",
+      "city": "Lugano",
+      "country": "Switzerland",
+      "venue": "LAC – Lugano Arte e Cultura, Sala Teatro",
+      "program": "The Last Testament",
+      "pieces": [
+        "Ludwig van Beethoven: Piano Sonata No. 32 in C minor, Op. 111",
+        "Franz Schubert: Piano Sonata No. 21 in B-flat major, D 960"
+      ],
+      "instruments": null,
+      "location_tag": "europe",
+      "source_url": "https://helenegrimaud.com/calendar/",
+      "detail_url": "https://helenegrimaud.com/event/lugano/",
+      "first_seen": "2026-11-12"
+    },
+    {
+      "id": "grimaud|2027-06-11|lucerne",
+      "artist": "Hélène Grimaud",
+      "date": "2027-06-11",
+      "city": "Lucerne",
+      "country": "Switzerland",
+      "venue": "KKL Luzern",
+      "program": "The Last Testament",
+      "pieces": [
+        "Ludwig van Beethoven: Piano Sonata No. 32 in C minor, Op. 111",
+        "Franz Schubert: Piano Sonata No. 21 in B-flat major, D 960"
+      ],
+      "instruments": null,
+      "location_tag": "europe",
+      "source_url": "https://helenegrimaud.com/calendar/",
+      "detail_url": "https://helenegrimaud.com/event/lucerne/",
+      "first_seen": "2026-11-12"
+    },
+    {
+      "id": "grimaud|2027-06-14|munich",
+      "artist": "Hélène Grimaud",
+      "date": "2027-06-14",
+      "city": "Munich",
+      "country": "Germany",
+      "venue": "Isarphilharmonie",
+      "program": "The Last Testament",
+      "pieces": [
+        "Ludwig van Beethoven: Piano Sonata No. 32 in C minor, Op. 111",
+        "Franz Schubert: Piano Sonata No. 21 in B-flat major, D 960"
+      ],
+      "instruments": null,
+      "location_tag": "germany",
+      "source_url": "https://helenegrimaud.com/calendar/",
+      "detail_url": "https://helenegrimaud.com/event/munich/",
+      "first_seen": "2026-11-12"
+    },
+    {
+      "id": "grimaud|2027-06-17|vienna",
+      "artist": "Hélène Grimaud",
+      "date": "2027-06-17",
+      "city": "Vienna",
+      "country": "Austria",
+      "venue": "Wiener Konzerthaus",
+      "program": "The Last Testament",
+      "pieces": [
+        "Ludwig van Beethoven: Piano Sonata No. 32 in C minor, Op. 111",
+        "Franz Schubert: Piano Sonata No. 21 in B-flat major, D 960"
+      ],
+      "instruments": null,
+      "location_tag": "europe",
+      "source_url": "https://helenegrimaud.com/calendar/",
+      "detail_url": "https://helenegrimaud.com/event/vienna/",
+      "first_seen": "2026-11-12"
+    },
+    {
+      "id": "grimaud|2027-06-20|amsterdam",
+      "artist": "Hélène Grimaud",
+      "date": "2027-06-20",
+      "city": "Amsterdam",
+      "country": "Netherlands",
+      "venue": "Het Concertgebouw, Main Hall",
+      "program": "The Last Testament",
+      "pieces": [
+        "Ludwig van Beethoven: Piano Sonata No. 32 in C minor, Op. 111",
+        "Franz Schubert: Piano Sonata No. 21 in B-flat major, D 960"
+      ],
+      "instruments": null,
+      "location_tag": "europe",
+      "source_url": "https://helenegrimaud.com/calendar/",
+      "detail_url": "https://helenegrimaud.com/event/amsterdam/",
+      "first_seen": "2026-11-12"
+    },
+    {
+      "id": "grimaud|2027-06-23|dortmund",
+      "artist": "Hélène Grimaud",
+      "date": "2027-06-23",
+      "city": "Dortmund",
+      "country": "Germany",
+      "venue": "Konzerthaus Dortmund",
+      "program": "Duo Recital Program: Hélène Grimaud, piano; Gautier Capuçon, cello",
+      "pieces": [
+        "Robert Schumann: Fantasiestücke in A minor, Op. 73",
+        "Johannes Brahms: Cello Sonata No. 1 in E minor, Op. 38",
+        "Dmitri Shostakovich: Cello Sonata in D minor, Op. 40"
+      ],
+      "instruments": null,
+      "location_tag": "germany",
+      "source_url": "https://helenegrimaud.com/calendar/",
+      "detail_url": "https://helenegrimaud.com/event/dortmund-2/",
+      "first_seen": "2026-11-12"
+    },
+    {
+      "id": "grimaud|2027-06-26|neubrandenburg",
+      "artist": "Hélène Grimaud",
+      "date": "2027-06-26",
+      "city": "Neubrandenburg",
+      "country": "Germany",
+      "venue": "Konzertkirche Neubrandenburg",
+      "program": "The Last Testament",
+      "pieces": [
+        "Ludwig van Beethoven: Piano Sonata No. 32 in C minor, Op. 111",
+        "Franz Schubert: Piano Sonata No. 21 in B-flat major, D 960"
+      ],
+      "instruments": null,
+      "location_tag": "germany",
+      "source_url": "https://helenegrimaud.com/calendar/",
+      "detail_url": "https://helenegrimaud.com/event/neubrandenburg/",
+      "first_seen": "2026-11-12"
+    },
+    {
+      "id": "grimaud|2027-06-29|burghausen",
+      "artist": "Hélène Grimaud",
+      "date": "2027-06-29",
+      "city": "Burghausen",
+      "country": "Germany",
+      "venue": "Stadtsaal Burghausen",
+      "program": "The Last Testament",
+      "pieces": [
+        "Ludwig van Beethoven: Piano Sonata No. 32 in C minor, Op. 111",
+        "Franz Schubert: Piano Sonata No. 21 in B-flat major, D 960"
+      ],
+      "instruments": null,
+      "location_tag": "germany",
+      "source_url": "https://helenegrimaud.com/calendar/",
+      "detail_url": "https://helenegrimaud.com/event/burghausen/",
+      "first_seen": "2026-11-12"
+    },
+    {
+      "id": "grimaud|2027-07-02|neuvecelle",
+      "artist": "Hélène Grimaud",
+      "date": "2027-07-02",
+      "city": "Neuvecelle",
+      "country": "France",
+      "venue": "La Source Vive",
+      "program": "The Last Testament",
+      "pieces": [
+        "Ludwig van Beethoven: Piano Sonata No. 32 in C minor, Op. 111",
+        "Franz Schubert: Piano Sonata No. 21 in B-flat major, D 960"
+      ],
+      "instruments": null,
+      "location_tag": "europe",
+      "source_url": "https://helenegrimaud.com/calendar/",
+      "detail_url": "https://helenegrimaud.com/event/neuvecelle/",
+      "first_seen": "2026-11-12"
     }
   ]
 }
