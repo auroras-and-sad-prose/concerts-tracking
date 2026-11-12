@@ -418,6 +418,43 @@ func TestTravelCitySurvivesRetag(t *testing.T) {
 	}
 }
 
+// An entry may be added, refreshed or have its answer replaced, but not
+// dropped: the routine never removes one.
+func TestTravelAppendOnly(t *testing.T) {
+	kempen := travelEntry()
+	kempen.City = "Kempen"
+	base := Travel{Cities: []TravelTime{travelEntry(), kempen}}
+
+	refreshed := travelEntry()
+	refreshed.Station = nil
+	refreshed.Train = nil
+	refreshed.NoTrain = &NoTrainRoute{
+		Query:   "Altenkrempe, Germany",
+		Routes:  []ListedRoute{{Name: "Drive", Minutes: 180}},
+		Checked: "2026-11-01",
+	}
+	added := travelEntry()
+	added.City = "Rostock"
+	head := Travel{Cities: []TravelTime{added, kempen, refreshed}}
+	if p := CheckTravelAppendOnly(base, head); len(p) != 0 {
+		t.Fatalf("expected a reordered, refreshed and extended file to pass, got %v", p)
+	}
+	if p := CheckTravelAppendOnly(Travel{}, head); len(p) != 0 {
+		t.Fatalf("expected an empty base to allow anything, got %v", p)
+	}
+
+	p := CheckTravelAppendOnly(base, Travel{Cities: []TravelTime{kempen}})
+	if len(p) != 1 || !strings.Contains(p[0], `"Altenkrempe" was removed`) {
+		t.Fatalf("expected one problem naming the removed city, got %v", p)
+	}
+	// A respelt city is a removal plus an addition; the page joins on the name.
+	respelt := travelEntry()
+	respelt.City = "altenkrempe"
+	if p := CheckTravelAppendOnly(base, Travel{Cities: []TravelTime{respelt, kempen}}); len(p) != 1 {
+		t.Fatalf("expected a respelt city to count as removed, got %v", p)
+	}
+}
+
 func TestTravelRejectsUnknownFields(t *testing.T) {
 	path := filepath.Join(t.TempDir(), "travel.json")
 	content := `{"cities":[{"city":"Altenkrempe","train":{"query":"Altenkrempe, Germany","minutes":190,"route":"Train","carriers":["enno"],"checked":"2026-09-26","via":"Lübeck"}}]}`

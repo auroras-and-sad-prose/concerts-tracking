@@ -233,6 +233,7 @@ func main() {
 	artistsPath := flag.String("artists", "artists.json", "path to the artist roster; empty disables the roster checks")
 	favoritesPath := flag.String("favorites", "favorites.json", "path to the curated favorite works; empty disables the favorites checks")
 	travelPath := flag.String("travel", "travel.json", "path to the train times from Berlin; empty disables the travel checks")
+	travelBasePath := flag.String("travel-base", "", "optional path to the previous version of the travel file; enables its append-only check")
 	stationsPath := flag.String("stations", "tools/stations/de.csv", "path to the German station list travel.json stations are checked against; empty skips that check")
 	findStation := flag.String("find-station", "", "look up a German place name in the station list, print the station to copy into travel.json, and exit")
 	favoritesReport := flag.Bool("favorites-report", false, "print which upcoming concerts play a favorite work; with -base, mark which of those are news")
@@ -321,6 +322,18 @@ func main() {
 		for _, p := range ValidateTravel(travel, f, stationList) {
 			problems = append(problems, fmt.Sprintf("%s: %s", *travelPath, p))
 		}
+		if *travelBasePath != "" {
+			travelBase, err := loadJSON[Travel](*travelBasePath)
+			if err != nil {
+				fmt.Fprintf(os.Stderr, "error: cannot read travel base %s: %v\n", *travelBasePath, err)
+				os.Exit(1)
+			}
+			for _, p := range CheckTravelAppendOnly(travelBase, travel) {
+				problems = append(problems, fmt.Sprintf("%s: %s", *travelPath, p))
+			}
+		}
+	} else if *travelBasePath != "" {
+		fmt.Fprintln(os.Stderr, "note: -travel-base does nothing while -travel is empty")
 	}
 
 	if len(problems) > 0 {
