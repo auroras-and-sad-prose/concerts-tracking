@@ -129,6 +129,11 @@ and never both of the last two:
   `carriers` list that may be empty (a drive has none) — and none of them
   train-based: one that is belongs in `train`.
 
+And, as with `seen.json`, it is checked against the previous version: an entry
+may not be **removed**. What an entry holds may change freely — that is what a
+refresh is — so the check is on the `city` alone, and a respelt city counts as
+a removal.
+
 Run locally before committing (the validator reads `artists.json`,
 `favorites.json`, `travel.json` and `tools/stations/de.csv` from the working
 directory too; `-artists ""`, `-favorites ""`, `-travel ""` and `-stations ""`
@@ -447,8 +452,8 @@ store, and the link stands in for one.
 **Unlike the roster and the favorites, the routine writes this file.** Step 6a
 says how. It adds entries, fills in a missing half, and refreshes a stale
 `train` or `no_train` — replacing one with the other when the newer answer
-differs; it never removes an entry. A wrong entry is corrected by a person
-like any other reviewed change.
+differs; it never removes an entry, and CI fails a change that does. A wrong
+entry is corrected by a person like any other reviewed change.
 
 **Where the numbers come from.**
 - **Train times:** only from the Rome2Rio connector's `get-routes` tool. The

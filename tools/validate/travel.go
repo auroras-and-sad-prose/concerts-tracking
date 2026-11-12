@@ -212,6 +212,27 @@ func ValidateTravel(t Travel, f File, list *stations.List) []string {
 	return problems
 }
 
+// CheckTravelAppendOnly ensures every city travel.json held in base still has
+// an entry in head. The routine adds entries and refreshes them; it never
+// removes one, and nothing could make removal right, since an entry's city is
+// one some row in seen.json has and those rows are never deleted. What an
+// entry holds may change freely: a refreshed answer replaces train with
+// no_train, or one route with another.
+func CheckTravelAppendOnly(base, head Travel) []string {
+	var problems []string
+	kept := make(map[string]bool, len(head.Cities))
+	for _, e := range head.Cities {
+		kept[e.City] = true
+	}
+	for _, e := range base.Cities {
+		if !kept[e.City] {
+			problems = append(problems, fmt.Sprintf(
+				"append-only: existing entry %q was removed; an entry may be refreshed or corrected but not dropped", e.City))
+		}
+	}
+	return problems
+}
+
 // Rome2Rio names a route after its legs, joined by commas: "Train",
 // "Train via Wolfsburg", "Train, night train", "Train, bus, car ferry",
 // "Fly Berlin Brandenburg Airport to Gran Canaria Airport", "Drive,

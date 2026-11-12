@@ -50,9 +50,20 @@ jobs:
             fi
           fi
           echo "base: $base"
+          # A file the base doesn't have yet leaves its half of the check out.
           git show "$base:seen.json" > /tmp/base-seen.json 2>/dev/null || :
+          git show "$base:travel.json" > /tmp/base-travel.json 2>/dev/null || :
+          set --
           if [ -s /tmp/base-seen.json ]; then
-            go run ./tools/validate -file seen.json -base /tmp/base-seen.json
+            set -- "$@" -base /tmp/base-seen.json
           else
-            echo "no base seen.json available; skipping append-only check"
+            echo "no base seen.json available; skipping its append-only check"
+          fi
+          if [ -s /tmp/base-travel.json ]; then
+            set -- "$@" -travel-base /tmp/base-travel.json
+          else
+            echo "no base travel.json available; skipping its append-only check"
+          fi
+          if [ "$#" -gt 0 ]; then
+            go run ./tools/validate -file seen.json "$@"
           fi
