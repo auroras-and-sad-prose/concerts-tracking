@@ -26,14 +26,31 @@ jobs:
         run: go run ./tools/validate -file seen.json
 
       - name: Append-only check vs base
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_REF: ${{ github.base_ref }}
+          BEFORE: ${{ github.event.before }}
         run: |
           set -e
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            git fetch origin "${{ github.base_ref }}" --depth=1
-            git show "origin/${{ github.base_ref }}:seen.json" > /tmp/base-seen.json 2>/dev/null || :
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            git fetch origin "$BASE_REF" --depth=1
+            base="origin/$BASE_REF"
           else
-            git show "HEAD^:seen.json" > /tmp/base-seen.json 2>/dev/null || :
+            # What main pointed at before this push, not HEAD^: a push can carry
+            # several commits, and against HEAD^ only the last one's changes are
+            # checked, so a row deleted in an earlier commit would pass.
+            base="$BEFORE"
+            if ! git cat-file -e "$base^{commit}" 2>/dev/null; then
+              # Not in the checkout after a force push; ask for it by hash.
+              git fetch origin "$base" 2>/dev/null || :
+            fi
+            if ! git cat-file -e "$base^{commit}" 2>/dev/null; then
+              echo "::warning::commit before this push ($base) is unavailable; checking against HEAD^ only"
+              base="HEAD^"
+            fi
           fi
+          echo "base: $base"
+          git show "$base:seen.json" > /tmp/base-seen.json 2>/dev/null || :
           if [ -s /tmp/base-seen.json ]; then
             go run ./tools/validate -file seen.json -base /tmp/base-seen.json
           else
