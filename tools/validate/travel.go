@@ -238,6 +238,11 @@ func CheckTravelAppendOnly(base, head Travel) []string {
 // "Fly Berlin Brandenburg Airport to Gran Canaria Airport", "Drive,
 // Eurotunnel". A "via" list is joined the same way ("Train via Wolfsburg,
 // Hauptbahnhof"), its places capitalized where a later leg is not ("bus").
+//
+// index.html reads these names as well (its readLegs), to label a route and
+// to keep a train-based one from being offered as the alternative to a long
+// train. testdata/routes.json holds the two readings to the same answers: a
+// change here means the same change there and a case in that file.
 var (
 	// railModes are the legs of a trip by train. A rail leg is the bare word
 	// or the word followed by "via", "to" or "from", so "Train and bus" is

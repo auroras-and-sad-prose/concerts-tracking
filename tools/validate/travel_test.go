@@ -398,6 +398,37 @@ func TestLongTrainMatchesFixture(t *testing.T) {
 	}
 }
 
+// index.html reads route names too, to label a route and to tell a
+// train-based one from the rest; the shared fixture holds its reading and
+// this one to the same answers.
+func TestRouteReadingMatchesFixture(t *testing.T) {
+	data, err := os.ReadFile(filepath.Join("testdata", "routes.json"))
+	if err != nil {
+		t.Fatalf("read fixture: %v", err)
+	}
+	var fixture struct {
+		Routes []struct {
+			Name       string `json:"name"`
+			TrainBased bool   `json:"train_based"`
+			AllTrain   bool   `json:"all_train"`
+		} `json:"routes"`
+	}
+	if err := json.Unmarshal(data, &fixture); err != nil {
+		t.Fatalf("parse fixture: %v", err)
+	}
+	if len(fixture.Routes) == 0 {
+		t.Fatal("fixture lists no routes")
+	}
+	for _, r := range fixture.Routes {
+		if got := isTrainBased(r.Name); got != r.TrainBased {
+			t.Errorf("isTrainBased(%q) = %v, fixture says %v", r.Name, got, r.TrainBased)
+		}
+		if got := isAllTrain(r.Name); got != r.AllTrain {
+			t.Errorf("isAllTrain(%q) = %v, fixture says %v", r.Name, got, r.AllTrain)
+		}
+	}
+}
+
 func TestTravelDuplicateCity(t *testing.T) {
 	f := File{Concerts: []Concert{valid()}}
 	if p := ValidateTravel(Travel{Cities: []TravelTime{travelEntry(), travelEntry()}}, f, stationList(t)); len(p) == 0 {
