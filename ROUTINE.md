@@ -10,7 +10,7 @@ is in `CLAUDE.md`.
 ## Operating procedure for the concert-watch routine
 
 You are a scheduled concert-monitoring agent. Your job: detect NEW upcoming
-concerts by eight classical musicians and alert about them, using this repo as
+concerts by the classical musicians listed below and alert about them, using this repo as
 memory so the same concert is never alerted on twice. You run inside a fresh
 clone of this private repo with read/write access to repo contents, to Pull
 Requests. All state lives in `seen.json` at the repo root.
@@ -45,15 +45,21 @@ following links out of it is how detail — and sometimes a concert — is found
    programme, and carries a "View event" link to her own
    `helenegrimaud.com/event/…` page. On 2026-11-12 all 38 upcoming dates,
    through July 2027, were in the one fetched page; the `←`/`→` arrows
-   belong to the Month view, not a pager)
+   belong to the Month view, not a pager). Read the city together with the
+   line under it before step 3: her first listed date was Athens, Georgia ·
+   USA, a US recital, not Athens in Greece, and a US date is ignored however
+   European its city's name sounds. An entry headed `Recital Program: The
+   Last Testament` gives the recital's title, not a work: `pieces` holds
+   only the lines below it that name a composer and a work (rule 3), and
+   the title may head `program`, as a series name does on other rows.
 
-These seven pages list upcoming concerts directly (Perlman has no primary
+These pages list upcoming concerts directly (Perlman has no primary
 source — see above). Bürkev's and Oganyan's pages separate an upcoming list
 from a past-concerts list on the same page — don't trust the page's own
 "upcoming/past" labels; decide what's current purely from the date filter in
 step 2.
 
-**Secondary source — Bachtrack, for all eight artists (Perlman's only source):**
+**Secondary source — Bachtrack, for every artist above (Perlman's only source):**
 
 1. Olga Scheps — https://bachtrack.com/performer/olga-scheps
 2. María Dueñas — https://bachtrack.com/performer/maria-duenas
@@ -699,7 +705,7 @@ succeeds, and the concerts are simply no longer in the bytes. All three look
 exactly like a quiet day, and a quiet day sends nothing, so unless the run says
 so the reader mistakes a hole in the coverage for a day without news. Name the
 source in the notification (`concert-watch 2026-08-22: no new concerts;
-bachtrack.com failed for all 8 artists — see run report`) and in full in step
+bachtrack.com failed for every artist — see run report`) and in full in step
 8. With no data to change there is nothing to commit and no PR to open, as for
 a conflict. When the run has other news, or a `travel.json` change that would
 otherwise go out silently, the failure rides on the same notification line and
@@ -713,7 +719,7 @@ everything together.
 
 If there are zero new concerts, no status changed, no favorite turned up on an
 existing row, no conflict was found and no source failed, print a one-line
-summary instead (e.g. "No new concerts. Checked 8 artists, all sources OK.").
+summary instead (e.g. "No new concerts. Checked N artists, all sources OK.", with N the tracked artists in `artists.json`).
 A quiet run leaves no branch behind, opens no PR, and sends no notification:
 with nothing to say, saying it loudly is how a daily routine trains its reader
 to ignore it.
