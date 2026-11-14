@@ -7,6 +7,11 @@ on:
   pull_request:
     paths: ["seen.json", "artists.json", "favorites.json", "travel.json", "tools/**", "go.mod", ".github/workflows/validate.yml"]
 
+# Read-only token: these jobs only check out and fetch the repo, so a
+# compromised action or dependency can't push or edit anything with it.
+permissions:
+  contents: read
+
 jobs:
   validate:
     runs-on: ubuntu-latest
