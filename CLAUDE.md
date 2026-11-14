@@ -169,6 +169,12 @@ legs (`tools/validate/testdata/routes.json`), and the eight-hour threshold
 cd tests && npm install && npx playwright install chromium && npm test
 ```
 
+Each Playwright release expects its own Chromium build, so rerun
+`npx playwright install chromium` after any change to the Playwright version in
+`tests/package.json`; otherwise the suite fails at launch with "Executable
+doesn't exist". CI runs the suite on the Node version set in
+`.github/workflows/smoke.yml`.
+
 ## The artist roster (`artists.json`)
 
 Which instrument a musician plays is a stable fact about the performer, not
