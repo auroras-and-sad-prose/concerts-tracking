@@ -1157,6 +1157,21 @@
       }
     },
     {
+      "city": "València",
+      "train": {
+        "query": "Valencia, Spain",
+        "minutes": 1312,
+        "route": "Train",
+        "carriers": ["Deutsche Bahn Intercity (DB IC)", "TGV inOui", "Renfe Viajeros"],
+        "others": [
+          { "name": "Fly", "minutes": 351, "carriers": ["Ryanair"] },
+          { "name": "Train, bus", "minutes": 1809, "carriers": ["Deutsche Bahn Intercity (DB IC)", "FlixBus", "Renfe Viajeros"] },
+          { "name": "Drive", "minutes": 1263, "carriers": [] }
+        ],
+        "checked": "2026-11-14"
+      }
+    },
+    {
       "city": "Yerevan",
       "train": {
         "query": "Yerevan, Armenia",
