@@ -3,9 +3,14 @@ name: smoke-page
 on:
   push:
     branches: [main]
-    paths: ["index.html", "seen.json", "artists.json", "favorites.json", "travel.json", "tests/**", "tools/favorites/testdata/**", "tools/validate/testdata/**"]
+    paths: ["index.html", "seen.json", "artists.json", "favorites.json", "travel.json", "tests/**", "tools/favorites/testdata/**", "tools/validate/testdata/**", ".github/workflows/smoke.yml"]
   pull_request:
-    paths: ["index.html", "seen.json", "artists.json", "favorites.json", "travel.json", "tests/**", "tools/favorites/testdata/**", "tools/validate/testdata/**"]
+    paths: ["index.html", "seen.json", "artists.json", "favorites.json", "travel.json", "tests/**", "tools/favorites/testdata/**", "tools/validate/testdata/**", ".github/workflows/smoke.yml"]
+
+# Read-only token: these jobs only check out and fetch the repo, so a
+# compromised action or dependency can't push or edit anything with it.
+permissions:
+  contents: read
 
 jobs:
   smoke:
