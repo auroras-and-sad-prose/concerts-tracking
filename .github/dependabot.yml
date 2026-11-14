@@ -1,0 +1,27 @@
+# Dependency updates arrive as pull requests that CI checks and a person
+# merges; nothing floats to "latest" on its own. The cooldown holds back a
+# release until it is a week old, since a hijacked release is usually caught
+# and pulled within days.
+#
+# Go is left out on purpose: go.mod has no dependencies, so there is nothing
+# for Dependabot to update. Add a "gomod" entry if it ever gains a `require`.
+version: 2
+updates:
+  # Playwright for the browser smoke tests (tests/package.json and its lockfile).
+  - package-ecosystem: npm
+    directory: /tests
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7
+
+  # The actions the workflows use (checkout, setup-go, setup-node).
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7
+    groups:
+      actions:
+        patterns: ["*"]
