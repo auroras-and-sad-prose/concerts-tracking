@@ -119,14 +119,24 @@ sends, the same way the Deutsche Grammophon "Load more" request is sent below:
    a desktop card (`listing-shortform`) and then a mobile card
    (`listing-ms`). The two hold different fields, so group the cards by
    `data-id` and read one listing from both. Don't keep one card and drop the
-   other.
+   other. Every listing seen on 2026-11-21 had both cards and every field
+   below. If a listing lacks a card or a field, read what it has: a missing
+   venue stays `null` (rule 2), and missing works make `pieces` the string
+   form (rule 3). Name the listing in step 8; don't drop it silently. A
+   listing with no readable date or city can't become a row. Report it in
+   step 8 rather than skipping it.
    - **Dates**, from `data-dates` on either card. It holds one Unix timestamp
      per performance, comma-separated (`1796843700,1797016500` for two
      Concertgebouw nights), each a start time in UTC. Convert each to the date
-     in the venue's local time. Each is its own concert (step 4: the listing
-     sets out each night). Check the result against the dates the cards print
-     (`listing-ms-dates`, `listing-shortform-dates`, e.g. `Dec 09, 11`).
-     Don't take the date from the `data-label` on the mobile card's
+     in the venue's local time. A listing with several timestamps is several
+     concerts, one row per date. This is not step 4's case of two sources
+     describing one engagement differently: here one source sets out each
+     performance with its own timestamp. Check every converted date against
+     the dates the cards print (`listing-ms-dates`, `listing-shortform-dates`,
+     e.g. `Dec 09, 11`). If they disagree, write no row for that listing:
+     report it in step 8 (and in the PR body) as a conflict under rule 10,
+     quoting both. A wrong `date` can't be corrected later, because it is
+     frozen. Don't take the date from the `data-label` on the mobile card's
      `concert-event` link (`2026-Dec-09, Concertgebouw: Main Hall: …`): it
      names only the first night.
    - **City and venue**, from the mobile card's `listing-ms-city` and
@@ -146,10 +156,18 @@ sends, the same way the Deutsche Grammophon "Load more" request is sent below:
 On 2026-11-21 the answer came back in one piece: 16 listings and 18 dates for
 Julia Fischer, with no `btk-search-more` element in `data.html`. The page
 script pages a long list through that element. It carries `data-startrow`
-(and `data-param`), and pressing it requests
-`json/search/get-results/<width>/listing/<param>;startrow=<n>`. If an answer
-contains a `btk-search-more` element, the list has not been read until those
-requests return no more listings. If you cannot exhaust it, report the source
+and `data-param`, and pressing it sends a GET to
+`https://bachtrack.com/json/search/get-results/<width>/listing/<rest>`, where:
+- `<width>` is the browser window's width in pixels. Send `1280`, a desktop
+  width.
+- `<rest>` is `<param>;startrow=<n>`, or just `startrow=<n>` when `data-param`
+  is empty.
+
+The answer's `data.count` is how many listings came back and `data.text` holds
+their cards. Add `count` to `startrow` for the next request. Stop when `count`
+is 0. These requests come from the same script as the first one, so the same
+footing applies. If an answer contains a `btk-search-more` element, the list
+has not been read until these requests return no more listings. If you cannot exhaust it, report the source
 as partly read in step 8. If the call fails or `result` is not `"OK"`, the
 search source has failed for that artist (step 7). Never take the profile
 teaser as the whole list. Rule 5's re-fetch of a search-events `source_url` is
