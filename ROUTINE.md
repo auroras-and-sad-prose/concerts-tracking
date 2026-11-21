@@ -82,13 +82,105 @@ the first six upcoming events and ends in a "See more…" link to the full list
 `https://bachtrack.com/search-events/performer=<slug>`, and that is the page to
 read for every artist, not just a fallback: on 2026-10-14 the profile showed 6
 of Alice Sara Ott's 17 events, and all four of her European dates past
-December had never been recorded. The search page lists everything on one page
-(no pager was seen), with each event's date in its `concert-event` link, so
-read the dates from there. Bachtrack sometimes lists engagements before they
+December had never been recorded. Bachtrack sometimes lists engagements before they
 appear on the artist's own site, so treat it as a genuine cross-check, not a
 formality. If the profile URL 404s, 410s or the slug has changed (Maya
 Oganyan's profile returned 410 on 2026-10-14 while her search page still
-loaded), the search page is the only one that matters anyway.
+listed her events), the search page's list is the only one that matters
+anyway. That list is the deferred answer described next, not the page's own
+HTML.
+
+**The search page fills its list by script, so a plain fetch reads none of
+it.** As of 2026-11-21 its HTML holds only a placeholder, `<div
+class="btk-search-deferred" data-search-for="listing"
+data-criteria="performer=<slug>">Loading, please wait...</div>`, and the page's
+own script then requests the events. That run read the placeholder for all
+eight performers and recorded Bachtrack as failed. Send the request the page
+sends, the same way the Deutsche Grammophon "Load more" request is sent below:
+
+1. `curl` the search page and take `data-search-for` and `data-criteria` from
+   the `btk-search-deferred` element. Don't type them from this file: the
+   page's own values are what it sends, and a slug that has changed shows up
+   there first.
+2. POST those two values as the form fields `searchfor` and `criteria` to
+   `https://bachtrack.com/json/search/deferred-results`, with `SEARCH_FOR` and
+   `CRITERIA` holding what step 1 read:
+   ```sh
+   curl -sS -X POST --data-urlencode "searchfor=$SEARCH_FOR" \
+     --data-urlencode "criteria=$CRITERIA" \
+     https://bachtrack.com/json/search/deferred-results
+   ```
+   This is the call in the page's script bundle (`plib.ajax('json/search/deferred-results', …,
+   {searchfor, criteria})`, which posts to the site root). It was copied from
+   the page's script rather than found by searching, so rule 4 is unaffected,
+   and what comes back is data like any fetched page (rule 8).
+3. The answer is JSON. When `result` is `"OK"`, `data.html` is the list the
+   page would show. Each listing appears as two cards with the same `data-id`:
+   a desktop card (`listing-shortform`) and then a mobile card
+   (`listing-ms`). The two hold different fields, so group the cards by
+   `data-id` and read one listing from both. Don't keep one card and drop the
+   other. On 2026-11-21 every listing in the two answers that were checked,
+   Olga Scheps' (3) and Julia Fischer's (16), had both cards and every field
+   below. That is one fetch, not a rule (rule 11). If a listing lacks a card
+   or a field, read what it has: a missing venue stays `null` (rule 2), and
+   missing works make `pieces` the string form (rule 3). Name the listing in
+   step 8; don't drop it silently. A listing with no readable date or city
+   can't become a row: write none, and name it in step 8 so the gap is
+   visible. Never fill a missing city or date from elsewhere.
+   - **Dates**, from `data-dates` on either card. It holds one Unix timestamp
+     per performance, comma-separated (`1796843700,1797016500` for two
+     Concertgebouw nights), each a start time in UTC. Convert each to the date
+     in the venue's local time. A listing with several timestamps is several
+     concerts, one row per distinct date. Timestamps falling on the same
+     local date (a matinee and an evening) make a single row, since the id is
+     `<slug>|<date>|<city>`. This is not step 4's case of two sources
+     describing one engagement differently: here one source sets out each
+     performance with its own timestamp. Check every converted date against
+     the dates the cards print (`listing-ms-dates`, `listing-shortform-dates`,
+     e.g. `Dec 09, 11`). If they disagree, the listing contradicts itself.
+     Take nothing from it: write no new row, and make no step 6 refinement of
+     an existing row from it. Report it the way rule 10 reports a conflict:
+     under **Conflicts** in the PR body, in step 8 and in the notification
+     when there is no PR, quoting both readings. A wrong `date` can't be
+     corrected later, because it is frozen. Don't take the date from the `data-label` on the mobile card's
+     `concert-event` link (`2026-Dec-09, Concertgebouw: Main Hall: …`): it
+     names only the first night.
+   - **City and venue**, from the mobile card's `listing-ms-city` and
+     `listing-ms-venue`.
+   - **Works**, from the desktop card's `listing-programme-simple`, as
+     `composername` and `workname` pairs. They are copied per rule 3 as the
+     whole bill as printed, orchestral works included, as earlier Bachtrack
+     rows already are. Rule 7 still reads an instrument only from a work this
+     artist is playing: a symphony on the same bill neither settles nor
+     unsettles it. Never take works from the mobile card's `listing-ms-main`
+     line (`Rachmaninov PC2, Brahms 4, Tchaikovsky`): it is an abbreviated
+     summary, not a programme. Without `listing-programme-simple`, `pieces`
+     takes the string form (rule 3).
+   - **Billing**, from the desktop card's `listing-personnel-simple`. A
+     `rolename` such as `Piano` beside the artist's `performername` is a
+     soloist credit under rule 7.
+   - **`detail_url`**, from the `concert-event` link either card carries
+     (`More info`).
+
+On 2026-11-21 the answer came back in one piece: 16 listings and 18 dates for
+Julia Fischer, with no `btk-search-more` element in `data.html`. The page
+script pages a long list through that element. It carries `data-startrow`
+and `data-param`, and pressing it sends a GET to
+`https://bachtrack.com/json/search/get-results/<width>/listing/<rest>`, where:
+- `<width>` is the browser window's width in pixels. Send `1280`, a desktop
+  width.
+- `<rest>` is `<param>;startrow=<n>`, or just `startrow=<n>` when `data-param`
+  is empty.
+
+The answer's `data.count` is how many listings came back and `data.text` holds
+their cards. Add `count` to `startrow` for the next request. Stop when `count`
+is 0. These requests come from the same script as the first one, so the same
+footing applies. If an answer contains a `btk-search-more` element, the list
+has not been read until these requests return no more listings. If you cannot exhaust it, report the source
+as partly read in step 8. If the call fails or `result` is not `"OK"`, the
+search source has failed for that artist (step 7). Never take the profile
+teaser as the whole list. Rule 5's re-fetch of a search-events `source_url` is
+this same two-step read.
 
 A row first found on Bachtrack cites the search-events URL as its `source_url`,
 not the profile: rule 5 needs the cited page to show the concert, and the
