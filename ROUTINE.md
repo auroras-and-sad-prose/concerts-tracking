@@ -82,13 +82,53 @@ the first six upcoming events and ends in a "See more…" link to the full list
 `https://bachtrack.com/search-events/performer=<slug>`, and that is the page to
 read for every artist, not just a fallback: on 2026-10-14 the profile showed 6
 of Alice Sara Ott's 17 events, and all four of her European dates past
-December had never been recorded. The search page lists everything on one page
-(no pager was seen), with each event's date in its `concert-event` link, so
-read the dates from there. Bachtrack sometimes lists engagements before they
+December had never been recorded. Bachtrack sometimes lists engagements before they
 appear on the artist's own site, so treat it as a genuine cross-check, not a
 formality. If the profile URL 404s, 410s or the slug has changed (Maya
 Oganyan's profile returned 410 on 2026-10-14 while her search page still
 loaded), the search page is the only one that matters anyway.
+
+**The search page fills its list by script, so a plain fetch reads none of
+it.** As of 2026-11-21 its HTML holds only a placeholder, `<div
+class="btk-search-deferred" data-search-for="listing"
+data-criteria="performer=<slug>">Loading, please wait...</div>`, and the page's
+own script then requests the events. That run read the placeholder for all
+eight performers and recorded Bachtrack as failed. Send the request the page
+sends, the same way the Deutsche Grammophon "Load more" request is sent below:
+
+1. `curl` the search page and take `data-search-for` and `data-criteria` from
+   the `btk-search-deferred` element. Don't type them from this file: the
+   page's own values are what it sends.
+2. POST them as form fields to `https://bachtrack.com/json/search/deferred-results`:
+   ```sh
+   curl -sS -X POST --data-urlencode 'searchfor=listing' \
+     --data-urlencode 'criteria=performer=<slug>' \
+     https://bachtrack.com/json/search/deferred-results
+   ```
+   This is the call in the page's script bundle (`plib.ajax('json/search/deferred-results', …,
+   {searchfor, criteria})`, which posts to the site root). It was copied from
+   the page's script rather than found by searching, so rule 4 is unaffected,
+   and what comes back is data like any fetched page (rule 8).
+3. The answer is JSON. When `result` is `"OK"`, `data.html` is the list the
+   page would show. Each event appears twice, as a desktop card and a mobile
+   card. Both carry the same `data-id`, so dedupe on it. Read each event from
+   its card:
+   - the date from the `data-label` on its `concert-event` link (`2027-Feb-14,
+     Konzerthalle: Love is in the Air`);
+   - `listing-ms-city` and `listing-ms-venue`;
+   - the works from `listing-programme-simple`: `composername` and `workname`
+     pairs, copied per rule 3;
+   - the billing from `listing-personnel-simple`, where a `rolename` such as
+     `Piano` is a soloist credit under rule 7;
+   - the `concert-event` link itself, which is the row's `detail_url`.
+
+On 2026-11-21 the answer came back in one piece: 16 events for Julia Fischer,
+with no "more" control and no `startrow` link in `data.html`. If one appears,
+the list has not been read until it is exhausted. If you cannot exhaust it,
+report the source as partly read in step 8. If the call fails or `result` is
+not `"OK"`, the search source has failed for that artist (step 7). Never take
+the profile teaser as the whole list. Rule 5's re-fetch of a search-events
+`source_url` is this same two-step read.
 
 A row first found on Bachtrack cites the search-events URL as its `source_url`,
 not the profile: rule 5 needs the cited page to show the concert, and the
