@@ -131,7 +131,9 @@ sends, the same way the Deutsche Grammophon "Load more" request is sent below:
      per performance, comma-separated (`1796843700,1797016500` for two
      Concertgebouw nights), each a start time in UTC. Convert each to the date
      in the venue's local time. A listing with several timestamps is several
-     concerts, one row per date. This is not step 4's case of two sources
+     concerts, one row per distinct date. Timestamps falling on the same
+     local date (a matinee and an evening) make a single row, since the id is
+     `<slug>|<date>|<city>`. This is not step 4's case of two sources
      describing one engagement differently: here one source sets out each
      performance with its own timestamp. Check every converted date against
      the dates the cards print (`listing-ms-dates`, `listing-shortform-dates`,
@@ -150,7 +152,10 @@ sends, the same way the Deutsche Grammophon "Load more" request is sent below:
      whole bill as printed, orchestral works included, as earlier Bachtrack
      rows already are. Rule 7 still reads an instrument only from a work this
      artist is playing: a symphony on the same bill neither settles nor
-     unsettles it.
+     unsettles it. Never take works from the mobile card's `listing-ms-main`
+     line (`Rachmaninov PC2, Brahms 4, Tchaikovsky`): it is an abbreviated
+     summary, not a programme. Without `listing-programme-simple`, `pieces`
+     takes the string form (rule 3).
    - **Billing**, from the desktop card's `listing-personnel-simple`. A
      `rolename` such as `Piano` beside the artist's `performername` is a
      soloist credit under rule 7.
