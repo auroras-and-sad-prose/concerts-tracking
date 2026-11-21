@@ -119,12 +119,14 @@ sends, the same way the Deutsche Grammophon "Load more" request is sent below:
    a desktop card (`listing-shortform`) and then a mobile card
    (`listing-ms`). The two hold different fields, so group the cards by
    `data-id` and read one listing from both. Don't keep one card and drop the
-   other. Every listing seen on 2026-11-21 had both cards and every field
-   below. If a listing lacks a card or a field, read what it has: a missing
-   venue stays `null` (rule 2), and missing works make `pieces` the string
-   form (rule 3). Name the listing in step 8; don't drop it silently. A
-   listing with no readable date or city can't become a row. Report it in
-   step 8 rather than skipping it.
+   other. On 2026-11-21 every listing in the two answers that were checked,
+   Olga Scheps' (3) and Julia Fischer's (16), had both cards and every field
+   below. That is one fetch, not a rule (rule 11). If a listing lacks a card
+   or a field, read what it has: a missing venue stays `null` (rule 2), and
+   missing works make `pieces` the string form (rule 3). Name the listing in
+   step 8; don't drop it silently. A listing with no readable date or city
+   can't become a row: write none, and name it in step 8 so the gap is
+   visible. Never fill a missing city or date from elsewhere.
    - **Dates**, from `data-dates` on either card. It holds one Unix timestamp
      per performance, comma-separated (`1796843700,1797016500` for two
      Concertgebouw nights), each a start time in UTC. Convert each to the date
@@ -133,10 +135,12 @@ sends, the same way the Deutsche Grammophon "Load more" request is sent below:
      describing one engagement differently: here one source sets out each
      performance with its own timestamp. Check every converted date against
      the dates the cards print (`listing-ms-dates`, `listing-shortform-dates`,
-     e.g. `Dec 09, 11`). If they disagree, write no row for that listing:
-     report it in step 8 (and in the PR body) as a conflict under rule 10,
-     quoting both. A wrong `date` can't be corrected later, because it is
-     frozen. Don't take the date from the `data-label` on the mobile card's
+     e.g. `Dec 09, 11`). If they disagree, the listing contradicts itself.
+     Take nothing from it: write no new row, and make no step 6 refinement of
+     an existing row from it. Report it the way rule 10 reports a conflict:
+     under **Conflicts** in the PR body, in step 8 and in the notification
+     when there is no PR, quoting both readings. A wrong `date` can't be
+     corrected later, because it is frozen. Don't take the date from the `data-label` on the mobile card's
      `concert-event` link (`2026-Dec-09, Concertgebouw: Main Hall: …`): it
      names only the first night.
    - **City and venue**, from the mobile card's `listing-ms-city` and
