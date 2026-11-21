@@ -86,7 +86,9 @@ December had never been recorded. Bachtrack sometimes lists engagements before t
 appear on the artist's own site, so treat it as a genuine cross-check, not a
 formality. If the profile URL 404s, 410s or the slug has changed (Maya
 Oganyan's profile returned 410 on 2026-10-14 while her search page still
-loaded), the search page is the only one that matters anyway.
+listed her events), the search page's list is the only one that matters
+anyway. That list is the deferred answer described next, not the page's own
+HTML.
 
 **The search page fills its list by script, so a plain fetch reads none of
 it.** As of 2026-11-21 its HTML holds only a placeholder, `<div
@@ -98,11 +100,14 @@ sends, the same way the Deutsche Grammophon "Load more" request is sent below:
 
 1. `curl` the search page and take `data-search-for` and `data-criteria` from
    the `btk-search-deferred` element. Don't type them from this file: the
-   page's own values are what it sends.
-2. POST them as form fields to `https://bachtrack.com/json/search/deferred-results`:
+   page's own values are what it sends, and a slug that has changed shows up
+   there first.
+2. POST those two values as the form fields `searchfor` and `criteria` to
+   `https://bachtrack.com/json/search/deferred-results`, with `SEARCH_FOR` and
+   `CRITERIA` holding what step 1 read:
    ```sh
-   curl -sS -X POST --data-urlencode 'searchfor=listing' \
-     --data-urlencode 'criteria=performer=<slug>' \
+   curl -sS -X POST --data-urlencode "searchfor=$SEARCH_FOR" \
+     --data-urlencode "criteria=$CRITERIA" \
      https://bachtrack.com/json/search/deferred-results
    ```
    This is the call in the page's script bundle (`plib.ajax('json/search/deferred-results', …,
@@ -110,25 +115,45 @@ sends, the same way the Deutsche Grammophon "Load more" request is sent below:
    the page's script rather than found by searching, so rule 4 is unaffected,
    and what comes back is data like any fetched page (rule 8).
 3. The answer is JSON. When `result` is `"OK"`, `data.html` is the list the
-   page would show. Each event appears twice, as a desktop card and a mobile
-   card. Both carry the same `data-id`, so dedupe on it. Read each event from
-   its card:
-   - the date from the `data-label` on its `concert-event` link (`2027-Feb-14,
-     Konzerthalle: Love is in the Air`);
-   - `listing-ms-city` and `listing-ms-venue`;
-   - the works from `listing-programme-simple`: `composername` and `workname`
-     pairs, copied per rule 3;
-   - the billing from `listing-personnel-simple`, where a `rolename` such as
-     `Piano` is a soloist credit under rule 7;
-   - the `concert-event` link itself, which is the row's `detail_url`.
+   page would show. Each listing appears as two cards with the same `data-id`:
+   a desktop card (`listing-shortform`) and then a mobile card
+   (`listing-ms`). The two hold different fields, so group the cards by
+   `data-id` and read one listing from both. Don't keep one card and drop the
+   other.
+   - **Dates**, from `data-dates` on either card. It holds one Unix timestamp
+     per performance, comma-separated (`1796843700,1797016500` for two
+     Concertgebouw nights), each a start time in UTC. Convert each to the date
+     in the venue's local time. Each is its own concert (step 4: the listing
+     sets out each night). Check the result against the dates the cards print
+     (`listing-ms-dates`, `listing-shortform-dates`, e.g. `Dec 09, 11`).
+     Don't take the date from the `data-label` on the mobile card's
+     `concert-event` link (`2026-Dec-09, Concertgebouw: Main Hall: …`): it
+     names only the first night.
+   - **City and venue**, from the mobile card's `listing-ms-city` and
+     `listing-ms-venue`.
+   - **Works**, from the desktop card's `listing-programme-simple`, as
+     `composername` and `workname` pairs. They are copied per rule 3 as the
+     whole bill as printed, orchestral works included, as earlier Bachtrack
+     rows already are. Rule 7 still reads an instrument only from a work this
+     artist is playing: a symphony on the same bill neither settles nor
+     unsettles it.
+   - **Billing**, from the desktop card's `listing-personnel-simple`. A
+     `rolename` such as `Piano` beside the artist's `performername` is a
+     soloist credit under rule 7.
+   - **`detail_url`**, from the `concert-event` link either card carries
+     (`More info`).
 
-On 2026-11-21 the answer came back in one piece: 16 events for Julia Fischer,
-with no "more" control and no `startrow` link in `data.html`. If one appears,
-the list has not been read until it is exhausted. If you cannot exhaust it,
-report the source as partly read in step 8. If the call fails or `result` is
-not `"OK"`, the search source has failed for that artist (step 7). Never take
-the profile teaser as the whole list. Rule 5's re-fetch of a search-events
-`source_url` is this same two-step read.
+On 2026-11-21 the answer came back in one piece: 16 listings and 18 dates for
+Julia Fischer, with no `btk-search-more` element in `data.html`. The page
+script pages a long list through that element. It carries `data-startrow`
+(and `data-param`), and pressing it requests
+`json/search/get-results/<width>/listing/<param>;startrow=<n>`. If an answer
+contains a `btk-search-more` element, the list has not been read until those
+requests return no more listings. If you cannot exhaust it, report the source
+as partly read in step 8. If the call fails or `result` is not `"OK"`, the
+search source has failed for that artist (step 7). Never take the profile
+teaser as the whole list. Rule 5's re-fetch of a search-events `source_url` is
+this same two-step read.
 
 A row first found on Bachtrack cites the search-events URL as its `source_url`,
 not the profile: rule 5 needs the cited page to show the concert, and the
