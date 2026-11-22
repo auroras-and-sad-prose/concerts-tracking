@@ -1887,12 +1887,20 @@
       "date": "2027-03-14",
       "city": "London",
       "country": "United Kingdom",
-      "venue": "The Southbank Centre",
-      "program": "Julia Fischer",
-      "pieces": "Programme not announced",
+      "venue": "Southbank Centre: Queen Elizabeth Hall",
+      "program": "Julia Fischer & Yulianna Avdeeva: Beethoven",
+      "pieces": [
+        "Handel: Violin Sonata in F major, Op.1 no.12, HWV 370",
+        "Respighi: Violin Sonata in B minor",
+        "Beethoven: Violin Sonata no. 9 in A major \"Kreutzer\", Op.47"
+      ],
       "location_tag": "europe",
       "source_url": "https://www.juliafischer.com/en/events",
-      "first_seen": "2026-09-06"
+      "first_seen": "2026-09-06",
+      "instruments": [
+        "violin"
+      ],
+      "detail_url": "https://bachtrack.com/concert-event/julia-fischer-yulianna-avdeeva-beethoven-southbank-centre-queen-elizabeth-hall-14-march-2027/450387"
     },
     {
       "id": "fischer|2027-03-15|nijmegen",
@@ -3548,7 +3556,7 @@
       "instruments": null,
       "location_tag": "germany",
       "source_url": "https://www.deutschegrammophon.com/en/artists/maria-duenas/on-tour",
-      "detail_url": null,
+      "detail_url": "https://bachtrack.com/concert-event/philharmonia-orchestra-london-weber-beethoven-tchaikovsky-philharmonia-orchestra-gasteig-hp8-isarphilharmonie-4-may-2027/451375",
       "first_seen": "2026-10-14"
     },
     {
@@ -3699,7 +3707,7 @@
       "instruments": null,
       "location_tag": "europe",
       "source_url": "https://www.alicesaraott.com/calendar",
-      "detail_url": null,
+      "detail_url": "https://www.alicesaraott.com/schedule/madrid-spain-2027-february-04",
       "first_seen": "2026-10-24"
     },
     {
@@ -3716,7 +3724,7 @@
       "instruments": null,
       "location_tag": "europe",
       "source_url": "https://www.alicesaraott.com/calendar",
-      "detail_url": null,
+      "detail_url": "https://www.alicesaraott.com/schedule/madrid-spain-2027-february-05",
       "first_seen": "2026-10-24"
     },
     {
