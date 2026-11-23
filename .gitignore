@@ -3,3 +3,6 @@
 
 # npm install in tests/ drops Playwright here
 /tests/node_modules/
+
+# go run ./tools/fetch writes the lists it reads here
+/.cache/

@@ -175,6 +175,28 @@ Each Playwright release expects its own Chromium build, so rerun
 doesn't exist". CI runs the suite on the Node version set in
 `.github/workflows/smoke.yml`.
 
+## The fetch tool and its allow rule (`tools/fetch`, `.claude/settings.json`)
+
+Two of the routine's sources fill their lists by script: Bachtrack's search
+page and the Deutsche Grammophon "Load more" button. Reading them means
+sending the POST requests those pages send. `tools/fetch` sends them:
+
+```sh
+go run ./tools/fetch bachtrack <performer-slug>
+go run ./tools/fetch dg https://www.deutschegrammophon.com/en/artists/maria-duenas/on-tour
+```
+
+It writes what it read under `.cache/fetch/` (gitignored) and exits 0
+(read to the end), 2 (partly read) or 1 (failed). `.claude/settings.json`
+allows exactly those two commands, so a scheduled run, which no one is there
+to approve prompts for, can make the requests. On 2026-11-23 the same requests
+typed by hand were refused by the auto-mode classifier. Keep the rule this
+narrow. The tool takes nothing but a slug or an on-tour page on
+deutschegrammophon.com and writes nowhere else, and its tests
+(`TestRunRefusesOtherArguments`) hold it to that, because the rule trusts it
+with any argument. The rule also trusts whatever code is in `tools/fetch` when
+the run starts, which is one more reason a run never edits `tools/` (step 7).
+
 ## The artist roster (`artists.json`)
 
 Which instrument a musician plays is a stable fact about the performer, not
