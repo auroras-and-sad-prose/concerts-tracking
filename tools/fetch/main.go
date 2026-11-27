@@ -75,17 +75,28 @@ func run(args []string, stdout, stderr io.Writer) int {
 }
 
 func runWith(cfg config, args []string, stdout, stderr io.Writer) int {
-	if len(args) != 2 {
+	// A refused command still prints its FAILED line, so a caller keyed on
+	// the outcome word always finds one; the usage goes to stderr beside it.
+	refuse := func(label, format string, a ...any) int {
+		fmt.Fprintf(stdout, "%s: FAILED: %s\n", label, fmt.Sprintf(format, a...))
 		fmt.Fprintln(stderr, usage)
 		return 1
+	}
+	if len(args) == 0 {
+		return refuse("fetch", "no source given")
+	}
+	if args[0] != "bachtrack" && args[0] != "dg" {
+		return refuse("fetch", "unknown source %q", args[0])
+	}
+	if len(args) != 2 {
+		return refuse(args[0], "expected one argument after %q, got %d", args[0], len(args)-1)
 	}
 	c := cfg.client
 	switch args[0] {
 	case "bachtrack":
 		slug := args[1]
 		if !slugRE.MatchString(slug) {
-			fmt.Fprintf(stderr, "error: %q is not a Bachtrack performer slug (lowercase letters, digits and hyphens)\n", slug)
-			return 1
+			return refuse("bachtrack "+fmt.Sprintf("%q", slug), "not a Bachtrack performer slug (lowercase letters, digits and hyphens); nothing was fetched")
 		}
 		res, err := readBachtrack(c, cfg.bachtrack, slug)
 		if err != nil {
@@ -102,8 +113,7 @@ func runWith(cfg config, args []string, stdout, stderr io.Writer) int {
 	case "dg":
 		m := dgPageRE.FindStringSubmatch(args[1])
 		if m == nil {
-			fmt.Fprintf(stderr, "error: %q is not a deutschegrammophon.com artist on-tour page\n", args[1])
-			return 1
+			return refuse("dg "+fmt.Sprintf("%q", args[1]), "not a deutschegrammophon.com artist on-tour page; nothing was fetched")
 		}
 		res, err := readDG(c, cfg.dgSite+strings.TrimPrefix(args[1], dgSite), cfg.dgGraphQL, m[1])
 		if err != nil {

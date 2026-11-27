@@ -58,6 +58,15 @@ func TestTagsWithClassQuotedGreaterThan(t *testing.T) {
 	}
 }
 
+// A quote that does not open a value (alt=O'Brien) must not swallow the
+// tags after it: here, the next listing's wrapper and card.
+func TestTagsStrayApostrophe(t *testing.T) {
+	doc := "<img alt=O'Brien src=x>" + listing("5") + `<a title='unterminated>`
+	if n, desk, mob := countListings(doc); n != 1 || desk != 1 || mob != 1 {
+		t.Fatalf("got %d listing(s), %d desktop, %d mobile; want 1, 1, 1", n, desk, mob)
+	}
+}
+
 func TestDeferredAttrs(t *testing.T) {
 	sf, cr, ok := deferredAttrs(deferredPage)
 	if !ok || sf != "listing" || cr != "performer=olga-scheps" {
@@ -341,8 +350,18 @@ func TestReadDGNoNextData(t *testing.T) {
 	}
 }
 
+// noNetwork fails the test on any request: refused arguments fetch nothing.
+type noNetwork struct{ t *testing.T }
+
+func (n noNetwork) RoundTrip(r *http.Request) (*http.Response, error) {
+	n.t.Errorf("a refused command sent a request: %s %s", r.Method, r.URL)
+	return nil, fmt.Errorf("no network in this test")
+}
+
 // The allow rule in .claude/settings.json trusts the command with any
 // argument, so the arguments it refuses are part of what keeps it narrow.
+// Each refusal still prints one FAILED line, the outcome word the routine
+// goes by, and fetches and writes nothing.
 func TestRunRefusesOtherArguments(t *testing.T) {
 	for _, args := range [][]string{
 		nil,
@@ -355,9 +374,15 @@ func TestRunRefusesOtherArguments(t *testing.T) {
 		{"dg", "http://www.deutschegrammophon.com/en/artists/maria-duenas/on-tour"},
 		{"curl", "https://bachtrack.com"},
 	} {
+		dir := t.TempDir()
+		cfg := config{client: &http.Client{Transport: noNetwork{t}}, bachtrack: bachtrackBase, dgSite: dgSite, dgGraphQL: dgGraphQL, outDir: dir}
 		var out, errb bytes.Buffer
-		if code := run(args, &out, &errb); code != 1 || out.Len() != 0 {
-			t.Errorf("run(%q) = %d, stdout %q; want 1 and nothing fetched", args, code, out.String())
+		code := runWith(cfg, args, &out, &errb)
+		if code != 1 || !strings.Contains(out.String(), ": FAILED: ") || strings.Count(out.String(), "\n") != 1 {
+			t.Errorf("run(%q) = %d, stdout %q; want 1 and one FAILED line", args, code, out.String())
+		}
+		if entries, _ := os.ReadDir(dir); len(entries) != 0 {
+			t.Errorf("run(%q) wrote %v", args, entries)
 		}
 	}
 	if !dgPageRE.MatchString("https://www.deutschegrammophon.com/en/artists/maria-duenas/on-tour") {

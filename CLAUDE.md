@@ -187,7 +187,9 @@ go run ./tools/fetch dg https://www.deutschegrammophon.com/en/artists/maria-duen
 ```
 
 It writes what it read under `.cache/fetch/` (gitignored) and prints one
-line starting with the outcome: `COMPLETE`, `PARTLY READ` or `FAILED`. Go by
+line naming the outcome after the source and slug (`bachtrack julia-fischer:
+COMPLETE, …`): `COMPLETE`, `PARTLY READ` or `FAILED`, the last also for an
+argument it refuses. Go by
 that word: the exit status is 0 only for `COMPLETE`, but `go run` reports
 every other exit as 1, so the status cannot tell partly read from failed.
 `.claude/settings.json`

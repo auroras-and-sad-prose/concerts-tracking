@@ -257,8 +257,11 @@ func reportedTotal(list string) (int, bool) {
 var (
 	// tagRE matches a start tag, stepping over quoted attribute values so
 	// that a '>' inside one (a data-label reading "Bach > Brahms") does not
-	// end the tag early.
-	tagRE  = regexp.MustCompile(`<[a-zA-Z][a-zA-Z0-9-]*(?:\s(?:[^"'<>]|"[^"]*"|'[^']*')*)?>`)
+	// end the tag early. A quote opens a value only right after '=': a stray
+	// one (alt=O'Brien) is an ordinary character, so it cannot run on into
+	// the tags that follow. The quoted branches come first, so they win
+	// wherever they match.
+	tagRE  = regexp.MustCompile(`<[a-zA-Z][a-zA-Z0-9-]*(?:\s(?:=\s*"[^"]*"|=\s*'[^']*'|[^<>])*)?>`)
 	attrRE = regexp.MustCompile(`([a-zA-Z_:][-a-zA-Z0-9_:.]*)\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'=<>` + "`" + `]+))`)
 )
 

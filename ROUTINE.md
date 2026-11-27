@@ -121,7 +121,8 @@ every artist.
    through `btk-search-more`, as described below.
 3. It writes the list to `.cache/fetch/bachtrack/<slug>.html`: every answer's
    cards in the order they came, each headed by a comment naming the request.
-   It prints one line that starts with the outcome: `COMPLETE` (read to the
+   It prints one line naming the outcome right after the slug
+   (`bachtrack julia-fischer: COMPLETE, …`): `COMPLETE` (read to the
    end), `PARTLY READ` (the file holds what was read, and the line says why it
    stopped) or `FAILED` (nothing usable came back, and no file is written),
    followed by the number of listings and of desktop and mobile cards. Go by
@@ -253,8 +254,8 @@ classifier refused the hand-typed POST.
 
    It writes `.cache/fetch/dg/<slug>.json`, holding `initialEvents` (the 20
    in the HTML), `moreEvents` (every Load-more batch, in order), `complete`
-   and, when the walk stopped short, `stopped`. It prints one line that
-   starts with the outcome, as the Bachtrack read does: `COMPLETE` when it
+   and, when the walk stopped short, `stopped`. It prints one line naming
+   the outcome after the slug, as the Bachtrack read does: `COMPLETE` when it
    reached `hasNextPage: false`, `PARTLY READ` when it stopped short (record
    the label source as partly read, below), and `FAILED` when it could not
    read the page at all. The line then says how many events came from each.
