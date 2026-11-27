@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(go run ./tools/fetch bachtrack:*)",
+      "Bash(go run ./tools/fetch dg:*)"
+    ]
+  }
+}
