@@ -7,6 +7,8 @@ import (
 	"io"
 	"net/http"
 	"net/http/httptest"
+	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 )
@@ -43,6 +45,16 @@ func TestTagsWithClass(t *testing.T) {
 	}
 	if got[1]["data-param"] != "a=b&c=d" {
 		t.Errorf("entities not decoded: got %q", got[1]["data-param"])
+	}
+}
+
+// A '>' inside a quoted attribute value must not end the tag: the class
+// after it would be lost, and the listing with it.
+func TestTagsWithClassQuotedGreaterThan(t *testing.T) {
+	doc := `<a data-label='Bach > Brahms' class='listing-ms' data-id='7'>x</a><b title="1>0" class=listing-ms>`
+	got := tagsWithClass(doc, "listing-ms")
+	if len(got) != 2 || got[0]["data-id"] != "7" || got[1]["title"] != "1>0" {
+		t.Fatalf("got %v", got)
 	}
 }
 
@@ -133,7 +145,7 @@ func TestReadBachtrackOneAnswer(t *testing.T) {
 	if !res.Complete || res.Requests != 2 || len(res.Parts) != 1 {
 		t.Fatalf("complete=%v requests=%d parts=%d", res.Complete, res.Requests, len(res.Parts))
 	}
-	if res.summary() != "read to the end, 2 listing(s) (2 desktop, 2 mobile card(s)) from 2 request(s); the answer says 2 in all" {
+	if res.summary() != "COMPLETE, read to the end: 2 listing(s) (2 desktop, 2 mobile card(s)) from 2 request(s); the answer says 2 in all" {
 		t.Errorf("summary: %s", res.summary())
 	}
 }
@@ -217,15 +229,20 @@ func dgPage(t *testing.T, events int, next bool, cursor string) string {
 	return `<html><script id="__NEXT_DATA__" type="application/json">` + jsonAnswer(t, nd) + `</script></html>`
 }
 
-func fakeDG(t *testing.T, page string, batches map[string]string) (*httptest.Server, *int) {
+type dgCalls struct {
+	posts int
+	lang  string // the language the last Load-more request asked for
+}
+
+func fakeDG(t *testing.T, page string, batches map[string]string) (*httptest.Server, *dgCalls) {
 	t.Helper()
-	posts := new(int)
+	calls := &dgCalls{}
 	return httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch {
-		case r.Method == http.MethodGet && r.URL.Path == "/page":
+		case r.Method == http.MethodGet && (r.URL.Path == "/page" || r.URL.Path == "/de/artists/maria-duenas/on-tour"):
 			io.WriteString(w, page)
 		case r.Method == http.MethodPost && r.URL.Path == "/graphql":
-			*posts++
+			calls.posts++
 			var req struct {
 				Query     string                     `json:"query"`
 				Variables map[string]json.RawMessage `json:"variables"`
@@ -240,6 +257,7 @@ func fakeDG(t *testing.T, page string, batches map[string]string) (*httptest.Ser
 			if !bytes.Equal(req.Variables["artist"], []byte("1191248")) {
 				t.Errorf("artist sent as %s, want the number 1191248", req.Variables["artist"])
 			}
+			json.Unmarshal(req.Variables["language"], &calls.lang)
 			var after string
 			json.Unmarshal(req.Variables["after"], &after)
 			body, ok := batches[after]
@@ -251,7 +269,7 @@ func fakeDG(t *testing.T, page string, batches map[string]string) (*httptest.Ser
 		default:
 			http.NotFound(w, r)
 		}
-	})), posts
+	})), calls
 }
 
 func batch(t *testing.T, n int, next bool, cursor string) string {
@@ -266,19 +284,19 @@ func batch(t *testing.T, n int, next bool, cursor string) string {
 }
 
 func TestReadDG(t *testing.T) {
-	srv, posts := fakeDG(t, dgPage(t, 20, true, "c1"), map[string]string{
+	srv, calls := fakeDG(t, dgPage(t, 20, true, "c1"), map[string]string{
 		"c1": batch(t, 20, true, "c2"),
 		"c2": batch(t, 3, false, "c3"),
 	})
 	defer srv.Close()
-	res, err := readDG(srv.Client(), srv.URL+"/page", srv.URL+"/graphql")
+	res, err := readDG(srv.Client(), srv.URL+"/page", srv.URL+"/graphql", "en")
 	if err != nil {
 		t.Fatal(err)
 	}
-	if !res.Complete || *posts != 2 || res.LoadMoreRequests != 2 || len(res.InitialEvents) != 20 || len(res.MoreEvents) != 23 {
-		t.Fatalf("complete=%v posts=%d initial=%d more=%d stopped=%q", res.Complete, *posts, len(res.InitialEvents), len(res.MoreEvents), res.Stopped)
+	if !res.Complete || calls.posts != 2 || res.LoadMoreRequests != 2 || len(res.InitialEvents) != 20 || len(res.MoreEvents) != 23 {
+		t.Fatalf("complete=%v posts=%d initial=%d more=%d stopped=%q", res.Complete, calls.posts, len(res.InitialEvents), len(res.MoreEvents), res.Stopped)
 	}
-	if res.summary() != "read to the end (hasNextPage false), 20 event(s) in the page + 23 from 2 Load-more request(s), 43 in all" {
+	if res.summary() != "COMPLETE, read to the end (hasNextPage false): 20 event(s) in the page + 23 from 2 Load-more request(s), 43 in all" {
 		t.Errorf("summary: %s", res.summary())
 	}
 	if _, err := res.file(); err != nil {
@@ -287,11 +305,11 @@ func TestReadDG(t *testing.T) {
 }
 
 func TestReadDGNoMore(t *testing.T) {
-	srv, posts := fakeDG(t, dgPage(t, 4, false, ""), nil)
+	srv, calls := fakeDG(t, dgPage(t, 4, false, ""), nil)
 	defer srv.Close()
-	res, err := readDG(srv.Client(), srv.URL+"/page", srv.URL+"/graphql")
-	if err != nil || !res.Complete || *posts != 0 {
-		t.Fatalf("err=%v complete=%v posts=%d", err, res.Complete, *posts)
+	res, err := readDG(srv.Client(), srv.URL+"/page", srv.URL+"/graphql", "en")
+	if err != nil || !res.Complete || calls.posts != 0 {
+		t.Fatalf("err=%v complete=%v posts=%d", err, res.Complete, calls.posts)
 	}
 }
 
@@ -304,7 +322,7 @@ func TestReadDGPartlyRead(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			srv, _ := fakeDG(t, dgPage(t, 20, true, "c1"), batches)
 			defer srv.Close()
-			res, err := readDG(srv.Client(), srv.URL+"/page", srv.URL+"/graphql")
+			res, err := readDG(srv.Client(), srv.URL+"/page", srv.URL+"/graphql", "en")
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -318,7 +336,7 @@ func TestReadDGPartlyRead(t *testing.T) {
 func TestReadDGNoNextData(t *testing.T) {
 	srv, _ := fakeDG(t, "<html>redesigned</html>", nil)
 	defer srv.Close()
-	if _, err := readDG(srv.Client(), srv.URL+"/page", srv.URL+"/graphql"); err == nil {
+	if _, err := readDG(srv.Client(), srv.URL+"/page", srv.URL+"/graphql", "en"); err == nil {
 		t.Fatal("a page without __NEXT_DATA__ was read as a list")
 	}
 }
@@ -344,5 +362,59 @@ func TestRunRefusesOtherArguments(t *testing.T) {
 	}
 	if !dgPageRE.MatchString("https://www.deutschegrammophon.com/en/artists/maria-duenas/on-tour") {
 		t.Error("the routine's own label page is refused")
+	}
+}
+
+// runWith is what the routine calls, so its contract is tested end to end:
+// the outcome word on stdout, the exit status, and the file it writes.
+func TestRunOutcomes(t *testing.T) {
+	complete := jsonAnswer(t, map[string]any{"result": "OK", "data": map[string]any{"html": showing(1, 1) + listing("1")}})
+	partial := jsonAnswer(t, map[string]any{"result": "OK", "data": map[string]any{"html": showing(1, 9) + listing("1")}})
+	for _, c := range []struct {
+		name, first, word string
+		code              int
+		file              bool
+	}{
+		{"complete", complete, "bachtrack olga-scheps: COMPLETE, read to the end: 1 listing(s)", 0, true},
+		{"partly read", partial, "bachtrack olga-scheps: PARTLY READ (the answer says the list holds 9 listings, and 1 were read)", 2, true},
+		{"failed", `{"result":"ERROR"}`, `bachtrack olga-scheps: FAILED: deferred-results answered result="ERROR"`, 1, false},
+	} {
+		t.Run(c.name, func(t *testing.T) {
+			srv := fakeBachtrack(t, c.first, nil)
+			defer srv.Close()
+			dir := t.TempDir()
+			var out, errb bytes.Buffer
+			code := runWith(config{client: srv.Client(), bachtrack: srv.URL, outDir: dir}, []string{"bachtrack", "olga-scheps"}, &out, &errb)
+			if code != c.code || !strings.HasPrefix(out.String(), c.word) || strings.Count(out.String(), "\n") != 1 {
+				t.Fatalf("exit %d, stdout %q; want %d and one line starting %q", code, out.String(), c.code, c.word)
+			}
+			_, err := os.Stat(filepath.Join(dir, "bachtrack", "olga-scheps.html"))
+			if (err == nil) != c.file {
+				t.Errorf("file written = %v, want %v", err == nil, c.file)
+			}
+		})
+	}
+}
+
+func TestRunDG(t *testing.T) {
+	srv, calls := fakeDG(t, dgPage(t, 20, true, "c1"), map[string]string{"c1": batch(t, 2, false, "c2")})
+	defer srv.Close()
+	dir := t.TempDir()
+	page := "https://www.deutschegrammophon.com/de/artists/maria-duenas/on-tour"
+	var out, errb bytes.Buffer
+	code := runWith(config{client: srv.Client(), dgSite: srv.URL, dgGraphQL: srv.URL + "/graphql", outDir: dir}, []string{"dg", page}, &out, &errb)
+	if code != 0 || !strings.HasPrefix(out.String(), "dg maria-duenas: COMPLETE") {
+		t.Fatalf("exit %d, stdout %q, stderr %q", code, out.String(), errb.String())
+	}
+	if calls.lang != "de" {
+		t.Errorf("Load more asked for language %q, want the page's \"de\"", calls.lang)
+	}
+	b, err := os.ReadFile(filepath.Join(dir, "dg", "maria-duenas.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var res dgResult
+	if err := json.Unmarshal(b, &res); err != nil || !res.Complete || res.Page != page || len(res.MoreEvents) != 2 {
+		t.Errorf("file: complete=%v page=%q more=%d err=%v", res.Complete, res.Page, len(res.MoreEvents), err)
 	}
 }

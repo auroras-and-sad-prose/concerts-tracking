@@ -168,9 +168,9 @@ func (r *bachtrackResult) summary() string {
 		s += fmt.Sprintf("; the answer says %d in all", r.Total)
 	}
 	if r.Complete {
-		return "read to the end, " + s
+		return "COMPLETE, read to the end: " + s
 	}
-	return "PARTLY READ (" + r.Stopped + "), " + s
+	return "PARTLY READ (" + r.Stopped + "): " + s
 }
 
 // getResultsRest is the path tail the pager's script builds:
@@ -255,7 +255,10 @@ func reportedTotal(list string) (int, bool) {
 }
 
 var (
-	tagRE  = regexp.MustCompile(`<[a-zA-Z][a-zA-Z0-9-]*(?:\s[^<>]*)?>`)
+	// tagRE matches a start tag, stepping over quoted attribute values so
+	// that a '>' inside one (a data-label reading "Bach > Brahms") does not
+	// end the tag early.
+	tagRE  = regexp.MustCompile(`<[a-zA-Z][a-zA-Z0-9-]*(?:\s(?:[^"'<>]|"[^"]*"|'[^']*')*)?>`)
 	attrRE = regexp.MustCompile(`([a-zA-Z_:][-a-zA-Z0-9_:.]*)\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'=<>` + "`" + `]+))`)
 )
 

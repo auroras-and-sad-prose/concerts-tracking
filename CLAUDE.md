@@ -186,8 +186,11 @@ go run ./tools/fetch bachtrack <performer-slug>
 go run ./tools/fetch dg https://www.deutschegrammophon.com/en/artists/maria-duenas/on-tour
 ```
 
-It writes what it read under `.cache/fetch/` (gitignored) and exits 0
-(read to the end), 2 (partly read) or 1 (failed). `.claude/settings.json`
+It writes what it read under `.cache/fetch/` (gitignored) and prints one
+line starting with the outcome: `COMPLETE`, `PARTLY READ` or `FAILED`. Go by
+that word: the exit status is 0 only for `COMPLETE`, but `go run` reports
+every other exit as 1, so the status cannot tell partly read from failed.
+`.claude/settings.json`
 allows exactly those two commands, so a scheduled run, which no one is there
 to approve prompts for, can make the requests. On 2026-11-23 the same requests
 typed by hand were refused by the auto-mode classifier. Keep the rule this

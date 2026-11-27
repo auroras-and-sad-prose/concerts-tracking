@@ -121,10 +121,13 @@ every artist.
    through `btk-search-more`, as described below.
 3. It writes the list to `.cache/fetch/bachtrack/<slug>.html`: every answer's
    cards in the order they came, each headed by a comment naming the request.
-   It prints one line with the number of listings and of desktop and mobile
-   cards, and exits 0 when the list was read to its end, 2 when it was only
-   partly read (the file holds what was read, and the line says why it
-   stopped), and 1 when nothing usable came back. Read that file; it is the
+   It prints one line that starts with the outcome: `COMPLETE` (read to the
+   end), `PARTLY READ` (the file holds what was read, and the line says why it
+   stopped) or `FAILED` (nothing usable came back, and no file is written),
+   followed by the number of listings and of desktop and mobile cards. Go by
+   that word, not the exit status: `go run` reports every non-zero exit as 1,
+   so the status can say "not complete" but cannot tell partly read from
+   failed. Read the file; it is the
    list the page would show. Each listing appears as two cards with the same `data-id`:
    a desktop card (`listing-shortform`) and then a mobile card
    (`listing-ms`). The two hold different fields, so group the cards by
@@ -187,10 +190,10 @@ their cards. Add `count` to `startrow` for the next request. Stop when `count`
 is 0. These requests come from the same script as the first one, so the same
 footing applies. The tool sends them for you. If an answer contains a
 `btk-search-more` element, the list has not been read until these requests
-return no more listings. When the tool exits 2, it could not exhaust the list:
-report the source as partly read in step 8, with the reason it printed. When
-it exits 1 (a call failed, or `result` was not `"OK"`), the search source has
-failed for that artist (step 7). Never take the profile teaser as the whole
+return no more listings. When the tool prints `PARTLY READ`, it could not
+exhaust the list: report the source as partly read in step 8, with the reason
+it printed. When it prints `FAILED` (a call failed, or `result` was not
+`"OK"`), the search source has failed for that artist (step 7). Never take the profile teaser as the whole
 list. Rule 5's re-fetch of a search-events `source_url` is this same command.
 
 A row first found on Bachtrack cites the search-events URL as its `source_url`,
@@ -250,9 +253,11 @@ classifier refused the hand-typed POST.
 
    It writes `.cache/fetch/dg/<slug>.json`, holding `initialEvents` (the 20
    in the HTML), `moreEvents` (every Load-more batch, in order), `complete`
-   and, when the walk stopped short, `stopped`. It prints how many events came
-   from each and exits 0 when it reached `hasNextPage: false`, 2 when it
-   stopped short, and 1 when it could not read the page at all.
+   and, when the walk stopped short, `stopped`. It prints one line that
+   starts with the outcome, as the Bachtrack read does: `COMPLETE` when it
+   reached `hasNextPage: false`, `PARTLY READ` when it stopped short (record
+   the label source as partly read, below), and `FAILED` when it could not
+   read the page at all. The line then says how many events came from each.
 3. Read each event as `dateStart` (already ISO), `locationPartners[0]`
    (`name` is the venue, then `city` and `country`) and `repertoire` (HTML:
    strip the tags and decode entities, as in `Saint-Sa&euml;ns`; composers

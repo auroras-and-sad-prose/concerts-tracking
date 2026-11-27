@@ -57,8 +57,10 @@ type dgResult struct {
 }
 
 // readDG reads the events in the page's __NEXT_DATA__, then presses "Load
-// more" the way the page does until hasNextPage is false.
-func readDG(c *http.Client, pageURL, graphqlURL string) (*dgResult, error) {
+// more" the way the page does until hasNextPage is false. lang is the page's
+// language segment ("en" in /en/artists/…), which the page sends as the
+// query's language, so the batches come back in the page's language.
+func readDG(c *http.Client, pageURL, graphqlURL, lang string) (*dgResult, error) {
 	page, err := get(c, pageURL)
 	if err != nil {
 		return nil, err
@@ -110,7 +112,7 @@ func readDG(c *http.Client, pageURL, graphqlURL string) (*dgResult, error) {
 			"query": dgQuery,
 			"variables": map[string]any{
 				"channel":          54,
-				"language":         "en",
+				"language":         lang,
 				"first":            20,
 				"sortBy":           "DATE",
 				"sortOrder":        "ASCENDING",
@@ -183,7 +185,7 @@ func (r *dgResult) summary() string {
 	s := fmt.Sprintf("%d event(s) in the page + %d from %d Load-more request(s), %d in all",
 		len(r.InitialEvents), len(r.MoreEvents), r.LoadMoreRequests, len(r.InitialEvents)+len(r.MoreEvents))
 	if r.Complete {
-		return "read to the end (hasNextPage false), " + s
+		return "COMPLETE, read to the end (hasNextPage false): " + s
 	}
-	return "PARTLY READ (" + r.Stopped + "), " + s
+	return "PARTLY READ (" + r.Stopped + "): " + s
 }
